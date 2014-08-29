@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements
 			TabSpec tab = mTabHost.newTabSpec(getString(mainTab.getResName()));
 
 			View indicator = LayoutInflater.from(this).inflate(
-					R.layout.tab_indicator, null);
+					R.layout.v2_tab_indicator, null);
 			ImageView icon = (ImageView) indicator.findViewById(R.id.tab_icon);
 			icon.setImageResource(mainTab.getResIcon());
 			TextView title = (TextView) indicator.findViewById(R.id.tab_titile);

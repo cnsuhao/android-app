@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.NewsList;
+import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.news.adapter.NewsAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
@@ -15,6 +16,8 @@ import net.oschina.app.v2.utils.TDevice;
 import org.apache.http.Header;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -32,7 +35,7 @@ public class NewsFragment extends BaseListFragment {
 	protected static final int STATE_NONE = 0;
 	protected static final int STATE_REFRESH = 1;
 	protected static final int STATE_LOADMORE = 2;
-	
+
 	private int mCurrentPage = 1;
 	private int mCatalog = NewsList.CATALOG_ALL;
 	private int mState = STATE_NONE;
@@ -115,5 +118,12 @@ public class NewsFragment extends BaseListFragment {
 	@Override
 	protected void sendRequestData() {
 		NewsApi.getNewsList(mCatalog, mCurrentPage, mHandler);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		News news = (News) mAdapter.getItem(position - 1);
+		UIHelper.showNewsRedirect(view.getContext(), news);
 	}
 }

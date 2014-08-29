@@ -1,9 +1,11 @@
 package net.oschina.app.v2.ui.pagertab;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Parcel;
@@ -14,6 +16,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,12 +28,13 @@ import net.oschina.app.R;
 
 public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		android.support.v4.view.ViewPager.OnPageChangeListener {
+
 	public static interface OnTabClickListener {
 
 		public abstract void onTabClicked(int i);
 	}
 
-	static class SavedState extends android.view.View.BaseSavedState {
+	static class SavedState extends BaseSavedState {
 		int currentPosition;
 
 		private SavedState(Parcel parcel) {
@@ -48,7 +52,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 			parcel.writeInt(currentPosition);
 		}
 
-		public static final Parcelable.Creator<SavedState> CREATOR = new Creator<PagerSlidingTabStrip.SavedState>() {
+		public static final Parcelable.Creator<SavedState> CREATOR = new Creator<SavedState>() {
 
 			@Override
 			public SavedState[] newArray(int size) {
@@ -60,6 +64,38 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 				return new SavedState(source);
 			}
 		};
+	}
+
+	private static final int ATTRS[];
+	private int checkedTextColor;
+	private int currentPosition;
+	private float currentPositionOffset;
+	private int dividerColor;
+	private int dividerPadding;
+	private Paint dividerPaint;
+	private int dividerWidth;
+	private int indicatorColor;
+	private int indicatorHeight;
+	private int lastScrollX;
+	private Locale locale;
+	private OnTabClickListener onTabClickListener;
+	private ViewPager pager;
+	private Paint rectPaint;
+	private int scrollOffset;
+	private int tabCount;
+	private int tabPadding;
+	private LinearLayout.LayoutParams tabViewLayoutParams;
+	private LinearLayout tabsContainer;
+	private boolean textAllCaps;
+	private int unCheckedTextColor;
+	private int underlineColor;
+	private int underlineHeight;
+
+	static {
+		int ai[] = new int[2];
+		ai[0] = 0x1010095;
+		ai[1] = 0x1010098;
+		ATTRS = ai;
 	}
 
 	public PagerSlidingTabStrip(Context context) {
@@ -75,11 +111,11 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		super(context, attributeset, i);
 		currentPosition = 0;
 		currentPositionOffset = 0.0F;
-		indicatorColor = 0xff01d9ae;
+		indicatorColor = Color.parseColor("#40AA53");//0xff01d9ae;
 		underlineColor = 0xffd9d9d9;
 		dividerColor = 0;
-		checkedTextColor = R.color.color_green_01d9ae;
-		unCheckedTextColor = R.color.action_bar_tittle_color_555555;
+		checkedTextColor = R.color.tab_strip_text_selected;
+		unCheckedTextColor = R.color.tab_strip_text_unselected;
 		textAllCaps = true;
 		scrollOffset = 52;
 		indicatorHeight = 4;
@@ -93,9 +129,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		setWillNotDraw(false);
 		tabsContainer = new LinearLayout(context);
 		tabsContainer.setOrientation(0);
-		tabsContainer
-				.setLayoutParams(new android.widget.FrameLayout.LayoutParams(
-						-1, -1));
+		tabsContainer.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
 		addView(tabsContainer);
 		android.util.DisplayMetrics displaymetrics = getResources()
 				.getDisplayMetrics();
@@ -112,30 +146,28 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		dividerWidth = (int) TypedValue.applyDimension(1, dividerWidth,
 				displaymetrics);
 		context.obtainStyledAttributes(attributeset, ATTRS).recycle();
-		TypedArray typedarray = context.obtainStyledAttributes(attributeset,
+		TypedArray td = context.obtainStyledAttributes(attributeset,
 				R.styleable.PagerSlidingTabStrip);
-		indicatorColor = typedarray.getColor(0, indicatorColor);
-		underlineColor = typedarray.getColor(1, underlineColor);
-		dividerColor = typedarray.getColor(2, dividerColor);
-		checkedTextColor = typedarray.getResourceId(4,
-				R.color.color_green_01d9ae);
-		unCheckedTextColor = typedarray.getResourceId(4,
-				R.color.action_bar_tittle_color_555555);
-		indicatorHeight = typedarray.getDimensionPixelSize(5, indicatorHeight);
-		underlineHeight = typedarray.getDimensionPixelSize(6, underlineHeight);
-		dividerPadding = typedarray.getDimensionPixelSize(7, dividerPadding);
-		tabPadding = typedarray.getDimensionPixelSize(8, tabPadding);
-		scrollOffset = typedarray.getDimensionPixelSize(9, scrollOffset);
-		textAllCaps = typedarray.getBoolean(12, textAllCaps);
-		typedarray.recycle();
+		indicatorColor = td.getColor(0, indicatorColor);
+		underlineColor = td.getColor(1, underlineColor);
+		dividerColor = td.getColor(2, dividerColor);
+		checkedTextColor = td.getResourceId(4, R.color.tab_strip_text_selected);
+		unCheckedTextColor = td.getResourceId(4,
+				R.color.tab_strip_text_unselected);
+		indicatorHeight = td.getDimensionPixelSize(5, indicatorHeight);
+		underlineHeight = td.getDimensionPixelSize(6, underlineHeight);
+		dividerPadding = td.getDimensionPixelSize(7, dividerPadding);
+		tabPadding = td.getDimensionPixelSize(8, tabPadding);
+		scrollOffset = td.getDimensionPixelSize(9, scrollOffset);
+		textAllCaps = td.getBoolean(12, textAllCaps);
+		td.recycle();
 		rectPaint = new Paint();
 		rectPaint.setAntiAlias(true);
-		rectPaint.setStyle(android.graphics.Paint.Style.FILL);
+		rectPaint.setStyle(Paint.Style.FILL);
 		dividerPaint = new Paint();
 		dividerPaint.setAntiAlias(true);
 		dividerPaint.setStrokeWidth(dividerWidth);
-		tabViewLayoutParams = new android.widget.LinearLayout.LayoutParams(0,
-				-1, 1.0F);
+		tabViewLayoutParams = new LinearLayout.LayoutParams(0, -1, 1.0F);
 		if (locale == null)
 			locale = getResources().getConfiguration().locale;
 	}
@@ -157,9 +189,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		tabsContainer.addView(view, position, tabViewLayoutParams);
 	}
 
+	@SuppressLint("InflateParams")
 	private void addTabView(int i, String s) {
 		LinearLayout linearlayout = (LinearLayout) LayoutInflater.from(
-				getContext()).inflate(R.layout.tab_layout_main, null);
+				getContext()).inflate(R.layout.v2_tab_layout_main, null);
 		((TextView) linearlayout.findViewById(R.id.tab_title_label)).setText(s);
 		addTab(i, linearlayout);
 	}
@@ -240,6 +273,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		getViewTreeObserver().addOnGlobalLayoutListener(
 				new OnGlobalLayoutListener() {
 
+					@SuppressWarnings("deprecation")
 					@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 					@Override
 					public void onGlobalLayout() {
@@ -356,8 +390,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		invalidate();
 	}
 
-	public void setOnTabClickListener(OnTabClickListener ontabclicklistener) {
-		onTabClickListener = ontabclicklistener;
+	public void setOnTabClickListener(OnTabClickListener listener) {
+		onTabClickListener = listener;
 	}
 
 	public void setScrollOffset(int i) {
@@ -395,37 +429,5 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		LinearLayout linearlayout = (LinearLayout) tabsContainer.getChildAt(i);
 		ImageView imageview = (ImageView) linearlayout.findViewById(0x7f070618);
 		r.a(q, (TextView) linearlayout.findViewById(0x7f070619), imageview);
-	}
-
-	private static final int ATTRS[];
-	private int checkedTextColor;
-	private int currentPosition;
-	private float currentPositionOffset;
-	private int dividerColor;
-	private int dividerPadding;
-	private Paint dividerPaint;
-	private int dividerWidth;
-	private int indicatorColor;
-	private int indicatorHeight;
-	private int lastScrollX;
-	private Locale locale;
-	private OnTabClickListener onTabClickListener;
-	private ViewPager pager;
-	private Paint rectPaint;
-	private int scrollOffset;
-	private int tabCount;
-	private int tabPadding;
-	private android.widget.LinearLayout.LayoutParams tabViewLayoutParams;
-	private LinearLayout tabsContainer;
-	private boolean textAllCaps;
-	private int unCheckedTextColor;
-	private int underlineColor;
-	private int underlineHeight;
-
-	static {
-		int ai[] = new int[2];
-		ai[0] = 0x1010095;
-		ai[1] = 0x1010098;
-		ATTRS = ai;
 	}
 }

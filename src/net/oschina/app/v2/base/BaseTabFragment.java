@@ -1,21 +1,23 @@
 package net.oschina.app.v2.base;
 
-
 public class BaseTabFragment extends BaseFragment {
-	public static interface a {
 
-		public abstract boolean isCurrent(BaseTabFragment yixintabfragment);
+	public static interface TabChangedListener {
+
+		public abstract boolean isCurrent(BaseTabFragment fragment);
 	}
+
+	private TabChangedListener mListener;
 
 	public BaseTabFragment() {
 	}
 
-	public final void a(a a1) {
-		e = a1;
+	public final void a(TabChangedListener listener) {
+		mListener = listener;
 	}
 
 	protected final boolean e() {
-		return e.isCurrent(this);
+		return mListener.isCurrent(this);
 	}
 
 	public void f() {
@@ -29,6 +31,4 @@ public class BaseTabFragment extends BaseFragment {
 
 	public void i() {
 	}
-
-	private a e;
 }

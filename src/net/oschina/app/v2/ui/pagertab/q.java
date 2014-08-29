@@ -5,6 +5,13 @@ import java.util.*;
 
 public final class q implements Serializable {
 
+	private static final long serialVersionUID = 0xe2d57122f51e480bL;
+	private final int a;
+	private int b;
+	private boolean c;
+	private int d;
+	private List e;
+
 	public q(int i) {
 		a = i;
 		d = -1;
@@ -65,11 +72,4 @@ public final class q implements Serializable {
 	final int e() {
 		return d;
 	}
-
-	private static final long serialVersionUID = 0xe2d57122f51e480bL;
-	private final int a;
-	private int b;
-	private boolean c;
-	private int d;
-	private List e;
 }

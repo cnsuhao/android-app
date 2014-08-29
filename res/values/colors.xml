@@ -12,9 +12,9 @@
     <color name="list_item_background_normal">#ffffff</color>
     <color name="list_item_background_pressed">#F1F1F1</color>
     
-    <color name="color_green_01d9ae">#ff01d9ae</color>
-    <color name="action_bar_tittle_color_555555">#ff555555</color>
-    <color name="GreyWhite_has_alpha">#66fafafa</color>
+    <color name="tab_strip_text_selected">@color/main_green</color>
+    <color name="tab_strip_text_unselected">@color/main_black</color>
+    <color name="tab_strip_background">#66fafafa</color>
     <color name="split_line_grey_color_d9d9d9">#ffd9d9d9</color>
     
 	<color name="white">#FFFFFF</color>

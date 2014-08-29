@@ -155,7 +155,7 @@ public class ListBaseAdapter extends BaseAdapter {
 			if (state == STATE_LOAD_MORE || state == STATE_NO_MORE
 					|| state == STATE_EMPTY_ITEM) {
 				LinearLayout loadmore = (LinearLayout) LayoutInflater.from(
-						parent.getContext()).inflate(R.layout.list_cell_footer,
+						parent.getContext()).inflate(R.layout.v2_list_cell_footer,
 						null);
 				ProgressBar progress = (ProgressBar) loadmore
 						.findViewById(R.id.progressbar);

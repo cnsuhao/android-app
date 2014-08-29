@@ -109,7 +109,7 @@
         <activity
             android:name=".ui.NewsDetail"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/Theme.SlideTop" />
+            android:theme="@style/ActionBarBaseTheme" />
         <activity
             android:name=".ui.SoftwareLib"
             android:configChanges="keyboardHidden|orientation"
@@ -132,7 +132,7 @@
         <activity
             android:name=".ui.QuestionDetail"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/Theme.SlideTop" />
+            android:theme="@style/ActionBarBaseTheme" />
         <activity
             android:name=".ui.QuestionPub"
             android:configChanges="keyboardHidden|orientation"
