@@ -71,4 +71,6 @@
     <dimen name="space_3">3.0dip</dimen>
     <dimen name="space_2">2.0dip</dimen>
     <dimen name="space_1">1.0dip</dimen>
+    
+    <dimen name="pager_sliding_tab_strip_height">40.0dip</dimen>
 </resources>

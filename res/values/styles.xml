@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     
+    <style name="TitleStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="SubTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">@color/white</item>
+    </style> 
+    
+    <style name="ActionBarBaseStyle" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="background">@color/actionbar_background</item>
+        <item name="titleTextStyle">@style/TitleStyle</item>
+        <item name="subtitleTextStyle">@style/SubTitle</item>
+    </style>
+    
+     <style name="ActionBarBaseStyle.Transparent" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:background">@color/transparent</item>
+        <item name="background">@color/transparent</item>
+    </style>
+
+    <style name="ActionBarBaseTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="actionBarStyle">@style/ActionBarBaseStyle</item>
+    </style>
+    
     
     <!-- sina weibo -->
    	<style name="ContentOverlay" parent="android:style/Theme.Dialog">

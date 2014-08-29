@@ -3,6 +3,8 @@ package net.oschina.app.ui;
 import net.oschina.app.AppManager;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -13,7 +15,7 @@ import android.view.View;
  * @version 1.0
  * @created 2012-9-18
  */
-public class BaseActivity extends Activity {
+public class BaseActivity extends ActionBarActivity {
 
 	// 是否允许全屏
 	private boolean allowFullScreen = true;

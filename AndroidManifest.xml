@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.oschina.app"
-    android:versionCode="28"
+    android:versionCode="29"
     android:versionName="1.7.6.9" >
 
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="19" />
-    
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -18,7 +18,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-    
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -82,11 +82,16 @@
             android:theme="@style/Theme.HalfTranslucent"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity
+            android:name="net.oschina.app.v2.activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActionBarBaseTheme" />
+        <activity
             android:name=".ui.Main"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.NoTitleBar" />
+            android:theme="@style/ActionBarBaseTheme" />
         <activity
             android:name=".ui.LoginDialog"
             android:configChanges="keyboardHidden|orientation"

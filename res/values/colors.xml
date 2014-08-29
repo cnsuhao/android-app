@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="main_green">#40AA53</color>
+    <color name="main_gray">#9A9A9A</color>
+    <color name="main_black">#353535</color>
+    <color name="actionbar_background">@color/main_green</color>
+    <color name="window_background">#EBEBEB</color>
+    <color name="primarybar_background">#FCFCFC</color>
+    <color name="primarybar_split_color">#D6D6D6</color>
+    
+    <color name="list_divider_color">#DADADA</color>
+    <color name="list_item_background_normal">#ffffff</color>
+    <color name="list_item_background_pressed">#F1F1F1</color>
+    
+    <color name="color_green_01d9ae">#ff01d9ae</color>
+    <color name="action_bar_tittle_color_555555">#ff555555</color>
+    <color name="GreyWhite_has_alpha">#66fafafa</color>
+    <color name="split_line_grey_color_d9d9d9">#ffd9d9d9</color>
+    
 	<color name="white">#FFFFFF</color>
 	<color name="black">#000000</color>
 	<color name="gray">#808080</color>

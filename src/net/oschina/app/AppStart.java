@@ -6,6 +6,7 @@ import java.util.List;
 import net.oschina.app.common.FileUtils;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.ui.Main;
+import net.oschina.app.v2.activity.MainActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -110,7 +111,7 @@ public class AppStart extends Activity {
      * 跳转到...
      */
     private void redirectTo(){        
-        Intent intent = new Intent(this, Main.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }

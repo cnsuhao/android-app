@@ -1,0 +1,14 @@
+<resources>
+
+    <style name="ActionBarBaseStyle" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:background">@color/actionbar_background</item>
+        <item name="android:titleTextStyle">@style/TitleStyle</item>
+        <item name="android:subtitleTextStyle">@style/SubTitle</item>
+    </style>
+
+    <style name="ActionBarBaseTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:actionBarStyle">@style/ActionBarBaseStyle</item>
+    </style>
+
+</resources>
