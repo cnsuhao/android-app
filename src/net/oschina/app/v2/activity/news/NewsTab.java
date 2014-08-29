@@ -2,21 +2,24 @@
 package net.oschina.app.v2.activity.news;
 
 import net.oschina.app.R;
+import net.oschina.app.bean.NewsList;
 import net.oschina.app.v2.activity.news.fragment.NewsFragment;
 
 
 public enum NewsTab {
-    LASTEST(0, R.string.frame_title_news_lastest, NewsFragment.class),
-    BLOG(1, R.string.frame_title_news_blog, NewsFragment.class),
-    RECOMMEND(2, R.string.frame_title_news_recommend, NewsFragment.class);
+    LASTEST(0,NewsList.CATALOG_ALL, R.string.frame_title_news_lastest, NewsFragment.class),
+    BLOG(1, NewsList.CATALOG_INTEGRATION,R.string.frame_title_news_blog, NewsFragment.class),
+    RECOMMEND(2,NewsList.CATALOG_SOFTWARE, R.string.frame_title_news_recommend, NewsFragment.class);
     
     private Class<?> clz;
     private int idx;
     private int title;
+    private int catalog;
 
-    private NewsTab(int idx, int title, Class<?> clz) {
+    private NewsTab(int idx,int catalog, int title, Class<?> clz) {
         this.idx = idx;
         this.clz = clz;
+        this.setCatalog(catalog);
         this.setTitle(title);
     }
 
@@ -51,4 +54,12 @@ public enum NewsTab {
     public void setTitle(int title) {
         this.title = title;
     }
+
+	public int getCatalog() {
+		return catalog;
+	}
+
+	public void setCatalog(int catalog) {
+		this.catalog = catalog;
+	}
 }

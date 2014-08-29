@@ -54,7 +54,7 @@
         <activity
             android:name=".AppStart"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -81,6 +81,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.HalfTranslucent"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        
+        <activity
+            android:name="net.oschina.app.v2.activity.oauth.AuthorizeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActionBarBaseTheme"
+            />
+        
         <activity
             android:name="net.oschina.app.v2.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"

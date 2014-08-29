@@ -3,9 +3,11 @@ package net.oschina.app.v2.activity.news;
 import java.util.Iterator;
 import java.util.List;
 
+import net.oschina.app.v2.activity.news.fragment.NewsFragment;
 import net.oschina.app.v2.base.BaseTabFragment;
 import net.oschina.app.v2.ui.pagertab.SlidingTabPagerAdapter;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -40,6 +42,11 @@ public final class NewsTabPagerAdapter extends SlidingTabPagerAdapter {
 					e.printStackTrace();
 				}
 			tabFragment.a(this);
+			
+			Bundle args = new Bundle();
+			args.putInt(NewsFragment.BUNDLE_KEY_CATALOG, values[i].getCatalog());
+			tabFragment.setArguments(args);
+			
 			fragments[values[i].getIdx()] = tabFragment;
 		}
 	}

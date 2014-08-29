@@ -12,7 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class NewsViewPagerFragment extends Fragment implements OnPageChangeListener {
+public class NewsViewPagerFragment extends Fragment implements
+		OnPageChangeListener {
 
 	private PagerSlidingTabStrip mTabStrip;
 	private ViewPager mViewPager;
@@ -25,9 +26,11 @@ public class NewsViewPagerFragment extends Fragment implements OnPageChangeListe
 				false);
 		mTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
 		mViewPager = (ViewPager) view.findViewById(R.id.main_tab_pager);
-		mTabAdapter = new NewsTabPagerAdapter(getChildFragmentManager(),
-				getActivity(), mViewPager);
 
+		if (mTabAdapter == null) {
+			mTabAdapter = new NewsTabPagerAdapter(getChildFragmentManager(),
+					getActivity(), mViewPager);
+		}
 		mViewPager.setOffscreenPageLimit(mTabAdapter.getCacheCount());
 		mViewPager.setAdapter(mTabAdapter);
 		mViewPager.setOnPageChangeListener(this);

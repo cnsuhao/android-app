@@ -10,7 +10,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:text="这是标题"
         android:textColor="@color/main_black"
         android:textSize="@dimen/text_size_16" />
 
@@ -26,16 +25,15 @@
             android:id="@+id/tv_source"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="chinaos"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_title"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/space_10"
+            android:visibility="gone"
             android:src="@drawable/widget_comment_count_icon" />
 
         <TextView
@@ -44,7 +42,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
-            android:text="9分钟前"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
     </LinearLayout>

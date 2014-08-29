@@ -22,7 +22,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
 	protected PullToRefreshListView mListView;
 	protected ListBaseAdapter mAdapter;
-	private EmptyLayout mErrorLayout;
+	protected EmptyLayout mErrorLayout;
 
 	protected int getLayoutRes() {
 		return R.layout.v2_fragment_pull_refresh_listview;
@@ -38,6 +38,13 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
 	protected void initViews(View view) {
 		mErrorLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
+		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				onRefresh(null);
+			}
+		});
 		mListView = (PullToRefreshListView) view.findViewById(R.id.listview);
 
 		mListView.setOnItemClickListener(this);
@@ -65,7 +72,6 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
 	@Override
 	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-
 	}
 
 	@Override
@@ -78,6 +84,6 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	}
 
 	protected void executeOnLoadFinish() {
-		mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+		mListView.onRefreshComplete();
 	}
 }
