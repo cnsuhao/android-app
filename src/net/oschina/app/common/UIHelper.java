@@ -40,7 +40,6 @@ import net.oschina.app.ui.Main;
 import net.oschina.app.ui.MessageDetail;
 import net.oschina.app.ui.MessageForward;
 import net.oschina.app.ui.MessagePub;
-import net.oschina.app.ui.NewsDetail;
 import net.oschina.app.ui.QuestionDetail;
 import net.oschina.app.ui.QuestionPub;
 import net.oschina.app.ui.QuestionTag;
@@ -56,16 +55,17 @@ import net.oschina.app.ui.UserCenter;
 import net.oschina.app.ui.UserFavorite;
 import net.oschina.app.ui.UserFriend;
 import net.oschina.app.ui.UserInfo;
+import net.oschina.app.v2.activity.news.BlogDetailActivity;
+import net.oschina.app.v2.activity.news.NewsDetailActivity;
 import net.oschina.app.widget.LinkView;
-import net.oschina.app.widget.PathChooseDialog;
 import net.oschina.app.widget.LinkView.MyURLSpan;
+import net.oschina.app.widget.PathChooseDialog;
 import net.oschina.app.widget.PathChooseDialog.ChooseCompleteListener;
 import net.oschina.app.widget.ScreenShotView;
 import net.oschina.app.widget.ScreenShotView.OnScreenShotListener;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ApplicationErrorReport.AnrInfo;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -116,7 +116,7 @@ import android.widget.Toast;
  */
 public class UIHelper {
 	private final static String TAG = "UIHelper";
-	
+
 	public final static int LISTVIEW_ACTION_INIT = 0x01;
 	public final static int LISTVIEW_ACTION_REFRESH = 0x02;
 	public final static int LISTVIEW_ACTION_SCROLL = 0x03;
@@ -149,10 +149,12 @@ public class UIHelper {
 			+ "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shThemeDefault.css\">"
 			+ "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore.css\">"
 			+ "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>";
-	public final static String WEB_STYLE = linkCss + "<style>* {font-size:14px;line-height:20px;} p {color:#333;} a {color:#3E62A6;} img {max-width:310px;} "
+	public final static String WEB_STYLE = linkCss
+			+ "<style>* {font-size:14px;line-height:20px;} p {color:#333;} a {color:#3E62A6;} img {max-width:310px;} "
 			+ "img.alignleft {float:left;max-width:120px;margin:0 10px 5px 0;border:1px solid #ccc;background:#fff;padding:2px;} "
 			+ "pre {font-size:9pt;line-height:12pt;font-family:Courier New,Arial;border:1px solid #ddd;border-left:5px solid #6CE26C;background:#f6f6f6;padding:5px;overflow: auto;} "
 			+ "a.tag {font-size:15px;text-decoration:none;background-color:#bbd6f3;border-bottom:2px solid #3E6D8E;border-right:2px solid #7F9FB6;color:#284a7b;margin:2px 2px 2px 0;padding:2px 4px;white-space:nowrap;}</style>";
+
 	/**
 	 * 显示首页
 	 * 
@@ -187,8 +189,10 @@ public class UIHelper {
 	 * @param newsId
 	 */
 	public static void showNewsDetail(Context context, int newsId) {
-		Intent intent = new Intent(context, NewsDetail.class);
+		Intent intent = new Intent(context, NewsDetailActivity.class);
 		intent.putExtra("news_id", newsId);
+		intent.putExtra(NewsDetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				NewsDetailActivity.DISPLAY_NEWS);
 		context.startActivity(intent);
 	}
 
@@ -199,8 +203,10 @@ public class UIHelper {
 	 * @param postId
 	 */
 	public static void showQuestionDetail(Context context, int postId) {
-		Intent intent = new Intent(context, QuestionDetail.class);
+		Intent intent = new Intent(context, NewsDetailActivity.class);
 		intent.putExtra("post_id", postId);
+		intent.putExtra(NewsDetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				NewsDetailActivity.DISPLAY_QUESTION);
 		context.startActivity(intent);
 	}
 
@@ -262,8 +268,10 @@ public class UIHelper {
 	 * @param blogId
 	 */
 	public static void showBlogDetail(Context context, int blogId) {
-		Intent intent = new Intent(context, BlogDetail.class);
+		Intent intent = new Intent(context, NewsDetailActivity.class);
 		intent.putExtra("blog_id", blogId);
+		intent.putExtra(NewsDetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				NewsDetailActivity.DISPLAY_BLOG);
 		context.startActivity(intent);
 	}
 
@@ -274,8 +282,10 @@ public class UIHelper {
 	 * @param ident
 	 */
 	public static void showSoftwareDetail(Context context, String ident) {
-		Intent intent = new Intent(context, SoftwareDetail.class);
+		Intent intent = new Intent(context, NewsDetailActivity.class);
 		intent.putExtra("ident", ident);
+		intent.putExtra(NewsDetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				NewsDetailActivity.DISPLAY_SOFTWARE);
 		context.startActivity(intent);
 	}
 
@@ -473,10 +483,11 @@ public class UIHelper {
 	public static void showShareDialog(final Activity context,
 			final String title, final String url) {
 		final String spiltUrl;
-		//判断分享的链接是否包含my
-		if(url.indexOf("my")>0){
-			spiltUrl = "http://m.oschina.net/" + url.substring(url.indexOf("blog"));
-		}else{
+		// 判断分享的链接是否包含my
+		if (url.indexOf("my") > 0) {
+			spiltUrl = "http://m.oschina.net/"
+					+ url.substring(url.indexOf("blog"));
+		} else {
 			spiltUrl = "http://m.oschina.net/" + url.substring(22);
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -490,7 +501,7 @@ public class UIHelper {
 					public void onClick(DialogInterface arg0, int arg1) {
 						switch (arg1) {
 						case 0:// 新浪微博
-							// 分享的内容
+								// 分享的内容
 							final String shareMessage = title + " " + url;
 							// 初始化微博
 							if (SinaWeiboHelper.isWeiboNull()) {
@@ -527,19 +538,26 @@ public class UIHelper {
 							QQWeiboHelper.shareToQQ(context, title, url);
 							break;
 						case 2:// 微信朋友圈
-							WXFriendsHelper.shareToWXFriends(context, title, spiltUrl);
+							WXFriendsHelper.shareToWXFriends(context, title,
+									spiltUrl);
 							break;
 						case 3:// 截图分享
 							addScreenShot(context, new OnScreenShotListener() {
 
 								@SuppressLint("NewApi")
 								public void onComplete(Bitmap bm) {
-									Intent intent = new Intent(context,ScreenShotShare.class);
+									Intent intent = new Intent(context,
+											ScreenShotShare.class);
 									intent.putExtra("title", title);
 									intent.putExtra("url", url);
-									intent.putExtra("cut_image_tmp_path",ScreenShotView.TEMP_SHARE_FILE_NAME);
+									intent.putExtra("cut_image_tmp_path",
+											ScreenShotView.TEMP_SHARE_FILE_NAME);
 									try {
-										ImageUtils.saveImageToSD(context,ScreenShotView.TEMP_SHARE_FILE_NAME,bm, 100);
+										ImageUtils
+												.saveImageToSD(
+														context,
+														ScreenShotView.TEMP_SHARE_FILE_NAME,
+														bm, 100);
 									} catch (IOException e) {
 										e.printStackTrace();
 									}
@@ -829,9 +847,10 @@ public class UIHelper {
 		Intent intent = new Intent(context, Search.class);
 		context.startActivity(intent);
 	}
-	
+
 	/**
 	 * 显示扫一扫界面
+	 * 
 	 * @param context
 	 */
 	public static void showCapture(Context context) {
@@ -1337,10 +1356,10 @@ public class UIHelper {
 		style = new SpannableStringBuilder(view.getText());
 		// style.clearSpans();// 这里会清除之前所有的样式
 		for (URLSpan url : urls) {
-			 style.removeSpan(url);// 只需要移除之前的URL样式，再重新设置
-			 MyURLSpan myURLSpan =  view.new MyURLSpan(url.getURL());
-			 style.setSpan(myURLSpan, span.getSpanStart(url),
-		    		span.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			style.removeSpan(url);// 只需要移除之前的URL样式，再重新设置
+			MyURLSpan myURLSpan = view.new MyURLSpan(url.getURL());
+			style.setSpan(myURLSpan, span.getSpanStart(url),
+					span.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		}
 
 		// 设置用户名字体加粗、高亮
@@ -1418,9 +1437,10 @@ public class UIHelper {
 		Intent intent = new Intent(context, FeedBack.class);
 		context.startActivity(intent);
 	}
-	
+
 	/**
 	 * 显示用户举报
+	 * 
 	 * @param context
 	 * @param link
 	 */
@@ -1654,14 +1674,17 @@ public class UIHelper {
 			}
 		}, "mWebViewImageListener");
 	}
-	
+
 	@SuppressWarnings("deprecation")
-	public static void showQuestionOption(final Activity context, View aim, final Post postDetail) {
+	public static void showQuestionOption(final Activity context, View aim,
+			final Post postDetail) {
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		final View mMenuView = inflater.inflate(R.layout.widget_bar_option_menu, null);
+		final View mMenuView = inflater.inflate(
+				R.layout.widget_bar_option_menu, null);
 		int w = context.getWindowManager().getDefaultDisplay().getWidth();
-		final PopupWindow option = new PopupWindow(mMenuView, w/2 - 50, LayoutParams.WRAP_CONTENT, true);
+		final PopupWindow option = new PopupWindow(mMenuView, w / 2 - 50,
+				LayoutParams.WRAP_CONTENT, true);
 		option.setOutsideTouchable(true);
 		option.setAnimationStyle(R.style.popupMenu);
 		ColorDrawable dw = new ColorDrawable(000000);
@@ -1672,14 +1695,15 @@ public class UIHelper {
 				switch (id) {
 				case R.id.question_option_share:
 					Log.i(TAG, postDetail.getBody());
-					showShareDialog(context, postDetail.getTitle(), postDetail.getUrl());
+					showShareDialog(context, postDetail.getTitle(),
+							postDetail.getUrl());
 					break;
 				case R.id.question_option_report:
 					AppContext ac = (AppContext) context.getApplication();
-					if(!ac.isLogin()){
+					if (!ac.isLogin()) {
 						UIHelper.showLoginDialog(context);
 						return;
-					}	
+					}
 					showReport(context, postDetail.getUrl());
 					break;
 				default:
@@ -1688,23 +1712,25 @@ public class UIHelper {
 				option.dismiss();
 			}
 		};
-		LinearLayout mShare = (LinearLayout) mMenuView.findViewById(R.id.question_option_share);
+		LinearLayout mShare = (LinearLayout) mMenuView
+				.findViewById(R.id.question_option_share);
 		mShare.setOnClickListener(click);
-		LinearLayout mReport = (LinearLayout) mMenuView.findViewById(R.id.question_option_report);
+		LinearLayout mReport = (LinearLayout) mMenuView
+				.findViewById(R.id.question_option_report);
 		mReport.setOnClickListener(click);
-		//mMenuView添加OnTouchListener监听判断获取触屏位置如果在选择框外面则销毁弹出框
+		// mMenuView添加OnTouchListener监听判断获取触屏位置如果在选择框外面则销毁弹出框
 		mMenuView.setOnTouchListener(new OnTouchListener() {
-			
+
 			public boolean onTouch(View v, MotionEvent event) {
-				
+
 				int height = mMenuView.findViewById(R.id.pop_layout).getTop();
-				int y=(int) event.getY();
-				
-				if(event.getAction()==MotionEvent.ACTION_UP){
-					if(y<height){
+				int y = (int) event.getY();
+
+				if (event.getAction() == MotionEvent.ACTION_UP) {
+					if (y < height) {
 						option.dismiss();
 					}
-				}				
+				}
 				return true;
 			}
 		});

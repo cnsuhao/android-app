@@ -103,4 +103,11 @@
     
     <string name="loading">加载中…</string>
     <string name="loading_no_more">没有更多数据.</string>
+    
+    <string name="publish_comment">写点什么吧</string>
+    <!-- software detail -->
+    <string name="software_license">开源协议 : %s</string>
+    <string name="software_language">开发语言 : %s</string>
+    <string name="software_os">操作系统 : %s</string>
+    <string name="software_recordtime">收录时间 : %s</string>
 </resources>

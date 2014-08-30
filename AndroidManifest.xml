@@ -81,15 +81,22 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.HalfTranslucent"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-        
         <activity
             android:name="net.oschina.app.v2.activity.oauth.AuthorizeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ActionBarBaseTheme"
-            />
-        
+            android:theme="@style/ActionBarBaseTheme" />
         <activity
             android:name="net.oschina.app.v2.activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActionBarBaseTheme" />
+        <activity
+            android:name="net.oschina.app.v2.activity.news.NewsDetailActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActionBarBaseTheme" />
+        <activity
+            android:name="net.oschina.app.v2.activity.news.BlogDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/ActionBarBaseTheme" />
