@@ -3,6 +3,7 @@
     <color name="main_green">#40AA53</color>
     <color name="main_gray">#9A9A9A</color>
     <color name="main_black">#353535</color>
+    <color name="main_purple">#576B95</color>
     <color name="actionbar_background">@color/main_green</color>
     <color name="window_background">#EBEBEB</color>
     <color name="primarybar_background">#FCFCFC</color>
@@ -16,6 +17,9 @@
     <color name="tab_strip_text_unselected">@color/main_black</color>
     <color name="tab_strip_background">#66fafafa</color>
     <color name="split_line_grey_color_d9d9d9">#ffd9d9d9</color>
+    
+    <color name="main_link_text_color">#ff507daf</color>
+    <color name="timeline_clickable_text_highlighted_background">#ffbedfff</color>
     
 	<color name="white">#FFFFFF</color>
 	<color name="black">#000000</color>

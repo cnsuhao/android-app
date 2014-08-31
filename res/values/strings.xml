@@ -110,4 +110,10 @@
     <string name="software_language">开发语言 : %s</string>
     <string name="software_os">操作系统 : %s</string>
     <string name="software_recordtime">收录时间 : %s</string>
+    
+    <string name="from_mobile">来自:手机</string>
+    <string name="from_android">来自:Android</string>
+    <string name="from_iphone">来自:Iphone</string>
+    <string name="from_windows_phone">来自:Windows Phone</string>
+    <string name="from_wechat">来自:微信</string>
 </resources>

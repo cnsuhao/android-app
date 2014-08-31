@@ -27,6 +27,28 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.get("action/api/news_list", params, handler);
 	}
 
+	public static void getPostList(int catalog, int page,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		// params.put("access_token", "");
+		params.put("catalog", catalog);
+		params.put("pageIndex", page);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		params.put("dataType", "json");
+		ApiHttpClient.get("action/api/post_list", params, handler);
+	}
+	
+	public static void getTweetList(int uid, int page,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		// params.put("access_token", "");
+		params.put("uid", uid);
+		params.put("pageIndex", page);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		params.put("dataType", "json");
+		ApiHttpClient.get("action/api/tweet_list", params, handler);
+	}
+	
 	/**
 	 * 获取新闻明细
 	 * 

@@ -1,7 +1,7 @@
-package net.oschina.app.v2.activity.news.fragment;
+package net.oschina.app.v2.activity.tweet.fragment;
 
 import net.oschina.app.R;
-import net.oschina.app.v2.activity.news.adapter.NewsTabPagerAdapter;
+import net.oschina.app.v2.activity.tweet.adapter.TweetTabPagerAdapter;
 import net.oschina.app.v2.ui.pagertab.PagerSlidingTabStrip;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,12 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class NewsViewPagerFragment extends Fragment implements
+public class TweetViewPagerFragment extends Fragment implements
 		OnPageChangeListener {
 
 	private PagerSlidingTabStrip mTabStrip;
 	private ViewPager mViewPager;
-	private NewsTabPagerAdapter mTabAdapter;
+	private TweetTabPagerAdapter mTabAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,
@@ -28,7 +28,7 @@ public class NewsViewPagerFragment extends Fragment implements
 		mViewPager = (ViewPager) view.findViewById(R.id.main_tab_pager);
 
 		if (mTabAdapter == null) {
-			mTabAdapter = new NewsTabPagerAdapter(getChildFragmentManager(),
+			mTabAdapter = new TweetTabPagerAdapter(getChildFragmentManager(),
 					getActivity(), mViewPager);
 		}
 		mViewPager.setOffscreenPageLimit(mTabAdapter.getCacheCount());

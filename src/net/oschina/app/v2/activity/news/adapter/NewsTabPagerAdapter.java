@@ -1,8 +1,9 @@
-package net.oschina.app.v2.activity.news;
+package net.oschina.app.v2.activity.news.adapter;
 
 import java.util.Iterator;
 import java.util.List;
 
+import net.oschina.app.v2.activity.news.NewsTab;
 import net.oschina.app.v2.activity.news.fragment.NewsFragment;
 import net.oschina.app.v2.base.BaseTabFragment;
 import net.oschina.app.v2.ui.pagertab.SlidingTabPagerAdapter;

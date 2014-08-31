@@ -149,7 +149,7 @@
         <activity
             android:name=".ui.TweetDetail"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/Theme.SlideTop" />
+            android:theme="@style/ActionBarBaseTheme" />
         <activity
             android:name=".ui.TweetPub"
             android:configChanges="keyboardHidden|orientation"
@@ -202,7 +202,7 @@
             android:name=".ui.UserCenter"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ZoomLight" />
+            android:theme="@style/ActionBarBaseTheme" />
         <activity
             android:name=".ui.UserFavorite"
             android:configChanges="keyboardHidden|orientation"

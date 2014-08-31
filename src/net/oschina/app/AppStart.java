@@ -81,21 +81,6 @@ public class AppStart extends Activity {
 			}
 		}
 
-		// BaseApi.authorize(new TextHttpResponseHandler() {
-		//
-		// @Override
-		// public void onSuccess(int arg0, Header[] arg1, String arg2) {
-		// // TODO Auto-generated method stub
-		// Log.d(TAG, "-->"+arg2);
-		// }
-		//
-		// @Override
-		// public void onFailure(int arg0, Header[] arg1, String arg2, Throwable
-		// arg3) {
-		// // TODO Auto-generated method stub
-		// arg3.printStackTrace();
-		// }
-		// });
 	}
 
 	/**
