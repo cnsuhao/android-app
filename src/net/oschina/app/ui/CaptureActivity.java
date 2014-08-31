@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+
 import com.barcode.camera.CameraManager;
 import com.barcode.decode.CaptureActivityHandler;
 import com.barcode.decode.FinishListener;

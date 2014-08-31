@@ -1,15 +1,14 @@
 package net.oschina.app.v2.api;
 
+import java.util.Locale;
+
+import net.oschina.app.AppContext;
 import android.content.Context;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
-import java.util.Locale;
-
-import net.oschina.app.AppContext;
 
 public class ApiHttpClient {
 	//http://www.oschina.net/action/oauth2/authorize?response_type=code&client_id=F6QtiYRetdUEwsYKYvNR&state=xyz&redirect_uri=http://my.oschina.net/u/142883

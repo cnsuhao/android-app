@@ -3,18 +3,11 @@ package net.oschina.app.widget;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.XMLReader;
-
 import net.oschina.app.bean.URLs;
-import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import android.content.Context;
 import android.graphics.Color;
-import android.text.Editable;
 import android.text.Html;
-import android.text.Html.TagHandler;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;

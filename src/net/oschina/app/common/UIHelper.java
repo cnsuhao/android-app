@@ -29,7 +29,6 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.URLs;
 import net.oschina.app.ui.About;
 import net.oschina.app.ui.BaseActivity;
-import net.oschina.app.ui.BlogDetail;
 import net.oschina.app.ui.CaptureActivity;
 import net.oschina.app.ui.CommentPub;
 import net.oschina.app.ui.FeedBack;
@@ -40,22 +39,18 @@ import net.oschina.app.ui.Main;
 import net.oschina.app.ui.MessageDetail;
 import net.oschina.app.ui.MessageForward;
 import net.oschina.app.ui.MessagePub;
-import net.oschina.app.ui.QuestionDetail;
 import net.oschina.app.ui.QuestionPub;
 import net.oschina.app.ui.QuestionTag;
 import net.oschina.app.ui.ReportUi;
 import net.oschina.app.ui.ScreenShotShare;
 import net.oschina.app.ui.Search;
 import net.oschina.app.ui.Setting;
-import net.oschina.app.ui.SoftwareDetail;
 import net.oschina.app.ui.SoftwareLib;
-import net.oschina.app.ui.TweetDetail;
 import net.oschina.app.ui.TweetPub;
 import net.oschina.app.ui.UserCenter;
 import net.oschina.app.ui.UserFavorite;
 import net.oschina.app.ui.UserFriend;
 import net.oschina.app.ui.UserInfo;
-import net.oschina.app.v2.activity.news.BlogDetailActivity;
 import net.oschina.app.v2.activity.news.NewsDetailActivity;
 import net.oschina.app.widget.LinkView;
 import net.oschina.app.widget.LinkView.MyURLSpan;
@@ -239,8 +234,10 @@ public class UIHelper {
 	 * @param tweetId
 	 */
 	public static void showTweetDetail(Context context, int tweetId) {
-		Intent intent = new Intent(context, TweetDetail.class);
+		Intent intent = new Intent(context, NewsDetailActivity.class);
 		intent.putExtra("tweet_id", tweetId);
+		intent.putExtra(NewsDetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				NewsDetailActivity.DISPLAY_TWEET);
 		context.startActivity(intent);
 	}
 

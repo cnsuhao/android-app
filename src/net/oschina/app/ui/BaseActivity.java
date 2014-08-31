@@ -1,9 +1,7 @@
 package net.oschina.app.ui;
 
 import net.oschina.app.AppManager;
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.View;

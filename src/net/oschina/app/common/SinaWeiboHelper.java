@@ -1,20 +1,19 @@
 package net.oschina.app.common;
 
-import com.weibo.net.AccessToken;
-import com.weibo.net.DialogError;
-import com.weibo.net.Weibo;
-import com.weibo.net.WeiboDialogListener;
-import com.weibo.net.WeiboException;
-
 import net.oschina.app.AppConfig;
 import net.oschina.app.R;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
+
+import com.weibo.net.AccessToken;
+import com.weibo.net.DialogError;
+import com.weibo.net.Weibo;
+import com.weibo.net.WeiboDialogListener;
+import com.weibo.net.WeiboException;
 /**
  * 新浪微博帮助类
  * @author liux (http://my.oschina.net/liux)

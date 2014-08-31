@@ -1,7 +1,9 @@
 package net.oschina.app.v2.ui.pagertab;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public final class q implements Serializable {
 

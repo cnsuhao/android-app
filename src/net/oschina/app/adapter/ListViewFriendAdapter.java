@@ -6,7 +6,6 @@ import net.oschina.app.R;
 import net.oschina.app.bean.FriendList.Friend;
 import net.oschina.app.common.BitmapManager;
 import net.oschina.app.common.StringUtils;
-
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;

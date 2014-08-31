@@ -1,23 +1,8 @@
 package net.oschina.app.v2.activity.news.fragment;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
-import org.apache.http.Header;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
-import android.database.MergeCursor;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import net.oschina.app.AppContext;
-import net.oschina.app.AppException;
 import net.oschina.app.R;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.News.Relative;
@@ -26,6 +11,18 @@ import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+
+import org.apache.http.Header;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class NewsDetailFragment extends BaseFragment {
 

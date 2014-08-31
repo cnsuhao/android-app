@@ -5,7 +5,6 @@ import java.util.List;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.Messages;
-import net.oschina.app.bean.Tweet;
 import net.oschina.app.common.BitmapManager;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;

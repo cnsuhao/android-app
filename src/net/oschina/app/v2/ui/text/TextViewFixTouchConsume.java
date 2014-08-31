@@ -5,10 +5,6 @@ import java.util.regex.Pattern;
 
 import net.oschina.app.bean.URLs;
 import net.oschina.app.common.UIHelper;
-import net.oschina.app.widget.LinkView;
-import net.oschina.app.widget.LinkView.MyURLSpan;
-import net.oschina.app.widget.LinkView.NoLinkSpan;
-import net.oschina.app.widget.LinkView.OnLinkClickListener;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Html;

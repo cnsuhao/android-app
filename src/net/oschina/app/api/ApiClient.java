@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.bean.ActiveList;
@@ -42,6 +43,7 @@ import net.oschina.app.bean.WellcomeImage;
 import net.oschina.app.common.FileUtils;
 import net.oschina.app.common.ImageUtils;
 import net.oschina.app.common.StringUtils;
+
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;

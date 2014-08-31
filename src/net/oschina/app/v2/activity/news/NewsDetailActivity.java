@@ -1,14 +1,15 @@
 package net.oschina.app.v2.activity.news;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import net.oschina.app.R;
 import net.oschina.app.v2.activity.news.fragment.BlogDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.NewsDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.QuestionDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.SoftwareDetailFragment;
+import net.oschina.app.v2.activity.tweet.fragment.TweetDetailFragment;
 import net.oschina.app.v2.base.BaseActivity;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
 /**
  * 新闻资讯详情
@@ -21,6 +22,7 @@ public class NewsDetailActivity extends BaseActivity {
 	public static final int DISPLAY_BLOG = 1;
 	public static final int DISPLAY_SOFTWARE = 2;
 	public static final int DISPLAY_QUESTION =3;
+	public static final int DISPLAY_TWEET = 4;
 	public static final String BUNDLE_KEY_DISPLAY_TYPE = "BUNDLE_KEY_DISPLAY_TYPE";
 
 	@Override
@@ -46,6 +48,9 @@ public class NewsDetailActivity extends BaseActivity {
 			break;
 		case DISPLAY_QUESTION:
 			fragment = new QuestionDetailFragment();
+			break;
+		case DISPLAY_TWEET:
+			fragment = new TweetDetailFragment();
 			break;
 		default:
 			break;

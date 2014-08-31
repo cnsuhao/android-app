@@ -1,13 +1,9 @@
 package net.oschina.app.ui;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.google.zxing.common.BitMatrix;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
@@ -23,11 +19,9 @@ import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;

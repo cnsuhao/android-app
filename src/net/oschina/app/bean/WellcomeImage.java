@@ -5,12 +5,9 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 import net.oschina.app.AppException;
-import net.oschina.app.common.StringUtils;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-
-import com.tencent.mm.sdk.platformtools.Log;
 
 import android.util.Xml;
 

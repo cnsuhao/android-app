@@ -10,7 +10,6 @@ import net.oschina.app.common.BitmapManager;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.widget.LinkView;
-
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;

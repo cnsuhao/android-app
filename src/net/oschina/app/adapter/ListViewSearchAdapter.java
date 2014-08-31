@@ -5,7 +5,6 @@ import java.util.List;
 import net.oschina.app.R;
 import net.oschina.app.bean.SearchList.Result;
 import net.oschina.app.common.StringUtils;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

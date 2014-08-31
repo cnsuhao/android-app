@@ -1,10 +1,10 @@
 package net.oschina.app.v2.activity.news;
 
-import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import net.oschina.app.R;
 import net.oschina.app.v2.activity.news.fragment.NewsDetailFragment;
 import net.oschina.app.v2.base.BaseActivity;
+import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 
 /**
  * 新闻资讯详情

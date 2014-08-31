@@ -12,7 +12,6 @@ import java.util.concurrent.Executors;
 
 import net.oschina.app.AppException;
 import net.oschina.app.api.ApiClient;
-
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;

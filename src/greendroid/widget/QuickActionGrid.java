@@ -18,7 +18,6 @@ package greendroid.widget;
 import java.util.List;
 
 import net.oschina.app.R;
-
 import android.content.Context;
 import android.graphics.Rect;
 import android.view.KeyEvent;

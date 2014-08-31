@@ -1,9 +1,9 @@
 package net.oschina.app.v2.api.remote;
 
+import net.oschina.app.v2.api.ApiHttpClient;
+
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
-import net.oschina.app.v2.api.ApiHttpClient;
 
 public class BaseApi {
 	public static final int DEF_PAGE_SIZE = 20;

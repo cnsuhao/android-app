@@ -3,21 +3,13 @@ package net.oschina.app;
 import java.io.File;
 import java.util.List;
 
-import org.apache.http.Header;
-
-import com.loopj.android.http.TextHttpResponseHandler;
-
 import net.oschina.app.common.FileUtils;
 import net.oschina.app.common.StringUtils;
-import net.oschina.app.ui.Main;
 import net.oschina.app.v2.activity.MainActivity;
-import net.oschina.app.v2.activity.oauth.AuthorizeActivity;
-import net.oschina.app.v2.api.remote.BaseApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;

@@ -14,8 +14,6 @@ import java.util.Hashtable;
 import java.util.Properties;
 import java.util.UUID;
 
-import com.loopj.android.http.AsyncHttpClient;
-
 import net.oschina.app.api.ApiClient;
 import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Barcode;
@@ -50,7 +48,6 @@ import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.ApiHttpClient;
 import net.oschina.app.v2.base.BaseApplication;
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
@@ -63,8 +60,9 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.webkit.CacheManager;
+
+import com.loopj.android.http.AsyncHttpClient;
 
 /**
  * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据

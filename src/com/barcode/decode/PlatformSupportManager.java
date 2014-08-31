@@ -16,13 +16,13 @@
 
 package com.barcode.decode;
 
-import android.os.Build;
-import android.util.Log;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import android.os.Build;
+import android.util.Log;
 
 /**
  * <p>Sometimes the application wants to access advanced functionality exposed by Android APIs that are only available

@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.commons.httpclient.util.URIUtil;
-import org.apache.http.client.utils.URIUtils;
-
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.R;

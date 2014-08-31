@@ -6,7 +6,6 @@ import net.oschina.app.R;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogList;
 import net.oschina.app.common.StringUtils;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

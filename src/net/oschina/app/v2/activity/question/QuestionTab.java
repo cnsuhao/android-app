@@ -3,7 +3,6 @@ package net.oschina.app.v2.activity.question;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.PostList;
-import net.oschina.app.v2.activity.news.fragment.NewsFragment;
 import net.oschina.app.v2.activity.question.fragment.QuestionFragment;
 
 

@@ -1,7 +1,6 @@
 package net.oschina.app.adapter;
 
 import net.oschina.app.R;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;

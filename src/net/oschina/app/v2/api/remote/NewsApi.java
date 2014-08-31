@@ -37,7 +37,7 @@ public class NewsApi extends BaseApi {
 		params.put("dataType", "json");
 		ApiHttpClient.get("action/api/post_list", params, handler);
 	}
-	
+
 	public static void getTweetList(int uid, int page,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
@@ -48,7 +48,26 @@ public class NewsApi extends BaseApi {
 		params.put("dataType", "json");
 		ApiHttpClient.get("action/api/tweet_list", params, handler);
 	}
-	
+
+	/**
+	 * 获取评论列表
+	 * 
+	 * @param id
+	 * @param catalog
+	 *            1新闻 2帖子 3动弹 4动态
+	 * @param page
+	 * @param handler
+	 */
+	public static void getCommentList(int id, int catalog, int page,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("catalog", catalog);
+		params.put("id", id);
+		params.put("pageIndex", page);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/comment_list", params, handler);
+	}
+
 	/**
 	 * 获取新闻明细
 	 * 
@@ -65,13 +84,19 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.get("action/api/blog_detail", params, handler);
 	}
 
-	public static void getSoftwareDetail(String ident, AsyncHttpResponseHandler handler) {
+	public static void getSoftwareDetail(String ident,
+			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams("ident", ident);
 		ApiHttpClient.get("action/api/software_detail", params, handler);
 	}
-	
+
 	public static void getPostDetail(int id, AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams("id", id);
 		ApiHttpClient.get("action/api/post_detail", params, handler);
+	}
+
+	public static void getTweetDetail(int id, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams("id", id);
+		ApiHttpClient.get("action/api/tweet_detail", params, handler);
 	}
 }

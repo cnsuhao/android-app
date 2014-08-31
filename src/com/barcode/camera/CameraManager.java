@@ -16,6 +16,8 @@
 
 package com.barcode.camera;
 
+import java.io.IOException;
+
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -23,9 +25,8 @@ import android.hardware.Camera;
 import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import com.google.zxing.PlanarYUVLuminanceSource;
 
-import java.io.IOException;
+import com.google.zxing.PlanarYUVLuminanceSource;
 
 /**
  * 相机管理类

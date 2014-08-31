@@ -1,17 +1,19 @@
 package net.oschina.app.v2.ui.text;
 
+import java.lang.ref.WeakReference;
+
+import net.oschina.app.R;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.text.style.ReplacementSpan;
 import android.view.View;
 //import com.sina.weibo.k.a;
-import java.lang.ref.WeakReference;
-
-import net.oschina.app.R;
 
 public abstract class am extends ReplacementSpan {
 

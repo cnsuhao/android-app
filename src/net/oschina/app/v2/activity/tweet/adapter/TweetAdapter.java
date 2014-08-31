@@ -6,12 +6,9 @@ import net.oschina.app.common.StringUtils;
 import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
 import net.oschina.app.v2.ui.text.MyURLSpan;
-import net.oschina.app.v2.ui.text.TextViewFixTouchConsume;
 import net.oschina.app.v2.ui.text.TweetTextView;
-import net.oschina.app.widget.LinkView;
 import android.annotation.SuppressLint;
 import android.text.Html;
-import android.text.Spannable;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,23 +32,25 @@ public class TweetAdapter extends ListBaseAdapter {
 
 		Tweet item = (Tweet) _data.get(position);
 		vh.name.setText(item.getAuthor());
-		//vh.title.setLinkText(item.getBody());
-		//vh.title.setMovementMethod(TextViewFixTouchConsume.LocalLinkMovementMethod.getInstance());
-		//vh.title.setLinkText(item.getBody());
+		// vh.title.setLinkText(item.getBody());
+		// vh.title.setMovementMethod(TextViewFixTouchConsume.LocalLinkMovementMethod.getInstance());
+		// vh.title.setLinkText(item.getBody());
 		vh.title.setMovementMethod(MyLinkMovementMethod.a());
 		vh.title.setFocusable(false);
 		vh.title.setDispatchToParent(true);
 		vh.title.setLongClickable(false);
-		
+
 		Spanned span = Html.fromHtml(item.getBody());
 		vh.title.setText(span);
 		MyURLSpan.parseLinkText(vh.title, span);
-		
+
 		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
-		
+
+		vh.from.setVisibility(View.VISIBLE);
 		switch (item.getAppClient()) {
 		default:
 			vh.from.setText("");
+			vh.from.setVisibility(View.GONE);
 			break;
 		case Tweet.CLIENT_MOBILE:
 			vh.from.setText(R.string.from_mobile);
@@ -69,20 +68,29 @@ public class TweetAdapter extends ListBaseAdapter {
 			vh.from.setText(R.string.from_wechat);
 			break;
 		}
-		
+
+		if (item.getCommentCount() > 0) {
+			vh.commentCount.setText(String.valueOf(item.getCommentCount()));
+			vh.commentCount.setVisibility(View.VISIBLE);
+		} else {
+			vh.commentCount.setVisibility(View.GONE);
+		}
+
 		return convertView;
 	}
 
 	static class ViewHolder {
-		public TextView name, from, time;
+		public TextView name, from, time, commentCount;
 		public TweetTextView title;
 		public ImageView avatar;
+
 		public ViewHolder(View view) {
 			name = (TextView) view.findViewById(R.id.tv_name);
 			title = (TweetTextView) view.findViewById(R.id.tv_title);
 			from = (TextView) view.findViewById(R.id.tv_from);
 			time = (TextView) view.findViewById(R.id.tv_time);
-			avatar = (ImageView)view.findViewById(R.id.iv_avatar);
+			commentCount = (TextView) view.findViewById(R.id.tv_comment_count);
+			avatar = (ImageView) view.findViewById(R.id.iv_avatar);
 		}
 	}
 }

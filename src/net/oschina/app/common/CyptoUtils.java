@@ -1,5 +1,6 @@
 package net.oschina.app.common;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.security.Key;
 import java.security.spec.AlgorithmParameterSpec;
 

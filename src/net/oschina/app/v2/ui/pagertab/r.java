@@ -1,11 +1,9 @@
 package net.oschina.app.v2.ui.pagertab;
 
+import net.oschina.app.v2.utils.aa;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.TextView;
-import java.util.*;
-
-import net.oschina.app.v2.utils.aa;
 
 public final class r {
 

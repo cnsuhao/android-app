@@ -1,5 +1,8 @@
 package net.oschina.app.v2.ui.pagertab;
 
+import java.util.Locale;
+
+import net.oschina.app.R;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -21,10 +24,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.Locale;
-
-import net.oschina.app.R;
 
 public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		android.support.v4.view.ViewPager.OnPageChangeListener {

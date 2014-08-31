@@ -4,7 +4,8 @@ import net.oschina.app.v2.base.BaseTabFragment;
 import net.oschina.app.v2.base.BaseTabFragment.TabChangedListener;
 import net.oschina.app.v2.ui.pagertab.PagerSlidingTabStrip.OnTabClickListener;
 import android.content.Context;
-import android.support.v4.app.*;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 public abstract class SlidingTabPagerAdapter extends FragmentPagerAdapter

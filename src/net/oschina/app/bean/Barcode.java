@@ -1,21 +1,11 @@
 package net.oschina.app.bean;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 
 import net.oschina.app.AppException;
-import net.oschina.app.common.FileUtils;
-import net.oschina.app.common.StringUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import android.util.Xml;
 
 /**
  * 二维码扫描实体类

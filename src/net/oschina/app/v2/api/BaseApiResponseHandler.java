@@ -1,6 +1,6 @@
 package net.oschina.app.v2.api;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
+import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -9,7 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class BaseApiResponseHandler extends JsonHttpResponseHandler {
 

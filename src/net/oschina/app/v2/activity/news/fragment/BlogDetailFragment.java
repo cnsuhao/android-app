@@ -5,8 +5,6 @@ import java.io.ByteArrayInputStream;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.Blog;
-import net.oschina.app.bean.News;
-import net.oschina.app.bean.News.Relative;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.remote.NewsApi;
