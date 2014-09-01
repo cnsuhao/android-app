@@ -91,7 +91,7 @@ public class BlogDetailFragment extends BaseFragment {
 	private void initData() {
 		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 		// start to load news detail
-		NewsApi.getNewsDetail(mBlogId, mHandler);
+		NewsApi.getBlogDetail(mBlogId, mHandler);
 	}
 
 	private void fillUI() {

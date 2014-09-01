@@ -1,13 +1,14 @@
 package net.oschina.app.v2.activity;
 
 import net.oschina.app.R;
+import net.oschina.app.v2.base.BaseActivity;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost.OnTabChangeListener;
@@ -15,17 +16,24 @@ import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
-public class MainActivity extends ActionBarActivity implements
-		OnTabChangeListener {
+/**
+ * 应用主界面
+ * @author tonlin
+ * @since 2014/08
+ */
+public class MainActivity extends BaseActivity implements OnTabChangeListener {
 
 	private FragmentTabHost mTabHost;
 
+	@Override
+	protected int getLayoutId() {
+		return R.layout.v2_activity_main;
+	}
+
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.v2_activity_main);
-
+	protected void init(Bundle savedInstanceState) {
+		super.init(savedInstanceState);
 		mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
 		mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
 		if (android.os.Build.VERSION.SDK_INT > 10) {
@@ -37,6 +45,18 @@ public class MainActivity extends ActionBarActivity implements
 		mTabHost.setCurrentTab(0);
 		mTabHost.setOnTabChangedListener(this);
 	}
+
+	// protected void initActionBar(ActionBar actionBar) {
+	// //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+	// //actionBar.setDisplayUseLogoEnabled(false);
+	//
+	// //actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP|ActionBar.DISPLAY_SHOW_TITLE);
+	// actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+	// View view =
+	// LayoutInflater.from(this).inflate(R.layout.actionbar_custom_backtitle,
+	// null);
+	// actionBar.setCustomView(view);
+	// }
 
 	@SuppressLint("InflateParams")
 	private void initTabs() {
@@ -78,5 +98,11 @@ public class MainActivity extends ActionBarActivity implements
 				v.findViewById(R.id.tab_titile).setSelected(false);
 			}
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main_menu, menu);
+		return true;
 	}
 }

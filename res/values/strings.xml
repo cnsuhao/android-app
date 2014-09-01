@@ -7,6 +7,7 @@
     <string name="main_menu_myinfo">我的资料</string>
     <string name="main_menu_software">开源软件</string>
     <string name="main_menu_search">搜索</string>
+    <string name="main_menu_post">发表</string>
     <string name="main_menu_sweep">扫一扫</string>
     <string name="main_menu_picshow">显示图片</string>
     <string name="main_menu_picnoshow">隐藏图片</string>
@@ -126,4 +127,10 @@
     <string name="progress_login">正在登录…</string>
     <string name="tip_login_error_for_network">对不起,无法登录.</string>
     <string name="tip_no_internet">当前没有可用的网络链接</string>
+    <string name="actionbar_title_news">资讯</string>
+    <string name="actionbar_title_blog">博客</string>
+    <string name="actionbar_title_software">软件</string>
+    <string name="actionbar_title_question">问答</string>
+    <string name="actionbar_title_tweet">动弹</string>
+    <string name="actionbar_title_detail">详情</string>
 </resources>
