@@ -25,6 +25,7 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.URLs;
 import net.oschina.app.ui.About;
@@ -51,8 +52,9 @@ import net.oschina.app.ui.UserCenter;
 import net.oschina.app.ui.UserFavorite;
 import net.oschina.app.ui.UserFriend;
 import net.oschina.app.ui.UserInfo;
+import net.oschina.app.v2.activity.common.SimpleBackActivity;
 import net.oschina.app.v2.activity.news.NewsDetailActivity;
-import net.oschina.app.v2.user.LoginActivity;
+import net.oschina.app.v2.activity.user.LoginActivity;
 import net.oschina.app.widget.LinkView;
 import net.oschina.app.widget.LinkView.MyURLSpan;
 import net.oschina.app.widget.PathChooseDialog;
@@ -74,7 +76,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
@@ -833,7 +834,14 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showSetting(Context context) {
-		Intent intent = new Intent(context, Setting.class);
+		//Intent intent = new Intent(context, Setting.class);
+		//context.startActivity(intent);
+		showSimpleBack(context, SimpleBackPage.SETTINGS);
+	}
+
+	public static void showSimpleBack(Context context, SimpleBackPage page) {
+		Intent intent = new Intent(context, SimpleBackActivity.class);
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
 		context.startActivity(intent);
 	}
 
@@ -873,13 +881,14 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showUserInfo(Activity context) {
-		AppContext ac = (AppContext) context.getApplicationContext();
-		if (!ac.isLogin()) {
-			showLoginDialog(context);
-		} else {
-			Intent intent = new Intent(context, UserInfo.class);
-			context.startActivity(intent);
-		}
+		//AppContext ac = (AppContext) context.getApplicationContext();
+		//if (!ac.isLogin()) {
+		//	showLoginDialog(context);
+		//} else {
+			//Intent intent = new Intent(context, UserInfo.class);
+			//context.startActivity(intent);
+		//}
+		showSimpleBack(context, SimpleBackPage.PROFILE);
 	}
 
 	/**
@@ -1303,9 +1312,9 @@ public class UIHelper {
 		}
 		return sp;
 	}
-	
-	public static SpannableString parseActiveAction2(
-			int objecttype, int objectcatalog, String objecttitle) {
+
+	public static SpannableString parseActiveAction2(int objecttype,
+			int objectcatalog, String objecttitle) {
 		String title = "";
 		int start = 0;
 		int end = 0;
@@ -1346,12 +1355,12 @@ public class UIHelper {
 		}
 		SpannableString sp = new SpannableString(title);
 		// 设置用户名字体大小、加粗、高亮
-		//sp.setSpan(new AbsoluteSizeSpan(14, true), 0, author.length(),
-		//		Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		//sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
-		//		author.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		//sp.setSpan(new ForegroundColorSpan(Color.parseColor("#0e5986")), 0,
-		//		author.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		// sp.setSpan(new AbsoluteSizeSpan(14, true), 0, author.length(),
+		// Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		// sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
+		// author.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		// sp.setSpan(new ForegroundColorSpan(Color.parseColor("#0e5986")), 0,
+		// author.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		// 设置标题字体大小、高亮
 		if (!StringUtils.isEmpty(objecttitle)) {
 			start = title.indexOf(objecttitle);
@@ -1486,8 +1495,9 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showAbout(Context context) {
-		Intent intent = new Intent(context, About.class);
-		context.startActivity(intent);
+		//Intent intent = new Intent(context, About.class);
+		//context.startActivity(intent);
+		showSimpleBack(context, SimpleBackPage.ABOUT);
 	}
 
 	/**
@@ -1519,17 +1529,17 @@ public class UIHelper {
 	 * @param menu
 	 */
 	public static void showMenuLoginOrLogout(Activity activity, Menu menu) {
-		if (((AppContext) activity.getApplication()).isLogin()) {
-			menu.findItem(R.id.main_menu_user).setTitle(
-					R.string.main_menu_logout);
-			menu.findItem(R.id.main_menu_user).setIcon(
-					R.drawable.ic_menu_logout);
-		} else {
-			menu.findItem(R.id.main_menu_user).setTitle(
-					R.string.main_menu_login);
-			menu.findItem(R.id.main_menu_user)
-					.setIcon(R.drawable.ic_menu_login);
-		}
+		// if (((AppContext) activity.getApplication()).isLogin()) {
+		// menu.findItem(R.id.main_menu_login).setTitle(
+		// R.string.main_menu_logout);
+		// menu.findItem(R.id.main_menu_login).setIcon(
+		// R.drawable.ic_menu_logout);
+		// } else {
+		// menu.findItem(R.id.main_menu_login).setTitle(
+		// R.string.main_menu_login);
+		// menu.findItem(R.id.main_menu_login)
+		// .setIcon(R.drawable.ic_menu_login);
+		// }
 	}
 
 	/**
@@ -1578,9 +1588,11 @@ public class UIHelper {
 		AppContext ac = (AppContext) activity.getApplication();
 		if (ac.isLogin()) {
 			ac.Logout();
-			ToastMessage(activity, "已退出登录");
+			// ToastMessage(activity, "已退出登录");
+			AppContext.showToastShort(R.string.tip_logout_success);
 		} else {
-			showLoginDialog(activity);
+			// showLoginDialog(activity);
+			UIHelper.showLogin(activity);
 		}
 	}
 
@@ -1804,7 +1816,13 @@ public class UIHelper {
 	}
 
 	public static void showLogin(Context context) {
-		Intent intent = new Intent(context,LoginActivity.class);
+		Intent intent = new Intent(context, LoginActivity.class);
 		context.startActivity(intent);
+	}
+
+	public static void exitApp(Context context) {
+		Intent intent = new Intent(
+				net.oschina.app.v2.base.BaseActivity.INTENT_ACTION_EXIT_APP);
+		context.sendBroadcast(intent);
 	}
 }

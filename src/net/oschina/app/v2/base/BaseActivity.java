@@ -5,6 +5,10 @@ import net.oschina.app.v2.ui.dialog.BaseToast;
 import net.oschina.app.v2.ui.dialog.DialogControl;
 import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.ui.dialog.WaitDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -17,18 +21,27 @@ import android.widget.TextView;
 
 public abstract class BaseActivity extends ActionBarActivity implements
 		DialogControl, VisibilityControl, View.OnClickListener {
+	public static final String INTENT_ACTION_EXIT_APP = "INTENT_ACTION_EXIT_APP";
 	private boolean _isVisible;
 	private WaitDialog _waitDialog;
 
 	protected LayoutInflater mInflater;
 	private ActionBar mActionBar;
 	private TextView mTvActionTitle;
+	
+	private BroadcastReceiver mExistReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			finish();
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (!hasActionBar()) {
-			requestWindowFeature(Window.FEATURE_NO_TITLE);
+			supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
 		}
 		onBeforeSetContentLayout();
 		if (getLayoutId() != 0) {
@@ -40,8 +53,18 @@ public abstract class BaseActivity extends ActionBarActivity implements
 			initActionBar(mActionBar);
 		}
 		init(savedInstanceState);
+		
+		IntentFilter filter = new IntentFilter(INTENT_ACTION_EXIT_APP);
+		registerReceiver(mExistReceiver, filter);
 	}
 
+	@Override
+	protected void onDestroy() {
+		unregisterReceiver(mExistReceiver);
+		mExistReceiver = null;
+		super.onDestroy();
+	}
+	
 	protected void onBeforeSetContentLayout() {
 	}
 

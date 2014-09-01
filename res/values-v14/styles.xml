@@ -12,6 +12,7 @@
         <item name="android:actionBarStyle">@style/ActionBarBaseStyle</item>
         <item name="android:actionOverflowButtonStyle">@style/OverflowButton</item>
         <item name="android:actionBarItemBackground">@drawable/actionbar_item_background_selector</item>
+        <item name="android:dropDownListViewStyle">@style/DrapDownListView</item>
         <!-- <item name="android:homeAsUpIndicator">@drawable/actionbar_back_icon_normal</item> -->
     </style>
 

@@ -51,11 +51,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.ListPopupWindowCompat;
+import android.support.v7.internal.widget.ListPopupWindow;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -75,7 +79,7 @@ import android.widget.TextView;
  * @created 2012-3-21
  */
 public class Main extends BaseActivity {
-	
+
 	public static final int QUICKACTION_LOGIN_OR_LOGOUT = 0;
 	public static final int QUICKACTION_USERINFO = 1;
 	public static final int QUICKACTION_SOFTWARE = 2;
@@ -135,7 +139,7 @@ public class Main extends BaseActivity {
 	private int lvTweetSumData;
 	private int lvActiveSumData;
 	private int lvMsgSumData;
-	
+
 	private RadioButton fbNews;
 	private RadioButton fbQuestion;
 	private RadioButton fbTweet;
@@ -192,16 +196,16 @@ public class Main extends BaseActivity {
 
 	private TweetReceiver tweetReceiver;// 动弹发布接收器
 	private AppContext appContext;// 全局Context
-	
+
 	private DoubleClickExitHelper mDoubleClickExitHelper;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		
+
 		mDoubleClickExitHelper = new DoubleClickExitHelper(this);
-		
+
 		// 注册广播接收器
 		tweetReceiver = new TweetReceiver();
 		IntentFilter filter = new IntentFilter();
@@ -254,8 +258,6 @@ public class Main extends BaseActivity {
 		super.onDestroy();
 		unregisterReceiver(tweetReceiver);
 	}
-	
-	
 
 	@Override
 	protected void onNewIntent(Intent intent) {
@@ -264,13 +266,16 @@ public class Main extends BaseActivity {
 		if (intent.getBooleanExtra("LOGIN", false)) {
 			// 加载动弹、动态及留言(当前动弹的catalog大于0表示用户的uid)
 			if (lvTweetData.isEmpty() && curTweetCatalog > 0 && mCurSel == 2) {
-				this.loadLvTweetData(curTweetCatalog, 0, lvTweetHandler,UIHelper.LISTVIEW_ACTION_INIT);
+				this.loadLvTweetData(curTweetCatalog, 0, lvTweetHandler,
+						UIHelper.LISTVIEW_ACTION_INIT);
 			} else if (mCurSel == 3) {
 				if (lvActiveData.isEmpty()) {
-					this.loadLvActiveData(curActiveCatalog, 0, lvActiveHandler,UIHelper.LISTVIEW_ACTION_INIT);
+					this.loadLvActiveData(curActiveCatalog, 0, lvActiveHandler,
+							UIHelper.LISTVIEW_ACTION_INIT);
 				}
 				if (lvMsgData.isEmpty()) {
-					this.loadLvMsgData(0, lvMsgHandler,UIHelper.LISTVIEW_ACTION_INIT);
+					this.loadLvMsgData(0, lvMsgHandler,
+							UIHelper.LISTVIEW_ACTION_INIT);
 				}
 			}
 		} else if (intent.getBooleanExtra("NOTICE", false)) {
@@ -293,10 +298,13 @@ public class Main extends BaseActivity {
 					}
 					// 发完动弹后-刷新最新动弹、我的动弹&最新动态(当前界面必须是动弹|动态)
 					if (curTweetCatalog >= 0 && mCurSel == 2) {
-						loadLvTweetData(curTweetCatalog, 0, lvTweetHandler,UIHelper.LISTVIEW_ACTION_REFRESH);
-					} else if (curActiveCatalog == ActiveList.CATALOG_LASTEST&& mCurSel == 3) {
-						
-						loadLvActiveData(curActiveCatalog, 0, lvActiveHandler,UIHelper.LISTVIEW_ACTION_REFRESH);
+						loadLvTweetData(curTweetCatalog, 0, lvTweetHandler,
+								UIHelper.LISTVIEW_ACTION_REFRESH);
+					} else if (curActiveCatalog == ActiveList.CATALOG_LASTEST
+							&& mCurSel == 3) {
+
+						loadLvActiveData(curActiveCatalog, 0, lvActiveHandler,
+								UIHelper.LISTVIEW_ACTION_REFRESH);
 					}
 				}
 			} else {
@@ -306,27 +314,37 @@ public class Main extends BaseActivity {
 					public void handleMessage(Message msg) {
 						if (msg.what == 1) {
 							Result res = (Result) msg.obj;
-							UIHelper.ToastMessage(context,res.getErrorMessage(), 1000);
+							UIHelper.ToastMessage(context,
+									res.getErrorMessage(), 1000);
 							if (res.OK()) {
 								// 发送通知广播
 								if (res.getNotice() != null) {
-									UIHelper.sendBroadCast(context,res.getNotice());
+									UIHelper.sendBroadCast(context,
+											res.getNotice());
 								}
 								// 发完动弹后-刷新最新、我的动弹&最新动态
 								if (curTweetCatalog >= 0 && mCurSel == 2) {
-									loadLvTweetData(curTweetCatalog, 0,lvTweetHandler,UIHelper.LISTVIEW_ACTION_REFRESH);
-								} else if (curActiveCatalog == ActiveList.CATALOG_LASTEST&& mCurSel == 3) {
-									loadLvActiveData(curActiveCatalog, 0,lvActiveHandler,UIHelper.LISTVIEW_ACTION_REFRESH);
+									loadLvTweetData(curTweetCatalog, 0,
+											lvTweetHandler,
+											UIHelper.LISTVIEW_ACTION_REFRESH);
+								} else if (curActiveCatalog == ActiveList.CATALOG_LASTEST
+										&& mCurSel == 3) {
+									loadLvActiveData(curActiveCatalog, 0,
+											lvActiveHandler,
+											UIHelper.LISTVIEW_ACTION_REFRESH);
 								}
 								if (TweetPub.mContext != null) {
 									// 清除动弹保存的临时编辑内容
-									appContext.removeProperty(AppConfig.TEMP_TWEET,AppConfig.TEMP_TWEET_IMAGE);
+									appContext.removeProperty(
+											AppConfig.TEMP_TWEET,
+											AppConfig.TEMP_TWEET_IMAGE);
 									((Activity) TweetPub.mContext).finish();
 								}
 							}
 						} else {
 							((AppException) msg.obj).makeToast(context);
-							if (TweetPub.mContext != null&&TweetPub.mMessage != null)
+							if (TweetPub.mContext != null
+									&& TweetPub.mMessage != null)
 								TweetPub.mMessage.setVisibility(View.GONE);
 						}
 					}
@@ -390,7 +408,7 @@ public class Main extends BaseActivity {
 			case QUICKACTION_SOFTWARE:// 开源软件
 				UIHelper.showSoftware(Main.this);
 				break;
-			case QUICKACTION_SEARCH:// 
+			case QUICKACTION_SEARCH://
 				UIHelper.showCapture(Main.this);
 				break;
 			case QUICKACTION_SETTING:// 设置
@@ -402,13 +420,13 @@ public class Main extends BaseActivity {
 			}
 		}
 	};
-	
+
 	private void checkBackGround() {
 		if (!appContext.isNetworkConnected()) {
 			return;
 		}
 		// 启动线程去检查服务器接口是否需要下载新的欢迎界面背景图片到手机
-		new Thread(){
+		new Thread() {
 			public void run() {
 				// 将图片下载下来
 				try {
@@ -690,22 +708,26 @@ public class Main extends BaseActivity {
 					lvQuestion_foot_progress.setVisibility(View.VISIBLE);
 					// 当前pageIndex
 					int pageIndex = lvQuestionSumData / AppContext.PAGE_SIZE;
-					loadLvQuestionData(curQuestionCatalog, pageIndex,lvQuestionHandler, UIHelper.LISTVIEW_ACTION_SCROLL);
-							
+					loadLvQuestionData(curQuestionCatalog, pageIndex,
+							lvQuestionHandler, UIHelper.LISTVIEW_ACTION_SCROLL);
+
 				}
 			}
 
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
-				lvQuestion.onScroll(view, firstVisibleItem, visibleItemCount,totalItemCount);
-						
+				lvQuestion.onScroll(view, firstVisibleItem, visibleItemCount,
+						totalItemCount);
+
 			}
 		});
 		lvQuestion
 				.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
 					public void onRefresh() {
-						loadLvQuestionData(curQuestionCatalog, 0,lvQuestionHandler,UIHelper.LISTVIEW_ACTION_REFRESH);
-								
+						loadLvQuestionData(curQuestionCatalog, 0,
+								lvQuestionHandler,
+								UIHelper.LISTVIEW_ACTION_REFRESH);
+
 					}
 				});
 	}
@@ -714,10 +736,14 @@ public class Main extends BaseActivity {
 	 * 初始化动弹列表
 	 */
 	private void initTweetListView() {
-		lvTweetAdapter = new ListViewTweetAdapter(this, lvTweetData,R.layout.tweet_listitem);
-		lvTweet_footer = getLayoutInflater().inflate(R.layout.listview_footer,null);
-		lvTweet_foot_more = (TextView) lvTweet_footer.findViewById(R.id.listview_foot_more);
-		lvTweet_foot_progress = (ProgressBar) lvTweet_footer.findViewById(R.id.listview_foot_progress);
+		lvTweetAdapter = new ListViewTweetAdapter(this, lvTweetData,
+				R.layout.tweet_listitem);
+		lvTweet_footer = getLayoutInflater().inflate(R.layout.listview_footer,
+				null);
+		lvTweet_foot_more = (TextView) lvTweet_footer
+				.findViewById(R.id.listview_foot_more);
+		lvTweet_foot_progress = (ProgressBar) lvTweet_footer
+				.findViewById(R.id.listview_foot_progress);
 		lvTweet = (PullToRefreshListView) findViewById(R.id.frame_listview_tweet);
 		lvTweet.addFooterView(lvTweet_footer);// 添加底部视图 必须在setAdapter前
 		lvTweet.setAdapter(lvTweetAdapter);
@@ -738,7 +764,7 @@ public class Main extends BaseActivity {
 					tweet = (Tweet) tv.getTag();
 				}
 				if (tweet == null)
-					return;   			
+					return;
 				// 跳转到动弹详情&评论页面
 				UIHelper.showTweetDetail(view.getContext(), tweet.getId());
 			}
@@ -754,7 +780,8 @@ public class Main extends BaseActivity {
 				// 判断是否滚动到底部
 				boolean scrollEnd = false;
 				try {
-					if (view.getPositionForView(lvTweet_footer) == view.getLastVisiblePosition())
+					if (view.getPositionForView(lvTweet_footer) == view
+							.getLastVisiblePosition())
 						scrollEnd = true;
 				} catch (Exception e) {
 					scrollEnd = false;
@@ -767,7 +794,8 @@ public class Main extends BaseActivity {
 					lvTweet_foot_progress.setVisibility(View.VISIBLE);
 					// 当前pageIndex
 					int pageIndex = lvTweetSumData / AppContext.PAGE_SIZE;
-					loadLvTweetData(curTweetCatalog, pageIndex, lvTweetHandler,UIHelper.LISTVIEW_ACTION_SCROLL);
+					loadLvTweetData(curTweetCatalog, pageIndex, lvTweetHandler,
+							UIHelper.LISTVIEW_ACTION_SCROLL);
 				}
 			}
 
@@ -789,7 +817,8 @@ public class Main extends BaseActivity {
 				if (view instanceof TextView) {
 					_tweet = (Tweet) view.getTag();
 				} else {
-					TextView tv = (TextView) view.findViewById(R.id.tweet_listitem_username);
+					TextView tv = (TextView) view
+							.findViewById(R.id.tweet_listitem_username);
 					_tweet = (Tweet) tv.getTag();
 				}
 				if (_tweet == null)
@@ -2154,7 +2183,8 @@ public class Main extends BaseActivity {
 						|| action == UIHelper.LISTVIEW_ACTION_SCROLL)
 					isRefresh = true;
 				try {
-					ActiveList list = appContext.getActiveList(catalog,pageIndex, isRefresh);
+					ActiveList list = appContext.getActiveList(catalog,
+							pageIndex, isRefresh);
 					msg.what = list.getPageSize();
 					msg.obj = list;
 				} catch (AppException e) {
@@ -2300,18 +2330,18 @@ public class Main extends BaseActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int item_id = item.getItemId();
 		switch (item_id) {
-		case R.id.main_menu_user:
-			UIHelper.loginOrLogout(this);
-			break;
-		case R.id.main_menu_about:
-			UIHelper.showAbout(this);
-			break;
-		case R.id.main_menu_setting:
-			UIHelper.showSetting(this);
-			break;
-		case R.id.main_menu_exit:
-			UIHelper.Exit(this);
-			break;
+		// case R.id.main_menu_login:
+		// UIHelper.loginOrLogout(this);
+		// break;
+		// case R.id.main_menu_about:
+		// / UIHelper.showAbout(this);
+		// break;
+		// case R.id.main_menu_setting:
+		// UIHelper.showSetting(this);
+		// break;
+		// case R.id.main_menu_exit:
+		// UIHelper.Exit(this);
+		// break;
 		}
 		return true;
 	}
@@ -2337,4 +2367,6 @@ public class Main extends BaseActivity {
 		}
 		return flag;
 	}
+
+	
 }

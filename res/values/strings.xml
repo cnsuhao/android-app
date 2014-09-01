@@ -2,20 +2,21 @@
 <resources>    
     <string name="app_name">开源中国</string>
     
-    <string name="main_menu_login">用户登录</string>
-    <string name="main_menu_logout">注销登录</string>
+    <string name="main_menu_login">登录</string>
+    <string name="main_menu_logout">注销</string>
     <string name="main_menu_myinfo">我的资料</string>
     <string name="main_menu_software">开源软件</string>
     <string name="main_menu_search">搜索</string>
     <string name="main_menu_post">发表</string>
+    <string name="main_menu_more">更多</string>
     <string name="main_menu_sweep">扫一扫</string>
     <string name="main_menu_picshow">显示图片</string>
     <string name="main_menu_picnoshow">隐藏图片</string>
     <string name="main_menu_cache">清除缓存</string>
     <string name="main_menu_email">意见反馈</string>
     <string name="main_menu_about">关于我们</string>
-    <string name="main_menu_setting">系统设置</string>
-    <string name="main_menu_exit">退出程序</string>
+    <string name="main_menu_setting">设置</string>
+    <string name="main_menu_exit">退出应用</string>
     
     <string name="frame_title_news_lastest">最新资讯</string>
     <string name="frame_title_news_blog">最新博客</string>
@@ -118,6 +119,7 @@
     <string name="from_windows_phone">来自:Windows Phone</string>
     <string name="from_wechat">来自:微信</string>
     
+    <string name="unlogin">未登录</string>
     <string name="unlogin_tip">您还未登录\r\n点击屏幕登录</string>
     <string name="hint_username">输入账号/邮箱</string>
     <string name="hint_password">密码</string>
@@ -133,4 +135,25 @@
     <string name="actionbar_title_question">问答</string>
     <string name="actionbar_title_tweet">动弹</string>
     <string name="actionbar_title_detail">详情</string>
+    <string name="tip_logout_success">注销成功,你将无法看到你个人的动态更新.</string>
+    
+    <string name="picture_save_path">图片保存路径</string>
+    <string name="current_picture_save_path">目前路径：%s</string>
+    <string name="load_picture">加载图片</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="check_udpdate">检查更新</string>
+    <string name="feedback">意见反馈</string>
+    <string name="grade">去评分</string>
+    <string name="about_us">关于</string>
+    <string name="actionbar_title_settings">设置</string>
+    <string name="actionbar_title_about">关于</string>
+    
+    <string name="actionbar_title_profile">个人中心</string>
+    <string name="favorite">收藏</string>
+    <string name="following">关注</string>
+    <string name="follower">粉丝</string>
+    <string name="join_time">加入时间：</string>
+    <string name="location">所在地区: </string>
+    <string name="development_platform">开发平台: </string>
+    <string name="academic_focus">专长领域: </string>
 </resources>

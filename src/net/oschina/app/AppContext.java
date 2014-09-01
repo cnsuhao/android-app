@@ -60,6 +60,7 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.textservice.TextInfo;
 import android.webkit.CacheManager;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -284,7 +285,7 @@ public class AppContext extends BaseApplication {
 	public void initLoginInfo() {
 		User loginUser = getLoginInfo();
 		if (loginUser != null && loginUser.getUid() > 0
-				&& loginUser.isRememberMe()) {
+				&& !TextUtils.isEmpty(ApiClient.getCookie(this))) {//&& loginUser.isRememberMe()
 			this.loginUid = loginUser.getUid();
 			this.login = true;
 		} else {
@@ -292,17 +293,17 @@ public class AppContext extends BaseApplication {
 		}
 	}
 
-	public boolean hasLogin() {
-		User loginUser = getLoginInfo();
-		if (loginUser != null && loginUser.getUid() > 0) {
-			this.loginUid = loginUser.getUid();
-			this.login = true;
-			return true;
-		} else {
-			this.Logout();
-			return false;
-		}
-	}
+//	public boolean hasLogin() {
+//		User loginUser = getLoginInfo();
+//		if (loginUser != null && loginUser.getUid() > 0) {
+//			this.loginUid = loginUser.getUid();
+//			this.login = true;
+//			return true;
+//		} else {
+//			this.Logout();
+//			return false;
+//		}
+//	}
 
 	/**
 	 * 用户登录验证

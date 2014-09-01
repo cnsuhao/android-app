@@ -110,15 +110,15 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		super(context, attributeset, i);
 		currentPosition = 0;
 		currentPositionOffset = 0.0F;
-		indicatorColor = Color.parseColor("#40AA53");//0xff01d9ae;
-		underlineColor = 0xffd9d9d9;
+		indicatorColor = Color.parseColor("#40AA53");// 0xff01d9ae;
+		underlineColor = Color.parseColor("#DADADA");
 		dividerColor = 0;
 		checkedTextColor = R.color.tab_strip_text_selected;
 		unCheckedTextColor = R.color.tab_strip_text_unselected;
 		textAllCaps = true;
 		scrollOffset = 52;
 		indicatorHeight = 4;
-		underlineHeight = 2;
+		underlineHeight = 1;
 		dividerPadding = 12;
 		tabPadding = 0;
 		dividerWidth = 1;
@@ -130,20 +130,15 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		tabsContainer.setOrientation(0);
 		tabsContainer.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
 		addView(tabsContainer);
-		android.util.DisplayMetrics displaymetrics = getResources()
-				.getDisplayMetrics();
-		scrollOffset = (int) TypedValue.applyDimension(1, scrollOffset,
-				displaymetrics);
+		android.util.DisplayMetrics dm = getResources().getDisplayMetrics();
+		scrollOffset = (int) TypedValue.applyDimension(1, scrollOffset, dm);
 		indicatorHeight = (int) TypedValue.applyDimension(1, indicatorHeight,
-				displaymetrics);
+				dm);
 		underlineHeight = (int) TypedValue.applyDimension(0, underlineHeight,
-				displaymetrics);
-		dividerPadding = (int) TypedValue.applyDimension(1, dividerPadding,
-				displaymetrics);
-		tabPadding = (int) TypedValue.applyDimension(1, tabPadding,
-				displaymetrics);
-		dividerWidth = (int) TypedValue.applyDimension(1, dividerWidth,
-				displaymetrics);
+				dm);
+		dividerPadding = (int) TypedValue.applyDimension(1, dividerPadding, dm);
+		tabPadding = (int) TypedValue.applyDimension(1, tabPadding, dm);
+		dividerWidth = (int) TypedValue.applyDimension(1, dividerWidth, dm);
 		context.obtainStyledAttributes(attributeset, ATTRS).recycle();
 		TypedArray td = context.obtainStyledAttributes(attributeset,
 				R.styleable.PagerSlidingTabStrip);

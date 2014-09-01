@@ -19,6 +19,11 @@
         <item name="android:src">@drawable/actionbar_more_icon</item>
     </style>
 
+    <style name="DrapDownListView" parent="@style/Widget.AppCompat.Light.ListView.DropDown">
+        <item name="android:dividerHeight">1px</item>
+        <item name="android:divider">@color/list_divider_color</item>
+    </style>
+    
     <style name="ActionBarBaseStyle" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="background">@color/actionbar_background</item>
         <item name="titleTextStyle">@style/TitleStyle</item>
@@ -35,6 +40,7 @@
         <item name="actionBarStyle">@style/ActionBarBaseStyle</item>
         <item name="actionOverflowButtonStyle">@style/OverflowButton</item>
         <item name="actionBarItemBackground">@drawable/actionbar_item_background_selector</item>
+        <item name="dropDownListViewStyle">@style/DrapDownListView</item>
     </style>
 
     <!-- sina weibo -->
@@ -509,4 +515,24 @@
         <item name="android:layout_alignParentBottom">true</item>
     </style>
 
+    <style name="setting_item_container">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/list_item_background</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="setting_item_text">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
 </resources>

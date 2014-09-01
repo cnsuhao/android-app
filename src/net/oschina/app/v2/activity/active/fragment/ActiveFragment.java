@@ -114,7 +114,7 @@ public class ActiveFragment extends BaseListFragment {
 
 			@Override
 			public void onClick(View v) {
-				if (AppContext.instance().hasLogin()) {
+				if (AppContext.instance().isLogin()) {
 					onRefresh(null);
 				} else {
 					UIHelper.showLogin(getActivity());

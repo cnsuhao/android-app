@@ -1,4 +1,4 @@
-package net.oschina.app.v2.user;
+package net.oschina.app.v2.activity.user;
 
 import java.io.ByteArrayInputStream;
 
@@ -71,12 +71,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 				if (cookies != null) {
 					String tmpcookies = "";
 					for (Cookie c : cookies.getCookies()) {
-						 TLog.log(TAG, "cookie:"+c.getName()+" "+c.getValue());
-						 tmpcookies += (c.getName()+"="+c.getValue())+";";
+						TLog.log(TAG,
+								"cookie:" + c.getName() + " " + c.getValue());
+						tmpcookies += (c.getName() + "=" + c.getValue()) + ";";
 					}
-					TLog.log(TAG, "cookies:"+tmpcookies);
+					TLog.log(TAG, "cookies:" + tmpcookies);
 					AppContext.instance().setProperty("cookie", tmpcookies);
-					ApiHttpClient.setCookie(ApiClient.getCookie(AppContext.instance()));
+					ApiHttpClient.setCookie(ApiClient.getCookie(AppContext
+							.instance()));
 				}
 				User user = User.parse(new ByteArrayInputStream(arg2));
 				user.setAccount(mUserName);
@@ -107,10 +109,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 		}
 	};
 
+	protected int getLayoutId() {
+		return R.layout.v2_activity_login;
+	}
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.v2_activity_login);
+	protected boolean hasBackButton() {
+		return true;
+	}
+
+	@Override
+	protected int getActionBarTitle() {
+		return R.string.login;
+	}
+
+	@Override
+	protected void init(Bundle savedInstanceState) {
+		super.init(savedInstanceState);
 		Intent data = getIntent();
 		if (data != null) {
 			requestCode = data.getIntExtra(BUNDLE_KEY_REQUEST_CODE,
