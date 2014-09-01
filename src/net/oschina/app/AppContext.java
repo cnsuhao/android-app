@@ -63,6 +63,7 @@ import android.text.TextUtils;
 import android.webkit.CacheManager;
 
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.PersistentCookieStore;
 
 /**
  * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
@@ -107,7 +108,11 @@ public class AppContext extends BaseApplication {
 		instance = this;
 
 		init2();
-		ApiHttpClient.setHttpClient(new AsyncHttpClient());
+		AsyncHttpClient client = new AsyncHttpClient();
+		PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
+		client.setCookieStore(myCookieStore);
+		ApiHttpClient.setHttpClient(client);
+		ApiHttpClient.setCookie(ApiClient.getCookie(this));
 
 	}
 
@@ -121,9 +126,9 @@ public class AppContext extends BaseApplication {
 		return getPreferences().getString(KEY_ACCESS_TOKEN, null);
 	}
 
-	public static boolean hasLogin() {
-		return !TextUtils.isEmpty(getAccessToken());
-	}
+	//public static boolean hasLogin() {
+	//	return !TextUtils.isEmpty(getAccessToken());
+	//}
 
 	/**
 	 * 初始化
@@ -284,6 +289,18 @@ public class AppContext extends BaseApplication {
 			this.login = true;
 		} else {
 			this.Logout();
+		}
+	}
+
+	public boolean hasLogin() {
+		User loginUser = getLoginInfo();
+		if (loginUser != null && loginUser.getUid() > 0) {
+			this.loginUid = loginUser.getUid();
+			this.login = true;
+			return true;
+		} else {
+			this.Logout();
+			return false;
 		}
 	}
 

@@ -53,7 +53,7 @@ public class EmptyLayout extends LinearLayout implements
 			@Override
 			public void onClick(View v) {
 				if (clickEnable) {
-					setErrorType(2);
+					//setErrorType(NETWORK_LOADING);
 					if (listener != null)
 						listener.onClick(v);
 				}
@@ -89,7 +89,7 @@ public class EmptyLayout extends LinearLayout implements
 	@Override
 	public void onClick(View v) {
 		if (clickEnable) {
-			setErrorType(NETWORK_LOADING);
+			//setErrorType(NETWORK_LOADING);
 			if (listener != null)
 				listener.onClick(v);
 		}
@@ -117,8 +117,8 @@ public class EmptyLayout extends LinearLayout implements
 	public void setDayNight(boolean flag) {
 	}
 
-	public void setErrorMessage(String s) {
-		tv.setText(s);
+	public void setErrorMessage(String msg) {
+		tv.setText(msg);
 	}
 
 	public void setErrorType(int i) {

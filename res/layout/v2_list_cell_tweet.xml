@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/iv_avatar"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/list_item_avatar_size"
+        android:layout_height="@dimen/list_item_avatar_size"
         android:layout_marginRight="@dimen/space_8"
         android:background="@drawable/ic_default_avatar"
         android:contentDescription="@null" />
@@ -21,6 +21,13 @@
         android:textColor="@color/main_purple"
         android:textSize="@dimen/text_size_14" />
 
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/main_gray"
+        android:textSize="@dimen/text_size_12" />
     <!-- net.oschina.app.widget.LinkView -->
 
     <net.oschina.app.v2.ui.text.TweetTextView
@@ -46,9 +53,10 @@
 
         <TextView
             android:id="@+id/tv_from"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/space_10"
+            android:layout_weight="1"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
 
@@ -60,16 +68,6 @@
             android:drawableLeft="@drawable/ic_comment_count"
             android:drawablePadding="@dimen/space_2"
             android:gravity="center_vertical"
-            android:textColor="@color/main_gray"
-            android:textSize="@dimen/text_size_12"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right|center_vertical"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
     </LinearLayout>

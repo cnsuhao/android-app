@@ -52,6 +52,7 @@ import net.oschina.app.ui.UserFavorite;
 import net.oschina.app.ui.UserFriend;
 import net.oschina.app.ui.UserInfo;
 import net.oschina.app.v2.activity.news.NewsDetailActivity;
+import net.oschina.app.v2.user.LoginActivity;
 import net.oschina.app.widget.LinkView;
 import net.oschina.app.widget.LinkView.MyURLSpan;
 import net.oschina.app.widget.PathChooseDialog;
@@ -73,6 +74,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
@@ -1301,6 +1303,69 @@ public class UIHelper {
 		}
 		return sp;
 	}
+	
+	public static SpannableString parseActiveAction2(
+			int objecttype, int objectcatalog, String objecttitle) {
+		String title = "";
+		int start = 0;
+		int end = 0;
+		if (objecttype == 32 && objectcatalog == 0) {
+			title = "加入了开源中国";
+		} else if (objecttype == 1 && objectcatalog == 0) {
+			title = "添加了开源项目 " + objecttitle;
+		} else if (objecttype == 2 && objectcatalog == 1) {
+			title = "在讨论区提问：" + objecttitle;
+		} else if (objecttype == 2 && objectcatalog == 2) {
+			title = "发表了新话题：" + objecttitle;
+		} else if (objecttype == 3 && objectcatalog == 0) {
+			title = "发表了博客 " + objecttitle;
+		} else if (objecttype == 4 && objectcatalog == 0) {
+			title = "发表一篇新闻 " + objecttitle;
+		} else if (objecttype == 5 && objectcatalog == 0) {
+			title = "分享了一段代码 " + objecttitle;
+		} else if (objecttype == 6 && objectcatalog == 0) {
+			title = "发布了一个职位：" + objecttitle;
+		} else if (objecttype == 16 && objectcatalog == 0) {
+			title = "在新闻 " + objecttitle + " 发表评论";
+		} else if (objecttype == 17 && objectcatalog == 1) {
+			title = "回答了问题：" + objecttitle;
+		} else if (objecttype == 17 && objectcatalog == 2) {
+			title = "回复了话题：" + objecttitle;
+		} else if (objecttype == 17 && objectcatalog == 3) {
+			title = "在 " + objecttitle + " 对回帖发表评论";
+		} else if (objecttype == 18 && objectcatalog == 0) {
+			title = "在博客 " + objecttitle + " 发表评论";
+		} else if (objecttype == 19 && objectcatalog == 0) {
+			title = "在代码 " + objecttitle + " 发表评论";
+		} else if (objecttype == 20 && objectcatalog == 0) {
+			title = "在职位 " + objecttitle + " 发表评论";
+		} else if (objecttype == 101 && objectcatalog == 0) {
+			title = "回复了动态：" + objecttitle;
+		} else if (objecttype == 100) {
+			title = "更新了动态";
+		}
+		SpannableString sp = new SpannableString(title);
+		// 设置用户名字体大小、加粗、高亮
+		//sp.setSpan(new AbsoluteSizeSpan(14, true), 0, author.length(),
+		//		Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		//sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
+		//		author.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		//sp.setSpan(new ForegroundColorSpan(Color.parseColor("#0e5986")), 0,
+		//		author.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		// 设置标题字体大小、高亮
+		if (!StringUtils.isEmpty(objecttitle)) {
+			start = title.indexOf(objecttitle);
+			if (objecttitle.length() > 0 && start > 0) {
+				end = start + objecttitle.length();
+				sp.setSpan(new AbsoluteSizeSpan(14, true), start, end,
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				sp.setSpan(
+						new ForegroundColorSpan(Color.parseColor("#0e5986")),
+						start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			}
+		}
+		return sp;
+	}
 
 	/**
 	 * 组合动态的回复文本
@@ -1736,5 +1801,10 @@ public class UIHelper {
 		} else {
 			option.showAsDropDown(aim, -10, 0);
 		}
+	}
+
+	public static void showLogin(Context context) {
+		Intent intent = new Intent(context,LoginActivity.class);
+		context.startActivity(intent);
 	}
 }

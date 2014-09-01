@@ -84,7 +84,7 @@ public class ApiClient {
 		appCookie = "";
 	}
 	
-	private static String getCookie(AppContext appContext) {
+	public static String getCookie(AppContext appContext) {
 		if(appCookie == null || appCookie == "") {
 			appCookie = appContext.getProperty("cookie");
 		}

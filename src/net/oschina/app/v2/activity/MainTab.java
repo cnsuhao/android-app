@@ -1,10 +1,10 @@
 package net.oschina.app.v2.activity;
 
 import net.oschina.app.R;
+import net.oschina.app.v2.activity.active.fragment.ActiveViewPagerFragment;
 import net.oschina.app.v2.activity.news.fragment.NewsViewPagerFragment;
 import net.oschina.app.v2.activity.question.fragment.QuestionViewPagerFragment;
 import net.oschina.app.v2.activity.tweet.fragment.TweetViewPagerFragment;
-import android.support.v4.app.Fragment;
 
 public enum MainTab {
 
@@ -15,7 +15,7 @@ public enum MainTab {
 
 	TWEET(2, R.string.tab_name_tweet, R.drawable.tab_icon_tweet, TweetViewPagerFragment.class),
 
-	ME(3, R.string.tab_name_me, R.drawable.tab_icon_me, Fragment.class);
+	ME(3, R.string.tab_name_me, R.drawable.tab_icon_me, ActiveViewPagerFragment.class);
 	
 	private int idx;
 	private int resName;

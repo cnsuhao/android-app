@@ -39,18 +39,15 @@ public class TweetAdapter extends ListBaseAdapter {
 		vh.title.setFocusable(false);
 		vh.title.setDispatchToParent(true);
 		vh.title.setLongClickable(false);
-
 		Spanned span = Html.fromHtml(item.getBody());
 		vh.title.setText(span);
 		MyURLSpan.parseLinkText(vh.title, span);
 
 		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
 
-		vh.from.setVisibility(View.VISIBLE);
 		switch (item.getAppClient()) {
 		default:
 			vh.from.setText("");
-			vh.from.setVisibility(View.GONE);
 			break;
 		case Tweet.CLIENT_MOBILE:
 			vh.from.setText(R.string.from_mobile);
@@ -69,12 +66,7 @@ public class TweetAdapter extends ListBaseAdapter {
 			break;
 		}
 
-		if (item.getCommentCount() > 0) {
-			vh.commentCount.setText(String.valueOf(item.getCommentCount()));
-			vh.commentCount.setVisibility(View.VISIBLE);
-		} else {
-			vh.commentCount.setVisibility(View.GONE);
-		}
+		vh.commentCount.setText(String.valueOf(item.getCommentCount()));
 
 		return convertView;
 	}

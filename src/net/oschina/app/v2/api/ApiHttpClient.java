@@ -11,7 +11,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 public class ApiHttpClient {
-	//http://www.oschina.net/action/oauth2/authorize?response_type=code&client_id=F6QtiYRetdUEwsYKYvNR&state=xyz&redirect_uri=http://my.oschina.net/u/142883
+	// http://www.oschina.net/action/oauth2/authorize?response_type=code&client_id=F6QtiYRetdUEwsYKYvNR&state=xyz&redirect_uri=http://my.oschina.net/u/142883
 	public final static String HOST = "www.oschina.net";
 	private static String API_URL;
 	public static String ASSET_URL = "http://media-cache.pinterest.com/%s";
@@ -29,6 +29,10 @@ public class ApiHttpClient {
 	}
 
 	public ApiHttpClient() {
+	}
+
+	public static AsyncHttpClient getHttpClient() {
+		return client;
 	}
 
 	public static void cancelAll(Context context) {
@@ -58,7 +62,7 @@ public class ApiHttpClient {
 
 	public static String getAbsoluteApiUrl(String partUrl) {
 		String url = String.format(API_URL, partUrl);
-		Log.d("BASE_CLIENT", "request:"+url);
+		Log.d("BASE_CLIENT", "request:" + url);
 		return url;
 	}
 
@@ -87,7 +91,7 @@ public class ApiHttpClient {
 	}
 
 	public static void log(String log) {
-		Log.i("BaseApi", log);
+		Log.d("BaseApi", log);
 	}
 
 	public static void post(String partUrl, AsyncHttpResponseHandler handler) {
@@ -126,10 +130,15 @@ public class ApiHttpClient {
 		client = c;
 		client.addHeader("Accept-Language", Locale.getDefault().toString());
 		client.addHeader("Host", HOST);
+		client.addHeader("Connection", "Keep-Alive");
 		setUserAgent(ApiClientHelper.getUserAgent(AppContext.instance()));
 	}
 
 	public static void setUserAgent(String userAgent) {
 		client.setUserAgent(userAgent);
+	}
+
+	public static void setCookie(String cookie) {
+		client.addHeader("Cookie", cookie);
 	}
 }

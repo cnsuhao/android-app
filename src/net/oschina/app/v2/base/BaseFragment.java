@@ -1,15 +1,35 @@
 package net.oschina.app.v2.base;
 
+import net.oschina.app.R;
+import net.oschina.app.v2.ui.dialog.DialogControl;
+import net.oschina.app.v2.ui.dialog.WaitDialog;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.view.View;
 
-public class BaseFragment extends Fragment {
+public class BaseFragment extends Fragment implements View.OnClickListener {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	protected void hideWaitDialog() {
+		FragmentActivity activity = getActivity();
+		if (activity instanceof DialogControl) {
+			((DialogControl) activity).hideWaitDialog();
+		}
+	}
 
+	protected WaitDialog showWaitDialog() {
+		return showWaitDialog(R.string.loading);
+	}
+
+	protected WaitDialog showWaitDialog(int resid) {
+		FragmentActivity activity = getActivity();
+		if (activity instanceof DialogControl) {
+			return ((DialogControl) activity).showWaitDialog(resid);
+		}
+		return null;
+	}
+
+	@Override
+	public void onClick(View v) {
 	}
 
 }

@@ -43,6 +43,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10.0dip"
                 android:lines="2"
+                android:gravity="center"
                 android:text="@string/error_view_click_to_refresh"
                 android:textColor="@color/main_gray"
                 android:textSize="@dimen/text_size_16" />

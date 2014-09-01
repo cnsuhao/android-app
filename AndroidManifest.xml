@@ -85,6 +85,11 @@
             android:name="net.oschina.app.v2.activity.oauth.AuthorizeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActionBarBaseTheme" />
+        <activity 
+            android:name="net.oschina.app.v2.user.LoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActionBarBaseTheme"/>
         <activity
             android:name="net.oschina.app.v2.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"

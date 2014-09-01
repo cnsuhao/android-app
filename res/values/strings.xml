@@ -29,7 +29,7 @@
     <string name="frame_title_tweet_my">我的动弹</string>
     <string name="frame_title_tweet_send">动弹一下</string>
     <string name="frame_title_active_lastest">最新动态</string>
-    <string name="frame_title_active_atme">我</string>
+    <string name="frame_title_active_atme">\@我</string>
     <string name="frame_title_active_comment">评论</string>
     <string name="frame_title_active_myself">我自己</string>
     <string name="frame_title_active_message">留言</string>
@@ -116,4 +116,14 @@
     <string name="from_iphone">来自:Iphone</string>
     <string name="from_windows_phone">来自:Windows Phone</string>
     <string name="from_wechat">来自:微信</string>
+    
+    <string name="unlogin_tip">您还未登录\r\n点击屏幕登录</string>
+    <string name="hint_username">输入账号/邮箱</string>
+    <string name="hint_password">密码</string>
+    <string name="login">登录</string>
+    <string name="tip_please_input_username">请输入用户名</string>
+	<string name="tip_please_input_password">请输入密码</string>
+    <string name="progress_login">正在登录…</string>
+    <string name="tip_login_error_for_network">对不起,无法登录.</string>
+    <string name="tip_no_internet">当前没有可用的网络链接</string>
 </resources>

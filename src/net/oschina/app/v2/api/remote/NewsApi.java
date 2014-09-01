@@ -49,6 +49,16 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.get("action/api/tweet_list", params, handler);
 	}
 
+	public static void getActiveList(int uid, int catalog, int page,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("catalog", catalog);
+		params.put("pageIndex", page);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/active_list", params, handler);
+	}
+	
 	/**
 	 * 获取评论列表
 	 * 

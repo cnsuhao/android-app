@@ -36,7 +36,7 @@ public class NewsFragment extends BaseListFragment {
 	protected static final int STATE_REFRESH = 1;
 	protected static final int STATE_LOADMORE = 2;
 
-	private int mCurrentPage = 1;
+	private int mCurrentPage = 0;
 	private int mCatalog = NewsList.CATALOG_ALL;
 	private int mState = STATE_NONE;
 
@@ -99,7 +99,7 @@ public class NewsFragment extends BaseListFragment {
 
 	@Override
 	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-		mCurrentPage = 1;
+		mCurrentPage = 0;
 		mState = STATE_REFRESH;
 		sendRequestData();
 	}
