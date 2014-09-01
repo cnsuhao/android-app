@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            style="@style/setting_item_container"
+            android:layout_marginTop="@dimen/space_20"
+            android:padding="@dimen/space_8" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space_8"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/picture_save_path"
+                    android:textColor="@color/main_black"
+                    android:textSize="@dimen/text_size_16" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_2"
+                    android:text="@string/current_picture_save_path"
+                    android:textColor="@color/main_gray"
+                    android:textSize="@dimen/text_size_12" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/space_8"
+                android:src="@drawable/ic_item_goto_right_tip" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/space_8"
+            android:layout_marginRight="@dimen/space_8"
+            android:background="@color/list_divider_color" />
+
+        <LinearLayout
+            style="@style/setting_item_container"
+            android:padding="@dimen/space_12" >
+
+            <TextView
+                style="@style/setting_item_text"
+                android:layout_marginLeft="@dimen/space_8"
+                android:text="@string/load_picture" />
+
+            <net.oschina.app.v2.ui.tooglebutton.ToggleButton
+                xmlns:toggle="http://schemas.android.com/apk/res/net.oschina.app"
+                android:id="@+id/tb_load_picture"
+                android:layout_width="65dp"
+                android:layout_height="30dp"
+                toggle:borderWidth="0.1dp"
+                toggle:onColor="@color/main_green" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space_8"
+                android:layout_marginRight="@dimen/space_8"
+                android:src="@drawable/ic_item_goto_right_tip" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/space_8"
+            android:layout_marginRight="@dimen/space_8"
+            android:background="@color/list_divider_color" />
+
+        <LinearLayout
+            style="@style/setting_item_container"
+            android:padding="@dimen/space_16" >
+
+            <TextView
+                style="@style/setting_item_text"
+                android:text="@string/clear_cache" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12K"
+                android:textColor="@color/main_gray"
+                android:textSize="@dimen/text_size_14" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space_8"
+                android:src="@drawable/ic_item_goto_right_tip" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/space_8"
+            android:layout_marginRight="@dimen/space_8"
+            android:background="@color/list_divider_color" />
+
+        <LinearLayout
+            style="@style/setting_item_container"
+            android:padding="@dimen/space_16" >
+
+            <TextView
+                style="@style/setting_item_text"
+                android:text="@string/check_udpdate" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="V1.0.0beta"
+                android:textColor="@color/main_gray"
+                android:textSize="@dimen/text_size_14" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space_8"
+                android:src="@drawable/ic_item_goto_right_tip" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/space_8"
+            android:layout_marginRight="@dimen/space_8"
+            android:layout_marginTop="@dimen/space_20"
+            android:background="@color/list_divider_color" />
+
+        <LinearLayout
+            style="@style/setting_item_container"
+            android:padding="@dimen/space_16" >
+
+            <TextView
+                style="@style/setting_item_text"
+                android:text="@string/feedback" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_item_goto_right_tip" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/space_8"
+            android:layout_marginRight="@dimen/space_8"
+            android:background="@color/list_divider_color" />
+
+        <LinearLayout
+            style="@style/setting_item_container"
+            android:padding="@dimen/space_16" >
+
+            <TextView
+                style="@style/setting_item_text"
+                android:text="@string/grade" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_item_goto_right_tip" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/space_8"
+            android:layout_marginRight="@dimen/space_8"
+            android:background="@color/list_divider_color" />
+
+        <LinearLayout
+            android:id="@+id/ly_about"
+            style="@style/setting_item_container"
+            android:padding="@dimen/space_16" >
+
+            <TextView
+                style="@style/setting_item_text"
+                android:text="@string/about_us" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_item_goto_right_tip" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
