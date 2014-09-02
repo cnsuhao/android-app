@@ -5,7 +5,12 @@ import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
+import net.oschina.app.v2.ui.text.MyURLSpan;
+import net.oschina.app.v2.ui.text.TweetTextView;
 import android.annotation.SuppressLint;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -28,7 +33,15 @@ public class CommentAdapter extends ListBaseAdapter {
 		Comment item = (Comment) _data.get(position);
 
 		vh.name.setText(item.getAuthor());
-		vh.content.setText(item.getContent());
+
+		vh.content.setMovementMethod(MyLinkMovementMethod.a());
+		vh.content.setFocusable(false);
+		vh.content.setDispatchToParent(true);
+		vh.content.setLongClickable(false);
+		Spanned span = Html.fromHtml(item.getContent());
+		vh.content.setText(span);
+		MyURLSpan.parseLinkText(vh.content, span);
+		
 		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
 
 		vh.from.setVisibility(View.VISIBLE);
@@ -58,11 +71,11 @@ public class CommentAdapter extends ListBaseAdapter {
 	}
 
 	static class ViewHolder {
-		TextView name, content, time, from;
-
+		TextView name, time, from;
+		TweetTextView content;
 		ViewHolder(View view) {
 			name = (TextView) view.findViewById(R.id.tv_name);
-			content = (TextView) view.findViewById(R.id.tv_content);
+			content = (TweetTextView) view.findViewById(R.id.tv_content);
 			time = (TextView) view.findViewById(R.id.tv_time);
 			from = (TextView) view.findViewById(R.id.tv_from);
 		}

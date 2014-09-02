@@ -37,13 +37,13 @@
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
 
-        <ImageView
+        <TextView
+            android:id="@+id/tv_answer_view_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/space_10"
-            android:src="@drawable/widget_comment_count_icon"
-            android:visibility="gone" />
+            android:layout_marginLeft="@dimen/space_8"
+            android:textColor="@color/main_gray"
+            android:textSize="@dimen/text_size_12" />
 
         <TextView
             android:id="@+id/tv_time"

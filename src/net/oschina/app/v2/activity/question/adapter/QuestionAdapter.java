@@ -29,16 +29,18 @@ public class QuestionAdapter extends ListBaseAdapter {
 
 		vh.title.setText(item.getTitle());
 		vh.source.setText(item.getAuthor());
+		vh.avCount.setText(item.getAnswerCount()+"/"+item.getViewCount());
 		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
 		return convertView;
 	}
 
 	static class ViewHolder {
-		public TextView title, source, time;
+		public TextView title, source,avCount, time;
 		public ImageView avatar;
 		public ViewHolder(View view) {
 			title = (TextView) view.findViewById(R.id.tv_title);
 			source = (TextView) view.findViewById(R.id.tv_source);
+			avCount = (TextView) view.findViewById(R.id.tv_answer_view_count);
 			time = (TextView) view.findViewById(R.id.tv_time);
 			avatar = (ImageView)view.findViewById(R.id.iv_avatar);
 		}

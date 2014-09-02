@@ -30,14 +30,15 @@
         android:textColor="@color/main_gray"
         android:textSize="@dimen/text_size_12" />
 
-    <TextView
+    <net.oschina.app.v2.ui.text.TweetTextView
         android:id="@+id/tv_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_name"
-        android:layout_marginTop="@dimen/space_8"
+        android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_avatar"
         android:textColor="@color/main_black"
+        android:autoLink="web|email"
         android:textSize="@dimen/text_size_14" />
 
     <TextView
