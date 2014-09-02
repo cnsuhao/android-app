@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.Blog;
+import net.oschina.app.bean.CommentList;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.remote.NewsApi;
@@ -15,10 +16,12 @@ import org.apache.http.Header;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,14 +100,30 @@ public class BlogDetailFragment extends BaseFragment {
 			receivedError = true;
 		}
 	};
-	
+	private TextView mTvCommentCount;
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		ActionBarActivity act = (ActionBarActivity) activity;
+		mTvCommentCount = (TextView) act.getSupportActionBar().getCustomView()
+				.findViewById(R.id.tv_comment_count);
+		mTvCommentCount.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				UIHelper.showBlogComment(getActivity(), mBlog.getId());
+			}
+		});
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.v2_fragment_news_detail,
 				container, false);
 
-		mBlogId = getActivity().getIntent().getIntExtra("blog_id", 0);;
+		mBlogId = getActivity().getIntent().getIntExtra("blog_id", 0);
 
 		initViews(view);
 
@@ -139,10 +158,9 @@ public class BlogDetailFragment extends BaseFragment {
 		}
 		UIHelper.addWebImageShow(getActivity(), webView);
 	}
-	
+
 	private void initData() {
 		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-		// start to load news detail
 		NewsApi.getBlogDetail(mBlogId, mHandler);
 	}
 
@@ -150,32 +168,38 @@ public class BlogDetailFragment extends BaseFragment {
 		mTvTitle.setText(mBlog.getTitle());
 		mTvSource.setText(mBlog.getAuthor());
 		mTvTime.setText(StringUtils.friendly_time(mBlog.getPubDate()));
+		if (mTvCommentCount != null) {
+			mTvCommentCount.setVisibility(View.VISIBLE);
+			mTvCommentCount.setText(getString(R.string.comment_count,
+					mBlog.getCommentCount()));
+		}
 	}
 
 	private void fillWebViewBody() {
 		String body = UIHelper.WEB_STYLE + mBlog.getBody();
-		
+
 		Log.i(TAG, mBlog.getBody());
-		//读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
+		// 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
 		boolean isLoadImage;
-		AppContext ac = (AppContext)getActivity().getApplication();
-		if(AppContext.NETTYPE_WIFI == ac.getNetworkType()){
+		AppContext ac = (AppContext) getActivity().getApplication();
+		if (AppContext.NETTYPE_WIFI == ac.getNetworkType()) {
 			isLoadImage = true;
-		}else{
+		} else {
 			isLoadImage = ac.isLoadImage();
 		}
-		if(isLoadImage){
-			body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+","$1");
-			body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+","$1");
-			
+		if (isLoadImage) {
+			body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
+			body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
+
 			// 添加点击图片放大支持
-			body = body.replaceAll("(<img[^>]+src=\")(\\S+)\"",
-					"$1$2\" onClick=\"javascript:mWebViewImageListener.onImageClick('$2')\"");
-		}else{
-			body = body.replaceAll("<\\s*img\\s+([^>]*)\\s*>","");
+			body = body
+					.replaceAll("(<img[^>]+src=\")(\\S+)\"",
+							"$1$2\" onClick=\"javascript:mWebViewImageListener.onImageClick('$2')\"");
+		} else {
+			body = body.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "");
 		}
-		
+
 		mWebView.setWebViewClient(mWebClient);
-		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8",null);
+		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
 	}
 }

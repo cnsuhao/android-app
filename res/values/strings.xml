@@ -17,6 +17,9 @@
     <string name="main_menu_about">关于我们</string>
     <string name="main_menu_setting">设置</string>
     <string name="main_menu_exit">退出应用</string>
+  
+    <string name="detail_menu_favorite">收藏</string>
+    <string name="detail_menu_for_share">分享</string>
     
     <string name="frame_title_news_lastest">最新资讯</string>
     <string name="frame_title_news_blog">最新博客</string>
@@ -177,4 +180,9 @@
     <string name="actionbar_title_friends">我的好友</string>
     <string name="actionbar_title_favorites">我的收藏</string>
     <string name="actionbar_title_ossoftware">开源软件</string>
+    
+    <string name="actionbar_title_comment">评论</string>
+    <string name="comment_count">评论:%s</string>
+    <string name="answer_count">回答:%s</string>
+    <string name="post_answer">回答</string>
 </resources>

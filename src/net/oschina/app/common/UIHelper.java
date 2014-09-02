@@ -28,7 +28,6 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.URLs;
-import net.oschina.app.ui.About;
 import net.oschina.app.ui.BaseActivity;
 import net.oschina.app.ui.CaptureActivity;
 import net.oschina.app.ui.CommentPub;
@@ -46,12 +45,10 @@ import net.oschina.app.ui.ReportUi;
 import net.oschina.app.ui.ScreenShotShare;
 import net.oschina.app.ui.Search;
 import net.oschina.app.ui.Setting;
-import net.oschina.app.ui.SoftwareLib;
 import net.oschina.app.ui.TweetPub;
 import net.oschina.app.ui.UserCenter;
-import net.oschina.app.ui.UserFavorite;
 import net.oschina.app.ui.UserFriend;
-import net.oschina.app.ui.UserInfo;
+import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
 import net.oschina.app.v2.activity.common.SimpleBackActivity;
 import net.oschina.app.v2.activity.news.DetailActivity;
 import net.oschina.app.v2.activity.user.LoginActivity;
@@ -74,9 +71,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
@@ -835,13 +832,21 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showSetting(Context context) {
-		//Intent intent = new Intent(context, Setting.class);
-		//context.startActivity(intent);
+		// Intent intent = new Intent(context, Setting.class);
+		// context.startActivity(intent);
 		showSimpleBack(context, SimpleBackPage.SETTINGS);
 	}
 
 	public static void showSimpleBack(Context context, SimpleBackPage page) {
 		Intent intent = new Intent(context, SimpleBackActivity.class);
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
+		context.startActivity(intent);
+	}
+
+	public static void showSimpleBack(Context context, SimpleBackPage page,
+			Bundle args) {
+		Intent intent = new Intent(context, SimpleBackActivity.class);
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
 		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
 		context.startActivity(intent);
 	}
@@ -872,8 +877,8 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showSoftware(Context context) {
-		//Intent intent = new Intent(context, SoftwareLib.class);
-		//context.startActivity(intent);
+		// Intent intent = new Intent(context, SoftwareLib.class);
+		// context.startActivity(intent);
 		showSimpleBack(context, SimpleBackPage.SOFTEARE);
 	}
 
@@ -883,13 +888,13 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showUserInfo(Activity context) {
-		//AppContext ac = (AppContext) context.getApplicationContext();
-		//if (!ac.isLogin()) {
-		//	showLoginDialog(context);
-		//} else {
-			//Intent intent = new Intent(context, UserInfo.class);
-			//context.startActivity(intent);
-		//}
+		// AppContext ac = (AppContext) context.getApplicationContext();
+		// if (!ac.isLogin()) {
+		// showLoginDialog(context);
+		// } else {
+		// Intent intent = new Intent(context, UserInfo.class);
+		// context.startActivity(intent);
+		// }
 		showSimpleBack(context, SimpleBackPage.PROFILE);
 	}
 
@@ -925,8 +930,8 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showUserFavorite(Context context) {
-		//Intent intent = new Intent(context, UserFavorite.class);
-		//context.startActivity(intent);
+		// Intent intent = new Intent(context, UserFavorite.class);
+		// context.startActivity(intent);
 		showSimpleBack(context, SimpleBackPage.FAVORITES);
 	}
 
@@ -1093,7 +1098,7 @@ public class UIHelper {
 	 * @return
 	 */
 	public static WebViewClient getWebViewClient() {
-		
+
 		return new WebViewClient() {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -1499,8 +1504,8 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showAbout(Context context) {
-		//Intent intent = new Intent(context, About.class);
-		//context.startActivity(intent);
+		// Intent intent = new Intent(context, About.class);
+		// context.startActivity(intent);
 		showSimpleBack(context, SimpleBackPage.ABOUT);
 	}
 
@@ -1832,5 +1837,19 @@ public class UIHelper {
 
 	public static void showFriends(Context context) {
 		showSimpleBack(context, SimpleBackPage.FRIENDS);
+	}
+
+	public static void showBlogComment(Context context, int id) {
+		Bundle args = new Bundle();
+		args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
+		args.putBoolean(CommentFrament.BUNDLE_KEY_BLOG, true);
+		showSimpleBack(context, SimpleBackPage.COMMENT, args);
+	}
+
+	public static void showComment(Context context, int id, int catalog) {
+		Bundle args = new Bundle();
+		args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
+		args.putInt(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
+		showSimpleBack(context, SimpleBackPage.COMMENT, args);
 	}
 }

@@ -31,6 +31,7 @@ public class Software extends Entity {
 	private String language;
 	private String os;
 	private String recordtime;
+	private String url;
 	private int favorite;
 
 	public int getFavorite() {
@@ -148,6 +149,8 @@ public class Software extends Entity {
 					} else if (sw != null) {
 						if (tag.equalsIgnoreCase("id")) {
 							sw.id = StringUtils.toInt(xmlParser.nextText(), 0);
+						}  else if (tag.equalsIgnoreCase("url")) {
+							sw.setUrl(xmlParser.nextText());
 						} else if (tag.equalsIgnoreCase("title")) {
 							sw.setTitle(xmlParser.nextText());
 						} else if (tag.equalsIgnoreCase("extensionTitle")) {
@@ -210,5 +213,13 @@ public class Software extends Entity {
 			inputStream.close();
 		}
 		return sw;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }

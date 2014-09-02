@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.LayoutParams;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
 	protected LayoutInflater mInflater;
 	private ActionBar mActionBar;
 	private TextView mTvActionTitle;
-	
+
 	private BroadcastReceiver mExistReceiver = new BroadcastReceiver() {
 
 		@Override
@@ -53,7 +54,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
 			initActionBar(mActionBar);
 		}
 		init(savedInstanceState);
-		
+
 		IntentFilter filter = new IntentFilter(INTENT_ACTION_EXIT_APP);
 		registerReceiver(mExistReceiver, filter);
 	}
@@ -64,7 +65,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
 		mExistReceiver = null;
 		super.onDestroy();
 	}
-	
+
 	protected void onBeforeSetContentLayout() {
 	}
 
@@ -88,6 +89,10 @@ public abstract class BaseActivity extends ActionBarActivity implements
 		return false;
 	}
 
+	protected int getActionBarCustomView() {
+		return 0;
+	}
+
 	protected void init(Bundle savedInstanceState) {
 	}
 
@@ -96,22 +101,34 @@ public abstract class BaseActivity extends ActionBarActivity implements
 			return;
 		if (hasBackButton()) {
 			actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-			View view = inflateView(R.layout.actionbar_custom_backtitle);
-			view.findViewById(R.id.btn_back).setOnClickListener(
-					new OnClickListener() {
+			int layoutRes = getActionBarCustomView();
+			View view = inflateView(layoutRes == 0 ? R.layout.v2_actionbar_custom_backtitle
+					: layoutRes);
+			View back = view.findViewById(R.id.btn_back);
+			if (back == null) {
+				throw new IllegalArgumentException(
+						"can not find R.id.btn_back in customView");
+			}
+			back.setOnClickListener(new OnClickListener() {
 
-						@Override
-						public void onClick(View v) {
-							onBackPressed();
-						}
-					});
+				@Override
+				public void onClick(View v) {
+					onBackPressed();
+				}
+			});
 			mTvActionTitle = (TextView) view
 					.findViewById(R.id.tv_actionbar_title);
+			if (mTvActionTitle == null) {
+				throw new IllegalArgumentException(
+						"can not find R.id.tv_actionbar_title in customView");
+			}
 			int titleRes = getActionBarTitle();
 			if (titleRes != 0) {
 				mTvActionTitle.setText(titleRes);
 			}
-			actionBar.setCustomView(view);
+			LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
+					LayoutParams.MATCH_PARENT);
+			actionBar.setCustomView(view, params);
 		} else {
 			actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
 			actionBar.setDisplayUseLogoEnabled(false);
@@ -122,7 +139,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
 		}
 	}
 
-	protected void setActionBarTitle(int resId) {
+	public void setActionBarTitle(int resId) {
 		if (hasActionBar() && resId != 0) {
 			if (mTvActionTitle != null) {
 				mTvActionTitle.setText(resId);

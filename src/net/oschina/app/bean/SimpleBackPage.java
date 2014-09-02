@@ -1,6 +1,7 @@
 package net.oschina.app.bean;
 
 import net.oschina.app.R;
+import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
 import net.oschina.app.v2.activity.favorite.fragment.FavoriteViewPagerFragment;
 import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
 import net.oschina.app.v2.activity.settings.fragment.AboutFragment;
@@ -15,7 +16,8 @@ public enum SimpleBackPage {
 	PROFILE(2, R.string.actionbar_title_profile, ProfileFragment.class),
 	FRIENDS(3, R.string.actionbar_title_friends, FriendViewPagerFragment.class),
 	FAVORITES(4, R.string.actionbar_title_favorites, FavoriteViewPagerFragment.class),
-	SOFTEARE(5, R.string.actionbar_title_ossoftware, SoftwareViewPagerFragment.class);
+	SOFTEARE(5, R.string.actionbar_title_ossoftware, SoftwareViewPagerFragment.class),
+	COMMENT(6, R.string.actionbar_title_comment, CommentFrament.class);
 
 	private int title;
 	private Class<?> clz;

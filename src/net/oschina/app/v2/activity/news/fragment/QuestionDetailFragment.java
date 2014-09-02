@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Post;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
@@ -17,10 +18,12 @@ import org.apache.http.Header;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +42,7 @@ public class QuestionDetailFragment extends BaseFragment {
 	private EmptyLayout mEmptyLayout;
 	private TextView mTvTitle, mTvSource, mTvTime;
 	private WebView mWebView;
+	private TextView mTvCommentCount;
 	private int mPostId;
 	private Post mPost;
 
@@ -101,6 +105,22 @@ public class QuestionDetailFragment extends BaseFragment {
 	};
 	
 	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		ActionBarActivity act = (ActionBarActivity) activity;
+		mTvCommentCount = (TextView) act.getSupportActionBar().getCustomView()
+				.findViewById(R.id.tv_comment_count);
+		mTvCommentCount.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				UIHelper.showComment(getActivity(), mPost.getId(),
+						CommentList.CATALOG_POST);
+			}
+		});
+	}
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.v2_fragment_news_detail,
@@ -152,6 +172,11 @@ public class QuestionDetailFragment extends BaseFragment {
 		mTvTitle.setText(mPost.getTitle());
 		mTvSource.setText(mPost.getAuthor());
 		mTvTime.setText(StringUtils.friendly_time(mPost.getPubDate()));
+		if (mTvCommentCount != null) {
+			mTvCommentCount.setVisibility(View.VISIBLE);
+			mTvCommentCount.setText(getString(R.string.answer_count,
+					mPost.getAnswerCount()+"/"+mPost.getViewCount()));
+		}
 	}
 
 	private void fillWebViewBody() {

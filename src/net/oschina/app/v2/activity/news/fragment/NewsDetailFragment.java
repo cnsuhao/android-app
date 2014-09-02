@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.News.Relative;
 import net.oschina.app.common.StringUtils;
@@ -16,10 +17,12 @@ import org.apache.http.Header;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +43,7 @@ public class NewsDetailFragment extends BaseFragment {
 	private WebView mWebView;
 	private int mNewsId;
 	private News mNews;
+	private TextView mTvCommentCount;
 
 	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
 
@@ -96,7 +100,23 @@ public class NewsDetailFragment extends BaseFragment {
 			receivedError = true;
 		}
 	};
-	
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		ActionBarActivity act = (ActionBarActivity) activity;
+		mTvCommentCount = (TextView) act.getSupportActionBar().getCustomView()
+				.findViewById(R.id.tv_comment_count);
+		mTvCommentCount.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				UIHelper.showComment(getActivity(), mNews.getId(),
+						CommentList.CATALOG_NEWS);
+			}
+		});
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -120,7 +140,7 @@ public class NewsDetailFragment extends BaseFragment {
 		mWebView = (WebView) view.findViewById(R.id.webview);
 		initWebView(mWebView);
 	}
-	
+
 	@SuppressLint("SetJavaScriptEnabled")
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void initWebView(WebView webView) {
@@ -138,6 +158,7 @@ public class NewsDetailFragment extends BaseFragment {
 		}
 		UIHelper.addWebImageShow(getActivity(), webView);
 	}
+
 	private void initData() {
 		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 		// start to load news detail
@@ -148,6 +169,11 @@ public class NewsDetailFragment extends BaseFragment {
 		mTvTitle.setText(mNews.getTitle());
 		mTvSource.setText(mNews.getAuthor());
 		mTvTime.setText(StringUtils.friendly_time(mNews.getPubDate()));
+		if (mTvCommentCount != null) {
+			mTvCommentCount.setVisibility(View.VISIBLE);
+			mTvCommentCount.setText(getString(R.string.comment_count,
+					mNews.getCommentCount()));
+		}
 	}
 
 	private void fillWebViewBody() {
@@ -197,7 +223,7 @@ public class NewsDetailFragment extends BaseFragment {
 		}
 
 		body += "<div style='margin-bottom: 80px'/>";
-		
+
 		mWebView.setWebViewClient(mWebClient);
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
 	}

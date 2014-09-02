@@ -29,7 +29,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.tencent.mm.sdk.platformtools.Log;
 
 public class TweetDetailFragment extends BaseFragment {
 	protected static final int STATE_NONE = 0;

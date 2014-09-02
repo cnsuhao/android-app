@@ -118,6 +118,15 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.get("action/api/comment_list", params, handler);
 	}
 
+	public static void getBlogCommentList(int id, int page,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("id", id);
+		params.put("pageIndex", page);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/blogcomment_list", params, handler);
+	}
+	
 	/**
 	 * 获取新闻明细
 	 * 

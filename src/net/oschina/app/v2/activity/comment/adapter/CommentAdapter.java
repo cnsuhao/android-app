@@ -16,7 +16,7 @@ public class CommentAdapter extends ListBaseAdapter {
 	@Override
 	protected View getRealView(int position, View convertView, ViewGroup parent) {
 		ViewHolder vh = null;
-		if (convertView == null) {
+		if (convertView == null || convertView.getTag() == null) {
 			convertView = getLayoutInflater(parent.getContext()).inflate(
 					R.layout.v2_list_cell_comment, null);
 			vh = new ViewHolder(convertView);

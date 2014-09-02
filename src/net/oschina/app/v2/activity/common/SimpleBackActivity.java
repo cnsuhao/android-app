@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 public class SimpleBackActivity extends BaseActivity {
 
 	public final static String BUNDLE_KEY_PAGE = "BUNDLE_KEY_PAGE";
+	public final static String BUNDLE_KEY_ARGS = "BUNDLE_KEY_ARGS";
 	private static final String TAG = "FLAG_TAG";
 	private WeakReference<Fragment> mFragment;
 
@@ -46,6 +47,12 @@ public class SimpleBackActivity extends BaseActivity {
 
 		try {
 			Fragment fragment = (Fragment) page.getClz().newInstance();
+
+			Bundle args = data.getBundleExtra(BUNDLE_KEY_ARGS);
+			if (args != null) {
+				fragment.setArguments(args);
+			}
+
 			FragmentTransaction trans = getSupportFragmentManager()
 					.beginTransaction();
 			trans.replace(R.id.container, fragment, TAG);
