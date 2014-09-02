@@ -76,6 +76,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
@@ -1824,5 +1825,9 @@ public class UIHelper {
 		Intent intent = new Intent(
 				net.oschina.app.v2.base.BaseActivity.INTENT_ACTION_EXIT_APP);
 		context.sendBroadcast(intent);
+	}
+
+	public static void showFriends(Context context) {
+		showSimpleBack(context, SimpleBackPage.FRIENDS);
 	}
 }

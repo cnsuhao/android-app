@@ -59,6 +59,16 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.get("action/api/active_list", params, handler);
 	}
 	
+	public static void getFriendList(int uid, int relation, int page,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("relation", relation);
+		params.put("pageIndex", page);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/friends_list", params, handler);
+	}
+	
 	/**
 	 * 获取评论列表
 	 * 
