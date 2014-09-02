@@ -23,6 +23,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	protected PullToRefreshListView mListView;
 	protected ListBaseAdapter mAdapter;
 	protected EmptyLayout mErrorLayout;
+	protected int mStoreEmptyState;
 
 	protected int getLayoutRes() {
 		return R.layout.v2_fragment_pull_refresh_listview;
@@ -61,6 +62,15 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 			mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 			onRefresh(null);
 		}
+		if (mStoreEmptyState != -1) {
+			mErrorLayout.setErrorType(mStoreEmptyState);
+		}
+	}
+
+	@Override
+	public void onDestroyView() {
+		mStoreEmptyState = mErrorLayout.getErrorState();
+		super.onDestroyView();
 	}
 
 	protected abstract ListBaseAdapter getListAdapter();

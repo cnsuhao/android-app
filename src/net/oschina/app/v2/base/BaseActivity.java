@@ -140,11 +140,17 @@ public abstract class BaseActivity extends ActionBarActivity implements
 	}
 
 	public void setActionBarTitle(int resId) {
-		if (hasActionBar() && resId != 0) {
+		if (resId != 0) {
+			setActionBarTitle(getString(resId));
+		}
+	}
+
+	public void setActionBarTitle(String title) {
+		if (hasActionBar()) {
 			if (mTvActionTitle != null) {
-				mTvActionTitle.setText(resId);
+				mTvActionTitle.setText(title);
 			}
-			mActionBar.setTitle(resId);
+			mActionBar.setTitle(title);
 		}
 	}
 

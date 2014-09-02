@@ -182,6 +182,7 @@
     <string name="actionbar_title_ossoftware">开源软件</string>
     
     <string name="actionbar_title_comment">评论</string>
+    <string name="actionbar_title_question_tag">%s相关</string>
     <string name="comment_count">评论:%s</string>
     <string name="answer_count">回答:%s</string>
     <string name="post_answer">回答</string>

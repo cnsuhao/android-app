@@ -37,6 +37,15 @@ public class NewsApi extends BaseApi {
 		params.put("dataType", "json");
 		ApiHttpClient.get("action/api/post_list", params, handler);
 	}
+	
+	public static void getPostListByTag(String tag, int page,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("tag", tag);
+		params.put("pageIndex", page);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/post_list", params, handler);
+	}
 
 	public static void getTweetList(int uid, int page,
 			AsyncHttpResponseHandler handler) {

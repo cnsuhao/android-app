@@ -51,6 +51,7 @@ import net.oschina.app.ui.UserFriend;
 import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
 import net.oschina.app.v2.activity.common.SimpleBackActivity;
 import net.oschina.app.v2.activity.news.DetailActivity;
+import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
 import net.oschina.app.v2.activity.user.LoginActivity;
 import net.oschina.app.widget.LinkView;
 import net.oschina.app.widget.LinkView.MyURLSpan;
@@ -213,9 +214,12 @@ public class UIHelper {
 	 * @param tag
 	 */
 	public static void showQuestionListByTag(Context context, String tag) {
-		Intent intent = new Intent(context, QuestionTag.class);
-		intent.putExtra("post_tag", tag);
-		context.startActivity(intent);
+		//Intent intent = new Intent(context, QuestionTag.class);
+		//intent.putExtra("post_tag", tag);
+		//context.startActivity(intent);
+		Bundle args = new Bundle();
+		args.putString(QuestionTagFragment.BUNDLE_KEY_TAG, tag);
+		showSimpleBack(context, SimpleBackPage.QUESTION_TAG, args);
 	}
 
 	/**
