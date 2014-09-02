@@ -12,22 +12,35 @@ import net.oschina.app.v2.ui.empty.EmptyLayout;
 
 import org.apache.http.Header;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
+import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+/**
+ * 软件详情
+ * 
+ * @author william_sim
+ * @since 2014/09/02
+ */
 public class SoftwareDetailFragment extends BaseFragment {
 
 	protected static final String TAG = SoftwareDetailFragment.class
 			.getSimpleName();
 	private EmptyLayout mEmptyLayout;
-	// private ScrollView mNewsContainer;
+	private TextView mTvLicense, mTvLanguage, mTvOs, mTvRecordTime;
 	private TextView mTvTitle;
 	private WebView mWebView;
 	private String mIdent;
@@ -42,7 +55,6 @@ public class SoftwareDetailFragment extends BaseFragment {
 				if (mSoftware != null && mSoftware.getId() > 0) {
 					fillUI();
 					fillWebViewBody();
-					mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 				} else {
 					throw new RuntimeException("load detail error");
 				}
@@ -56,6 +68,37 @@ public class SoftwareDetailFragment extends BaseFragment {
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 				Throwable arg3) {
 			mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+		}
+	};
+
+	private WebViewClient mWebClient = new WebViewClient() {
+
+		private boolean receivedError = false;
+
+		@Override
+		public void onPageStarted(WebView view, String url, Bitmap favicon) {
+			receivedError = false;
+		}
+
+		@Override
+		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+			UIHelper.showUrlRedirect(view.getContext(), url);
+			return true;
+		}
+
+		@Override
+		public void onPageFinished(WebView view, String url) {
+			if (receivedError) {
+				mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+			} else {
+				mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+			}
+		}
+
+		@Override
+		public void onReceivedError(WebView view, int errorCode,
+				String description, String failingUrl) {
+			receivedError = true;
 		}
 	};
 
@@ -80,9 +123,35 @@ public class SoftwareDetailFragment extends BaseFragment {
 		mTvTitle = (TextView) view.findViewById(R.id.tv_title);
 
 		mWebView = (WebView) view.findViewById(R.id.webview);
-		mWebView.getSettings().setSupportZoom(true);
-		mWebView.getSettings().setBuiltInZoomControls(true);
-		mWebView.getSettings().setDefaultFontSize(15);
+		initWebView(mWebView);
+
+		mTvLicense = (TextView) view.findViewById(R.id.tv_software_license);
+		mTvLanguage = (TextView) view.findViewById(R.id.tv_software_language);
+		mTvOs = (TextView) view.findViewById(R.id.tv_software_os);
+		mTvRecordTime = (TextView) view
+				.findViewById(R.id.tv_software_recordtime);
+
+		view.findViewById(R.id.btn_software_index).setOnClickListener(this);
+		view.findViewById(R.id.btn_software_download).setOnClickListener(this);
+		view.findViewById(R.id.btn_software_document).setOnClickListener(this);
+	}
+
+	@SuppressLint("SetJavaScriptEnabled")
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void initWebView(WebView webView) {
+		WebSettings settings = webView.getSettings();
+		settings.setDefaultFontSize(15);
+		settings.setJavaScriptEnabled(true);
+		settings.setSupportZoom(true);
+		settings.setBuiltInZoomControls(true);
+		int sysVersion = Build.VERSION.SDK_INT;
+		if (sysVersion >= 11) {
+			settings.setDisplayZoomControls(false);
+		} else {
+			ZoomButtonsController zbc = new ZoomButtonsController(webView);
+			zbc.getZoomControls().setVisibility(View.GONE);
+		}
+		UIHelper.addWebImageShow(getActivity(), webView);
 	}
 
 	private void initData() {
@@ -93,6 +162,11 @@ public class SoftwareDetailFragment extends BaseFragment {
 
 	private void fillUI() {
 		mTvTitle.setText(mSoftware.getTitle());
+
+		mTvLicense.setText(mSoftware.getLicense());
+		mTvLanguage.setText(mSoftware.getLanguage());
+		mTvOs.setText(mSoftware.getOs());
+		mTvRecordTime.setText(mSoftware.getRecordtime());
 	}
 
 	private void fillWebViewBody() {
@@ -116,6 +190,19 @@ public class SoftwareDetailFragment extends BaseFragment {
 			body = body.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "");
 		}
 
+		mWebView.setWebViewClient(mWebClient);// UIHelper.getWebViewClient()
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
+	}
+
+	@Override
+	public void onClick(View v) {
+		final int id = v.getId();
+		if (id == R.id.btn_software_index) {
+			UIHelper.openBrowser(v.getContext(), mSoftware.getHomepage());
+		} else if (id == R.id.btn_software_download) {
+			UIHelper.openBrowser(v.getContext(), mSoftware.getDownload());
+		} else if (id == R.id.btn_software_document) {
+			UIHelper.openBrowser(v.getContext(), mSoftware.getDocument());
+		}
 	}
 }

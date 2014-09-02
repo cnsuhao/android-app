@@ -158,8 +158,8 @@ public class ActiveFragment extends BaseListFragment {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		News news = (News) mAdapter.getItem(position - 1);
-		UIHelper.showNewsRedirect(view.getContext(), news);
+		Active active = (Active) mAdapter.getItem(position - 1);
+		UIHelper.showActiveRedirect(view.getContext(), active);
 	}
 	
 	@Override

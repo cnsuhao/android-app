@@ -25,13 +25,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/list_item_background_normal"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="@dimen/space_8" >
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/graywhite" />
+                        android:layout_marginRight="@dimen/space_8"
+                        android:background="@color/graywhite"
+                        android:contentDescription="@null" />
 
                     <TextView
                         android:id="@+id/tv_title"
@@ -67,55 +70,153 @@
                     android:background="@color/list_item_background_normal"
                     android:orientation="vertical" >
 
-                    <TextView
-                        android:id="@+id/tv_software_license"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/space_8"
-                        android:text="@string/software_license"
-                        android:textColor="@color/main_gray"
-                        android:textSize="@dimen/text_size_16" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/space_8" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/space_8"
+                            android:text="@string/software_license"
+                            android:textColor="@color/main_gray"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <TextView
+                            android:id="@+id/tv_software_license"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/main_black"
+                            android:textSize="@dimen/text_size_16" />
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:background="@color/list_divider_color" />
 
-                    <TextView
-                        android:id="@+id/tv_software_language"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/space_8"
-                        android:text="@string/software_language"
-                        android:textColor="@color/main_gray"
-                        android:textSize="@dimen/text_size_16" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/space_8" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/space_8"
+                            android:text="@string/software_language"
+                            android:textColor="@color/main_gray"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <TextView
+                            android:id="@+id/tv_software_language"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/main_black"
+                            android:textSize="@dimen/text_size_16" />
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:background="@color/list_divider_color" />
 
-                    <TextView
-                        android:id="@+id/tv_software_os"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/space_8"
-                        android:text="@string/software_os"
-                        android:textColor="@color/main_gray"
-                        android:textSize="@dimen/text_size_16" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/space_8" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/space_8"
+                            android:text="@string/software_os"
+                            android:textColor="@color/main_gray"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <TextView
+                            android:id="@+id/tv_software_os"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/main_black"
+                            android:textSize="@dimen/text_size_16" />
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:background="@color/list_divider_color" />
 
-                    <TextView
-                        android:id="@+id/tv_software_recordtime"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/space_8"
-                        android:text="@string/software_recordtime"
-                        android:textColor="@color/main_gray"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/space_8" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/space_8"
+                            android:text="@string/software_recordtime"
+                            android:textColor="@color/main_gray"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <TextView
+                            android:id="@+id/tv_software_recordtime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/main_black"
+                            android:textSize="@dimen/text_size_16" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_10"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/space_30" >
+
+                    <Button
+                        android:id="@+id/btn_software_index"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="@dimen/space_20"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_white_selector"
+                        android:text="@string/software_index"
+                        android:textColor="@color/main_black"
+                        android:textSize="@dimen/text_size_16" />
+
+                    <Button
+                        android:id="@+id/btn_software_download"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="@dimen/space_20"
+                        android:layout_marginRight="@dimen/space_20"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_white_selector"
+                        android:text="@string/software_download"
+                        android:textColor="@color/main_black"
+                        android:textSize="@dimen/text_size_16" />
+
+                    <Button
+                        android:id="@+id/btn_software_document"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_marginRight="@dimen/space_20"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_white_selector"
+                        android:text="@string/software_document"
+                        android:textColor="@color/main_black"
                         android:textSize="@dimen/text_size_16" />
                 </LinearLayout>
             </LinearLayout>

@@ -122,10 +122,13 @@
     
     <string name="publish_comment">写点什么吧</string>
     <!-- software detail -->
-    <string name="software_license">开源协议 : %s</string>
-    <string name="software_language">开发语言 : %s</string>
-    <string name="software_os">操作系统 : %s</string>
-    <string name="software_recordtime">收录时间 : %s</string>
+    <string name="software_license">开源协议 :</string>
+    <string name="software_language">开发语言 :</string>
+    <string name="software_os">操作系统 :</string>
+    <string name="software_recordtime">收录时间 :</string>
+    <string name="software_index">软件首页</string>
+    <string name="software_download">软件下载</string>
+    <string name="software_document">软件文档</string>
     
     <string name="from_mobile">来自:手机</string>
     <string name="from_android">来自:Android</string>

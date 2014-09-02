@@ -17,7 +17,7 @@ import android.support.v4.app.FragmentTransaction;
  * @author william_sim
  * 
  */
-public class NewsDetailActivity extends BaseActivity {
+public class DetailActivity extends BaseActivity {
 
 	public static final int DISPLAY_NEWS = 0;
 	public static final int DISPLAY_BLOG = 1;

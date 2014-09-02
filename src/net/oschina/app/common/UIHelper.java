@@ -53,7 +53,7 @@ import net.oschina.app.ui.UserFavorite;
 import net.oschina.app.ui.UserFriend;
 import net.oschina.app.ui.UserInfo;
 import net.oschina.app.v2.activity.common.SimpleBackActivity;
-import net.oschina.app.v2.activity.news.NewsDetailActivity;
+import net.oschina.app.v2.activity.news.DetailActivity;
 import net.oschina.app.v2.activity.user.LoginActivity;
 import net.oschina.app.widget.LinkView;
 import net.oschina.app.widget.LinkView.MyURLSpan;
@@ -188,10 +188,10 @@ public class UIHelper {
 	 * @param newsId
 	 */
 	public static void showNewsDetail(Context context, int newsId) {
-		Intent intent = new Intent(context, NewsDetailActivity.class);
+		Intent intent = new Intent(context, DetailActivity.class);
 		intent.putExtra("news_id", newsId);
-		intent.putExtra(NewsDetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-				NewsDetailActivity.DISPLAY_NEWS);
+		intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				DetailActivity.DISPLAY_NEWS);
 		context.startActivity(intent);
 	}
 
@@ -202,10 +202,10 @@ public class UIHelper {
 	 * @param postId
 	 */
 	public static void showQuestionDetail(Context context, int postId) {
-		Intent intent = new Intent(context, NewsDetailActivity.class);
+		Intent intent = new Intent(context, DetailActivity.class);
 		intent.putExtra("post_id", postId);
-		intent.putExtra(NewsDetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-				NewsDetailActivity.DISPLAY_QUESTION);
+		intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				DetailActivity.DISPLAY_QUESTION);
 		context.startActivity(intent);
 	}
 
@@ -238,10 +238,10 @@ public class UIHelper {
 	 * @param tweetId
 	 */
 	public static void showTweetDetail(Context context, int tweetId) {
-		Intent intent = new Intent(context, NewsDetailActivity.class);
+		Intent intent = new Intent(context, DetailActivity.class);
 		intent.putExtra("tweet_id", tweetId);
-		intent.putExtra(NewsDetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-				NewsDetailActivity.DISPLAY_TWEET);
+		intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				DetailActivity.DISPLAY_TWEET);
 		context.startActivity(intent);
 	}
 
@@ -269,10 +269,10 @@ public class UIHelper {
 	 * @param blogId
 	 */
 	public static void showBlogDetail(Context context, int blogId) {
-		Intent intent = new Intent(context, NewsDetailActivity.class);
+		Intent intent = new Intent(context, DetailActivity.class);
 		intent.putExtra("blog_id", blogId);
-		intent.putExtra(NewsDetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-				NewsDetailActivity.DISPLAY_BLOG);
+		intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				DetailActivity.DISPLAY_BLOG);
 		context.startActivity(intent);
 	}
 
@@ -283,10 +283,10 @@ public class UIHelper {
 	 * @param ident
 	 */
 	public static void showSoftwareDetail(Context context, String ident) {
-		Intent intent = new Intent(context, NewsDetailActivity.class);
+		Intent intent = new Intent(context, DetailActivity.class);
 		intent.putExtra("ident", ident);
-		intent.putExtra(NewsDetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-				NewsDetailActivity.DISPLAY_SOFTWARE);
+		intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				DetailActivity.DISPLAY_SOFTWARE);
 		context.startActivity(intent);
 	}
 
@@ -1093,6 +1093,7 @@ public class UIHelper {
 	 * @return
 	 */
 	public static WebViewClient getWebViewClient() {
+		
 		return new WebViewClient() {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {

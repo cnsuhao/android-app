@@ -14,13 +14,20 @@ import net.oschina.app.v2.ui.empty.EmptyLayout;
 
 import org.apache.http.Header;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
+import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -29,7 +36,6 @@ public class NewsDetailFragment extends BaseFragment {
 	protected static final String TAG = NewsDetailFragment.class
 			.getSimpleName();
 	private EmptyLayout mEmptyLayout;
-	//private ScrollView mNewsContainer;
 	private TextView mTvTitle, mTvSource, mTvTime;
 	private WebView mWebView;
 	private int mNewsId;
@@ -44,7 +50,6 @@ public class NewsDetailFragment extends BaseFragment {
 				if (mNews != null && mNews.getId() > 0) {
 					fillUI();
 					fillWebViewBody();
-					mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 				} else {
 					throw new RuntimeException("load detail error");
 				}
@@ -61,6 +66,37 @@ public class NewsDetailFragment extends BaseFragment {
 		}
 	};
 
+	private WebViewClient mWebClient = new WebViewClient() {
+
+		private boolean receivedError = false;
+
+		@Override
+		public void onPageStarted(WebView view, String url, Bitmap favicon) {
+			receivedError = false;
+		}
+
+		@Override
+		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+			UIHelper.showUrlRedirect(view.getContext(), url);
+			return true;
+		}
+
+		@Override
+		public void onPageFinished(WebView view, String url) {
+			if (receivedError) {
+				mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+			} else {
+				mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+			}
+		}
+
+		@Override
+		public void onReceivedError(WebView view, int errorCode,
+				String description, String failingUrl) {
+			receivedError = true;
+		}
+	};
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,17 +113,31 @@ public class NewsDetailFragment extends BaseFragment {
 
 	private void initViews(View view) {
 		mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
-		//mNewsContainer = (ScrollView) view.findViewById(R.id.sv_news_container);
 		mTvTitle = (TextView) view.findViewById(R.id.tv_title);
 		mTvSource = (TextView) view.findViewById(R.id.tv_source);
 		mTvTime = (TextView) view.findViewById(R.id.tv_time);
 
 		mWebView = (WebView) view.findViewById(R.id.webview);
-		mWebView.getSettings().setSupportZoom(true);
-		mWebView.getSettings().setBuiltInZoomControls(true);
-		mWebView.getSettings().setDefaultFontSize(15);
+		initWebView(mWebView);
 	}
-
+	
+	@SuppressLint("SetJavaScriptEnabled")
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void initWebView(WebView webView) {
+		WebSettings settings = webView.getSettings();
+		settings.setDefaultFontSize(15);
+		settings.setJavaScriptEnabled(true);
+		settings.setSupportZoom(true);
+		settings.setBuiltInZoomControls(true);
+		int sysVersion = Build.VERSION.SDK_INT;
+		if (sysVersion >= 11) {
+			settings.setDisplayZoomControls(false);
+		} else {
+			ZoomButtonsController zbc = new ZoomButtonsController(webView);
+			zbc.getZoomControls().setVisibility(View.GONE);
+		}
+		UIHelper.addWebImageShow(getActivity(), webView);
+	}
 	private void initData() {
 		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 		// start to load news detail
@@ -147,7 +197,8 @@ public class NewsDetailFragment extends BaseFragment {
 		}
 
 		body += "<div style='margin-bottom: 80px'/>";
-		//System.out.println(body);
+		
+		mWebView.setWebViewClient(mWebClient);
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
 	}
 }
