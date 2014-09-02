@@ -69,6 +69,36 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.get("action/api/friends_list", params, handler);
 	}
 	
+	public static void getFavoriteList(int uid, int type, int page,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("type", type);
+		params.put("pageIndex", page);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/favorite_list", params, handler);
+	}
+	
+	public static void getSoftwareCatalogList(int tag,AsyncHttpResponseHandler handler){
+		RequestParams params = new RequestParams("tag",tag);
+		ApiHttpClient.get("action/api/softwarecatalog_list", params, handler);
+	}
+	
+	public static void getSoftwareTagList(int searchTag,int page, AsyncHttpResponseHandler handler){
+		RequestParams params = new RequestParams();
+		params.put("searchTag", searchTag);
+		params.put("pageIndex", page);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/softwaretag_list", params, handler);
+	}
+	
+	public static void getSoftwareList(String searchTag,int page,AsyncHttpResponseHandler handler){
+		RequestParams params = new RequestParams();
+		params.put("searchTag", searchTag);
+		params.put("pageIndex", page);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/software_list", params, handler);
+	}
 	/**
 	 * 获取评论列表
 	 * 

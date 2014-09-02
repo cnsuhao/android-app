@@ -156,9 +156,12 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 			}
 			break;
 		case 1:
-			UIHelper.showSetting(this);
+			UIHelper.showSoftware(this);
 			break;
 		case 2:
+			UIHelper.showSetting(this);
+			break;
+		case 3:
 			UIHelper.exitApp(this);
 			break;
 		default:
@@ -174,7 +177,7 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 
 		@Override
 		public int getCount() {
-			return 3;
+			return 4;
 		}
 
 		@Override
@@ -208,10 +211,14 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 				TextView name = (TextView) convertView
 						.findViewById(R.id.tv_name);
 				int iconResId = 0;
+
 				if (position == 1) {
+					name.setText(R.string.main_menu_software);
+					iconResId = R.drawable.actionbar_menu_icn_software;
+				} else if (position == 2) {
 					name.setText(R.string.main_menu_setting);
 					iconResId = R.drawable.actionbar_menu_icn_set;
-				} else {
+				} else if (position == 3) {
 					name.setText(R.string.main_menu_exit);
 					iconResId = R.drawable.actionbar_menu_icn_exit;
 				}

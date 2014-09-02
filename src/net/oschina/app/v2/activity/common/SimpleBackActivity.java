@@ -1,8 +1,11 @@
 package net.oschina.app.v2.activity.common;
 
+import java.lang.ref.WeakReference;
+
 import net.oschina.app.R;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.v2.base.BaseActivity;
+import net.oschina.app.v2.base.BaseFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +14,8 @@ import android.support.v4.app.FragmentTransaction;
 public class SimpleBackActivity extends BaseActivity {
 
 	public final static String BUNDLE_KEY_PAGE = "BUNDLE_KEY_PAGE";
+	private static final String TAG = "FLAG_TAG";
+	private WeakReference<Fragment> mFragment;
 
 	@Override
 	protected int getLayoutId() {
@@ -38,17 +43,32 @@ public class SimpleBackActivity extends BaseActivity {
 		}
 
 		setActionBarTitle(page.getTitle());
-		
+
 		try {
 			Fragment fragment = (Fragment) page.getClz().newInstance();
 			FragmentTransaction trans = getSupportFragmentManager()
 					.beginTransaction();
-			trans.replace(R.id.container, fragment);
+			trans.replace(R.id.container, fragment, TAG);
 			trans.commit();
+
+			mFragment = new WeakReference<Fragment>(fragment);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(
 					"generate fragment error. by value:" + pageValue);
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (mFragment != null && mFragment.get() != null
+				&& mFragment.get() instanceof BaseFragment) {
+			BaseFragment bf = (BaseFragment) mFragment.get();
+			if (!bf.onBackPressed()) {
+				super.onBackPressed();
+			}
+		} else {
+			super.onBackPressed();
 		}
 	}
 }

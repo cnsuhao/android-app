@@ -37,6 +37,18 @@
     <string name="frame_title_active_message">留言</string>
     <string name="frame_title_friend_following">关注</string>
     <string name="frame_title_friend_follower">粉丝</string>
+    <string name="frame_title_favorite_software">软件</string>
+    <string name="frame_title_favorite_post">话题</string>
+    <string name="frame_title_favorite_code">代码</string>
+    <string name="frame_title_favorite_blog">博客</string>
+    <string name="frame_title_favorite_news">资讯</string>
+    
+    <string name="frame_title_software_catalog">分类</string>
+    <string name="frame_title_software_recommend">推荐</string>
+    <string name="frame_title_software_lastest">最新</string>    
+    <string name="frame_title_software_hot">热门</string>
+    <string name="frame_title_software_china">国产</string>
+        
     
     <string name="footbar_refresh">刷新</string>
     <string name="footbar_comment">评论</string>
@@ -160,4 +172,6 @@
     <string name="academic_focus">专长领域: </string>
     
     <string name="actionbar_title_friends">我的好友</string>
+    <string name="actionbar_title_favorites">我的收藏</string>
+    <string name="actionbar_title_ossoftware">开源软件</string>
 </resources>

@@ -32,4 +32,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener {
 	public void onClick(View v) {
 	}
 
+	public boolean onBackPressed() {
+		return false;
+	}
 }

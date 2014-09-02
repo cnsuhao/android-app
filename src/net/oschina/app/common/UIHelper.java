@@ -872,8 +872,9 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showSoftware(Context context) {
-		Intent intent = new Intent(context, SoftwareLib.class);
-		context.startActivity(intent);
+		//Intent intent = new Intent(context, SoftwareLib.class);
+		//context.startActivity(intent);
+		showSimpleBack(context, SimpleBackPage.SOFTEARE);
 	}
 
 	/**
@@ -924,8 +925,9 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showUserFavorite(Context context) {
-		Intent intent = new Intent(context, UserFavorite.class);
-		context.startActivity(intent);
+		//Intent intent = new Intent(context, UserFavorite.class);
+		//context.startActivity(intent);
+		showSimpleBack(context, SimpleBackPage.FAVORITES);
 	}
 
 	/**

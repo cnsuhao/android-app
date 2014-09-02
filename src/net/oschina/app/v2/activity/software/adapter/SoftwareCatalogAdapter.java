@@ -1,7 +1,7 @@
-package net.oschina.app.v2.activity.friend.adapter;
+package net.oschina.app.v2.activity.software.adapter;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.FriendList.Friend;
+import net.oschina.app.bean.SoftwareCatalogList.SoftwareType;
 import net.oschina.app.v2.base.ListBaseAdapter;
 import android.annotation.SuppressLint;
 import android.view.View;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class FriendAdapter extends ListBaseAdapter {
+public class SoftwareCatalogAdapter extends ListBaseAdapter {
 
 	@SuppressLint("InflateParams")
 	@Override
@@ -17,33 +17,25 @@ public class FriendAdapter extends ListBaseAdapter {
 		ViewHolder vh = null;
 		if (convertView == null || convertView.getTag() == null) {
 			convertView = getLayoutInflater(parent.getContext()).inflate(
-					R.layout.v2_list_cell_friend, null);
+					R.layout.v2_list_cell_software_catalog, null);
 			vh = new ViewHolder(convertView);
 			convertView.setTag(vh);
 		} else {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		Friend item = (Friend) _data.get(position);
-
-		vh.name.setText(item.getName());
-		vh.desc.setText(item.getExpertise());
-		vh.gender.setImageResource(item.getGender() == 1 ? R.drawable.list_male
-				: R.drawable.list_female);
-
+		SoftwareType item = (SoftwareType) _data.get(position);
+		vh.name.setText(item.name);
 		return convertView;
 	}
 
 	static class ViewHolder {
-		public TextView name, desc;
-		public ImageView gender;
-		public ImageView avatar;
+		public TextView name;
+		public ImageView go;
 
 		public ViewHolder(View view) {
 			name = (TextView) view.findViewById(R.id.tv_name);
-			desc = (TextView) view.findViewById(R.id.tv_desc);
-			gender = (ImageView) view.findViewById(R.id.iv_gender);
-			avatar = (ImageView) view.findViewById(R.id.iv_avatar);
+			go = (ImageView) view.findViewById(R.id.iv_goto);
 		}
 	}
 }

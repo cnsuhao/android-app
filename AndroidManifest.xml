@@ -124,8 +124,7 @@
             android:name=".ui.SoftwareLib"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.ZoomLight" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.SoftwareDetail"
             android:configChanges="keyboardHidden|orientation|screenSize"

@@ -34,10 +34,10 @@ public abstract class SlidingTabPagerAdapter extends FragmentPagerAdapter
 	}
 
 	private void onLeave(int i) {
-		BaseTabFragment yixintabfragment = getFragmentByPosition(lastPostion);
+		BaseTabFragment fragment = getFragmentByPosition(lastPostion);
 		lastPostion = i;
-		if (yixintabfragment != null)
-			yixintabfragment.g();
+		if (fragment != null)
+			fragment.g();
 	}
 
 	public abstract int getCacheCount();

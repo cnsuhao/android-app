@@ -20,6 +20,7 @@ public class ProfileFragment extends BaseFragment {
 	}
 
 	private void initViews(View view) {
+		view.findViewById(R.id.ly_favorite).setOnClickListener(this);
 		view.findViewById(R.id.ly_following).setOnClickListener(this);
 		view.findViewById(R.id.ly_follower).setOnClickListener(this);
 	}
@@ -31,6 +32,8 @@ public class ProfileFragment extends BaseFragment {
 			UIHelper.showFriends(getActivity());
 		} else if (id == R.id.ly_following) {
 			UIHelper.showFriends(getActivity());
+		} else if(id == R.id.ly_favorite){
+			UIHelper.showUserFavorite(getActivity());
 		}
 	}
 }
