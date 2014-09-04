@@ -14,6 +14,7 @@
         <item name="android:actionBarItemBackground">@drawable/actionbar_item_background_selector</item>
         <item name="android:dropDownListViewStyle">@style/DrapDownListView</item>
         <!-- <item name="android:homeAsUpIndicator">@drawable/actionbar_back_icon_normal</item> -->
+        <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
     </style>
 
 </resources>

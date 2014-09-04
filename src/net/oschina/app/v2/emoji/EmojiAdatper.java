@@ -29,7 +29,7 @@ public class EmojiAdatper extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		return null;
+		return mEmojis.get(position);
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class EmojiAdatper extends BaseAdapter {
 		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.MATCH_PARENT, mEmojiHeight);
 		vh.icon.setLayoutParams(lp);
-		
+
 		return convertView;
 	}
 

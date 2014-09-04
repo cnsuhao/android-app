@@ -98,6 +98,7 @@
             android:name="net.oschina.app.v2.activity.news.DetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
+            android:theme="@style/ActionBarBaseTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="net.oschina.app.v2.activity.common.SimpleBackActivity"

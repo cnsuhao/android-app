@@ -10,18 +10,30 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
 public class EmojiViewPagerAdapter extends RecyclingPagerAdapter {
+
+	public interface OnClickEmojiListener {
+		void onEmojiClick(Emoji emoji);
+
+		void onDelete();
+	}
+
 	private LayoutInflater infalter;
 	private int mEmojiHeight;
 	private List<List<Emoji>> mPagers = new ArrayList<List<Emoji>>();
 
+	private OnClickEmojiListener mListener;
+
 	public EmojiViewPagerAdapter(Context context, List<List<Emoji>> pager,
-			int emojiHeight) {
+			int emojiHeight, OnClickEmojiListener listener) {
 		infalter = LayoutInflater.from(context);
 		mPagers = pager;
 		mEmojiHeight = emojiHeight;
+		mListener = listener;
 	}
 
 	public void setEmojiHeight(int emojiHeight) {
@@ -40,9 +52,23 @@ public class EmojiViewPagerAdapter extends RecyclingPagerAdapter {
 		} else {
 			vh = (ViewHolder) convertView.getTag();
 		}
-		EmojiAdatper adapter = new EmojiAdatper(mPagers.get(position),
+		final EmojiAdatper adapter = new EmojiAdatper(mPagers.get(position),
 				mEmojiHeight);
 		vh.gv.setAdapter(adapter);
+		vh.gv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (mListener == null)
+					return;
+				if (position == adapter.getCount() - 1) {
+					mListener.onDelete();
+				} else {
+					mListener.onEmojiClick((Emoji) adapter.getItem(position));
+				}
+			}
+		});
 		adapter.notifyDataSetChanged();
 		return convertView;
 	}

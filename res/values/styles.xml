@@ -23,7 +23,15 @@
         <item name="android:dividerHeight">1px</item>
         <item name="android:divider">@color/list_divider_color</item>
     </style>
-    
+
+    <style name="CustomCirclePageIndicator">
+        <item name="fillColor">#999999</item>
+        <item name="strokeColor">#999999</item>
+        <item name="strokeWidth">0.5dp</item>
+        <item name="radius">3dp</item>
+        <item name="centered">true</item>
+    </style>
+
     <style name="ActionBarBaseStyle" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="background">@color/actionbar_background</item>
         <item name="titleTextStyle">@style/TitleStyle</item>
@@ -41,6 +49,7 @@
         <item name="actionOverflowButtonStyle">@style/OverflowButton</item>
         <item name="actionBarItemBackground">@drawable/actionbar_item_background_selector</item>
         <item name="dropDownListViewStyle">@style/DrapDownListView</item>
+        <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
     </style>
 
     <!-- sina weibo -->
@@ -356,7 +365,7 @@
 
     <style name="popupMenu" parent="android:Animation">
         <item name="@android:windowEnterAnimation">@anim/head_in</item>
-  //进入时的动画           <item name="@android:windowExitAnimation">@anim/head_out</item>
+  //进入时的动画                   <item name="@android:windowExitAnimation">@anim/head_out</item>
     //退出时的动画   </style>
 
     <!-- V2 styles -->
@@ -535,4 +544,5 @@
         <item name="android:textColor">@color/main_black</item>
         <item name="android:textSize">@dimen/text_size_16</item>
     </style>
+
 </resources>

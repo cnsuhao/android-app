@@ -12,18 +12,6 @@ public class EmojiHelper {
 
 	public static Map<String, Emoji> qq_emojis = new HashMap<String, Emoji>();
 
-	public final static String EMOJI_PREFIX = "[";
-	public final static String EMOJI_SUFFIX = "]";
-
-	static {
-		// Emoji emoji = new Emoji(R.drawable.f001, "[微笑]");
-		// emojis.put(emoji.getValue(), emoji);
-		// emoji = new Emoji(R.drawable.f002, "[撇嘴]");
-		// emojis.put(emoji.getValue(), emoji);
-		// emoji = new Emoji(R.drawable.f003, "[色]");
-		// emojis.put(emoji.getValue(), emoji);
-	}
-
 	public static Emoji getEmoji(String val) {
 		return qq_emojis.get(val.substring(1, val.length() - 1));
 	}
@@ -35,7 +23,7 @@ public class EmojiHelper {
 		for (int i = 0; i < 104; i++) {
 			int id = res.getIdentifier("smiley_" + i, "drawable",
 					contenxt.getPackageName());
-			Emoji emoji = new Emoji(id, vals[i]);
+			Emoji emoji = new Emoji(id, vals[i], i);
 			qq_emojis.put(vals[i], emoji);
 		}
 	}

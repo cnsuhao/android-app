@@ -1,19 +1,21 @@
 package net.oschina.app.v2.emoji;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.emoji.EmojiViewPagerAdapter.OnClickEmojiListener;
 import net.oschina.app.v2.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
 import net.oschina.app.v2.utils.TDevice;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +26,12 @@ import android.widget.LinearLayout;
 import com.viewpagerindicator.CirclePageIndicator;
 
 public class EmojiFragment extends BaseFragment implements
-		SoftKeyboardStateListener {
+		SoftKeyboardStateListener, OnClickEmojiListener {
 
+	private static final String TAG = EmojiFragment.class.getSimpleName();
 	private ViewPager mViewPager;
 	private ImageButton mBtnEmoji, mBtnSend;
-	private EditText mEtInput;
+	private EmojiEditText mEtInput;
 	private EmojiViewPagerAdapter mPagerAdapter;
 	private SoftKeyboardStateHelper mKeyboardHelper;
 	private boolean mIsKeyboardVisible;
@@ -37,6 +40,8 @@ public class EmojiFragment extends BaseFragment implements
 	private View mLyEmoji;
 
 	private int mCurrentKeyboardHeigh;
+
+	// private boolean mNeedHideEmojiOnShowKeyboard;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,
@@ -64,22 +69,31 @@ public class EmojiFragment extends BaseFragment implements
 
 		mBtnEmoji = (ImageButton) view.findViewById(R.id.btn_emoji);
 		mBtnSend = (ImageButton) view.findViewById(R.id.btn_send);
-		mEtInput = (EditText) view.findViewById(R.id.et_input);
+		mEtInput = (EmojiEditText) view.findViewById(R.id.et_input);
 
 		mBtnEmoji.setOnClickListener(this);
 
 		Map<String, Emoji> emojis = EmojiHelper.qq_emojis;
 		// int pagerSize = emojis.size() / 20;
-		Iterator<Entry<String, Emoji>> itr = emojis.entrySet().iterator();
+
+		List<Emoji> allEmojis = new ArrayList<Emoji>();
+		Iterator<String> itr1 = emojis.keySet().iterator();
+		while (itr1.hasNext()) {
+			Emoji ej = emojis.get(itr1.next());
+			allEmojis
+					.add(new Emoji(ej.getResId(), ej.getValue(), ej.getIndex()));
+		}
+		Collections.sort(allEmojis);
+
 		List<List<Emoji>> pagers = new ArrayList<List<Emoji>>();
 		List<Emoji> es = null;
 		int size = 0;
 		boolean justAdd = false;
-		while (itr.hasNext()) {
+		for (Emoji ej : allEmojis) {
+			Log.d(TAG, "emoji:" + ej.getIndex());
 			if (size == 0) {
 				es = new ArrayList<Emoji>();
 			}
-			Emoji ej = itr.next().getValue();
 			es.add(new Emoji(ej.getResId(), ej.getValue()));
 			size++;
 			if (size == 20) {
@@ -97,7 +111,7 @@ public class EmojiFragment extends BaseFragment implements
 		int emojiHeight = caculateEmojiPanelHeight();
 
 		mPagerAdapter = new EmojiViewPagerAdapter(getActivity(), pagers,
-				emojiHeight);
+				emojiHeight, this);
 		mViewPager.setAdapter(mPagerAdapter);
 		mIndicator.setViewPager(mViewPager);
 	}
@@ -135,14 +149,18 @@ public class EmojiFragment extends BaseFragment implements
 		if (id == R.id.btn_emoji) {
 			if (mLyEmoji.getVisibility() == View.GONE) {
 				mNeedHideEmoji = true;
-				if (mIsKeyboardVisible) {
-					TDevice.hideSoftKeyboard(getActivity().getCurrentFocus());
-				} else {
-					showEmojiPanel();
-				}
+				tryShowEmojiPanel();
 			} else {
-				hideEmojiPanel();
+				tryHideEmojiPanel();
 			}
+		}
+	}
+
+	private void tryShowEmojiPanel() {
+		if (mIsKeyboardVisible) {
+			TDevice.hideSoftKeyboard(getActivity().getCurrentFocus());
+		} else {
+			showEmojiPanel();
 		}
 	}
 
@@ -152,9 +170,19 @@ public class EmojiFragment extends BaseFragment implements
 		mBtnEmoji.setBackgroundResource(R.drawable.btn_emoji_pressed);
 	}
 
+	private void tryHideEmojiPanel() {
+		if (!mIsKeyboardVisible) {
+			TDevice.showSoftKeyboard(mEtInput);
+		} else {
+			hideEmojiPanel();
+		}
+	}
+
 	private void hideEmojiPanel() {
-		mLyEmoji.setVisibility(View.GONE);
-		mBtnEmoji.setBackgroundResource(R.drawable.btn_emoji_selector);
+		if (mLyEmoji.getVisibility() == View.VISIBLE) {
+			mLyEmoji.setVisibility(View.GONE);
+			mBtnEmoji.setBackgroundResource(R.drawable.btn_emoji_selector);
+		}
 	}
 
 	@Override
@@ -177,5 +205,16 @@ public class EmojiFragment extends BaseFragment implements
 		if (mNeedHideEmoji) {
 			showEmojiPanel();
 		}
+	}
+
+	@Override
+	public void onEmojiClick(Emoji emoji) {
+		mEtInput.insertEmoji(emoji);
+	}
+
+	@Override
+	public void onDelete() {
+		AppContext.showToastShort("删除");
+		mEtInput.delete();
 	}
 }
