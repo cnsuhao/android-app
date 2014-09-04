@@ -73,7 +73,7 @@
     <dimen name="space_1">1.0dip</dimen>
     
     <dimen name="pager_sliding_tab_strip_height">40.0dip</dimen>
-    <dimen name="list_item_avatar_size">40dp</dimen>
+    <dimen name="list_item_avatar_size">35dp</dimen>
 	<dimen name="avatar_size_big">60dp</dimen>
     
     <dimen name="popo_menu_dialog_width">180dp</dimen>

@@ -48,23 +48,36 @@ import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.ApiHttpClient;
 import net.oschina.app.v2.base.BaseApplication;
+import net.oschina.app.v2.emoji.EmojiHelper;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.textservice.TextInfo;
 import android.webkit.CacheManager;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 
 /**
  * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
@@ -82,6 +95,7 @@ public class AppContext extends BaseApplication {
 	public static final int PAGE_SIZE = 20;// 默认分页大小
 	private static final int CACHE_TIME = 60 * 60000;// 缓存失效时间
 	private static final String KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN";
+	private static final String KEY_SOFTKEYBOARD_HEIGHT = "KEY_SOFTKEYBOARD_HEIGHT";
 
 	private boolean login = false; // 登录状态
 	private int loginUid = 0; // 登录用户的id
@@ -115,6 +129,68 @@ public class AppContext extends BaseApplication {
 		ApiHttpClient.setHttpClient(client);
 		ApiHttpClient.setCookie(ApiClient.getCookie(this));
 
+		EmojiHelper.initEmojis();
+		initImageLoader(this);
+	}
+
+	public static void initImageLoader(Context context) {
+		DisplayImageOptions displayOptions = new DisplayImageOptions.Builder()
+				.preProcessor(new BitmapProcessor() {
+
+					@Override
+					public Bitmap process(Bitmap source) {
+						Bitmap target = getRoundedCornerBitmapBig(source);
+						if (source != target) {
+							source.recycle();
+						}
+						return target;
+					}
+				}).cacheInMemory(true).cacheOnDisk(true)
+				.bitmapConfig(Config.ARGB_8888).build();
+		// This configuration tuning is custom. You can tune every option, you
+		// may tune some of them,
+		// or you can create default configuration by
+		// ImageLoaderConfiguration.createDefault(this);
+		// method.
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+				context).threadPriority(Thread.NORM_PRIORITY - 2)
+				.denyCacheImageMultipleSizesInMemory()
+				.diskCacheFileNameGenerator(new Md5FileNameGenerator())
+				.diskCacheSize(50 * 1024 * 1024)
+				// 50 Mb
+				.tasksProcessingOrder(QueueProcessingType.LIFO)
+				.writeDebugLogs() // Remove for release app
+				.defaultDisplayImageOptions(displayOptions).build();
+		// Initialize ImageLoader with configuration.
+		ImageLoader.getInstance().init(config);
+	}
+
+	public static Bitmap getRoundedCornerBitmapBig(Bitmap bitmap) {
+		Bitmap outBitmap = Bitmap.createBitmap(bitmap.getWidth(),
+				bitmap.getHeight(), Config.ARGB_8888);
+		Canvas canvas = new Canvas(outBitmap);
+		final int color = 0xff424242;
+		final Paint paint = new Paint();
+		final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+		final RectF rectF = new RectF(rect);
+		final float roundPX = bitmap.getWidth() / 2;
+		paint.setAntiAlias(true);
+		canvas.drawARGB(0, 0, 0, 0);
+		paint.setColor(color);
+		canvas.drawRoundRect(rectF, roundPX, roundPX, paint);
+		paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+		canvas.drawBitmap(bitmap, rect, rect, paint);
+		return outBitmap;
+	}
+
+	public static void setSoftKeyboardHeight(int height) {
+		Editor editor = getPreferences().edit();
+		editor.putInt(KEY_SOFTKEYBOARD_HEIGHT, height);
+		apply(editor);
+	}
+
+	public static int getSoftKeyboardHeight() {
+		return getPreferences().getInt(KEY_SOFTKEYBOARD_HEIGHT, 0);
 	}
 
 	public static void setAccessToken(String token) {
@@ -127,9 +203,9 @@ public class AppContext extends BaseApplication {
 		return getPreferences().getString(KEY_ACCESS_TOKEN, null);
 	}
 
-	//public static boolean hasLogin() {
-	//	return !TextUtils.isEmpty(getAccessToken());
-	//}
+	// public static boolean hasLogin() {
+	// return !TextUtils.isEmpty(getAccessToken());
+	// }
 
 	/**
 	 * 初始化
@@ -285,7 +361,8 @@ public class AppContext extends BaseApplication {
 	public void initLoginInfo() {
 		User loginUser = getLoginInfo();
 		if (loginUser != null && loginUser.getUid() > 0
-				&& !TextUtils.isEmpty(ApiClient.getCookie(this))) {//&& loginUser.isRememberMe()
+				&& !TextUtils.isEmpty(ApiClient.getCookie(this))) {// &&
+																	// loginUser.isRememberMe()
 			this.loginUid = loginUser.getUid();
 			this.login = true;
 		} else {
@@ -293,17 +370,17 @@ public class AppContext extends BaseApplication {
 		}
 	}
 
-//	public boolean hasLogin() {
-//		User loginUser = getLoginInfo();
-//		if (loginUser != null && loginUser.getUid() > 0) {
-//			this.loginUid = loginUser.getUid();
-//			this.login = true;
-//			return true;
-//		} else {
-//			this.Logout();
-//			return false;
-//		}
-//	}
+	// public boolean hasLogin() {
+	// User loginUser = getLoginInfo();
+	// if (loginUser != null && loginUser.getUid() > 0) {
+	// this.loginUid = loginUser.getUid();
+	// this.login = true;
+	// return true;
+	// } else {
+	// this.Logout();
+	// return false;
+	// }
+	// }
 
 	/**
 	 * 用户登录验证
@@ -1977,5 +2054,4 @@ public class AppContext extends BaseApplication {
 	public static AppContext instance() {
 		return instance;
 	}
-
 }

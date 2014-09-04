@@ -1,5 +1,7 @@
 package net.oschina.app.v2.activity.question.adapter;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import net.oschina.app.R;
 import net.oschina.app.bean.Post;
 import net.oschina.app.common.StringUtils;
@@ -31,6 +33,8 @@ public class QuestionAdapter extends ListBaseAdapter {
 		vh.source.setText(item.getAuthor());
 		vh.avCount.setText(item.getAnswerCount()+"/"+item.getViewCount());
 		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+		
+		ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
 		return convertView;
 	}
 

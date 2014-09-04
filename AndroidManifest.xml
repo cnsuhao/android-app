@@ -50,8 +50,8 @@
         android:name=".AppContext"
         android:allowBackup="true"
         android:icon="@drawable/icon"
-        android:theme="@style/ActionBarBaseTheme"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:theme="@style/ActionBarBaseTheme" >
         <activity
             android:name=".AppStart"
             android:screenOrientation="portrait"
@@ -86,23 +86,23 @@
             android:name="net.oschina.app.v2.activity.oauth.AuthorizeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActionBarBaseTheme" />
-        <activity 
+        <activity
             android:name="net.oschina.app.v2.activity.user.LoginActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name="net.oschina.app.v2.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name="net.oschina.app.v2.activity.news.DetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="net.oschina.app.v2.activity.common.SimpleBackActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.Main"
             android:configChanges="keyboardHidden|orientation"
@@ -184,8 +184,7 @@
             android:name=".ui.Setting"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-             /><!-- android:theme="@style/Theme.Preference" -->
+            android:screenOrientation="portrait" /> <!-- android:theme="@style/Theme.Preference" -->
         <activity
             android:name=".ui.Search"
             android:configChanges="keyboardHidden|orientation"

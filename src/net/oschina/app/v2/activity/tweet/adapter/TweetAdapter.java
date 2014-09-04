@@ -1,5 +1,7 @@
 package net.oschina.app.v2.activity.tweet.adapter;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import net.oschina.app.R;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.common.StringUtils;
@@ -67,7 +69,8 @@ public class TweetAdapter extends ListBaseAdapter {
 		}
 
 		vh.commentCount.setText(String.valueOf(item.getCommentCount()));
-
+		
+		ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
 		return convertView;
 	}
 

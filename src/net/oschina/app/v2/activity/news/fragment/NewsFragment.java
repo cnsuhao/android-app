@@ -36,9 +36,9 @@ public class NewsFragment extends BaseListFragment {
 	protected static final int STATE_REFRESH = 1;
 	protected static final int STATE_LOADMORE = 2;
 
+	private int mState = STATE_NONE;
 	private int mCurrentPage = 0;
 	private int mCatalog = NewsList.CATALOG_ALL;
-	private int mState = STATE_NONE;
 
 	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
 

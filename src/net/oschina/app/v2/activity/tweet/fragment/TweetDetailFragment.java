@@ -19,14 +19,21 @@ import net.oschina.app.v2.utils.TDevice;
 import org.apache.http.Header;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -34,18 +41,18 @@ public class TweetDetailFragment extends BaseFragment {
 	protected static final int STATE_NONE = 0;
 	protected static final int STATE_REFRESH = 1;
 	protected static final int STATE_LOADMORE = 2;
-	protected static final String TAG = TweetDetailFragment.class.getSimpleName();
+	protected static final String TAG = TweetDetailFragment.class
+			.getSimpleName();
 	private ListView mListView;
 	private EmptyLayout mEmptyView;
-	private TextView mTvName, mTvFrom, mTvTime;
+	private TextView mTvName, mTvFrom, mTvTime, mTvCommentCount;
 	private WebView mContent;
 	private int mTweetId;
 	private Tweet mTweet;
 	private int mCurrentPage = 0;
 	private CommentAdapter mAdapter;
 	private int mState = STATE_NONE;
-	
-	
+
 	private AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
 
 		@Override
@@ -55,7 +62,9 @@ public class TweetDetailFragment extends BaseFragment {
 				if (mTweet != null && mTweet.getId() > 0) {
 					fillUI();
 					mCurrentPage = 0;
+					
 					mState = STATE_REFRESH;
+					mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
 					sendRequestCommentData();
 				} else {
 					throw new RuntimeException("load detail error");
@@ -69,6 +78,7 @@ public class TweetDetailFragment extends BaseFragment {
 		@Override
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 				Throwable arg3) {
+			mState = STATE_NONE;
 			mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
 		}
 	};
@@ -86,7 +96,7 @@ public class TweetDetailFragment extends BaseFragment {
 				mAdapter.addData(data);
 				mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
 				if (data.size() == 0 && mState == STATE_REFRESH) {
-					//mEmptyView.setErrorType(EmptyLayout.NODATA);
+					// mEmptyView.setErrorType(EmptyLayout.NODATA);
 				} else if (data.size() < TDevice.getPageSize()) {
 					if (mState == STATE_REFRESH)
 						mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
@@ -108,7 +118,34 @@ public class TweetDetailFragment extends BaseFragment {
 				Throwable arg3) {
 			mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
 		}
-		
+
+		public void onFinish() {
+			mState = STATE_NONE;
+		}
+	};
+
+	private OnScrollListener mScrollListener = new OnScrollListener() {
+
+		@Override
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+		}
+
+		@Override
+		public void onScroll(AbsListView view, int firstVisibleItem,
+				int visibleItemCount, int totalItemCount) {
+			if (mAdapter != null
+					&& mAdapter.getDataSize() > 0
+					&& mListView.getLastVisiblePosition() == (mListView
+							.getCount() - 1)) {
+				if (mState == STATE_NONE
+						&& mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+					mState = STATE_LOADMORE;
+					mCurrentPage++;
+					sendRequestCommentData();
+				}
+			}
+		}
 	};
 
 	@Override
@@ -128,20 +165,37 @@ public class TweetDetailFragment extends BaseFragment {
 	private void initViews(View view) {
 		mEmptyView = (EmptyLayout) view.findViewById(R.id.error_layout);
 		mListView = (ListView) view.findViewById(R.id.listview);
+		mListView.setOnScrollListener(mScrollListener);
 		View header = LayoutInflater.from(getActivity()).inflate(
 				R.layout.v2_list_header_tweet_detail, null);
 		mTvName = (TextView) header.findViewById(R.id.tv_name);
 		mTvFrom = (TextView) header.findViewById(R.id.tv_from);
 		mTvTime = (TextView) header.findViewById(R.id.tv_time);
+		mTvCommentCount = (TextView) header.findViewById(R.id.tv_comment_count);
 		mContent = (WebView) header.findViewById(R.id.webview);
-		mContent.getSettings().setJavaScriptEnabled(false);
-		mContent.getSettings().setSupportZoom(true);
-		mContent.getSettings().setBuiltInZoomControls(true);
-		mContent.getSettings().setDefaultFontSize(12);
+		initWebView(mContent);
 
 		mListView.addHeaderView(header);
-		mAdapter = new CommentAdapter();
+		mAdapter = new CommentAdapter(true);
 		mListView.setAdapter(mAdapter);
+	}
+
+	@SuppressLint("SetJavaScriptEnabled")
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void initWebView(WebView webView) {
+		WebSettings settings = webView.getSettings();
+		settings.setDefaultFontSize(20);
+		settings.setJavaScriptEnabled(true);
+		settings.setSupportZoom(true);
+		settings.setBuiltInZoomControls(true);
+		int sysVersion = Build.VERSION.SDK_INT;
+		if (sysVersion >= 11) {
+			settings.setDisplayZoomControls(false);
+		} else {
+			ZoomButtonsController zbc = new ZoomButtonsController(webView);
+			zbc.getZoomControls().setVisibility(View.GONE);
+		}
+		UIHelper.addWebImageShow(getActivity(), webView);
 	}
 
 	private void fillUI() {
@@ -168,6 +222,11 @@ public class TweetDetailFragment extends BaseFragment {
 			break;
 		}
 
+		mTvCommentCount.setText(getString(R.string.comment_count,
+				mTweet.getCommentCount()));
+		
+		//mTvCommentCount.setText(mTweet.getBody());
+		
 		// set content
 		String body = UIHelper.WEB_STYLE + mTweet.getBody();
 		body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
@@ -178,12 +237,12 @@ public class TweetDetailFragment extends BaseFragment {
 	}
 
 	private void sendRequestData() {
+		mState = STATE_REFRESH;
 		mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
 		NewsApi.getTweetDetail(mTweetId, mDetailHandler);
 	}
 
 	private void sendRequestCommentData() {
-		mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
 		NewsApi.getCommentList(mTweetId, CommentList.CATALOG_TWEET,
 				mCurrentPage, mCommentHandler);
 	}

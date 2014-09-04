@@ -1,5 +1,7 @@
 package net.oschina.app.v2.activity.active.adapter;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import net.oschina.app.R;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Tweet;
@@ -89,7 +91,14 @@ public class ActiveAdapter extends ListBaseAdapter {
 		} else {
 			vh.retweetCount.setVisibility(View.GONE);
 		}
-
+		
+		String faceURL = item.getFace();
+		if (faceURL.endsWith("portrait.gif") || StringUtils.isEmpty(faceURL)) {
+			vh.avatar.setImageBitmap(null);
+		} else {
+			ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
+		}
+		
 		return convertView;
 	}
 

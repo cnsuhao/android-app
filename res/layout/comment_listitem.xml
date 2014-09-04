@@ -65,6 +65,7 @@
 	            android:layout_width="wrap_content" 
 	         	android:layout_height="wrap_content"
 	         	android:layout_marginRight="10.0dip"
+	         	android:text="client"
 	         	android:textSize="@dimen/text_size_10"
 	         	android:textColor="@color/listitem_gray"/>
 			
@@ -72,6 +73,7 @@
 	        	android:id="@+id/comment_listitem_date" 
 	            android:layout_width="wrap_content" 
 	         	android:layout_height="wrap_content"
+	         	android:text="date"
 	         	android:textSize="@dimen/text_size_10"
 	         	android:textColor="@color/listitem_gray"/> 
         </LinearLayout>

@@ -1,5 +1,7 @@
 package net.oschina.app.v2.activity.news;
 
+import java.lang.ref.WeakReference;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.v2.activity.news.fragment.BlogDetailFragment;
@@ -8,10 +10,11 @@ import net.oschina.app.v2.activity.news.fragment.QuestionDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.SoftwareDetailFragment;
 import net.oschina.app.v2.activity.tweet.fragment.TweetDetailFragment;
 import net.oschina.app.v2.base.BaseActivity;
+import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.emoji.EmojiFragment;
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.internal.widget.ListPopupWindow;
 import android.view.LayoutInflater;
@@ -41,9 +44,11 @@ public class DetailActivity extends BaseActivity implements OnItemClickListener 
 	private ListPopupWindow mMenuWindow;
 	private MenuAdapter mMenuAdapter;
 
+	private WeakReference<BaseFragment> mFragment, mEmojiFragment;
+
 	@Override
 	protected int getLayoutId() {
-		return R.layout.v2_activity_simple_fragment;
+		return R.layout.v2_activity_detail;
 	}
 
 	@Override
@@ -66,8 +71,9 @@ public class DetailActivity extends BaseActivity implements OnItemClickListener 
 		super.init(savedInstanceState);
 		int displayType = getIntent().getIntExtra(BUNDLE_KEY_DISPLAY_TYPE,
 				DISPLAY_NEWS);
-		Fragment fragment = null;
+		BaseFragment fragment = null;
 		int actionBarTitle = 0;
+		boolean needEmoji = true;
 		switch (displayType) {
 		case DISPLAY_NEWS:
 			actionBarTitle = R.string.actionbar_title_news;
@@ -80,6 +86,7 @@ public class DetailActivity extends BaseActivity implements OnItemClickListener 
 		case DISPLAY_SOFTWARE:
 			actionBarTitle = R.string.actionbar_title_software;
 			fragment = new SoftwareDetailFragment();
+			needEmoji = false;
 			break;
 		case DISPLAY_QUESTION:
 			actionBarTitle = R.string.actionbar_title_question;
@@ -93,11 +100,31 @@ public class DetailActivity extends BaseActivity implements OnItemClickListener 
 			break;
 		}
 		// setActionBarTitle(actionBarTitle);
-
 		FragmentTransaction trans = getSupportFragmentManager()
 				.beginTransaction();
+		mFragment = new WeakReference<BaseFragment>(fragment);
 		trans.replace(R.id.container, fragment);
+		if (needEmoji) {
+			EmojiFragment f = new EmojiFragment();
+			mEmojiFragment = new WeakReference<BaseFragment>(f);
+			trans.replace(R.id.emoji_container, f);
+		}
 		trans.commit();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (mEmojiFragment != null && mEmojiFragment.get() != null) {
+			if (mEmojiFragment.get().onBackPressed()) {
+				return;
+			}
+		}
+		if (mFragment != null && mFragment.get() != null) {
+			if (mFragment.get().onBackPressed()) {
+				return;
+			}
+		}
+		super.onBackPressed();
 	}
 
 	@Override
@@ -139,7 +166,8 @@ public class DetailActivity extends BaseActivity implements OnItemClickListener 
 		}
 	}
 
-	@SuppressLint("ViewHolder") private static class MenuAdapter extends BaseAdapter {
+	@SuppressLint("ViewHolder")
+	private static class MenuAdapter extends BaseAdapter {
 
 		@Override
 		public int getCount() {
