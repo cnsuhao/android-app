@@ -1,10 +1,11 @@
 
 package net.oschina.app.v2.activity.software;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.SoftwareList;
 import net.oschina.app.v2.activity.software.fragment.SoftwareCataglogFragment;
 import net.oschina.app.v2.activity.software.fragment.SoftwareFragment;
+
+import com.tonlin.osc.happy.R;
 
 
 public enum SoftwareTab {

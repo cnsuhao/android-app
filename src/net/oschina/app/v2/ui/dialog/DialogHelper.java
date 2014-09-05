@@ -1,8 +1,9 @@
 package net.oschina.app.v2.ui.dialog;
 
-import net.oschina.app.R;
 import android.app.Activity;
 import android.content.Context;
+
+import com.tonlin.osc.happy.R;
 
 public class DialogHelper {
 	

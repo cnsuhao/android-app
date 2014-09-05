@@ -1,13 +1,8 @@
 package net.oschina.app.v2.activity.active.adapter;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.process.BitmapProcessor;
-
-import net.oschina.app.R;
 import net.oschina.app.bean.Active;
-import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.Active.ObjectReply;
+import net.oschina.app.bean.Tweet;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.ListBaseAdapter;
@@ -23,6 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
+import com.tonlin.osc.happy.R;
 
 public class ActiveAdapter extends ListBaseAdapter {
 	private final static String AT_HOST_PRE = "http://my.oschina.net";

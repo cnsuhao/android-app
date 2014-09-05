@@ -3,7 +3,6 @@ package net.oschina.app.v2.base;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.oschina.app.R;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +12,8 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 public class ListBaseAdapter extends BaseAdapter {
 	public static final int STATE_EMPTY_ITEM = 0;

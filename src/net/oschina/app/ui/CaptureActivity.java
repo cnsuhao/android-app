@@ -10,7 +10,6 @@ import java.util.Vector;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.AppManager;
-import net.oschina.app.R;
 import net.oschina.app.bean.Barcode;
 import net.oschina.app.common.UIHelper;
 import android.app.Activity;
@@ -41,6 +40,7 @@ import com.barcode.view.ViewfinderView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
+import com.tonlin.osc.happy.R;
 
 /**
  * 扫描二维码

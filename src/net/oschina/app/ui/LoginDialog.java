@@ -2,7 +2,6 @@ package net.oschina.app.ui;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
-import net.oschina.app.R;
 import net.oschina.app.api.ApiClient;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.User;
@@ -22,6 +21,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ViewSwitcher;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 用户登录对话框

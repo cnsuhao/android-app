@@ -1,12 +1,13 @@
 package net.oschina.app.v2.ui.dialog;
 
-import net.oschina.app.R;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 public class DialogAdapter extends BaseAdapter {
 

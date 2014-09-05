@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
-import net.oschina.app.R;
 import net.oschina.app.adapter.ListViewFavoriteAdapter;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.FavoriteList.Favorite;
@@ -24,6 +23,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 用户收藏

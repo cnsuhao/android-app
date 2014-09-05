@@ -1,7 +1,6 @@
 package net.oschina.app.common;
 
 import net.oschina.app.AppConfig;
-import net.oschina.app.R;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -9,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
+import com.tonlin.osc.happy.R;
 import com.weibo.net.AccessToken;
 import com.weibo.net.DialogError;
 import com.weibo.net.Weibo;

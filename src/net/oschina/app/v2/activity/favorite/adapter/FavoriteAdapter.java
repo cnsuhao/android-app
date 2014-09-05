@@ -1,12 +1,13 @@
 package net.oschina.app.v2.activity.favorite.adapter;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.FavoriteList.Favorite;
 import net.oschina.app.v2.base.ListBaseAdapter;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 public class FavoriteAdapter extends ListBaseAdapter {
 

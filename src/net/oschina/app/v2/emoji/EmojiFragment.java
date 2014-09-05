@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.emoji.EmojiViewPagerAdapter.OnClickEmojiListener;
 import net.oschina.app.v2.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
@@ -22,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.tonlin.osc.happy.R;
 import com.viewpagerindicator.CirclePageIndicator;
 
 public class EmojiFragment extends BaseFragment implements

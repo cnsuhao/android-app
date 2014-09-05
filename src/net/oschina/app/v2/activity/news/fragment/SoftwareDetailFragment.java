@@ -3,7 +3,6 @@ package net.oschina.app.v2.activity.news.fragment;
 import java.io.ByteArrayInputStream;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.bean.Software;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.remote.NewsApi;
@@ -28,6 +27,7 @@ import android.widget.TextView;
 import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.tonlin.osc.happy.R;
 
 /**
  * 软件详情

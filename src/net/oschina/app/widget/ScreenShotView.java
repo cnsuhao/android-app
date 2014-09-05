@@ -1,7 +1,6 @@
 package net.oschina.app.widget;
 
 import net.oschina.app.AppConfig;
-import net.oschina.app.R;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.ui.BaseActivity;
 import android.annotation.SuppressLint;
@@ -18,6 +17,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 

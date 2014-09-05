@@ -7,7 +7,6 @@ import java.util.Date;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
-import net.oschina.app.R;
 import net.oschina.app.bean.FriendList;
 import net.oschina.app.bean.MyInformation;
 import net.oschina.app.bean.Result;
@@ -31,6 +30,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 用户资料

@@ -1,6 +1,5 @@
 package net.oschina.app.bean;
 
-import net.oschina.app.R;
 import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
 import net.oschina.app.v2.activity.favorite.fragment.FavoriteViewPagerFragment;
 import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
@@ -8,8 +7,10 @@ import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
 import net.oschina.app.v2.activity.settings.fragment.AboutFragment;
 import net.oschina.app.v2.activity.settings.fragment.SettingsFragment;
 import net.oschina.app.v2.activity.software.fragment.SoftwareViewPagerFragment;
-import net.oschina.app.v2.activity.user.fragment.UserProfileFragment;
 import net.oschina.app.v2.activity.user.fragment.UserCenterFragment;
+import net.oschina.app.v2.activity.user.fragment.UserProfileFragment;
+
+import com.tonlin.osc.happy.R;
 
 public enum SimpleBackPage {
 

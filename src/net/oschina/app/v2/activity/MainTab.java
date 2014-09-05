@@ -1,10 +1,11 @@
 package net.oschina.app.v2.activity;
 
-import net.oschina.app.R;
 import net.oschina.app.v2.activity.active.fragment.ActiveViewPagerFragment;
 import net.oschina.app.v2.activity.news.fragment.NewsViewPagerFragment;
 import net.oschina.app.v2.activity.question.fragment.QuestionViewPagerFragment;
 import net.oschina.app.v2.activity.tweet.fragment.TweetViewPagerFragment;
+
+import com.tonlin.osc.happy.R;
 
 public enum MainTab {
 

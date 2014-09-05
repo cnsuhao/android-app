@@ -3,7 +3,6 @@ package net.oschina.app.ui;
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
-import net.oschina.app.R;
 import net.oschina.app.bean.Result;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
@@ -18,6 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 发表留言

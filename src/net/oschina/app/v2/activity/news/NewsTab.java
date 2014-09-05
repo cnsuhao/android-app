@@ -1,9 +1,10 @@
 
 package net.oschina.app.v2.activity.news;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.v2.activity.news.fragment.NewsFragment;
+
+import com.tonlin.osc.happy.R;
 
 
 public enum NewsTab {

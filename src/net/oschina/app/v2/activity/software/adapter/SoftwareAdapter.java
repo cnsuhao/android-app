@@ -1,12 +1,13 @@
 package net.oschina.app.v2.activity.software.adapter;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.SoftwareList.Software;
 import net.oschina.app.v2.base.ListBaseAdapter;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 public class SoftwareAdapter extends ListBaseAdapter {
 

@@ -3,7 +3,6 @@ package net.oschina.app.v2.activity.comment.fragment;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.BlogCommentList;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
@@ -26,6 +25,7 @@ import android.widget.ListView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.tonlin.osc.happy.R;
 
 public class CommentFrament extends BaseListFragment {
 

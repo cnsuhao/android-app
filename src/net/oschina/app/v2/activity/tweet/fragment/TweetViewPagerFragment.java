@@ -1,6 +1,5 @@
 package net.oschina.app.v2.activity.tweet.fragment;
 
-import net.oschina.app.R;
 import net.oschina.app.v2.activity.tweet.adapter.TweetTabPagerAdapter;
 import net.oschina.app.v2.ui.pagertab.PagerSlidingTabStrip;
 import android.os.Bundle;
@@ -11,6 +10,8 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.tonlin.osc.happy.R;
 
 public class TweetViewPagerFragment extends Fragment implements
 		OnPageChangeListener {

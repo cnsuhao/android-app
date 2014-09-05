@@ -1,8 +1,9 @@
 package net.oschina.app.v2.activity.favorite;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.v2.activity.favorite.fragment.FavoriteFragment;
+
+import com.tonlin.osc.happy.R;
 
 public enum FavoriteTab {
 	

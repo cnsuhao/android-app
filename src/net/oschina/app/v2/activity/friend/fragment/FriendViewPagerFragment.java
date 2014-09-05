@@ -1,6 +1,5 @@
 package net.oschina.app.v2.activity.friend.fragment;
 
-import net.oschina.app.R;
 import net.oschina.app.v2.activity.friend.adapter.FriendTabPagerAdapter;
 import net.oschina.app.v2.ui.pagertab.PagerSlidingTabStrip;
 import android.os.Bundle;
@@ -11,6 +10,8 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.tonlin.osc.happy.R;
 
 public class FriendViewPagerFragment extends Fragment implements
 		OnPageChangeListener {

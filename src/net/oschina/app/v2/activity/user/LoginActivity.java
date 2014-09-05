@@ -3,7 +3,6 @@ package net.oschina.app.v2.activity.user;
 import java.io.ByteArrayInputStream;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.api.ApiClient;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.User;
@@ -30,6 +29,7 @@ import android.widget.EditText;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.tonlin.osc.happy.R;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 

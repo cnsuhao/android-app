@@ -1,7 +1,6 @@
 package net.oschina.app.ui;
 
 import net.oschina.app.AppConfig;
-import net.oschina.app.R;
 import net.oschina.app.bean.AccessInfo;
 import net.oschina.app.common.FileUtils;
 import net.oschina.app.common.ImageUtils;
@@ -20,6 +19,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 截屏分享

@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
-import net.oschina.app.R;
 import net.oschina.app.adapter.ListViewSearchAdapter;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SearchList;
@@ -25,6 +24,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 搜索

@@ -1,6 +1,5 @@
 package net.oschina.app.v2.base;
 
-import net.oschina.app.R;
 import net.oschina.app.v2.ui.dialog.CommonToast;
 import net.oschina.app.v2.ui.dialog.DialogControl;
 import net.oschina.app.v2.ui.dialog.DialogHelper;
@@ -19,6 +18,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 public abstract class BaseActivity extends ActionBarActivity implements
 		DialogControl, VisibilityControl, View.OnClickListener {

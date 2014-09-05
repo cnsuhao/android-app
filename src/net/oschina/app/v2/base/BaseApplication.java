@@ -1,6 +1,5 @@
 package net.oschina.app.v2.base;
 
-import net.oschina.app.R;
 import net.oschina.app.v2.utils.TLog;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -15,6 +14,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tonlin.osc.happy.R;
 
 
 public class BaseApplication extends Application {

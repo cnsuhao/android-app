@@ -1,6 +1,5 @@
 package net.oschina.app.ui;
 
-import net.oschina.app.R;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import android.content.Intent;
@@ -9,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 用户反馈

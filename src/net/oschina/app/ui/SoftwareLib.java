@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
-import net.oschina.app.R;
 import net.oschina.app.adapter.ListViewSoftwareAdapter;
 import net.oschina.app.adapter.ListViewSoftwareCatalogAdapter;
 import net.oschina.app.bean.Notice;
@@ -30,6 +29,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 软件库

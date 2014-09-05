@@ -2,7 +2,6 @@ package net.oschina.app.adapter;
 
 import java.util.List;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Comment.Refer;
 import net.oschina.app.bean.Comment.Reply;
@@ -19,6 +18,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 用户评论Adapter类

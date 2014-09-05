@@ -1,6 +1,5 @@
 package net.oschina.app.v2.ui.dialog;
 
-import net.oschina.app.R;
 import net.oschina.app.v2.base.BaseApplication;
 import net.oschina.app.v2.utils.TDevice;
 import android.annotation.SuppressLint;
@@ -27,6 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 public class CommonDialog extends Dialog {
 	public DialogInterface.OnClickListener listener;

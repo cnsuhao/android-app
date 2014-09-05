@@ -1,6 +1,5 @@
 package net.oschina.app.v2.ui.dialog;
 
-import net.oschina.app.R;
 import net.oschina.app.v2.utils.TDevice;
 import android.app.Dialog;
 import android.content.Context;
@@ -11,6 +10,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 public class WaitDialog extends Dialog {
 

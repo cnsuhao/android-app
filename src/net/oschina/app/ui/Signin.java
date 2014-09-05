@@ -3,7 +3,6 @@ package net.oschina.app.ui;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.AppManager;
-import net.oschina.app.R;
 import net.oschina.app.bean.Barcode;
 import net.oschina.app.bean.JsonResult;
 import net.oschina.app.common.UIHelper;
@@ -18,6 +17,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tonlin.osc.happy.R;
 /**
  * 线下活动签到
  * @author 火蚁（http://my.oschina.net/LittleDY）

@@ -2,12 +2,12 @@ package net.oschina.app.v2.activity.comment.adapter;
 
 import java.util.List;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Comment.Refer;
 import net.oschina.app.bean.Comment.Reply;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.common.StringUtils;
+import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
 import net.oschina.app.v2.ui.text.MyURLSpan;
@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tonlin.osc.happy.R;
 
 public class CommentAdapter extends ListBaseAdapter {
 
@@ -36,7 +37,7 @@ public class CommentAdapter extends ListBaseAdapter {
 
 	@SuppressLint("InflateParams")
 	@Override
-	protected View getRealView(int position, View convertView, ViewGroup parent) {
+	protected View getRealView(int position, View convertView,final ViewGroup parent) {
 		ViewHolder vh = null;
 		if (convertView == null || convertView.getTag() == null) {
 			convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -47,7 +48,7 @@ public class CommentAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		Comment item = (Comment) _data.get(position);
+		final Comment item = (Comment) _data.get(position);
 
 		vh.name.setText(item.getAuthor());
 
@@ -160,6 +161,15 @@ public class CommentAdapter extends ListBaseAdapter {
 		}
 
 		ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
+		
+		vh.avatar.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				UIHelper.showUserCenter(parent.getContext(),
+						item.getAuthorId(), item.getAuthor());
+			}
+		});
 		
 		vh.split.setVisibility(showSplit ? View.VISIBLE : View.GONE);
 		return convertView;

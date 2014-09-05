@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import net.oschina.app.R;
 import net.oschina.app.adapter.ListViewPathAdapter;
 import net.oschina.app.adapter.ListViewPathAdapter.OnPathOperateListener;
 import net.oschina.app.common.FileUtils;
@@ -29,6 +28,8 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 路径选择弹

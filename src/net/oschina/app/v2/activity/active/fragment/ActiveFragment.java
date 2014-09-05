@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.NewsList;
@@ -28,6 +27,7 @@ import android.widget.ListView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tencent.mm.sdk.platformtools.Log;
+import com.tonlin.osc.happy.R;
 
 /**
  * @author william_sim

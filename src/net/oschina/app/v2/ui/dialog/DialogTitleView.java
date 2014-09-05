@@ -1,12 +1,13 @@
 package net.oschina.app.v2.ui.dialog;
 
-import net.oschina.app.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 public class DialogTitleView extends FrameLayout {
 

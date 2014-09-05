@@ -1,10 +1,8 @@
 package net.oschina.app.v2.activity.question.adapter;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
-import net.oschina.app.R;
 import net.oschina.app.bean.Post;
 import net.oschina.app.common.StringUtils;
+import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.ListBaseAdapter;
 import android.annotation.SuppressLint;
 import android.view.View;
@@ -12,11 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tonlin.osc.happy.R;
+
 public class QuestionAdapter extends ListBaseAdapter {
 
 	@SuppressLint("InflateParams")
 	@Override
-	protected View getRealView(int position, View convertView, ViewGroup parent) {
+	protected View getRealView(int position, View convertView,final ViewGroup parent) {
 		ViewHolder vh = null;
 		if (convertView == null || convertView.getTag() == null) {
 			convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -27,7 +28,7 @@ public class QuestionAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		Post item = (Post) _data.get(position);
+		final Post item = (Post) _data.get(position);
 
 		vh.title.setText(item.getTitle());
 		vh.source.setText(item.getAuthor());
@@ -35,6 +36,16 @@ public class QuestionAdapter extends ListBaseAdapter {
 		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
 		
 		ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
+		
+		vh.avatar.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				UIHelper.showUserCenter(parent.getContext(),
+						item.getAuthorId(), item.getAuthor());
+			}
+		});
+		
 		return convertView;
 	}
 

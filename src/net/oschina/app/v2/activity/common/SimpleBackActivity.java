@@ -2,7 +2,6 @@ package net.oschina.app.v2.activity.common;
 
 import java.lang.ref.WeakReference;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.v2.base.BaseActivity;
 import net.oschina.app.v2.base.BaseFragment;
@@ -10,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+
+import com.tonlin.osc.happy.R;
 
 public class SimpleBackActivity extends BaseActivity {
 

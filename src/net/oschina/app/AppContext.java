@@ -78,6 +78,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
+import com.tonlin.osc.happy.R;
 
 /**
  * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据

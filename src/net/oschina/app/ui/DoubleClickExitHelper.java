@@ -1,12 +1,13 @@
 package net.oschina.app.ui;
 
 import net.oschina.app.AppManager;
-import net.oschina.app.R;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
 import android.widget.Toast;
+
+import com.tonlin.osc.happy.R;
 
 
 /**

@@ -2,7 +2,6 @@ package net.oschina.app.adapter;
 
 import java.util.List;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Active.ObjectReply;
 import net.oschina.app.common.BitmapManager;
@@ -17,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 用户动态Adapter类

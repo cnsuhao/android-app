@@ -1,11 +1,12 @@
 package net.oschina.app.v2.activity.oauth;
 
-import net.oschina.app.R;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.tonlin.osc.happy.R;
 
 public class AuthorizeActivity extends ActionBarActivity {
 	private static final String AUTHROIZE_URL = "http://www.oschina.net/action/oauth2/authorize?response_type=code&client_id=F6QtiYRetdUEwsYKYvNR&state=xyz&redirect_uri=http://my.oschina.net/u/142883";

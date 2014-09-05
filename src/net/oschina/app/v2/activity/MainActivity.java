@@ -1,7 +1,6 @@
 package net.oschina.app.v2.activity;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.bean.User;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.BaseActivity;
@@ -25,6 +24,8 @@ import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 应用主界面

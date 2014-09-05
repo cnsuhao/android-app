@@ -11,7 +11,6 @@ import java.text.DecimalFormat;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
-import net.oschina.app.R;
 import net.oschina.app.api.ApiClient;
 import net.oschina.app.bean.Update;
 import android.app.AlertDialog;
@@ -34,6 +33,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 应用程序更新工具包

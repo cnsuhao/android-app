@@ -1,6 +1,5 @@
 package net.oschina.app.v2.ui.text;
 
-import net.oschina.app.R;
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
@@ -10,6 +9,8 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.view.MotionEvent;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 public class MyLinkMovementMethod extends LinkMovementMethod {
 

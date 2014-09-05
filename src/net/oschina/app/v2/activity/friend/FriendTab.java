@@ -1,8 +1,9 @@
 package net.oschina.app.v2.activity.friend;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.FriendList;
 import net.oschina.app.v2.activity.friend.fragment.FriendFragment;
+
+import com.tonlin.osc.happy.R;
 
 public enum FriendTab {
 	FOLLOWING(0, FriendList.TYPE_FOLLOWER,

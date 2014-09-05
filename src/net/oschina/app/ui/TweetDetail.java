@@ -7,7 +7,6 @@ import java.util.List;
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
-import net.oschina.app.R;
 import net.oschina.app.adapter.GridViewFaceAdapter;
 import net.oschina.app.adapter.ListViewCommentAdapter;
 import net.oschina.app.bean.Comment;
@@ -47,6 +46,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 动弹详情

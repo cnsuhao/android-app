@@ -15,6 +15,9 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 应用程序启动类：显示欢迎界面并跳转到主界面
@@ -33,7 +36,7 @@ public class AppStart extends Activity {
 		super.onCreate(savedInstanceState);
 
 		final View view = View.inflate(this, R.layout.start, null);
-		LinearLayout wellcome = (LinearLayout) view
+		RelativeLayout wellcome = (RelativeLayout) view
 				.findViewById(R.id.app_start_view);
 		check(wellcome);
 		setContentView(view);
@@ -80,7 +83,7 @@ public class AppStart extends Activity {
 	 * 
 	 * @param view
 	 */
-	private void check(LinearLayout view) {
+	private void check(RelativeLayout view) {
 		String path = FileUtils.getAppCache(this, "welcomeback");
 		List<File> files = FileUtils.listPathFiles(path);
 		if (!files.isEmpty()) {

@@ -3,7 +3,6 @@ package net.oschina.app.v2.emoji;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.oschina.app.R;
 import net.oschina.app.v2.adapter.RecyclingPagerAdapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+
+import com.tonlin.osc.happy.R;
 
 public class EmojiViewPagerAdapter extends RecyclingPagerAdapter {
 

@@ -1,6 +1,5 @@
 package net.oschina.app.v2.ui.tooglebutton;
 
-import net.oschina.app.R;
 import net.oschina.app.v2.ui.tooglebutton.rebound.SimpleSpringListener;
 import net.oschina.app.v2.ui.tooglebutton.rebound.Spring;
 import net.oschina.app.v2.ui.tooglebutton.rebound.SpringConfig;
@@ -15,6 +14,8 @@ import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * @author ThinkPad

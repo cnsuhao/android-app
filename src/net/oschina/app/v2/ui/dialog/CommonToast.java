@@ -1,6 +1,5 @@
 package net.oschina.app.v2.ui.dialog;
 
-import net.oschina.app.R;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.TLog;
 import android.animation.Animator;
@@ -14,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 public class CommonToast {
 	public static final long DURATION_LONG = 5000L;

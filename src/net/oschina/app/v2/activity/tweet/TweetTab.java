@@ -1,9 +1,10 @@
 
 package net.oschina.app.v2.activity.tweet;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.TweetList;
 import net.oschina.app.v2.activity.tweet.fragment.TweetFragment;
+
+import com.tonlin.osc.happy.R;
 
 
 public enum TweetTab {

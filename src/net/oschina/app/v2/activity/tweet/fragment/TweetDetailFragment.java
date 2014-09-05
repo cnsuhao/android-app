@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Tweet;
@@ -37,11 +36,14 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tonlin.osc.happy.R;
 
 public class TweetDetailFragment extends BaseFragment implements
 		EmojiTextListener, EmojiFragmentControl {
@@ -56,7 +58,7 @@ public class TweetDetailFragment extends BaseFragment implements
 	private int mCurrentPage = 0;
 	private CommentAdapter mAdapter;
 	private EmojiFragment mEmojiFragment;
-	
+
 	private AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
 
 		@Override
@@ -151,6 +153,7 @@ public class TweetDetailFragment extends BaseFragment implements
 			}
 		}
 	};
+	private ImageView mIvAvatar;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,
@@ -172,6 +175,15 @@ public class TweetDetailFragment extends BaseFragment implements
 		mListView.setOnScrollListener(mScrollListener);
 		View header = LayoutInflater.from(getActivity()).inflate(
 				R.layout.v2_list_header_tweet_detail, null);
+		mIvAvatar = (ImageView) header.findViewById(R.id.iv_avatar);
+		mIvAvatar.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				UIHelper.showUserCenter(getActivity(), mTweet.getAuthorId(),
+						mTweet.getAuthor());
+			}
+		});
 		mTvName = (TextView) header.findViewById(R.id.tv_name);
 		mTvFrom = (TextView) header.findViewById(R.id.tv_from);
 		mTvTime = (TextView) header.findViewById(R.id.tv_time);
@@ -203,6 +215,7 @@ public class TweetDetailFragment extends BaseFragment implements
 	}
 
 	private void fillUI() {
+		ImageLoader.getInstance().displayImage(mTweet.getFace(), mIvAvatar);
 		mTvName.setText(mTweet.getAuthor());
 		mTvTime.setText(StringUtils.friendly_time(mTweet.getPubDate()));
 		switch (mTweet.getAppClient()) {

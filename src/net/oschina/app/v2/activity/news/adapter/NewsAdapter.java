@@ -1,6 +1,5 @@
 package net.oschina.app.v2.activity.news.adapter;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.News;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.v2.base.ListBaseAdapter;
@@ -8,6 +7,8 @@ import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 public class NewsAdapter extends ListBaseAdapter {
 

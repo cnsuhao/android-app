@@ -17,7 +17,6 @@ package greendroid.widget;
 
 import java.util.List;
 
-import net.oschina.app.R;
 import android.content.Context;
 import android.graphics.Rect;
 import android.view.KeyEvent;
@@ -32,6 +31,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * A {@link QuickActionGrid} is an implementation of a {@link QuickActionWidget}

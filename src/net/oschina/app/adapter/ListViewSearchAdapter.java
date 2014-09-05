@@ -2,7 +2,6 @@ package net.oschina.app.adapter;
 
 import java.util.List;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.SearchList.Result;
 import net.oschina.app.common.StringUtils;
 import android.content.Context;
@@ -12,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 搜索Adapter类

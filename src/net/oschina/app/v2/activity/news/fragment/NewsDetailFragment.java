@@ -3,7 +3,6 @@ package net.oschina.app.v2.activity.news.fragment;
 import java.io.ByteArrayInputStream;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.News.Relative;
@@ -38,6 +37,7 @@ import android.widget.TextView;
 import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.tonlin.osc.happy.R;
 
 public class NewsDetailFragment extends BaseFragment implements
 		EmojiTextListener, EmojiFragmentControl {

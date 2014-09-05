@@ -20,6 +20,8 @@ import android.os.Environment;
 import android.os.Looper;
 import android.widget.Toast;
 
+import com.tonlin.osc.happy.R;
+
 /**
  * 应用程序异常类：用于捕获异常和提示错误信息
  * @author liux (http://my.oschina.net/liux)

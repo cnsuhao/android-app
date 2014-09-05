@@ -1,6 +1,5 @@
 package net.oschina.app.v2.ui.empty;
 
-import net.oschina.app.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -9,6 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 public class EmptyLayout extends LinearLayout implements
 		android.view.View.OnClickListener {// , ISkinUIObserver {

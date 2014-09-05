@@ -12,7 +12,6 @@ import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.AppManager;
-import net.oschina.app.R;
 import net.oschina.app.adapter.GridViewFaceAdapter;
 import net.oschina.app.api.ApiClient;
 import net.oschina.app.bean.AccessInfo;
@@ -40,13 +39,11 @@ import net.oschina.app.ui.MessageDetail;
 import net.oschina.app.ui.MessageForward;
 import net.oschina.app.ui.MessagePub;
 import net.oschina.app.ui.QuestionPub;
-import net.oschina.app.ui.QuestionTag;
 import net.oschina.app.ui.ReportUi;
 import net.oschina.app.ui.ScreenShotShare;
 import net.oschina.app.ui.Search;
 import net.oschina.app.ui.Setting;
 import net.oschina.app.ui.TweetPub;
-import net.oschina.app.ui.UserCenter;
 import net.oschina.app.ui.UserFriend;
 import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
 import net.oschina.app.v2.activity.common.SimpleBackActivity;
@@ -103,6 +100,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 应用程序UI工具包：封装UI相关的一些操作

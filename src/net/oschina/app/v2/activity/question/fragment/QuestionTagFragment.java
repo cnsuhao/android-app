@@ -3,7 +3,6 @@ package net.oschina.app.v2.activity.question.fragment;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostList;
 import net.oschina.app.common.UIHelper;
@@ -24,6 +23,7 @@ import android.widget.ListView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.tonlin.osc.happy.R;
 
 /**
  * 新闻资讯

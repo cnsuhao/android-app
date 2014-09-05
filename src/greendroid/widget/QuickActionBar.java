@@ -18,7 +18,6 @@ package greendroid.widget;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import net.oschina.app.R;
 import android.content.Context;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
@@ -32,6 +31,8 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * A QuickActionBar displays a set of {@link QuickAction} on a single row. In

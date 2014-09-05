@@ -2,7 +2,6 @@ package net.oschina.app.ui;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
-import net.oschina.app.R;
 import net.oschina.app.api.ApiClient;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Notice;
@@ -26,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 软件详情

@@ -8,7 +8,6 @@ import java.util.Date;
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
-import net.oschina.app.R;
 import net.oschina.app.adapter.GridViewFaceAdapter;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.Tweet;
@@ -55,6 +54,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 发表动弹

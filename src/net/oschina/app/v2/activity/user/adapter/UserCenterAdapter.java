@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.Tweet;
@@ -32,6 +31,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
+import com.tonlin.osc.happy.R;
 
 public class UserCenterAdapter extends ListBaseAdapter implements
 		StickyListHeadersAdapter {

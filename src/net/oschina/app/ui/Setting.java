@@ -5,7 +5,6 @@ import java.io.File;
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
-import net.oschina.app.R;
 import net.oschina.app.common.FileUtils;
 import net.oschina.app.common.MethodsCompat;
 import net.oschina.app.common.UIHelper;
@@ -22,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.tonlin.osc.happy.R;
 
 public class Setting extends PreferenceActivity {
 

@@ -2,7 +2,6 @@ package net.oschina.app.common;
 
 import java.io.ByteArrayOutputStream;
 
-import net.oschina.app.R;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -13,6 +12,7 @@ import com.tencent.mm.sdk.openapi.SendMessageToWX;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.tencent.mm.sdk.openapi.WXMediaMessage;
 import com.tencent.mm.sdk.openapi.WXWebpageObject;
+import com.tonlin.osc.happy.R;
 
 /**
  * 微信朋友圈帮助类

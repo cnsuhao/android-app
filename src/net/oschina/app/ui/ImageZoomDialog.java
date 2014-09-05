@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
-import net.oschina.app.R;
 import net.oschina.app.api.ApiClient;
 import net.oschina.app.common.FileUtils;
 import net.oschina.app.common.ImageUtils;
@@ -29,6 +28,8 @@ import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ViewSwitcher;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 图片缩放对话框

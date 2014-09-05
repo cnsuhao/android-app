@@ -1,6 +1,5 @@
 package net.oschina.app.v2.base;
 
-import net.oschina.app.R;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +14,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.tonlin.osc.happy.R;
 
 public abstract class BaseListFragment extends BaseTabFragment implements
 		OnRefreshListener<ListView>, OnLastItemVisibleListener,

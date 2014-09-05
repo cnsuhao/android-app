@@ -1,12 +1,9 @@
 package net.oschina.app.v2.activity.user.fragment;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.List;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.AppException;
-import net.oschina.app.R;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogList;
@@ -34,7 +31,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +41,7 @@ import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tonlin.osc.happy.R;
 
 public class UserCenterFragment extends BaseFragment implements
 		DislayModeChangeListener {

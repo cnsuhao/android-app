@@ -1,9 +1,10 @@
 
 package net.oschina.app.v2.activity.active;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.ActiveList;
 import net.oschina.app.v2.activity.active.fragment.ActiveFragment;
+
+import com.tonlin.osc.happy.R;
 
 
 public enum ActiveTab {

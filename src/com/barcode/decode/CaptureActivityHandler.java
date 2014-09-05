@@ -19,7 +19,6 @@ package com.barcode.decode;
 import java.util.Collection;
 import java.util.Vector;
 
-import net.oschina.app.R;
 import net.oschina.app.ui.CaptureActivity;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -39,6 +38,7 @@ import com.barcode.camera.CameraManager;
 import com.barcode.view.ViewfinderResultPointCallback;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
+import com.tonlin.osc.happy.R;
 
 /**
  * This class handles all the messaging which comprises the state machine for

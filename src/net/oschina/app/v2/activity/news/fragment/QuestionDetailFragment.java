@@ -5,7 +5,6 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Post;
 import net.oschina.app.common.StringUtils;
@@ -39,6 +38,7 @@ import android.widget.TextView;
 import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.tonlin.osc.happy.R;
 
 public class QuestionDetailFragment extends BaseFragment implements
 		EmojiTextListener, EmojiFragmentControl {

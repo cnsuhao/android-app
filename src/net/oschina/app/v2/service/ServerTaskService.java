@@ -1,12 +1,9 @@
 package net.oschina.app.v2.service;
 
+import net.oschina.app.v2.api.remote.NewsApi;
+
 import org.apache.http.Header;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.v2.api.remote.NewsApi;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -15,9 +12,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationCompatExtras;
 import android.support.v4.app.NotificationManagerCompat;
-import android.util.SparseIntArray;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.tonlin.osc.happy.R;
 
 public class ServerTaskService extends IntentService {
 

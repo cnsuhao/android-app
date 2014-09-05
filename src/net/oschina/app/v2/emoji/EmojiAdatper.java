@@ -3,7 +3,6 @@ package net.oschina.app.v2.emoji;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.oschina.app.R;
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.tonlin.osc.happy.R;
 
 public class EmojiAdatper extends BaseAdapter {
 

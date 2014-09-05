@@ -3,10 +3,10 @@ package net.oschina.app.v2.emoji;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.oschina.app.AppContext;
 import android.content.res.Resources;
 
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
+import com.tonlin.osc.happy.R;
 
 public class EmojiHelper {
 

@@ -1,6 +1,5 @@
 package net.oschina.app.ui;
 
-import net.oschina.app.R;
 import net.oschina.app.common.UpdateManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -8,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 关于我们

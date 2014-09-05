@@ -13,7 +13,6 @@ import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.AppManager;
-import net.oschina.app.R;
 import net.oschina.app.adapter.ListViewActiveAdapter;
 import net.oschina.app.adapter.ListViewBlogAdapter;
 import net.oschina.app.adapter.ListViewMessageAdapter;
@@ -51,15 +50,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.ListPopupWindowCompat;
-import android.support.v7.internal.widget.ListPopupWindow;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -70,6 +65,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 应用程序首页

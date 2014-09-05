@@ -1,6 +1,5 @@
 package net.oschina.app.widget;
 
-import net.oschina.app.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Gravity;
@@ -8,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 加载对话框控件

@@ -3,10 +3,9 @@ package net.oschina.app.v2.activity.software.fragment;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.SoftwareCatalogList;
-import net.oschina.app.bean.SoftwareList;
 import net.oschina.app.bean.SoftwareCatalogList.SoftwareType;
+import net.oschina.app.bean.SoftwareList;
 import net.oschina.app.bean.SoftwareList.Software;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.software.adapter.SoftwareAdapter;
@@ -34,6 +33,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleLis
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.tonlin.osc.happy.R;
 
 public class SoftwareCataglogFragment extends BaseTabFragment implements
 		OnItemClickListener, OnRefreshListener<ListView>,

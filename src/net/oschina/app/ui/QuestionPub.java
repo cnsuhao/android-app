@@ -3,7 +3,6 @@ package net.oschina.app.ui;
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
-import net.oschina.app.R;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.Result;
 import net.oschina.app.common.StringUtils;
@@ -20,6 +19,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 发表帖子

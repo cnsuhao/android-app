@@ -2,7 +2,6 @@ package net.oschina.app.adapter;
 
 import java.util.List;
 
-import net.oschina.app.R;
 import net.oschina.app.bean.SoftwareCatalogList.SoftwareType;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 软件分类Adapter类

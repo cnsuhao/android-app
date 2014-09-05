@@ -3,7 +3,6 @@ package net.oschina.app.v2.activity.news;
 import java.lang.ref.WeakReference;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.v2.activity.news.fragment.BlogDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
 import net.oschina.app.v2.activity.news.fragment.NewsDetailFragment;
@@ -27,6 +26,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.tonlin.osc.happy.R;
 
 /**
  * 新闻资讯详情
