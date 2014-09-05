@@ -15,18 +15,18 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class BaseToast {
+public class CommonToast {
 	public static final long DURATION_LONG = 5000L;
 	public static final long DURATION_MEDIUM = 3500L;
 	public static final long DURATION_SHORT = 2500L;
 	private long _duration = 3500l;
 	private ToastView _toastVw;
 
-	public BaseToast(Activity activity) {
+	public CommonToast(Activity activity) {
 		init(activity);
 	}
 
-	public BaseToast(Activity activity, String message, int icon,
+	public CommonToast(Activity activity, String message, int icon,
 			String action, int actionIcon, long l) {
 		_duration = l;
 		init(activity);

@@ -7,7 +7,6 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.ActiveList;
-import net.oschina.app.bean.News;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.User;
 import net.oschina.app.common.UIHelper;
@@ -31,8 +30,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tencent.mm.sdk.platformtools.Log;
 
 /**
- * 新闻资讯
- * 
  * @author william_sim
  */
 public class ActiveFragment extends BaseListFragment {
@@ -54,8 +51,8 @@ public class ActiveFragment extends BaseListFragment {
 				byte[] responseBytes) {
 			try {
 				String str = new String(responseBytes);
-				Log.d(TAG, ""+str);
-				
+				Log.d(TAG, "" + str);
+
 				ActiveList list = ActiveList.parse(new ByteArrayInputStream(
 						responseBytes));
 				if (mState == STATE_REFRESH)
@@ -161,20 +158,20 @@ public class ActiveFragment extends BaseListFragment {
 		Active active = (Active) mAdapter.getItem(position - 1);
 		UIHelper.showActiveRedirect(view.getContext(), active);
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
-		
+
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		//if(requestCode)
+		// if(requestCode)
 		User user = AppContext.instance().getLoginInfo();
 		if (user != null && user.getUid() > 0) {
-			
+
 		}
 	}
 }

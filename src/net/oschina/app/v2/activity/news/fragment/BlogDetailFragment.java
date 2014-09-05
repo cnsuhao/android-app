@@ -10,6 +10,10 @@ import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.emoji.EmojiFragment;
+import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
+import net.oschina.app.v2.service.PublicCommentTask;
+import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 
 import org.apache.http.Header;
@@ -22,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,16 +39,19 @@ import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-public class BlogDetailFragment extends BaseFragment {
+public class BlogDetailFragment extends BaseFragment implements
+		EmojiTextListener, EmojiFragmentControl {
 
 	protected static final String TAG = BlogDetailFragment.class
 			.getSimpleName();
 	private EmptyLayout mEmptyLayout;
 	private TextView mTvTitle, mTvSource, mTvTime;
+	private TextView mTvCommentCount;
 	private WebView mWebView;
 	private int mBlogId;
 	private Blog mBlog;
-
+	private EmojiFragment mEmojiFragment;
+	
 	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
 
 		@Override
@@ -100,7 +108,6 @@ public class BlogDetailFragment extends BaseFragment {
 			receivedError = true;
 		}
 	};
-	private TextView mTvCommentCount;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -201,5 +208,28 @@ public class BlogDetailFragment extends BaseFragment {
 
 		mWebView.setWebViewClient(mWebClient);
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
+	}
+
+	@Override
+	public void setEmojiFragment(EmojiFragment fragment) {
+		mEmojiFragment = fragment;
+		mEmojiFragment.setEmojiTextListener(this);
+	}
+
+	@Override
+	public void onSendClick(String text) {
+		if (TextUtils.isEmpty(text)) {
+			AppContext.showToastShort(R.string.tip_comment_content_empty);
+			mEmojiFragment.requestFocusInput();
+			return;
+		}
+		PublicCommentTask task = new PublicCommentTask();
+		task.setId(mBlogId);
+		task.setCatalog(CommentList.CATALOG_NEWS);
+		task.setIsPostToMyZone(0);
+		task.setContent(text);
+		task.setUid(AppContext.instance().getLoginUid());
+		ServerTaskUtils.publicComment(getActivity(), task);
+		mEmojiFragment.reset();
 	}
 }

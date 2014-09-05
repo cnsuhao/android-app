@@ -922,10 +922,14 @@ public class UIHelper {
 	 */
 	public static void showUserCenter(Context context, int hisuid,
 			String hisname) {
-		Intent intent = new Intent(context, UserCenter.class);
-		intent.putExtra("his_id", hisuid);
-		intent.putExtra("his_name", hisname);
-		context.startActivity(intent);
+//		Intent intent = new Intent(context, UserCenter.class);
+//		intent.putExtra("his_id", hisuid);
+//		intent.putExtra("his_name", hisname);
+//		context.startActivity(intent);
+		Bundle args = new Bundle();
+		args.putInt("his_id", hisuid);
+		args.putString("his_name", hisname);
+		showSimpleBack(context, SimpleBackPage.USER_CENTER,args);
 	}
 
 	/**

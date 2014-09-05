@@ -1,7 +1,7 @@
 package net.oschina.app.v2.base;
 
 import net.oschina.app.R;
-import net.oschina.app.v2.ui.dialog.BaseToast;
+import net.oschina.app.v2.ui.dialog.CommonToast;
 import net.oschina.app.v2.ui.dialog.DialogControl;
 import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.ui.dialog.WaitDialog;
@@ -185,7 +185,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
 	}
 
 	public void showToast(String message, int icon, int gravity) {
-		BaseToast toast = new BaseToast(this);
+		CommonToast toast = new CommonToast(this);
 		toast.setMessage(message);
 		toast.setMessageIc(icon);
 		toast.setLayoutGravity(gravity);

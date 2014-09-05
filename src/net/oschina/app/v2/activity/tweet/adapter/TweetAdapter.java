@@ -5,6 +5,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import net.oschina.app.R;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.common.StringUtils;
+import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
 import net.oschina.app.v2.ui.text.MyURLSpan;
@@ -21,7 +22,7 @@ public class TweetAdapter extends ListBaseAdapter {
 
 	@SuppressLint("InflateParams")
 	@Override
-	protected View getRealView(int position, View convertView, ViewGroup parent) {
+	protected View getRealView(int position, View convertView,final ViewGroup parent) {
 		ViewHolder vh = null;
 		if (convertView == null || convertView.getTag() == null) {
 			convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -32,7 +33,7 @@ public class TweetAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		Tweet item = (Tweet) _data.get(position);
+		final Tweet item = (Tweet) _data.get(position);
 		vh.name.setText(item.getAuthor());
 		// vh.title.setLinkText(item.getBody());
 		// vh.title.setMovementMethod(TextViewFixTouchConsume.LocalLinkMovementMethod.getInstance());
@@ -71,6 +72,15 @@ public class TweetAdapter extends ListBaseAdapter {
 		vh.commentCount.setText(String.valueOf(item.getCommentCount()));
 		
 		ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
+		
+		vh.avatar.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				UIHelper.showUserCenter(parent.getContext(),
+						item.getAuthorId(),item.getAuthor());
+			}
+		});
 		return convertView;
 	}
 

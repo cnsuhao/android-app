@@ -12,6 +12,10 @@ import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.emoji.EmojiFragment;
+import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
+import net.oschina.app.v2.service.PublicCommentTask;
+import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 
 import org.apache.http.Header;
@@ -24,6 +28,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +40,8 @@ import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-public class QuestionDetailFragment extends BaseFragment {
+public class QuestionDetailFragment extends BaseFragment implements
+		EmojiTextListener, EmojiFragmentControl {
 
 	protected static final String TAG = QuestionDetailFragment.class
 			.getSimpleName();
@@ -45,7 +51,8 @@ public class QuestionDetailFragment extends BaseFragment {
 	private TextView mTvCommentCount;
 	private int mPostId;
 	private Post mPost;
-
+	private EmojiFragment mEmojiFragment;
+	
 	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
 
 		@Override
@@ -71,7 +78,6 @@ public class QuestionDetailFragment extends BaseFragment {
 			mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
 		}
 	};
-
 
 	private WebViewClient mWebClient = new WebViewClient() {
 
@@ -103,7 +109,7 @@ public class QuestionDetailFragment extends BaseFragment {
 			receivedError = true;
 		}
 	};
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -119,7 +125,7 @@ public class QuestionDetailFragment extends BaseFragment {
 			}
 		});
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -161,7 +167,7 @@ public class QuestionDetailFragment extends BaseFragment {
 		}
 		UIHelper.addWebImageShow(getActivity(), webView);
 	}
-	
+
 	private void initData() {
 		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 		// start to load news detail
@@ -175,7 +181,7 @@ public class QuestionDetailFragment extends BaseFragment {
 		if (mTvCommentCount != null) {
 			mTvCommentCount.setVisibility(View.VISIBLE);
 			mTvCommentCount.setText(getString(R.string.answer_count,
-					mPost.getAnswerCount()+"/"+mPost.getViewCount()));
+					mPost.getAnswerCount() + "/" + mPost.getViewCount()));
 		}
 	}
 
@@ -219,5 +225,28 @@ public class QuestionDetailFragment extends BaseFragment {
 							URLEncoder.encode(tag), tag);
 		}
 		return String.format("<div style='margin-top:10px;'>%s</div>", tags);
+	}
+
+	@Override
+	public void setEmojiFragment(EmojiFragment fragment) {
+		mEmojiFragment = fragment;
+		mEmojiFragment.setEmojiTextListener(this);		
+	}
+
+	@Override
+	public void onSendClick(String text) {
+		if (TextUtils.isEmpty(text)) {
+			AppContext.showToastShort(R.string.tip_comment_content_empty);
+			mEmojiFragment.requestFocusInput();
+			return;
+		}
+		PublicCommentTask task = new PublicCommentTask();
+		task.setId(mPostId);
+		task.setCatalog(CommentList.CATALOG_POST);
+		task.setIsPostToMyZone(0);
+		task.setContent(text);
+		task.setUid(AppContext.instance().getLoginUid());
+		ServerTaskUtils.publicComment(getActivity(), task);
+		mEmojiFragment.reset();		
 	}
 }

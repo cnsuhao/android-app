@@ -5,6 +5,7 @@ import java.lang.ref.WeakReference;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.v2.activity.news.fragment.BlogDetailFragment;
+import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
 import net.oschina.app.v2.activity.news.fragment.NewsDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.QuestionDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.SoftwareDetailFragment;
@@ -73,7 +74,6 @@ public class DetailActivity extends BaseActivity implements OnItemClickListener 
 				DISPLAY_NEWS);
 		BaseFragment fragment = null;
 		int actionBarTitle = 0;
-		boolean needEmoji = true;
 		switch (displayType) {
 		case DISPLAY_NEWS:
 			actionBarTitle = R.string.actionbar_title_news;
@@ -86,7 +86,6 @@ public class DetailActivity extends BaseActivity implements OnItemClickListener 
 		case DISPLAY_SOFTWARE:
 			actionBarTitle = R.string.actionbar_title_software;
 			fragment = new SoftwareDetailFragment();
-			needEmoji = false;
 			break;
 		case DISPLAY_QUESTION:
 			actionBarTitle = R.string.actionbar_title_question;
@@ -104,11 +103,14 @@ public class DetailActivity extends BaseActivity implements OnItemClickListener 
 				.beginTransaction();
 		mFragment = new WeakReference<BaseFragment>(fragment);
 		trans.replace(R.id.container, fragment);
-		if (needEmoji) {
+		
+		if (fragment instanceof EmojiFragmentControl) {
 			EmojiFragment f = new EmojiFragment();
 			mEmojiFragment = new WeakReference<BaseFragment>(f);
+			((EmojiFragmentControl)fragment).setEmojiFragment(f);
 			trans.replace(R.id.emoji_container, f);
 		}
+		
 		trans.commit();
 	}
 

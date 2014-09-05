@@ -179,7 +179,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="福建福州"
                 android:textColor="@color/main_black"
                 android:textSize="@dimen/text_size_16" />
         </LinearLayout>
@@ -208,7 +207,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Android"
                 android:textColor="@color/main_black"
                 android:textSize="@dimen/text_size_16" />
         </LinearLayout>
@@ -237,7 +235,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="移动互联网"
                 android:textColor="@color/main_black"
                 android:textSize="@dimen/text_size_16" />
         </LinearLayout>

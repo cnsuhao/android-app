@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
@@ -32,16 +31,23 @@ public class EmojiFragment extends BaseFragment implements
 	private ViewPager mViewPager;
 	private ImageButton mBtnEmoji, mBtnSend;
 	private EmojiEditText mEtInput;
+	private View mLyEmoji;
 	private EmojiViewPagerAdapter mPagerAdapter;
 	private SoftKeyboardStateHelper mKeyboardHelper;
 	private boolean mIsKeyboardVisible;
 	private boolean mNeedHideEmoji;
 	private CirclePageIndicator mIndicator;
-	private View mLyEmoji;
-
 	private int mCurrentKeyboardHeigh;
 
-	// private boolean mNeedHideEmojiOnShowKeyboard;
+	private EmojiTextListener mListener;
+
+	public interface EmojiTextListener {
+		public void onSendClick(String text);
+	}
+
+	public void setEmojiTextListener(EmojiTextListener lis) {
+		mListener = lis;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,
@@ -69,6 +75,7 @@ public class EmojiFragment extends BaseFragment implements
 
 		mBtnEmoji = (ImageButton) view.findViewById(R.id.btn_emoji);
 		mBtnSend = (ImageButton) view.findViewById(R.id.btn_send);
+		mBtnSend.setOnClickListener(this);
 		mEtInput = (EmojiEditText) view.findViewById(R.id.et_input);
 
 		mBtnEmoji.setOnClickListener(this);
@@ -153,6 +160,10 @@ public class EmojiFragment extends BaseFragment implements
 			} else {
 				tryHideEmojiPanel();
 			}
+		} else if (id == R.id.btn_send) {
+			if (mListener != null) {
+				mListener.onSendClick(mEtInput.getText().toString());
+			}
 		}
 	}
 
@@ -214,7 +225,22 @@ public class EmojiFragment extends BaseFragment implements
 
 	@Override
 	public void onDelete() {
-		AppContext.showToastShort("删除");
 		mEtInput.delete();
+	}
+
+	public void requestFocusInput() {
+		if (mEtInput != null) {
+			mEtInput.requestFocus();
+		}
+	}
+
+	public void reset() {
+		if (mIsKeyboardVisible) {
+			TDevice.hideSoftKeyboard(getActivity().getCurrentFocus());
+		}
+		if (mEtInput != null) {
+			mEtInput.getText().clear();
+			mEtInput.clearFocus();
+		}
 	}
 }

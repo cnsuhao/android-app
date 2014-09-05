@@ -1,5 +1,7 @@
 package net.oschina.app.v2.api.remote;
 
+import java.net.URLEncoder;
+
 import net.oschina.app.v2.api.ApiHttpClient;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -37,7 +39,7 @@ public class NewsApi extends BaseApi {
 		params.put("dataType", "json");
 		ApiHttpClient.get("action/api/post_list", params, handler);
 	}
-	
+
 	public static void getPostListByTag(String tag, int page,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
@@ -67,7 +69,7 @@ public class NewsApi extends BaseApi {
 		params.put("pageSize", DEF_PAGE_SIZE);
 		ApiHttpClient.get("action/api/active_list", params, handler);
 	}
-	
+
 	public static void getFriendList(int uid, int relation, int page,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
@@ -77,7 +79,7 @@ public class NewsApi extends BaseApi {
 		params.put("pageSize", DEF_PAGE_SIZE);
 		ApiHttpClient.get("action/api/friends_list", params, handler);
 	}
-	
+
 	public static void getFavoriteList(int uid, int type, int page,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
@@ -87,27 +89,31 @@ public class NewsApi extends BaseApi {
 		params.put("pageSize", DEF_PAGE_SIZE);
 		ApiHttpClient.get("action/api/favorite_list", params, handler);
 	}
-	
-	public static void getSoftwareCatalogList(int tag,AsyncHttpResponseHandler handler){
-		RequestParams params = new RequestParams("tag",tag);
+
+	public static void getSoftwareCatalogList(int tag,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams("tag", tag);
 		ApiHttpClient.get("action/api/softwarecatalog_list", params, handler);
 	}
-	
-	public static void getSoftwareTagList(int searchTag,int page, AsyncHttpResponseHandler handler){
+
+	public static void getSoftwareTagList(int searchTag, int page,
+			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
 		params.put("searchTag", searchTag);
 		params.put("pageIndex", page);
 		params.put("pageSize", DEF_PAGE_SIZE);
 		ApiHttpClient.get("action/api/softwaretag_list", params, handler);
 	}
-	
-	public static void getSoftwareList(String searchTag,int page,AsyncHttpResponseHandler handler){
+
+	public static void getSoftwareList(String searchTag, int page,
+			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
 		params.put("searchTag", searchTag);
 		params.put("pageIndex", page);
 		params.put("pageSize", DEF_PAGE_SIZE);
 		ApiHttpClient.get("action/api/software_list", params, handler);
 	}
+
 	/**
 	 * 获取评论列表
 	 * 
@@ -135,7 +141,39 @@ public class NewsApi extends BaseApi {
 		params.put("pageSize", DEF_PAGE_SIZE);
 		ApiHttpClient.get("action/api/blogcomment_list", params, handler);
 	}
-	
+
+	public static void getUserInformation(int uid, int hisuid, String hisname,
+			int pageIndex, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("hisuid", hisuid);
+		params.put("hisname", hisname);
+		params.put("pageIndex", pageIndex);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/user_information", params, handler);
+	}
+
+	@SuppressWarnings("deprecation")
+	public static void getUserBlogList(int authoruid, final String authorname,
+			final int uid, final int pageIndex, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("authoruid", authoruid);
+		params.put("authorname", URLEncoder.encode(authorname));
+		params.put("uid", uid);
+		params.put("pageIndex", pageIndex);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/userblog_list", params, handler);
+	}
+
+	public static void updateRelation(int uid, int hisuid, int newrelation,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("hisuid", hisuid);
+		params.put("newrelation", newrelation);
+		ApiHttpClient.post("action/api/user_updaterelation", params, handler);
+	}
+
 	/**
 	 * 获取新闻明细
 	 * 
@@ -166,5 +204,16 @@ public class NewsApi extends BaseApi {
 	public static void getTweetDetail(int id, AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams("id", id);
 		ApiHttpClient.get("action/api/tweet_detail", params, handler);
+	}
+
+	public static void publicComment(int catalog, int id, int uid,
+			String content, int isPostToMyZone, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("catalog", catalog);
+		params.put("id", id);
+		params.put("uid", uid);
+		params.put("content", content);
+		params.put("isPostToMyZone", isPostToMyZone);
+		ApiHttpClient.post("action/api/comment_pub", params, handler);
 	}
 }

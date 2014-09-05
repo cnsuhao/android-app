@@ -152,7 +152,7 @@ public class ListBaseAdapter extends BaseAdapter {
 	@SuppressLint("InflateParams") @Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (position == getCount() - 1) {// 最后一条
-			if (state == STATE_LOAD_MORE || state == STATE_NO_MORE
+			if (getState() == STATE_LOAD_MORE || getState() == STATE_NO_MORE
 					|| state == STATE_EMPTY_ITEM) {
 				LinearLayout loadmore = (LinearLayout) LayoutInflater.from(
 						parent.getContext()).inflate(R.layout.v2_list_cell_footer,
@@ -160,7 +160,7 @@ public class ListBaseAdapter extends BaseAdapter {
 				ProgressBar progress = (ProgressBar) loadmore
 						.findViewById(R.id.progressbar);
 				TextView text = (TextView) loadmore.findViewById(R.id.text);
-				switch (state) {
+				switch (getState()) {
 				case STATE_LOAD_MORE:
 					loadmore.setVisibility(View.VISIBLE);
 					progress.setVisibility(View.VISIBLE);

@@ -24,7 +24,7 @@
     <color name="main_link_text_color">#ff507daf</color>
     <color name="timeline_clickable_text_highlighted_background">#ffbedfff</color>
     
-    <color name="ui_dialog_divider">#FF5152</color>
+    <color name="ui_dialog_divider">@color/list_divider_color</color>
     <color name="ui_dialog_list_text">#5E5E5E</color>
     <color name="text_dark">#af000000</color>
     <color name="text_light">#3f000000</color>

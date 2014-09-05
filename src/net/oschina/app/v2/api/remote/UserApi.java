@@ -17,4 +17,5 @@ public class UserApi extends BaseApi {
 		String loginurl = "action/api/login_validate";
 		ApiHttpClient.get(loginurl, params, handler);
 	}
+	
 }

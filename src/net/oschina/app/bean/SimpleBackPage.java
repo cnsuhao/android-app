@@ -8,18 +8,20 @@ import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
 import net.oschina.app.v2.activity.settings.fragment.AboutFragment;
 import net.oschina.app.v2.activity.settings.fragment.SettingsFragment;
 import net.oschina.app.v2.activity.software.fragment.SoftwareViewPagerFragment;
-import net.oschina.app.v2.activity.user.fragment.ProfileFragment;
+import net.oschina.app.v2.activity.user.fragment.UserProfileFragment;
+import net.oschina.app.v2.activity.user.fragment.UserCenterFragment;
 
 public enum SimpleBackPage {
 
 	SETTINGS(0, R.string.actionbar_title_settings, SettingsFragment.class), 
 	ABOUT(1, R.string.actionbar_title_about, AboutFragment.class),
-	PROFILE(2, R.string.actionbar_title_profile, ProfileFragment.class),
+	PROFILE(2, R.string.actionbar_title_profile, UserProfileFragment.class),
 	FRIENDS(3, R.string.actionbar_title_friends, FriendViewPagerFragment.class),
 	FAVORITES(4, R.string.actionbar_title_favorites, FavoriteViewPagerFragment.class),
 	SOFTEARE(5, R.string.actionbar_title_ossoftware, SoftwareViewPagerFragment.class),
 	COMMENT(6, R.string.actionbar_title_comment, CommentFrament.class),
-	QUESTION_TAG(7, R.string.actionbar_title_question, QuestionTagFragment.class);
+	QUESTION_TAG(7, R.string.actionbar_title_question, QuestionTagFragment.class),
+	USER_CENTER(8, R.string.actionbar_title_user_center, UserCenterFragment.class);
 
 	private int title;
 	private Class<?> clz;

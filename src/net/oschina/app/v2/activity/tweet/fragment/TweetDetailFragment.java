@@ -3,6 +3,7 @@ package net.oschina.app.v2.activity.tweet.fragment;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
@@ -10,9 +11,14 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.comment.adapter.CommentAdapter;
+import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.emoji.EmojiFragment;
+import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
+import net.oschina.app.v2.service.PublicCommentTask;
+import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.TDevice;
 
@@ -23,7 +29,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,10 +43,8 @@ import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-public class TweetDetailFragment extends BaseFragment {
-	protected static final int STATE_NONE = 0;
-	protected static final int STATE_REFRESH = 1;
-	protected static final int STATE_LOADMORE = 2;
+public class TweetDetailFragment extends BaseFragment implements
+		EmojiTextListener, EmojiFragmentControl {
 	protected static final String TAG = TweetDetailFragment.class
 			.getSimpleName();
 	private ListView mListView;
@@ -51,8 +55,8 @@ public class TweetDetailFragment extends BaseFragment {
 	private Tweet mTweet;
 	private int mCurrentPage = 0;
 	private CommentAdapter mAdapter;
-	private int mState = STATE_NONE;
-
+	private EmojiFragment mEmojiFragment;
+	
 	private AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
 
 		@Override
@@ -62,7 +66,7 @@ public class TweetDetailFragment extends BaseFragment {
 				if (mTweet != null && mTweet.getId() > 0) {
 					fillUI();
 					mCurrentPage = 0;
-					
+
 					mState = STATE_REFRESH;
 					mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
 					sendRequestCommentData();
@@ -224,9 +228,9 @@ public class TweetDetailFragment extends BaseFragment {
 
 		mTvCommentCount.setText(getString(R.string.comment_count,
 				mTweet.getCommentCount()));
-		
-		//mTvCommentCount.setText(mTweet.getBody());
-		
+
+		// mTvCommentCount.setText(mTweet.getBody());
+
 		// set content
 		String body = UIHelper.WEB_STYLE + mTweet.getBody();
 		body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
@@ -245,5 +249,28 @@ public class TweetDetailFragment extends BaseFragment {
 	private void sendRequestCommentData() {
 		NewsApi.getCommentList(mTweetId, CommentList.CATALOG_TWEET,
 				mCurrentPage, mCommentHandler);
+	}
+
+	@Override
+	public void setEmojiFragment(EmojiFragment fragment) {
+		mEmojiFragment = fragment;
+		mEmojiFragment.setEmojiTextListener(this);
+	}
+
+	@Override
+	public void onSendClick(String text) {
+		if (TextUtils.isEmpty(text)) {
+			AppContext.showToastShort(R.string.tip_comment_content_empty);
+			mEmojiFragment.requestFocusInput();
+			return;
+		}
+		PublicCommentTask task = new PublicCommentTask();
+		task.setId(mTweetId);
+		task.setCatalog(CommentList.CATALOG_TWEET);
+		task.setIsPostToMyZone(0);
+		task.setContent(text);
+		task.setUid(AppContext.instance().getLoginUid());
+		ServerTaskUtils.publicComment(getActivity(), task);
+		mEmojiFragment.reset();
 	}
 }

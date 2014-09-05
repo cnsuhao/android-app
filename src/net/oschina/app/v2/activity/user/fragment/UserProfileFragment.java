@@ -9,7 +9,7 @@ import net.oschina.app.R;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.BaseFragment;
 
-public class ProfileFragment extends BaseFragment {
+public class UserProfileFragment extends BaseFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

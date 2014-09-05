@@ -6,12 +6,12 @@ import android.content.Context;
 
 public class DialogHelper {
 	
-	public static BaseDialog getPinterestDialog(Context context) {
-		return new BaseDialog(context, R.style.dialog_common);
+	public static CommonDialog getPinterestDialog(Context context) {
+		return new CommonDialog(context, R.style.dialog_common);
 	}
 
-	public static BaseDialog getPinterestDialogCancelable(Context context) {
-		BaseDialog dialog = new BaseDialog(context,
+	public static CommonDialog getPinterestDialogCancelable(Context context) {
+		CommonDialog dialog = new CommonDialog(context,
 				R.style.dialog_common);
 		dialog.setCanceledOnTouchOutside(true);
 		return dialog;

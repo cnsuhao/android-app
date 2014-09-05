@@ -3,6 +3,7 @@ package net.oschina.app.v2.ui.dialog;
 import net.oschina.app.R;
 import net.oschina.app.v2.base.BaseApplication;
 import net.oschina.app.v2.utils.TDevice;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
@@ -27,7 +28,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-public class BaseDialog extends Dialog {
+public class CommonDialog extends Dialog {
 	public DialogInterface.OnClickListener listener;
 	protected View barDivider;
 	protected View buttonDivider;
@@ -46,21 +47,21 @@ public class BaseDialog extends Dialog {
 		}
 	};
 
-	public BaseDialog(Context context) {
+	public CommonDialog(Context context) {
 		this(context, R.style.dialog_common);
 		// contentPadding = (int) getContext().getResources().getDimension(
 		// R.dimen.global_dialog_padding);
 		// init(context);
 	}
 
-	public BaseDialog(Context context, int defStyle) {
+	public CommonDialog(Context context, int defStyle) {
 		super(context, defStyle);
 		contentPadding = (int) getContext().getResources().getDimension(
 				R.dimen.global_dialog_padding);
 		init(context);
 	}
 
-	protected BaseDialog(Context context, boolean flag,
+	protected CommonDialog(Context context, boolean flag,
 			DialogInterface.OnCancelListener listener) {
 		super(context, flag, listener);
 		contentPadding = (int) getContext().getResources().getDimension(
@@ -68,6 +69,7 @@ public class BaseDialog extends Dialog {
 		init(context);
 	}
 
+	@SuppressLint("InflateParams")
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	protected void init(final Context context) {
 		setCancelable(false);
@@ -93,8 +95,6 @@ public class BaseDialog extends Dialog {
 					int height = v.getHeight();
 					int contentHeight = container.getHeight();
 					int winHeight = BaseApplication.getDisplaySize()[1];
-					// ActivityUtil.getDisplayHeight(getSherlockActivity());
-
 					int needHeight = height - winHeight * 8 / 10;
 					if (needHeight > 0) {
 						container
@@ -132,7 +132,10 @@ public class BaseDialog extends Dialog {
 	public void setContent(View view, int padding) {
 		container.removeAllViews();
 		container.setPadding(padding, padding, padding, padding);
-		container.addView(view);
+		FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+				FrameLayout.LayoutParams.MATCH_PARENT,
+				FrameLayout.LayoutParams.WRAP_CONTENT);
+		container.addView(view, lp);
 	}
 
 	@Override
@@ -148,7 +151,7 @@ public class BaseDialog extends Dialog {
 	@Override
 	public void setContentView(View view,
 			android.view.ViewGroup.LayoutParams layoutparams) {
-		throw new Error("PinterestDialog: User setContent (View view) instead!");
+		throw new Error("Dialog: User setContent (View view) instead!");
 	}
 
 	public void setItems(BaseAdapter adapter,
@@ -204,18 +207,22 @@ public class BaseDialog extends Dialog {
 		scrollView.setLayoutParams(new FrameLayout.LayoutParams(
 				FrameLayout.LayoutParams.MATCH_PARENT,
 				FrameLayout.LayoutParams.WRAP_CONTENT));
-		TextView textview = new TextView(getContext(), null,
+		TextView tvMessage = new TextView(getContext(), null,
 				R.style.dialog_pinterest_text);
-		textview.setLayoutParams(new FrameLayout.LayoutParams(
+		tvMessage.setLayoutParams(new FrameLayout.LayoutParams(
 				FrameLayout.LayoutParams.MATCH_PARENT,
 				FrameLayout.LayoutParams.WRAP_CONTENT));
-		textview.setPadding(contentPadding, contentPadding, contentPadding,
+		tvMessage.setPadding(contentPadding, contentPadding, contentPadding,
 				contentPadding);
-		textview.setLineSpacing(0.0F, 1.3F);
-		textview.setText(spanned);
-		textview.setTextColor(getContext().getResources().getColor(
+		tvMessage.setLineSpacing(0.0F, 1.3F);
+		tvMessage.setText(spanned);
+		tvMessage.setTextColor(getContext().getResources().getColor(
 				R.color.black));
-		scrollView.addView(textview);
+
+		ScrollView.LayoutParams lp = new ScrollView.LayoutParams(
+				ScrollView.LayoutParams.MATCH_PARENT,
+				ScrollView.LayoutParams.WRAP_CONTENT);
+		scrollView.addView(tvMessage, lp);
 		setContent(scrollView, 0);
 	}
 
@@ -237,9 +244,9 @@ public class BaseDialog extends Dialog {
 				@Override
 				public void onClick(View view) {
 					if (listener != null)
-						listener.onClick(BaseDialog.this, 0);
+						listener.onClick(CommonDialog.this, 0);
 					else
-						dismissClick.onClick(BaseDialog.this, 0);
+						dismissClick.onClick(CommonDialog.this, 0);
 				}
 			});
 			negativeBt.setVisibility(View.VISIBLE);
@@ -270,9 +277,9 @@ public class BaseDialog extends Dialog {
 				@Override
 				public void onClick(View view) {
 					if (listener != null)
-						listener.onClick(BaseDialog.this, 0);
+						listener.onClick(CommonDialog.this, 0);
 					else
-						dismissClick.onClick(BaseDialog.this, 0);
+						dismissClick.onClick(CommonDialog.this, 0);
 				}
 			});
 			positiveBt.setVisibility(View.VISIBLE);

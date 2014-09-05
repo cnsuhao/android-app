@@ -11,6 +11,10 @@ import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.emoji.EmojiFragment;
+import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
+import net.oschina.app.v2.service.PublicCommentTask;
+import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 
 import org.apache.http.Header;
@@ -23,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +39,8 @@ import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-public class NewsDetailFragment extends BaseFragment {
+public class NewsDetailFragment extends BaseFragment implements
+		EmojiTextListener, EmojiFragmentControl {
 
 	protected static final String TAG = NewsDetailFragment.class
 			.getSimpleName();
@@ -44,6 +50,8 @@ public class NewsDetailFragment extends BaseFragment {
 	private int mNewsId;
 	private News mNews;
 	private TextView mTvCommentCount;
+
+	private EmojiFragment mEmojiFragment;
 
 	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
 
@@ -118,6 +126,18 @@ public class NewsDetailFragment extends BaseFragment {
 	}
 
 	@Override
+	public void onDestroyView() {
+		recycleWebView(mWebView);
+		super.onDestroyView();
+	}
+
+	@Override
+	public void onDestroy() {
+		recycleWebView(mWebView);
+		super.onDestroy();
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.v2_fragment_news_detail,
@@ -157,6 +177,14 @@ public class NewsDetailFragment extends BaseFragment {
 			zbc.getZoomControls().setVisibility(View.GONE);
 		}
 		UIHelper.addWebImageShow(getActivity(), webView);
+	}
+
+	private void recycleWebView(WebView webView) {
+		if (webView != null) {
+			webView.loadUrl("about:blank");
+			webView.destroy();
+			webView = null;
+		}
 	}
 
 	private void initData() {
@@ -226,5 +254,28 @@ public class NewsDetailFragment extends BaseFragment {
 
 		mWebView.setWebViewClient(mWebClient);
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
+	}
+
+	@Override
+	public void setEmojiFragment(EmojiFragment fragment) {
+		mEmojiFragment = fragment;
+		mEmojiFragment.setEmojiTextListener(this);
+	}
+
+	@Override
+	public void onSendClick(String text) {
+		if (TextUtils.isEmpty(text)) {
+			AppContext.showToastShort(R.string.tip_comment_content_empty);
+			mEmojiFragment.requestFocusInput();
+			return;
+		}
+		PublicCommentTask task = new PublicCommentTask();
+		task.setId(mNewsId);
+		task.setCatalog(CommentList.CATALOG_NEWS);
+		task.setIsPostToMyZone(0);
+		task.setContent(text);
+		task.setUid(AppContext.instance().getLoginUid());
+		ServerTaskUtils.publicComment(getActivity(), task);
+		mEmojiFragment.reset();
 	}
 }

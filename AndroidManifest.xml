@@ -258,6 +258,12 @@
                 <action android:name="net.oschina.app.action.APPWIDGET_UPDATE" />
             </intent-filter>
         </receiver>
+        
+        <service android:name="net.oschina.app.v2.service.ServerTaskService">
+            <intent-filter>
+                <action android:name="net.oschina.app.v2.ACTION_PUBLIC_COMMENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
