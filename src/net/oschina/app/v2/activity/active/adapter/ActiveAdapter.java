@@ -1,10 +1,13 @@
 package net.oschina.app.v2.activity.active.adapter;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.bean.Active.ObjectReply;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.ListBaseAdapter;
@@ -12,6 +15,7 @@ import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
 import net.oschina.app.v2.ui.text.MyURLSpan;
 import net.oschina.app.v2.ui.text.TweetTextView;
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -23,10 +27,22 @@ import android.widget.TextView;
 public class ActiveAdapter extends ListBaseAdapter {
 	private final static String AT_HOST_PRE = "http://my.oschina.net";
 	private final static String MAIN_HOST = "http://www.oschina.net";
+	private DisplayImageOptions options;
 
+	public ActiveAdapter(){
+		options = new DisplayImageOptions.Builder().cacheInMemory(true)
+				.cacheOnDisk(true).postProcessor(new BitmapProcessor() {
+
+					@Override
+					public Bitmap process(Bitmap arg0) {
+						return arg0;
+					}
+				}).build();
+	}
+	
 	@SuppressLint("InflateParams")
 	@Override
-	protected View getRealView(int position, View convertView, ViewGroup parent) {
+	protected View getRealView(int position, View convertView,final ViewGroup parent) {
 		ViewHolder vh = null;
 		if (convertView == null || convertView.getTag() == null) {
 			convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -37,7 +53,7 @@ public class ActiveAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		Active item = (Active) _data.get(position);
+		final Active item = (Active) _data.get(position);
 
 		vh.name.setText(item.getAuthor());
 
@@ -54,6 +70,15 @@ public class ActiveAdapter extends ListBaseAdapter {
 			Spanned span = Html.fromHtml(modifyPath(item.getMessage()));
 			vh.body.setText(span);
 			MyURLSpan.parseLinkText(vh.body, span);
+		}
+		
+		ObjectReply reply = item.getObjectReply();
+		if (reply != null) {
+			vh.reply.setText(UIHelper.parseActiveReply(reply.objectName, reply.objectBody));//
+			vh.lyReply.setVisibility(TextView.VISIBLE);
+		} else {
+			vh.reply.setText("");
+			vh.lyReply.setVisibility(TextView.GONE);
 		}
 		
 		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
@@ -98,6 +123,23 @@ public class ActiveAdapter extends ListBaseAdapter {
 		} else {
 			ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
 		}
+		vh.avatar.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				UIHelper.showUserCenter(parent.getContext(),
+						item.getAuthorId(), item.getAuthor());
+			}
+		});
+		
+		if (!TextUtils.isEmpty(item.getTweetimage())) {
+			vh.pic.setVisibility(View.VISIBLE);
+			ImageLoader.getInstance().displayImage(item.getTweetimage(), vh.pic,
+					options);
+		} else {
+			vh.pic.setVisibility(View.GONE);
+			vh.pic.setImageBitmap(null);
+		}
 		
 		return convertView;
 	}
@@ -114,19 +156,23 @@ public class ActiveAdapter extends ListBaseAdapter {
 	static class ViewHolder {
 		public TextView name, from, time, action, actionName, commentCount,
 				retweetCount;
-		public TweetTextView body;
-		public ImageView avatar;
+		public TweetTextView body,reply;
+		public ImageView avatar,pic;
+		public View lyReply;
 
 		public ViewHolder(View view) {
 			name = (TextView) view.findViewById(R.id.tv_name);
 			from = (TextView) view.findViewById(R.id.tv_from);
 			body = (TweetTextView) view.findViewById(R.id.tv_body);
+			lyReply= view.findViewById(R.id.ly_reply);
+			reply = (TweetTextView) view.findViewById(R.id.tv_reply);
 			time = (TextView) view.findViewById(R.id.tv_time);
 			action = (TextView) view.findViewById(R.id.tv_action);
 			actionName = (TextView) view.findViewById(R.id.tv_action_name);
 			commentCount = (TextView) view.findViewById(R.id.tv_comment_count);
 			retweetCount = (TextView) view.findViewById(R.id.tv_retweet_count);
 			avatar = (ImageView) view.findViewById(R.id.iv_avatar);
+			pic = (ImageView) view.findViewById(R.id.iv_pic);
 		}
 	}
 }

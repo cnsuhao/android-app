@@ -1,7 +1,5 @@
 package net.oschina.app.v2.activity.tweet.adapter;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import net.oschina.app.R;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.common.StringUtils;
@@ -11,18 +9,38 @@ import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
 import net.oschina.app.v2.ui.text.MyURLSpan;
 import net.oschina.app.v2.ui.text.TweetTextView;
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
+
 public class TweetAdapter extends ListBaseAdapter {
+
+	private DisplayImageOptions options;
+
+	public TweetAdapter() {
+		options = new DisplayImageOptions.Builder().cacheInMemory(true)
+				.cacheOnDisk(true).postProcessor(new BitmapProcessor() {
+
+					@Override
+					public Bitmap process(Bitmap arg0) {
+						return arg0;
+					}
+				}).build();
+	}
 
 	@SuppressLint("InflateParams")
 	@Override
-	protected View getRealView(int position, View convertView,final ViewGroup parent) {
+	protected View getRealView(int position, View convertView,
+			final ViewGroup parent) {
 		ViewHolder vh = null;
 		if (convertView == null || convertView.getTag() == null) {
 			convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -35,9 +53,7 @@ public class TweetAdapter extends ListBaseAdapter {
 
 		final Tweet item = (Tweet) _data.get(position);
 		vh.name.setText(item.getAuthor());
-		// vh.title.setLinkText(item.getBody());
-		// vh.title.setMovementMethod(TextViewFixTouchConsume.LocalLinkMovementMethod.getInstance());
-		// vh.title.setLinkText(item.getBody());
+
 		vh.title.setMovementMethod(MyLinkMovementMethod.a());
 		vh.title.setFocusable(false);
 		vh.title.setDispatchToParent(true);
@@ -70,24 +86,34 @@ public class TweetAdapter extends ListBaseAdapter {
 		}
 
 		vh.commentCount.setText(String.valueOf(item.getCommentCount()));
-		
+
 		ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
-		
+
 		vh.avatar.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				UIHelper.showUserCenter(parent.getContext(),
-						item.getAuthorId(),item.getAuthor());
+						item.getAuthorId(), item.getAuthor());
 			}
 		});
+
+		if (!TextUtils.isEmpty(item.getImgSmall())) {
+			vh.pic.setVisibility(View.VISIBLE);
+			ImageLoader.getInstance().displayImage(item.getImgSmall(), vh.pic,
+					options);
+		} else {
+			vh.pic.setVisibility(View.GONE);
+			vh.pic.setImageBitmap(null);
+		}
+
 		return convertView;
 	}
 
 	static class ViewHolder {
 		public TextView name, from, time, commentCount;
 		public TweetTextView title;
-		public ImageView avatar;
+		public ImageView avatar, pic;
 
 		public ViewHolder(View view) {
 			name = (TextView) view.findViewById(R.id.tv_name);
@@ -96,6 +122,7 @@ public class TweetAdapter extends ListBaseAdapter {
 			time = (TextView) view.findViewById(R.id.tv_time);
 			commentCount = (TextView) view.findViewById(R.id.tv_comment_count);
 			avatar = (ImageView) view.findViewById(R.id.iv_avatar);
+			pic = (ImageView) view.findViewById(R.id.iv_pic);
 		}
 	}
 }

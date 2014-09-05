@@ -1401,11 +1401,11 @@ public class UIHelper {
 	 * @return
 	 */
 	public static SpannableString parseActiveReply(String name, String body) {
-		SpannableString sp = new SpannableString(name + "：" + body);
+		SpannableString sp = new SpannableString(name + "：" + body.trim());
 		// 设置用户名字体加粗、高亮
-		sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
-				name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		sp.setSpan(new ForegroundColorSpan(Color.parseColor("#0e5986")), 0,
+		//sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
+		//		name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sp.setSpan(new ForegroundColorSpan(Color.parseColor("#576B95")), 0,
 				name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		return sp;
 	}

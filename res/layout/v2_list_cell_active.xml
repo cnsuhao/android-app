@@ -67,9 +67,44 @@
         android:textSize="@dimen/text_size_16" />
 
     <LinearLayout
+        android:id="@+id/ly_reply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_body"
+        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:background="@drawable/comment_reply_container_bg2"
+        android:visibility="gone" >
+
+        <net.oschina.app.v2.ui.text.TweetTextView
+            android:id="@+id/tv_reply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center_vertical"
+            android:padding="@dimen/space_4"
+            android:textColor="@color/main_gray"
+            android:textSize="@dimen/text_size_14" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ly_reply"
+        android:layout_margin="@dimen/space_10"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:contentDescription="@null"
+        android:maxHeight="150dp"
+        android:maxWidth="150dp"
+        android:src="@drawable/pic_bg"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_pic"
         android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/iv_avatar"
         android:gravity="center_vertical"
@@ -78,9 +113,9 @@
         <TextView
             android:id="@+id/tv_from"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/space_10"
+            android:layout_weight="1"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
 
@@ -101,9 +136,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/space_10"
             android:drawableLeft="@drawable/ic_retweet_count"
             android:drawablePadding="@dimen/space_2"
-            android:layout_marginLeft="@dimen/space_10"
             android:gravity="center_vertical"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12"

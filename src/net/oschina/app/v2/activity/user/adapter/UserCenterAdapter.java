@@ -19,6 +19,7 @@ import net.oschina.app.v2.ui.text.TweetTextView;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -28,7 +29,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 
 public class UserCenterAdapter extends ListBaseAdapter implements
 		StickyListHeadersAdapter {
@@ -51,11 +54,21 @@ public class UserCenterAdapter extends ListBaseAdapter implements
 		ACTIVE, BLOG, INFOMATION;
 	}
 
+	private DisplayImageOptions options;
+
 	public UserCenterAdapter(DislayModeChangeListener lis) {
 		mStates.put(DisplayMode.ACTIVE, STATE_LESS_ONE_PAGE);
 		mStates.put(DisplayMode.BLOG, STATE_LESS_ONE_PAGE);
 		mStates.put(DisplayMode.INFOMATION, STATE_LESS_ONE_PAGE);
 		mListener = lis;
+		options = new DisplayImageOptions.Builder().cacheInMemory(true)
+				.cacheOnDisk(true).postProcessor(new BitmapProcessor() {
+
+					@Override
+					public Bitmap process(Bitmap arg0) {
+						return arg0;
+					}
+				}).build();
 	}
 
 	public DisplayMode getDisplayMode() {
@@ -260,6 +273,14 @@ public class UserCenterAdapter extends ListBaseAdapter implements
 			ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
 		}
 
+		if (!TextUtils.isEmpty(item.getTweetimage())) {
+			vh.pic.setVisibility(View.VISIBLE);
+			ImageLoader.getInstance().displayImage(item.getTweetimage(), vh.pic,
+					options);
+		} else {
+			vh.pic.setVisibility(View.GONE);
+			vh.pic.setImageBitmap(null);
+		}
 		return convertView;
 	}
 
@@ -341,7 +362,7 @@ public class UserCenterAdapter extends ListBaseAdapter implements
 		public TextView name, from, time, action, actionName, commentCount,
 				retweetCount;
 		public TweetTextView body;
-		public ImageView avatar;
+		public ImageView avatar,pic;
 
 		public ViewHolder(View view) {
 			name = (TextView) view.findViewById(R.id.tv_name);
@@ -353,6 +374,7 @@ public class UserCenterAdapter extends ListBaseAdapter implements
 			commentCount = (TextView) view.findViewById(R.id.tv_comment_count);
 			retweetCount = (TextView) view.findViewById(R.id.tv_retweet_count);
 			avatar = (ImageView) view.findViewById(R.id.iv_avatar);
+			pic = (ImageView) view.findViewById(R.id.iv_pic);
 		}
 	}
 
