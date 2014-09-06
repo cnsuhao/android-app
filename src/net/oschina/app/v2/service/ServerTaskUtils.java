@@ -1,5 +1,6 @@
 package net.oschina.app.v2.service;
 
+import net.oschina.app.bean.Post;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,14 @@ public class ServerTaskUtils {
 		Intent intent = new Intent(ServerTaskService.ACTION_PUBLIC_COMMENT);
 		Bundle bundle = new Bundle();
 		bundle.putParcelable(ServerTaskService.BUNDLE_PUBLIC_COMMENT_TASK, task);
+		intent.putExtras(bundle);
+		context.startService(intent);
+	}
+
+	public static void publicPost(Context context, Post post) {
+		Intent intent = new Intent(ServerTaskService.ACTION_PUBLIC_POST);
+		Bundle bundle = new Bundle();
+		bundle.putParcelable(ServerTaskService.BUNDLE_PUBLIC_POST_TASK, post);
 		intent.putExtras(bundle);
 		context.startService(intent);
 	}

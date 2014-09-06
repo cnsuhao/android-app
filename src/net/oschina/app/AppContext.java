@@ -97,6 +97,7 @@ public class AppContext extends BaseApplication {
 	private static final int CACHE_TIME = 60 * 60000;// 缓存失效时间
 	private static final String KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN";
 	private static final String KEY_SOFTKEYBOARD_HEIGHT = "KEY_SOFTKEYBOARD_HEIGHT";
+	private static final String LAST_QUESTION_CATEGORY_IDX = "LAST_QUESTION_CATEGORY_IDX";
 
 	private boolean login = false; // 登录状态
 	private int loginUid = 0; // 登录用户的id
@@ -2054,5 +2055,14 @@ public class AppContext extends BaseApplication {
 
 	public static AppContext instance() {
 		return instance;
+	}
+
+	public static int getLastQuestionCategoryIdx() {
+		return getPreferences().getInt(LAST_QUESTION_CATEGORY_IDX, 0);
+	}
+	
+	public static String getLastQuestionCategory() {
+		int idx = getLastQuestionCategoryIdx();
+		return resources().getStringArray(R.array.post_pub_options)[idx];
 	}
 }

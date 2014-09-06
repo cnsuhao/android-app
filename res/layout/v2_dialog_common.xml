@@ -29,35 +29,24 @@
         android:id="@+id/button_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="right|center_vertical" >
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal" >
 
-        <LinearLayout
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/negative_bt"
-                style="@style/dialog_button" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/negative_bt"
+            style="@style/dialog_button"
+            android:visibility="gone" />
 
         <View
             android:id="@+id/button_divder"
             style="@style/section_item_divider_vertical"
             android:visibility="gone" />
 
-        <LinearLayout
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/positive_bt"
-                style="@style/dialog_button"
-                android:textStyle="bold" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/positive_bt"
+            style="@style/dialog_button"
+            android:textStyle="bold"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

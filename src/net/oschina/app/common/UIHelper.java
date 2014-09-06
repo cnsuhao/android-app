@@ -227,8 +227,9 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showQuestionPub(Context context) {
-		Intent intent = new Intent(context, QuestionPub.class);
-		context.startActivity(intent);
+		//Intent intent = new Intent(context, QuestionPub.class);
+		//context.startActivity(intent);
+		showSimpleBack(context, SimpleBackPage.QUESTION_PUBLIC);
 	}
 
 	/**
@@ -251,8 +252,9 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showTweetPub(Activity context) {
-		Intent intent = new Intent(context, TweetPub.class);
-		context.startActivityForResult(intent, REQUEST_CODE_FOR_RESULT);
+		//Intent intent = new Intent(context, TweetPub.class);
+		//context.startActivityForResult(intent, REQUEST_CODE_FOR_RESULT);
+		showSimpleBackForResult(context, SimpleBackPage.TWEET_PUBLIC,REQUEST_CODE_FOR_RESULT);
 	}
 
 	public static void showTweetPub(Activity context, String atme, int atuid) {
@@ -840,6 +842,12 @@ public class UIHelper {
 		showSimpleBack(context, SimpleBackPage.SETTINGS);
 	}
 
+	public static void showSimpleBackForResult(Activity context, SimpleBackPage page, int requestCode) {
+		Intent intent = new Intent(context, SimpleBackActivity.class);
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
+		context.startActivityForResult(intent, requestCode);
+	}
+	
 	public static void showSimpleBack(Context context, SimpleBackPage page) {
 		Intent intent = new Intent(context, SimpleBackActivity.class);
 		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());

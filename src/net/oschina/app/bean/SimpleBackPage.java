@@ -3,10 +3,12 @@ package net.oschina.app.bean;
 import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
 import net.oschina.app.v2.activity.favorite.fragment.FavoriteViewPagerFragment;
 import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
+import net.oschina.app.v2.activity.question.fragment.QuestionPublicFragment;
 import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
 import net.oschina.app.v2.activity.settings.fragment.AboutFragment;
 import net.oschina.app.v2.activity.settings.fragment.SettingsFragment;
 import net.oschina.app.v2.activity.software.fragment.SoftwareViewPagerFragment;
+import net.oschina.app.v2.activity.tweet.fragment.TweetPublicFragment;
 import net.oschina.app.v2.activity.user.fragment.UserCenterFragment;
 import net.oschina.app.v2.activity.user.fragment.UserProfileFragment;
 
@@ -22,7 +24,9 @@ public enum SimpleBackPage {
 	SOFTEARE(5, R.string.actionbar_title_ossoftware, SoftwareViewPagerFragment.class),
 	COMMENT(6, R.string.actionbar_title_comment, CommentFrament.class),
 	QUESTION_TAG(7, R.string.actionbar_title_question, QuestionTagFragment.class),
-	USER_CENTER(8, R.string.actionbar_title_user_center, UserCenterFragment.class);
+	USER_CENTER(8, R.string.actionbar_title_user_center, UserCenterFragment.class),
+	QUESTION_PUBLIC(9, R.string.actionbar_title_question_public, QuestionPublicFragment.class),
+	TWEET_PUBLIC(10, R.string.actionbar_title_tweet_public, TweetPublicFragment.class);
 
 	private int title;
 	private Class<?> clz;

@@ -109,11 +109,18 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 				v.findViewById(R.id.tab_titile).setSelected(false);
 			}
 		}
+		supportInvalidateOptionsMenu();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);
+		boolean visible = false;
+		int tab = mTabHost.getCurrentTab();
+		if (tab == 1 || tab == 2) {
+			visible = true;
+		}
+		menu.findItem(R.id.main_menu_post).setVisible(visible);
 		return true;
 	}
 
@@ -121,6 +128,11 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.main_menu_post:
+			if (mTabHost.getCurrentTab() == 1) {
+				UIHelper.showQuestionPub(this);
+			} else if(mTabHost.getCurrentTab() ==2){
+				UIHelper.showTweetPub(this);
+			}
 			break;
 		case R.id.main_menu_search:
 			break;

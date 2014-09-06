@@ -251,17 +251,17 @@ public class CommonDialog extends Dialog {
 				}
 			});
 			negativeBt.setVisibility(View.VISIBLE);
-			// if (positiveBt.getVisibility() == View.VISIBLE)
-			// buttonDivider.setVisibility(View.VISIBLE);
+			if (positiveBt.getVisibility() == View.VISIBLE)
+				buttonDivider.setVisibility(View.VISIBLE);
 		} else {
 			negativeBt.setVisibility(View.GONE);
 			buttonDivider.setVisibility(View.GONE);
 		}
-		// if (positiveBt.getVisibility() == View.VISIBLE
-		// || negativeBt.getVisibility() == View.VISIBLE)
-		// barDivider.setVisibility(View.VISIBLE);
-		// else
-		// barDivider.setVisibility(View.GONE);
+		if (positiveBt.getVisibility() == View.VISIBLE
+				|| negativeBt.getVisibility() == View.VISIBLE)
+			barDivider.setVisibility(View.VISIBLE);
+		else
+			barDivider.setVisibility(View.GONE);
 	}
 
 	public void setPositiveButton(int positive,
@@ -290,11 +290,11 @@ public class CommonDialog extends Dialog {
 			positiveBt.setVisibility(View.GONE);
 			buttonDivider.setVisibility(View.GONE);
 		}
-		// if (positiveBt.getVisibility() == View.VISIBLE
-		// || negativeBt.getVisibility() == View.VISIBLE)
-		// barDivider.setVisibility(View.VISIBLE);
-		// else
-		// barDivider.setVisibility(View.GONE);
+		if (positiveBt.getVisibility() == View.VISIBLE
+				|| negativeBt.getVisibility() == View.VISIBLE)
+			barDivider.setVisibility(View.VISIBLE);
+		else
+			barDivider.setVisibility(View.GONE);
 	}
 
 	public void setSubTitle(int i) {

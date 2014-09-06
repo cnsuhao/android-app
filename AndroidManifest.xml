@@ -263,6 +263,9 @@
             <intent-filter>
                 <action android:name="net.oschina.app.v2.ACTION_PUBLIC_COMMENT"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="net.oschina.app.v2.ACTION_PUBLIC_POST"/>
+            </intent-filter>
         </service>
     </application>
 

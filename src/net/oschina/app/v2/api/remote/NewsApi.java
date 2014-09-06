@@ -2,6 +2,7 @@ package net.oschina.app.v2.api.remote;
 
 import java.net.URLEncoder;
 
+import net.oschina.app.bean.Post;
 import net.oschina.app.v2.api.ApiHttpClient;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -215,5 +216,15 @@ public class NewsApi extends BaseApi {
 		params.put("content", content);
 		params.put("isPostToMyZone", isPostToMyZone);
 		ApiHttpClient.post("action/api/comment_pub", params, handler);
+	}
+	
+	public static void publicPost(Post post,AsyncHttpResponseHandler handler){
+		RequestParams params = new RequestParams();
+		params.put("uid", post.getAuthorId());
+		params.put("title", post.getTitle());
+		params.put("catalog", post.getCatalog());
+		params.put("content", post.getBody());
+		params.put("isNoticeMe", post.getIsNoticeMe());		
+		ApiHttpClient.post("action/api/post_pub", params, handler);
 	}
 }

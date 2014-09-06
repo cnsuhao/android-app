@@ -9,6 +9,7 @@
     <string name="main_menu_search">搜索</string>
     <string name="main_menu_post">发表</string>
     <string name="main_menu_more">更多</string>
+    <string name="main_menu_send">提交</string>
     <string name="main_menu_sweep">扫一扫</string>
     <string name="main_menu_picshow">显示图片</string>
     <string name="main_menu_picnoshow">隐藏图片</string>
@@ -176,6 +177,16 @@
     <string name="location">所在地区:</string>
     <string name="development_platform">开发平台:</string>
     <string name="academic_focus">专长领域:</string>
+    
+    <string name="actionbar_title_question_public">提问</string>
+    <string name="actionbar_title_tweet_public">动弹一下</string>
+    
+    <string name="question_title_hint">标题</string>
+    <string name="question_public_content">内容</string>
+    <string name="question_public_category">分类: %s</string>
+    <string name="question_public_let_me_know">有人回答时邮件通知我</string>
+    <string name="tip_title_empty">标题不能为空哦</string>
+    <string name="tip_content_empty">内容不能为空哦</string>
     
     <string name="actionbar_title_user_center">用户中心</string>
     <string name="following_count">关注:%s</string>
