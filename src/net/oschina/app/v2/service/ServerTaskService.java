@@ -1,6 +1,7 @@
 package net.oschina.app.v2.service;
 
 import net.oschina.app.bean.Post;
+import net.oschina.app.bean.Tweet;
 import net.oschina.app.v2.api.remote.NewsApi;
 
 import org.apache.http.Header;
@@ -21,10 +22,13 @@ import com.tonlin.osc.happy.R;
 public class ServerTaskService extends IntentService {
 
 	public static final String ACTION_PUBLIC_COMMENT = "net.oschina.app.v2.ACTION_PUBLIC_COMMENT";
-	public static final String ACTION_PUBLIC_POST= "net.oschina.app.v2.ACTION_PUBLIC_POST";
+	public static final String ACTION_PUBLIC_POST = "net.oschina.app.v2.ACTION_PUBLIC_POST";
+	public static final String ACTION_PUBLIC_TWEET = "net.oschina.app.v2.ACTION_PUBLIC_TWEET";
+
 	public static final String BUNDLE_PUBLIC_COMMENT_TASK = "BUNDLE_PUBLIC_COMMENT_TASK";
 	public static final String BUNDLE_PUBLIC_POST_TASK = "BUNDLE_PUBLIC_POST_TASK";
-	
+	public static final String BUNDLE_PUBLIC_TWEET_TASK = "BUNDLE_PUBLIC_TWEET_TASK";
+
 	private AsyncHttpResponseHandler mPublicCommentHandler = new AsyncHttpResponseHandler() {
 
 		@Override
@@ -33,7 +37,7 @@ public class ServerTaskService extends IntentService {
 			// cancellNotification(id);
 			notifySimpleNotifycation(id, "成功发表评论", "评论", "成功发表评论", false, true);
 			new Handler().postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					cancellNotification(1);
@@ -52,7 +56,7 @@ public class ServerTaskService extends IntentService {
 			stopSelf();
 		}
 	};
-	
+
 	private AsyncHttpResponseHandler mPublicPostHandler = new AsyncHttpResponseHandler() {
 
 		@Override
@@ -61,7 +65,7 @@ public class ServerTaskService extends IntentService {
 			// cancellNotification(id);
 			notifySimpleNotifycation(id, "成功发表帖子", "帖子", "成功发表帖子", false, true);
 			new Handler().postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					cancellNotification(2);
@@ -74,6 +78,34 @@ public class ServerTaskService extends IntentService {
 				Throwable arg3) {
 			int id = 2;// task.getId() * task.getUid()
 			notifySimpleNotifycation(id, "发布帖子失败", "帖子", "发布帖子失败", false, true);
+		}
+
+		public void onFinish() {
+			stopSelf();
+		}
+	};
+
+	private AsyncHttpResponseHandler mPublicTweetHandler = new AsyncHttpResponseHandler() {
+
+		@Override
+		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+			int id = 3;// task.getId() * task.getUid();
+			// cancellNotification(id);
+			notifySimpleNotifycation(id, "成功发表动弹", "动弹", "成功发表动弹", false, true);
+			new Handler().postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					cancellNotification(3);
+				}
+			}, 3000);
+		}
+
+		@Override
+		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+				Throwable arg3) {
+			int id = 3;// task.getId() * task.getUid()
+			notifySimpleNotifycation(id, "发布动弹失败", "动弹", "发布动弹失败", false, true);
 		}
 
 		public void onFinish() {
@@ -105,17 +137,16 @@ public class ServerTaskService extends IntentService {
 				publicComment(task);
 			}
 		} else if (ACTION_PUBLIC_POST.equals(action)) {
-			Post post = intent
-					.getParcelableExtra(BUNDLE_PUBLIC_POST_TASK);
+			Post post = intent.getParcelableExtra(BUNDLE_PUBLIC_POST_TASK);
 			if (post != null) {
 				publicPost(post);
 			}
+		} else if (ACTION_PUBLIC_TWEET.equals(action)) {
+			Tweet tweet = intent.getParcelableExtra(BUNDLE_PUBLIC_TWEET_TASK);
+			if (tweet != null) {
+				publicTweet(tweet);
+			}
 		}
-	}
-
-	private void publicPost(Post post) {
-		notifySimpleNotifycation(2, "正在发表你的帖子..", "帖子", "正在发布帖子", true, false);
-		NewsApi.publicPost(post, mPublicPostHandler);
 	}
 
 	private void publicComment(final PublicCommentTask task) {
@@ -126,19 +157,34 @@ public class ServerTaskService extends IntentService {
 				mPublicCommentHandler);
 	}
 
+	private void publicPost(Post post) {
+		notifySimpleNotifycation(2, "正在发表你的帖子..", "帖子", "正在发布帖子", true, false);
+		NewsApi.publicPost(post, mPublicPostHandler);
+	}
+
+	private void publicTweet(final Tweet tweet) {
+		// task.getId() * task.getUid()
+		notifySimpleNotifycation(3, "正在发表你的动弹..", "动弹", "正在发布动弹", true, false);
+		NewsApi.publicTweet(tweet, mPublicTweetHandler);
+	}
+
 	private void notifySimpleNotifycation(int id, String ticker, String title,
 			String content, boolean ongoing, boolean autoCancel) {
 		Notification notification = new NotificationCompat.Builder(this)
-				.setTicker(ticker).setContentTitle(title)
-				.setContentText(content).setAutoCancel(true)
+				.setTicker(ticker)
+				.setContentTitle(title)
+				.setContentText(content)
+				.setAutoCancel(true)
 				.setOngoing(false)
 				.setDefaults(Notification.DEFAULT_SOUND)
 				.setOnlyAlertOnce(true)
-				.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(), 0))
+				.setContentIntent(
+						PendingIntent.getActivity(this, 0, new Intent(), 0))
 				.setSmallIcon(R.drawable.icon).build();
 		// if (autoCancel) {
 		// notification.flags = Notification.FLAG_AUTO_CANCEL;
-		//notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+		// notification.flags = Notification.DEFAULT_LIGHTS |
+		// Notification.FLAG_AUTO_CANCEL;
 		// }
 		// NotificationManagerCompat.from(this).notify(id, notification);
 		NotificationManager notifyMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

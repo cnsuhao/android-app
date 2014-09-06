@@ -28,7 +28,9 @@ public class EmojiFragment extends BaseFragment implements
 		SoftKeyboardStateListener, OnClickEmojiListener {
 
 	private static final String TAG = EmojiFragment.class.getSimpleName();
+	
 	private ViewPager mViewPager;
+	private CirclePageIndicator mIndicator;
 	private ImageButton mBtnEmoji, mBtnSend;
 	private EmojiEditText mEtInput;
 	private View mLyEmoji;
@@ -36,7 +38,6 @@ public class EmojiFragment extends BaseFragment implements
 	private SoftKeyboardStateHelper mKeyboardHelper;
 	private boolean mIsKeyboardVisible;
 	private boolean mNeedHideEmoji;
-	private CirclePageIndicator mIndicator;
 	private int mCurrentKeyboardHeigh;
 
 	private EmojiTextListener mListener;

@@ -181,6 +181,10 @@
     <string name="actionbar_title_question_public">提问</string>
     <string name="actionbar_title_tweet_public">动弹一下</string>
     
+    <string name="choose_picture">选择图片</string>
+    <string name="clear_message">清楚文字吗?</string>
+    <string name="ok">确定</string>
+    
     <string name="question_title_hint">标题</string>
     <string name="question_public_content">内容</string>
     <string name="question_public_category">分类: %s</string>

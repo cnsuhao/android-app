@@ -1259,8 +1259,8 @@ public class UIHelper {
 		intent.putExtra("MSG_WHAT", what);
 		if (what == 1)
 			intent.putExtra("RESULT", res);
-		else
-			intent.putExtra("TWEET", tweet);
+		//else
+		//	intent.putExtra("TWEET", tweet);
 		context.sendBroadcast(intent);
 	}
 

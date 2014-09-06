@@ -1,9 +1,15 @@
 package net.oschina.app.v2.api.remote;
 
+import java.io.File;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.oschina.app.bean.Post;
+import net.oschina.app.bean.Tweet;
 import net.oschina.app.v2.api.ApiHttpClient;
+
+import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -217,14 +223,28 @@ public class NewsApi extends BaseApi {
 		params.put("isPostToMyZone", isPostToMyZone);
 		ApiHttpClient.post("action/api/comment_pub", params, handler);
 	}
-	
-	public static void publicPost(Post post,AsyncHttpResponseHandler handler){
+
+	public static void publicPost(Post post, AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
 		params.put("uid", post.getAuthorId());
 		params.put("title", post.getTitle());
 		params.put("catalog", post.getCatalog());
 		params.put("content", post.getBody());
-		params.put("isNoticeMe", post.getIsNoticeMe());		
+		params.put("isNoticeMe", post.getIsNoticeMe());
 		ApiHttpClient.post("action/api/post_pub", params, handler);
+	}
+
+	public static void publicTweet(Tweet tweet, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", tweet.getAuthorId());
+		params.put("msg", tweet.getBody());
+
+		Map<String, File> files = new HashMap<String, File>();
+		if (!TextUtils.isEmpty(tweet.getImageFilePath())) {
+			files.put("img", new File(tweet.getImageFilePath()));
+		}
+		//if (tweet.getAmrFile() != null)
+		//	files.put("amr", tweet.getAmrFile());
+		ApiHttpClient.post("action/api/tweet_pub", params, handler);
 	}
 }

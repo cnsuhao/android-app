@@ -53,4 +53,9 @@
         <item>翻墙</item>
         <item>非IT话题</item>
     </string-array>
+    
+    <string-array name="choose_picture">
+        <item>相册</item>
+        <item>拍照</item>
+    </string-array>
 </resources>
