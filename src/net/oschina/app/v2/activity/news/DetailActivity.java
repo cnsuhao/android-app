@@ -3,11 +3,11 @@ package net.oschina.app.v2.activity.news;
 import java.lang.ref.WeakReference;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.v2.activity.news.fragment.BlogDetailFragment;
+import net.oschina.app.v2.activity.blog.fragment.BlogDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
 import net.oschina.app.v2.activity.news.fragment.NewsDetailFragment;
-import net.oschina.app.v2.activity.news.fragment.QuestionDetailFragment;
-import net.oschina.app.v2.activity.news.fragment.SoftwareDetailFragment;
+import net.oschina.app.v2.activity.question.fragment.QuestionDetailFragment;
+import net.oschina.app.v2.activity.software.fragment.SoftwareDetailFragment;
 import net.oschina.app.v2.activity.tweet.fragment.TweetDetailFragment;
 import net.oschina.app.v2.base.BaseActivity;
 import net.oschina.app.v2.base.BaseFragment;

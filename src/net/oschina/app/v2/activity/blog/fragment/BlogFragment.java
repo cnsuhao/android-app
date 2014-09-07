@@ -1,4 +1,4 @@
-package net.oschina.app.v2.activity.news.fragment;
+package net.oschina.app.v2.activity.blog.fragment;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogList;
 import net.oschina.app.common.UIHelper;
-import net.oschina.app.v2.activity.news.adapter.BlogAdapter;
+import net.oschina.app.v2.activity.blog.adapter.BlogAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;

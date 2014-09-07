@@ -1,4 +1,4 @@
-package net.oschina.app.v2.activity.news.adapter;
+package net.oschina.app.v2.activity.blog.adapter;
 
 import net.oschina.app.bean.Blog;
 import net.oschina.app.common.StringUtils;

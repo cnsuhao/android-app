@@ -1,4 +1,4 @@
-package net.oschina.app.v2.activity.news.fragment;
+package net.oschina.app.v2.activity.software.fragment;
 
 import java.io.ByteArrayInputStream;
 

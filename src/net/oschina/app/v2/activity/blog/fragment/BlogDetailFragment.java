@@ -1,14 +1,14 @@
-package net.oschina.app.v2.activity.news.fragment;
+package net.oschina.app.v2.activity.blog.fragment;
 
 import java.io.ByteArrayInputStream;
-import java.net.URLEncoder;
-import java.util.List;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.bean.Blog;
+import net.oschina.app.bean.BlogCommentList;
 import net.oschina.app.bean.CommentList;
-import net.oschina.app.bean.Post;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
+import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.emoji.EmojiFragment;
@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,17 +41,17 @@ import android.widget.ZoomButtonsController;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 
-public class QuestionDetailFragment extends BaseFragment implements
+public class BlogDetailFragment extends BaseFragment implements
 		EmojiTextListener, EmojiFragmentControl {
 
-	protected static final String TAG = QuestionDetailFragment.class
+	protected static final String TAG = BlogDetailFragment.class
 			.getSimpleName();
 	private EmptyLayout mEmptyLayout;
 	private TextView mTvTitle, mTvSource, mTvTime;
-	private WebView mWebView;
 	private TextView mTvCommentCount;
-	private int mPostId;
-	private Post mPost;
+	private WebView mWebView;
+	private int mBlogId;
+	private Blog mBlog;
 	private EmojiFragment mEmojiFragment;
 	
 	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
@@ -58,8 +59,8 @@ public class QuestionDetailFragment extends BaseFragment implements
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			try {
-				mPost = Post.parse(new ByteArrayInputStream(arg2));
-				if (mPost != null && mPost.getId() > 0) {
+				mBlog = Blog.parse(new ByteArrayInputStream(arg2));
+				if (mBlog != null && mBlog.getId() > 0) {
 					fillUI();
 					fillWebViewBody();
 					mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
@@ -120,8 +121,7 @@ public class QuestionDetailFragment extends BaseFragment implements
 
 			@Override
 			public void onClick(View v) {
-				UIHelper.showComment(getActivity(), mPost.getId(),
-						CommentList.CATALOG_POST);
+				UIHelper.showBlogComment(getActivity(), mBlog.getId());
 			}
 		});
 	}
@@ -132,7 +132,7 @@ public class QuestionDetailFragment extends BaseFragment implements
 		View view = inflater.inflate(R.layout.v2_fragment_news_detail,
 				container, false);
 
-		mPostId = getActivity().getIntent().getIntExtra("post_id", 0);
+		mBlogId = getActivity().getIntent().getIntExtra("blog_id", 0);
 
 		initViews(view);
 
@@ -170,27 +170,24 @@ public class QuestionDetailFragment extends BaseFragment implements
 
 	private void initData() {
 		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-		// start to load news detail
-		NewsApi.getPostDetail(mPostId, mHandler);
+		NewsApi.getBlogDetail(mBlogId, mHandler);
 	}
 
 	private void fillUI() {
-		mTvTitle.setText(mPost.getTitle());
-		mTvSource.setText(mPost.getAuthor());
-		mTvTime.setText(StringUtils.friendly_time(mPost.getPubDate()));
+		mTvTitle.setText(mBlog.getTitle());
+		mTvSource.setText(mBlog.getAuthor());
+		mTvTime.setText(StringUtils.friendly_time(mBlog.getPubDate()));
 		if (mTvCommentCount != null) {
 			mTvCommentCount.setVisibility(View.VISIBLE);
-			mTvCommentCount.setText(getString(R.string.answer_count,
-					mPost.getAnswerCount() + "/" + mPost.getViewCount()));
+			mTvCommentCount.setText(getString(R.string.comment_count,
+					mBlog.getCommentCount()));
 		}
 	}
 
 	private void fillWebViewBody() {
-		// 显示标签
-		String tags = getPostTags(mPost.getTags());
+		String body = UIHelper.WEB_STYLE + mBlog.getBody();
 
-		String body = UIHelper.WEB_STYLE + mPost.getBody() + tags
-				+ "<div style=\"margin-bottom: 80px\" />";
+		Log.i(TAG, mBlog.getBody());
 		// 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
 		boolean isLoadImage;
 		AppContext ac = (AppContext) getActivity().getApplication();
@@ -202,6 +199,7 @@ public class QuestionDetailFragment extends BaseFragment implements
 		if (isLoadImage) {
 			body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
 			body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
+
 			// 添加点击图片放大支持
 			body = body
 					.replaceAll("(<img[^>]+src=\")(\\S+)\"",
@@ -214,23 +212,10 @@ public class QuestionDetailFragment extends BaseFragment implements
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
 	}
 
-	@SuppressWarnings("deprecation")
-	private String getPostTags(List<String> taglist) {
-		if (taglist == null)
-			return "";
-		String tags = "";
-		for (String tag : taglist) {
-			tags += String
-					.format("<a class='tag' href='http://www.oschina.net/question/tag/%s' >&nbsp;%s&nbsp;</a>&nbsp;&nbsp;",
-							URLEncoder.encode(tag), tag);
-		}
-		return String.format("<div style='margin-top:10px;'>%s</div>", tags);
-	}
-
 	@Override
 	public void setEmojiFragment(EmojiFragment fragment) {
 		mEmojiFragment = fragment;
-		mEmojiFragment.setEmojiTextListener(this);		
+		mEmojiFragment.setEmojiTextListener(this);
 	}
 
 	@Override
@@ -241,12 +226,10 @@ public class QuestionDetailFragment extends BaseFragment implements
 			return;
 		}
 		PublicCommentTask task = new PublicCommentTask();
-		task.setId(mPostId);
-		task.setCatalog(CommentList.CATALOG_POST);
-		task.setIsPostToMyZone(0);
+		task.setId(mBlogId);
 		task.setContent(text);
 		task.setUid(AppContext.instance().getLoginUid());
-		ServerTaskUtils.publicComment(getActivity(), task);
-		mEmojiFragment.reset();		
+		ServerTaskUtils.publicBlogComment(getActivity(), task);
+		mEmojiFragment.reset();
 	}
 }
