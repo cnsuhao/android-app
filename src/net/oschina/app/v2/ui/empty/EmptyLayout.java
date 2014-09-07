@@ -1,5 +1,6 @@
 package net.oschina.app.v2.ui.empty;
 
+import net.oschina.app.v2.utils.TDevice;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -128,9 +129,15 @@ public class EmptyLayout extends LinearLayout implements
 		case NETWORK_ERROR:
 			mErrorState = NETWORK_ERROR;
 			// img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"pagefailed_bg"));
-			tv.setText(R.string.error_view_load_error_click_to_refresh);
-			animProgress.setVisibility(View.GONE);
+			if(TDevice.hasInternet()) {
+				tv.setText(R.string.error_view_load_error_click_to_refresh);
+				img.setBackgroundResource(R.drawable.pagefailed_bg);
+			} else {
+				tv.setText(R.string.error_view_network_error_click_to_refresh);
+				img.setBackgroundResource(R.drawable.page_icon_network);
+			}
 			img.setVisibility(View.VISIBLE);
+			animProgress.setVisibility(View.GONE);
 			clickEnable = true;
 			break;
 		case NETWORK_LOADING:
@@ -144,6 +151,7 @@ public class EmptyLayout extends LinearLayout implements
 		case NODATA:
 			mErrorState = NODATA;
 			// img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
+			img.setBackgroundResource(R.drawable.page_icon_empty);
 			img.setVisibility(View.VISIBLE);
 			animProgress.setVisibility(View.GONE);
 			setTvNoDataContent();
@@ -154,6 +162,7 @@ public class EmptyLayout extends LinearLayout implements
 			break;
 		case NODATA_ENABLE_CLICK:
 			mErrorState = NODATA_ENABLE_CLICK;
+			img.setBackgroundResource(R.drawable.page_icon_empty);
 			// img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
 			img.setVisibility(View.VISIBLE);
 			animProgress.setVisibility(View.GONE);

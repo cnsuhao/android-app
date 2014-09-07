@@ -1,7 +1,9 @@
 
 package net.oschina.app.v2.activity.news;
 
+import net.oschina.app.bean.BlogList;
 import net.oschina.app.bean.NewsList;
+import net.oschina.app.v2.activity.news.fragment.BlogFragment;
 import net.oschina.app.v2.activity.news.fragment.NewsFragment;
 
 import com.tonlin.osc.happy.R;
@@ -9,8 +11,8 @@ import com.tonlin.osc.happy.R;
 
 public enum NewsTab {
     LASTEST(0,NewsList.CATALOG_ALL, R.string.frame_title_news_lastest, NewsFragment.class),
-    BLOG(1, NewsList.CATALOG_INTEGRATION,R.string.frame_title_news_blog, NewsFragment.class),
-    RECOMMEND(2,NewsList.CATALOG_SOFTWARE, R.string.frame_title_news_recommend, NewsFragment.class);
+    BLOG(1, BlogList.CATALOG_LATEST,R.string.frame_title_news_blog, BlogFragment.class),
+    RECOMMEND(2,BlogList.CATALOG_RECOMMEND, R.string.frame_title_news_recommend, BlogFragment.class);
     
     private Class<?> clz;
     private int idx;

@@ -25,6 +25,7 @@ import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 
 /**
@@ -211,12 +212,15 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 						R.layout.v2_list_cell_popup_menu_userinfo, null);
 				TextView name = (TextView) convertView
 						.findViewById(R.id.tv_name);
+				ImageView avatar = (ImageView)convertView.findViewById(R.id.iv_avatar);
 				AppContext.instance().initLoginInfo();
 				if (AppContext.instance().isLogin()) {
 					User user = AppContext.instance().getLoginInfo();
 					name.setText(user.getName());
+					ImageLoader.getInstance().displayImage(user.getFace(), avatar);
 				} else {
 					name.setText(R.string.unlogin);
+					avatar.setImageBitmap(null);
 				}
 			} else {
 				convertView = LayoutInflater.from(parent.getContext()).inflate(

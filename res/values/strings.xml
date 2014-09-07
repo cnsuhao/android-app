@@ -119,7 +119,8 @@
     <string name="error_view_click_to_refresh">点击屏幕,重新加载</string>
     <string name="error_view_no_data">暂无内容</string>
     <string name="error_view_loading">加载中…</string>
-    <string name="error_view_load_error_click_to_refresh">内容加载失败,点击重新加载</string>
+    <string name="error_view_load_error_click_to_refresh">内容加载失败\r\n点击重新加载</string>
+    <string name="error_view_network_error_click_to_refresh">没有可用的网络</string>
     
     <string name="loading">加载中…</string>
     <string name="loading_no_more">没有更多数据.</string>
@@ -204,6 +205,9 @@
     <string name="blog">博客</string>
     <string name="blog_count">博客(%s)</string>
     <string name="information">资料</string>
+    <string name="edit_avatar">编辑头像</string>
+    <string name="logout">退出当前帐号</string>
+    <string name="message_logout">退出后将无法看到个人动态,确定退出吗?</string>
     
     <string name="actionbar_title_friends">我的好友</string>
     <string name="actionbar_title_favorites">我的收藏</string>
@@ -217,4 +221,8 @@
     <string name="comment_reply_count">共有%s条评论</string>
     <string name="comment_refer_author">引用来自%s的评论</string>
     <string name="tip_comment_content_empty">"请输入评论内容"</string>
+    
+	<string name="message_delete_tweet">确定要删除这条动弹吗?</string>
+	<string name="tip_del_tweet_faile">对不起,删除该动弹失败</string>
+	<string name="tip_del_tweet_success">删除动弹成功</string>
 </resources>

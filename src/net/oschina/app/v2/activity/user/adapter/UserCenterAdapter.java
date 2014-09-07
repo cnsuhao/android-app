@@ -163,7 +163,7 @@ public class UserCenterAdapter extends ListBaseAdapter implements
 		TextView tvJoinTime = (TextView) convertView
 				.findViewById(R.id.tv_join_time);
 		TextView location = (TextView) convertView
-				.findViewById(R.id.tv_locaton);
+				.findViewById(R.id.tv_location);
 		TextView developmentPlatform = (TextView) convertView
 				.findViewById(R.id.tv_development_platform);
 		TextView academicFocus = (TextView) convertView

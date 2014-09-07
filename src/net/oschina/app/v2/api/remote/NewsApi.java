@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.oschina.app.bean.Post;
+import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.v2.api.ApiHttpClient;
 
@@ -34,6 +35,15 @@ public class NewsApi extends BaseApi {
 		params.put("pageSize", DEF_PAGE_SIZE);
 		params.put("dataType", "json");
 		ApiHttpClient.get("action/api/news_list", params, handler);
+	}
+
+	public static void getBlogList(String type, int pageIndex,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("type", type);
+		params.put("pageIndex", pageIndex);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/blog_list", params, handler);
 	}
 
 	public static void getPostList(int catalog, int page,
@@ -181,6 +191,13 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.post("action/api/user_updaterelation", params, handler);
 	}
 
+	public static void getMyInformation(int uid,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		ApiHttpClient.post("action/api/my_information", params, handler);
+	}
+
 	/**
 	 * 获取新闻明细
 	 * 
@@ -224,6 +241,37 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.post("action/api/comment_pub", params, handler);
 	}
 
+	public static void reportComment(int blog, int uid, String content,
+			int reply_id, int objuid, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("blog", blog);
+		params.put("uid", uid);
+		params.put("content", content);
+		params.put("reply_id", reply_id);
+		params.put("objuid", objuid);
+		ApiHttpClient.post("action/api/comment_reply", params, handler);
+	}
+
+	public static void publicBlogComment(int blog, int uid, String content,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("blog", blog);
+		params.put("uid", uid);
+		params.put("content", content);
+		ApiHttpClient.post("action/api/blogcomment_pub", params, handler);
+	}
+
+	public static void replyBlogComment(int blog, int uid, String content,
+			int reply_id, int objuid, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("blog", blog);
+		params.put("uid", uid);
+		params.put("content", content);
+		params.put("reply_id", reply_id);
+		params.put("objuid", objuid);
+		ApiHttpClient.post("action/api/blogcomment_pub", params, handler);
+	}
+
 	public static void publicPost(Post post, AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
 		params.put("uid", post.getAuthorId());
@@ -243,8 +291,87 @@ public class NewsApi extends BaseApi {
 		if (!TextUtils.isEmpty(tweet.getImageFilePath())) {
 			files.put("img", new File(tweet.getImageFilePath()));
 		}
-		//if (tweet.getAmrFile() != null)
-		//	files.put("amr", tweet.getAmrFile());
+		// if (tweet.getAmrFile() != null)
+		// files.put("amr", tweet.getAmrFile());
 		ApiHttpClient.post("action/api/tweet_pub", params, handler);
+	}
+
+	public static void deleteTweet(int uid, int tweetid,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("tweetid", tweetid);
+		ApiHttpClient.post("action/api/tweet_delete", params, handler);
+	}
+
+	public static void deleteComment(int id, int catalog, int replyid,
+			int authorid, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("id", id);
+		params.put("catalog", catalog);
+		params.put("replyid", replyid);
+		params.put("authorid", authorid);
+		ApiHttpClient.post("action/api/comment_delete", params, handler);
+	}
+
+	public static void deleteBlog(int uid, int authoruid, int id,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("authoruid", authoruid);
+		params.put("id", id);
+		ApiHttpClient.post("action/api/userblog_delete", params, handler);
+	}
+
+	public static void deleteBlogComment(int uid, int blogid, int replyid,
+			int authorid, int owneruid, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("blogid", blogid);
+		params.put("replyid", replyid);
+		params.put("authorid", authorid);
+		params.put("owneruid", owneruid);
+		ApiHttpClient.post("action/api/blogcomment_delete", params, handler);
+	}
+
+	public static void addFavorite(int uid, int objid, int type,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("objid", objid);
+		params.put("type", type);
+		ApiHttpClient.post("action/api/favorite_add", params, handler);
+	}
+
+	public static void delFavorite(int uid, int objid, int type,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("objid", objid);
+		params.put("type", type);
+		ApiHttpClient.post("action/api/favorite_delete", params, handler);
+	}
+
+	public static void getSearchList(String catalog, String content,
+			int pageIndex, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("catalog", catalog);
+		params.put("content", content);
+		params.put("pageIndex", pageIndex);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/search_list", params, handler);
+	}
+
+	public static void report(Report report, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("obj_id", report.getReportId());
+		params.put("url", report.getLinkAddress());
+		params.put("obj_type", report.getReason());
+		if (report.getOtherReason() != null) {
+			params.put("memo", report.getOtherReason());
+		} else {
+			params.put("memo", "其他原因");
+		}
+		ApiHttpClient.post("action/communityManage/report", params, handler);
 	}
 }

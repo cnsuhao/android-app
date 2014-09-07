@@ -1,6 +1,6 @@
 package net.oschina.app.v2.activity.news.adapter;
 
-import net.oschina.app.bean.News;
+import net.oschina.app.bean.Blog;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.v2.base.ListBaseAdapter;
 import android.annotation.SuppressLint;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
 
-public class NewsAdapter extends ListBaseAdapter {
+public class BlogAdapter extends ListBaseAdapter {
 
 	@SuppressLint("InflateParams")
 	@Override
@@ -26,17 +26,17 @@ public class NewsAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		News news = (News) _data.get(position);
+		Blog item = (Blog) _data.get(position);
 
-		vh.title.setText(news.getTitle());
-		vh.source.setText(news.getAuthor());
-		vh.time.setText(StringUtils.friendly_time(news.getPubDate()));
+		vh.title.setText(item.getTitle());
+		vh.source.setText(item.getAuthor());
+		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
 		
-		if(StringUtils.isToday(news.getPubDate())){
-			vh.tip.setVisibility(View.VISIBLE);
-			vh.tip.setImageResource(R.drawable.ic_today);
+		vh.tip.setVisibility(View.VISIBLE);
+		if(item.getDocumentType() == Blog.DOC_TYPE_ORIGINAL){
+			vh.tip.setImageResource(R.drawable.ic_source);
 		} else {
-			vh.tip.setVisibility(View.GONE);
+			vh.tip.setImageResource(R.drawable.ic_forward);
 		}
 		
 		return convertView;
