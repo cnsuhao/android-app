@@ -225,4 +225,15 @@
 	<string name="message_delete_tweet">确定要删除这条动弹吗?</string>
 	<string name="tip_del_tweet_faile">对不起,删除该动弹失败</string>
 	<string name="tip_del_tweet_success">删除动弹成功</string>
+	
+	<string name="operation">操作</string>
+	<string name="reply">回复</string>
+	<string name="delete">删除</string>
+	<string name="deleting">正在删除…</string>
+	<string name="delete_success">删除成功</string>
+	<string name="delete_faile">删除失败</string>
+	
+	<string name="reply_comment_to">回复“%s”的评论</string>
+	<string name="comment_success">评论成功</string>
+	<string name="comment_faile">评论失败</string>
 </resources>

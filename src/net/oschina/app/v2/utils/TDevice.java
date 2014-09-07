@@ -310,7 +310,14 @@ public class TDevice {
 
 	public static void showSoftKeyboard(View view) {
 		((InputMethodManager) BaseApplication.context().getSystemService(
-				Context.INPUT_METHOD_SERVICE)).showSoftInput(view, 1);
+				Context.INPUT_METHOD_SERVICE)).showSoftInput(view,
+				InputMethodManager.SHOW_FORCED);
+	}
+
+	public static void toogleSoftKeyboard(View view) {
+		((InputMethodManager) BaseApplication.context().getSystemService(
+				Context.INPUT_METHOD_SERVICE)).toggleSoftInput(0,
+				InputMethodManager.HIDE_NOT_ALWAYS);
 	}
 
 	public static boolean isSdcardReady() {
@@ -626,8 +633,7 @@ public class TDevice {
 
 	public static boolean hasStatusBar(Activity activity) {
 		WindowManager.LayoutParams attrs = activity.getWindow().getAttributes();
-		if ((attrs.flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) 
-				== WindowManager.LayoutParams.FLAG_FULLSCREEN) {
+		if ((attrs.flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) == WindowManager.LayoutParams.FLAG_FULLSCREEN) {
 			return false;
 		} else {
 			return true;

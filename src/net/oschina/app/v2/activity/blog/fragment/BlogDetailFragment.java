@@ -53,7 +53,7 @@ public class BlogDetailFragment extends BaseFragment implements
 	private int mBlogId;
 	private Blog mBlog;
 	private EmojiFragment mEmojiFragment;
-	
+
 	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
 
 		@Override
@@ -121,7 +121,8 @@ public class BlogDetailFragment extends BaseFragment implements
 
 			@Override
 			public void onClick(View v) {
-				UIHelper.showBlogComment(getActivity(), mBlog.getId());
+				UIHelper.showBlogComment(getActivity(), mBlog.getId(),
+						mBlog.getAuthorId());
 			}
 		});
 	}

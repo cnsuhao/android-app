@@ -241,14 +241,16 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.post("action/api/comment_pub", params, handler);
 	}
 
-	public static void reportComment(int blog, int uid, String content,
-			int reply_id, int objuid, AsyncHttpResponseHandler handler) {
+	public static void replyComment(int id, int catalog, int replyid,
+			int authorid, int uid, String content,
+			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
-		params.put("blog", blog);
+		params.put("catalog", catalog);
+		params.put("id", id);
 		params.put("uid", uid);
 		params.put("content", content);
-		params.put("reply_id", reply_id);
-		params.put("objuid", objuid);
+		params.put("replyid", replyid);
+		params.put("authorid", authorid);
 		ApiHttpClient.post("action/api/comment_reply", params, handler);
 	}
 

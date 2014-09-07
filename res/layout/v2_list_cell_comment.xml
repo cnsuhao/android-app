@@ -8,7 +8,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/space_8" >
+        android:paddingLeft="@dimen/space_8"
+        android:paddingRight="@dimen/space_8"
+        android:paddingTop="@dimen/space_8" >
 
         <ImageView
             android:id="@+id/iv_avatar"
@@ -75,6 +77,18 @@
             android:layout_toRightOf="@id/iv_avatar"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tv_from"
+            android:background="@null"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:padding="@dimen/space_4"
+            android:src="@drawable/btn_item_opt_more_selector" />
     </RelativeLayout>
 
     <View

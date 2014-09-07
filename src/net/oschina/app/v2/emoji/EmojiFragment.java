@@ -28,7 +28,7 @@ public class EmojiFragment extends BaseFragment implements
 		SoftKeyboardStateListener, OnClickEmojiListener {
 
 	private static final String TAG = EmojiFragment.class.getSimpleName();
-	
+
 	private ViewPager mViewPager;
 	private CirclePageIndicator mIndicator;
 	private ImageButton mBtnEmoji, mBtnSend;
@@ -57,8 +57,8 @@ public class EmojiFragment extends BaseFragment implements
 				false);
 
 		initViews(view);
-		mKeyboardHelper = new SoftKeyboardStateHelper(getActivity()
-				.findViewById(R.id.activity_root));
+		mKeyboardHelper = new SoftKeyboardStateHelper(getActivity().getWindow()
+				.getDecorView());// .findViewById(R.id.activity_root)
 		mKeyboardHelper.addSoftKeyboardStateListener(this);
 		return view;
 	}
@@ -232,6 +232,16 @@ public class EmojiFragment extends BaseFragment implements
 	public void requestFocusInput() {
 		if (mEtInput != null) {
 			mEtInput.requestFocus();
+			if (!mIsKeyboardVisible) {
+				TDevice.toogleSoftKeyboard(getActivity().getCurrentFocus());
+				// TDevice.showSoftKeyboard(getActivity().getCurrentFocus());
+			}
+		}
+	}
+
+	public void setInputHint(String hint) {
+		if (mEtInput != null) {
+			mEtInput.setHint(hint);
 		}
 	}
 
@@ -242,6 +252,7 @@ public class EmojiFragment extends BaseFragment implements
 		if (mEtInput != null) {
 			mEtInput.getText().clear();
 			mEtInput.clearFocus();
+			mEtInput.setHint(R.string.publish_comment);
 		}
 	}
 }

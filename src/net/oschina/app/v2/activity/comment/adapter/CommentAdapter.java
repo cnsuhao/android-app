@@ -28,16 +28,25 @@ public class CommentAdapter extends ListBaseAdapter {
 
 	private boolean showSplit;
 
-	public CommentAdapter() {
+	public interface OnOperationListener {
+		void onMoreClick(Comment comment);
 	}
 
-	public CommentAdapter(boolean showSplit) {
+	private OnOperationListener mListener;
+
+	public CommentAdapter(OnOperationListener lis) {
+		mListener = lis;
+	}
+
+	public CommentAdapter(OnOperationListener lis, boolean showSplit) {
 		this.showSplit = showSplit;
+		mListener = lis;
 	}
 
-	@SuppressLint("InflateParams")
+	@SuppressLint({ "InflateParams", "CutPasteId" })
 	@Override
-	protected View getRealView(int position, View convertView,final ViewGroup parent) {
+	protected View getRealView(int position, View convertView,
+			final ViewGroup parent) {
 		ViewHolder vh = null;
 		if (convertView == null || convertView.getTag() == null) {
 			convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -161,7 +170,7 @@ public class CommentAdapter extends ListBaseAdapter {
 		}
 
 		ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
-		
+
 		vh.avatar.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -170,7 +179,17 @@ public class CommentAdapter extends ListBaseAdapter {
 						item.getAuthorId(), item.getAuthor());
 			}
 		});
-		
+
+		vh.more.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (mListener != null) {
+					mListener.onMoreClick(item);
+				}
+			}
+		});
+
 		vh.split.setVisibility(showSplit ? View.VISIBLE : View.GONE);
 		return convertView;
 	}
@@ -179,9 +198,9 @@ public class CommentAdapter extends ListBaseAdapter {
 		TextView name, time, from;
 		TweetTextView content;
 		LinearLayout relies, refers;
-		View split;
+		View split, more;
 		ImageView avatar;
-		
+
 		ViewHolder(View view) {
 			avatar = (ImageView) view.findViewById(R.id.iv_avatar);
 			name = (TextView) view.findViewById(R.id.tv_name);
@@ -191,6 +210,7 @@ public class CommentAdapter extends ListBaseAdapter {
 			refers = (LinearLayout) view.findViewById(R.id.ly_refers);
 			relies = (LinearLayout) view.findViewById(R.id.ly_relies);
 			split = view.findViewById(R.id.split);
+			more = view.findViewById(R.id.iv_more);
 		}
 	}
 }

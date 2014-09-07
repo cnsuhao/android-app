@@ -10,6 +10,7 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.comment.adapter.CommentAdapter;
+import net.oschina.app.v2.activity.comment.adapter.CommentAdapter.OnOperationListener;
 import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
@@ -46,7 +47,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 
 public class TweetDetailFragment extends BaseFragment implements
-		EmojiTextListener, EmojiFragmentControl {
+		EmojiTextListener, EmojiFragmentControl, OnOperationListener {
 	protected static final String TAG = TweetDetailFragment.class
 			.getSimpleName();
 	private ListView mListView;
@@ -192,7 +193,7 @@ public class TweetDetailFragment extends BaseFragment implements
 		initWebView(mContent);
 
 		mListView.addHeaderView(header);
-		mAdapter = new CommentAdapter(true);
+		mAdapter = new CommentAdapter(this, true);
 		mListView.setAdapter(mAdapter);
 	}
 
@@ -285,5 +286,10 @@ public class TweetDetailFragment extends BaseFragment implements
 		task.setUid(AppContext.instance().getLoginUid());
 		ServerTaskUtils.publicComment(getActivity(), task);
 		mEmojiFragment.reset();
+	}
+
+	@Override
+	public void onMoreClick(Comment comment) {
+
 	}
 }
