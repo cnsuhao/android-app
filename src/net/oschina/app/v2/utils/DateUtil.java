@@ -15,7 +15,8 @@ import org.joda.time.DateTime;
 public class DateUtil {
 	private final static String PATTERN = "yyyy-MM-dd HH:mm:ss";
 	private final static String DEF_FORMAT = "yyyy-MM-dd HH:mm";
-
+	private final static String YEAR_MONTH_DAY = "yyyy-MM-dd";
+	private final static String YESTODAY = "昨天";
 	private final static ThreadLocal<SimpleDateFormat> dateFormater = new ThreadLocal<SimpleDateFormat>() {
 		@Override
 		protected SimpleDateFormat initialValue() {
@@ -33,7 +34,7 @@ public class DateUtil {
 	}
 
 	public static boolean isToday(long time) {
-		if (getNow("yyyy-MM-dd").equals(getDateStr(time, "yyyy-MM-dd"))) {
+		if (getNow(YEAR_MONTH_DAY).equals(getDateStr(time, YEAR_MONTH_DAY))) {
 			return true;
 		}
 		return false;
@@ -150,19 +151,32 @@ public class DateUtil {
 	public static String getFormatTime(long time) {
 		long current = System.currentTimeMillis();
 		long inteval = current - time;
-		if (inteval < ONE_MINUTE) {
-			return "刚刚";
-		} else if (inteval < ONE_HOUR) {
-			return inteval / ONE_MINUTE + "分钟前";
-		} else if (inteval < ONE_DAY) {
-			return inteval / ONE_HOUR +"小时前";
+		if (isToday(time)) {
+			if (inteval < ONE_MINUTE) {
+				return "刚刚";
+			} else if (inteval < ONE_HOUR) {
+				return inteval / ONE_MINUTE + "分钟前";
+			} else if (inteval < ONE_DAY) {
+				return inteval / ONE_HOUR + "小时前";
+			}
+			return "";
 		} else {
 			if (isTheSameYear(time)) {
-				return getDateStr(time, "MM/dd HH:mm");
+				if (isYestoday(time)) {
+					return YESTODAY;
+				}
+				return getDateStr(time, "MM/dd");
 			} else {
-				return getDateStr(time, "yyyy/MM/dd HH:mm");
+				return getDateStr(time, "yyyy/MM/dd");
 			}
 		}
+	}
+
+	private static boolean isYestoday(long time) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(time);
+		cal.add(Calendar.DAY_OF_YEAR, 1);
+		return isToday(cal.getTimeInMillis());
 	}
 
 	private static boolean isTheSameYear(long time) {
