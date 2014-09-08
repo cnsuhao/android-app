@@ -35,12 +35,6 @@
                     android:textColor="@color/main_gray"
                     android:textSize="@dimen/text_size_12" />
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/space_8"
-                android:src="@drawable/ic_item_goto_right_tip" />
         </LinearLayout>
 
         <View
@@ -66,13 +60,6 @@
                 android:layout_height="30dp"
                 toggle:borderWidth="0.1dp"
                 toggle:onColor="@color/main_green" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/space_8"
-                android:layout_marginRight="@dimen/space_8"
-                android:src="@drawable/ic_item_goto_right_tip" />
         </LinearLayout>
 
         <View
@@ -139,6 +126,27 @@
             android:layout_marginLeft="@dimen/space_8"
             android:layout_marginRight="@dimen/space_8"
             android:layout_marginTop="@dimen/space_20"
+            android:background="@color/list_divider_color" />
+
+        <LinearLayout
+            style="@style/setting_item_container"
+            android:padding="@dimen/space_16" >
+
+            <TextView
+                style="@style/setting_item_text"
+                android:text="@string/oss_license" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_item_goto_right_tip" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/space_8"
+            android:layout_marginRight="@dimen/space_8"
             android:background="@color/list_divider_color" />
 
         <LinearLayout

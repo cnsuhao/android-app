@@ -19,6 +19,7 @@
     <string name="main_menu_setting">设置</string>
     <string name="main_menu_exit">退出应用</string>
   
+    <string name="detail_menu_unfavorite">取消收藏</string>
     <string name="detail_menu_favorite">收藏</string>
     <string name="detail_menu_for_share">分享</string>
     
@@ -164,6 +165,7 @@
     <string name="load_picture">加载图片</string>
     <string name="clear_cache">清除缓存</string>
     <string name="check_udpdate">检查更新</string>
+    <string name="oss_license">开源协议</string>
     <string name="feedback">意见反馈</string>
     <string name="grade">去评分</string>
     <string name="about_us">关于</string>
@@ -236,4 +238,9 @@
 	<string name="reply_comment_to">回复“%s”的评论</string>
 	<string name="comment_success">评论成功</string>
 	<string name="comment_faile">评论失败</string>
+    
+    <string name="add_favorite_success">收藏成功</string>
+	<string name="add_favorite_faile">收藏失败</string>
+	<string name="del_favorite_success">已取消收藏</string>
+	<string name="del_favorite_faile">取消收藏失败</string>
 </resources>

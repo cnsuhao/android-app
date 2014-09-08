@@ -3,6 +3,8 @@ package net.oschina.app.v2.activity.news.adapter;
 import net.oschina.app.bean.News;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.utils.DateUtil;
+import net.oschina.app.v2.utils.TLog;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +32,8 @@ public class NewsAdapter extends ListBaseAdapter {
 
 		vh.title.setText(news.getTitle());
 		vh.source.setText(news.getAuthor());
-		vh.time.setText(StringUtils.friendly_time(news.getPubDate()));
-		
+		vh.time.setText(DateUtil.getFormatTime(news.getPubDate()));
+		//StringUtils.friendly_time(news.getPubDate())
 		if(StringUtils.isToday(news.getPubDate())){
 			vh.tip.setVisibility(View.VISIBLE);
 			vh.tip.setImageResource(R.drawable.ic_today);

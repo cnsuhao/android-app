@@ -9,7 +9,6 @@ import net.oschina.app.bean.Post;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.v2.api.ApiHttpClient;
-
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -336,6 +335,12 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.post("action/api/blogcomment_delete", params, handler);
 	}
 
+	/**
+	 * 用户添加收藏
+	 * @param uid 用户UID
+	 * @param objid 比如是新闻ID 或者问答ID 或者动弹ID
+	 * @param type 1:软件 2:话题 3:博客 4:新闻 5:代码
+	 */
 	public static void addFavorite(int uid, int objid, int type,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();

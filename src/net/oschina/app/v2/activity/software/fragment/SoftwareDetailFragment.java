@@ -3,28 +3,24 @@ package net.oschina.app.v2.activity.software.fragment;
 import java.io.ByteArrayInputStream;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Software;
 import net.oschina.app.common.UIHelper;
+import net.oschina.app.v2.activity.news.fragment.BaseDetailFragment;
 import net.oschina.app.v2.api.remote.NewsApi;
-import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 
 import org.apache.http.Header;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
-import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
@@ -35,7 +31,7 @@ import com.tonlin.osc.happy.R;
  * @author william_sim
  * @since 2014/09/02
  */
-public class SoftwareDetailFragment extends BaseFragment {
+public class SoftwareDetailFragment extends BaseDetailFragment {
 
 	protected static final String TAG = SoftwareDetailFragment.class
 			.getSimpleName();
@@ -103,6 +99,18 @@ public class SoftwareDetailFragment extends BaseFragment {
 	};
 
 	@Override
+	public void onDestroyView() {
+		recycleWebView(mWebView);
+		super.onDestroyView();
+	}
+
+	@Override
+	public void onDestroy() {
+		recycleWebView(mWebView);
+		super.onDestroy();
+	}
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.v2_fragment_software_detail,
@@ -136,24 +144,6 @@ public class SoftwareDetailFragment extends BaseFragment {
 		view.findViewById(R.id.btn_software_document).setOnClickListener(this);
 	}
 
-	@SuppressLint("SetJavaScriptEnabled")
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void initWebView(WebView webView) {
-		WebSettings settings = webView.getSettings();
-		settings.setDefaultFontSize(15);
-		settings.setJavaScriptEnabled(true);
-		settings.setSupportZoom(true);
-		settings.setBuiltInZoomControls(true);
-		int sysVersion = Build.VERSION.SDK_INT;
-		if (sysVersion >= 11) {
-			settings.setDisplayZoomControls(false);
-		} else {
-			ZoomButtonsController zbc = new ZoomButtonsController(webView);
-			zbc.getZoomControls().setVisibility(View.GONE);
-		}
-		UIHelper.addWebImageShow(getActivity(), webView);
-	}
-
 	private void initData() {
 		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 		// start to load news detail
@@ -167,6 +157,8 @@ public class SoftwareDetailFragment extends BaseFragment {
 		mTvLanguage.setText(mSoftware.getLanguage());
 		mTvOs.setText(mSoftware.getOs());
 		mTvRecordTime.setText(mSoftware.getRecordtime());
+		
+		notifyFavorite(mSoftware.getFavorite() == 1);
 	}
 
 	private void fillWebViewBody() {
@@ -204,5 +196,15 @@ public class SoftwareDetailFragment extends BaseFragment {
 		} else if (id == R.id.btn_software_document) {
 			UIHelper.openBrowser(v.getContext(), mSoftware.getDocument());
 		}
+	}
+
+	@Override
+	protected int getFavoriteTargetId() {
+		return mSoftware != null ? mSoftware.getId() : -1;
+	}
+	
+	@Override
+	protected int getFavoriteTargetType() {
+		return mSoftware != null ? FavoriteList.TYPE_SOFTWARE : -1;
 	}
 }

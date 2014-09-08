@@ -4,12 +4,12 @@ import java.io.ByteArrayInputStream;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.bean.CommentList;
+import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.News.Relative;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.remote.NewsApi;
-import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.emoji.EmojiFragment;
 import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.v2.service.PublicCommentTask;
@@ -18,11 +18,8 @@ import net.oschina.app.v2.ui.empty.EmptyLayout;
 
 import org.apache.http.Header;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
@@ -30,16 +27,14 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
-import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 
-public class NewsDetailFragment extends BaseFragment implements
+public class NewsDetailFragment extends BaseDetailFragment implements
 		EmojiTextListener, EmojiFragmentControl {
 
 	protected static final String TAG = NewsDetailFragment.class
@@ -161,32 +156,6 @@ public class NewsDetailFragment extends BaseFragment implements
 		initWebView(mWebView);
 	}
 
-	@SuppressLint("SetJavaScriptEnabled")
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void initWebView(WebView webView) {
-		WebSettings settings = webView.getSettings();
-		settings.setDefaultFontSize(15);
-		settings.setJavaScriptEnabled(true);
-		settings.setSupportZoom(true);
-		settings.setBuiltInZoomControls(true);
-		int sysVersion = Build.VERSION.SDK_INT;
-		if (sysVersion >= 11) {
-			settings.setDisplayZoomControls(false);
-		} else {
-			ZoomButtonsController zbc = new ZoomButtonsController(webView);
-			zbc.getZoomControls().setVisibility(View.GONE);
-		}
-		UIHelper.addWebImageShow(getActivity(), webView);
-	}
-
-	private void recycleWebView(WebView webView) {
-		if (webView != null) {
-			webView.loadUrl("about:blank");
-			webView.destroy();
-			webView = null;
-		}
-	}
-
 	private void initData() {
 		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 		// start to load news detail
@@ -202,6 +171,7 @@ public class NewsDetailFragment extends BaseFragment implements
 			mTvCommentCount.setText(getString(R.string.comment_count,
 					mNews.getCommentCount()));
 		}
+		notifyFavorite(mNews.getFavorite() == 1);
 	}
 
 	private void fillWebViewBody() {
@@ -277,5 +247,15 @@ public class NewsDetailFragment extends BaseFragment implements
 		task.setUid(AppContext.instance().getLoginUid());
 		ServerTaskUtils.publicComment(getActivity(), task);
 		mEmojiFragment.reset();
+	}
+
+	@Override
+	protected int getFavoriteTargetId() {
+		return mNews != null ? mNews.getId() : -1;
+	}
+	
+	@Override
+	protected int getFavoriteTargetType() {
+		return mNews != null ? FavoriteList.TYPE_NEWS : -1;
 	}
 }
