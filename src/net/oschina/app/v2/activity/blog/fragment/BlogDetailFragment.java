@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,7 +126,6 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	private void fillWebViewBody() {
 		String body = UIHelper.WEB_STYLE + mBlog.getBody();
 
-		Log.i(TAG, mBlog.getBody());
 		// 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
 		boolean isLoadImage;
 		AppContext ac = (AppContext) getActivity().getApplication();
