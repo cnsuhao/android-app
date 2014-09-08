@@ -1,6 +1,7 @@
 package net.oschina.app.v2.activity.friend.adapter;
 
 import net.oschina.app.bean.FriendList.Friend;
+import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.ListBaseAdapter;
 import android.annotation.SuppressLint;
 import android.view.View;
@@ -8,13 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 
 public class FriendAdapter extends ListBaseAdapter {
 
 	@SuppressLint("InflateParams")
 	@Override
-	protected View getRealView(int position, View convertView, ViewGroup parent) {
+	protected View getRealView(int position, View convertView,
+			final ViewGroup parent) {
 		ViewHolder vh = null;
 		if (convertView == null || convertView.getTag() == null) {
 			convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -25,12 +28,22 @@ public class FriendAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		Friend item = (Friend) _data.get(position);
+		final Friend item = (Friend) _data.get(position);
 
 		vh.name.setText(item.getName());
 		vh.desc.setText(item.getExpertise());
 		vh.gender.setImageResource(item.getGender() == 1 ? R.drawable.list_male
 				: R.drawable.list_female);
+
+		ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
+		vh.avatar.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				UIHelper.showUserCenter(parent.getContext(), item.getUserid(),
+						item.getName());
+			}
+		});
 
 		return convertView;
 	}

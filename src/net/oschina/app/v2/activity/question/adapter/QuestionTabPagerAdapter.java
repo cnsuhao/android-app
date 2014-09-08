@@ -53,7 +53,7 @@ public final class QuestionTabPagerAdapter extends SlidingTabPagerAdapter {
 	}
 
 	public final int getCacheCount() {
-		return QuestionTab.values().length;
+		return 2;
 	}
 
 	public final int getCount() {

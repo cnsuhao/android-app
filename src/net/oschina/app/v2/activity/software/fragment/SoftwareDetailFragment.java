@@ -1,17 +1,16 @@
 package net.oschina.app.v2.activity.software.fragment;
 
-import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Software;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.news.fragment.BaseDetailFragment;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
-
-import org.apache.http.Header;
-
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,10 +18,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.tonlin.osc.happy.R;
 
 /**
@@ -35,80 +36,13 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 
 	protected static final String TAG = SoftwareDetailFragment.class
 			.getSimpleName();
-	private EmptyLayout mEmptyLayout;
+	private static final String SOFTWARE_CACHE_KEY = "software_";
 	private TextView mTvLicense, mTvLanguage, mTvOs, mTvRecordTime;
 	private TextView mTvTitle;
 	private WebView mWebView;
+	private ImageView mIvLogo;
 	private String mIdent;
 	private Software mSoftware;
-
-	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
-
-		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-			try {
-				mSoftware = Software.parse(new ByteArrayInputStream(arg2));
-				if (mSoftware != null && mSoftware.getId() > 0) {
-					fillUI();
-					fillWebViewBody();
-				} else {
-					throw new RuntimeException("load detail error");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				onFailure(arg0, arg1, arg2, e);
-			}
-		}
-
-		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-		}
-	};
-
-	private WebViewClient mWebClient = new WebViewClient() {
-
-		private boolean receivedError = false;
-
-		@Override
-		public void onPageStarted(WebView view, String url, Bitmap favicon) {
-			receivedError = false;
-		}
-
-		@Override
-		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			UIHelper.showUrlRedirect(view.getContext(), url);
-			return true;
-		}
-
-		@Override
-		public void onPageFinished(WebView view, String url) {
-			if (receivedError) {
-				mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-			} else {
-				mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-			}
-		}
-
-		@Override
-		public void onReceivedError(WebView view, int errorCode,
-				String description, String failingUrl) {
-			receivedError = true;
-		}
-	};
-
-	@Override
-	public void onDestroyView() {
-		recycleWebView(mWebView);
-		super.onDestroyView();
-	}
-
-	@Override
-	public void onDestroy() {
-		recycleWebView(mWebView);
-		super.onDestroy();
-	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater,
@@ -120,7 +54,6 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 
 		initViews(view);
 
-		initData();
 		return view;
 	}
 
@@ -129,7 +62,7 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 		// mNewsContainer = (ScrollView)
 		// view.findViewById(R.id.sv_news_container);
 		mTvTitle = (TextView) view.findViewById(R.id.tv_title);
-
+		
 		mWebView = (WebView) view.findViewById(R.id.webview);
 		initWebView(mWebView);
 
@@ -138,25 +71,56 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 		mTvOs = (TextView) view.findViewById(R.id.tv_software_os);
 		mTvRecordTime = (TextView) view
 				.findViewById(R.id.tv_software_recordtime);
-
+		mIvLogo = (ImageView)view.findViewById(R.id.iv_logo);
+		
 		view.findViewById(R.id.btn_software_index).setOnClickListener(this);
 		view.findViewById(R.id.btn_software_download).setOnClickListener(this);
 		view.findViewById(R.id.btn_software_document).setOnClickListener(this);
 	}
 
-	private void initData() {
+	@Override
+	protected String getCacheKey() {
+		return new StringBuilder(SOFTWARE_CACHE_KEY).append(mIdent).toString();
+	}
+
+	@Override
+	protected void sendRequestData() {
 		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-		// start to load news detail
 		NewsApi.getSoftwareDetail(mIdent, mHandler);
 	}
 
+	@Override
+	protected Entity parseData(InputStream is) throws Exception {
+		return Software.parse(is);
+	}
+
+	@Override
+	protected Entity readData(Serializable seri) {
+		return (Software) seri;
+	}
+
+	@Override
+	protected void executeOnLoadDataSuccess(Entity entity) {
+		mSoftware = (Software) entity;
+		fillUI();
+		fillWebViewBody();
+	}
+	
 	private void fillUI() {
 		mTvTitle.setText(mSoftware.getTitle());
-
 		mTvLicense.setText(mSoftware.getLicense());
 		mTvLanguage.setText(mSoftware.getLanguage());
 		mTvOs.setText(mSoftware.getOs());
 		mTvRecordTime.setText(mSoftware.getRecordtime());
+		DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+				.cacheOnDisk(true).postProcessor(new BitmapProcessor() {
+
+					@Override
+					public Bitmap process(Bitmap arg0) {
+						return arg0;
+					}
+				}).build();
+		ImageLoader.getInstance().displayImage(mSoftware.getLogo(), mIvLogo,options);
 		
 		notifyFavorite(mSoftware.getFavorite() == 1);
 	}

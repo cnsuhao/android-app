@@ -17,8 +17,8 @@ public final class FavoriteTabPagerAdapter extends SlidingTabPagerAdapter {
 
 	public FavoriteTabPagerAdapter(FragmentManager mgr, Context context,
 			ViewPager viewpager) {
-		super(mgr, FavoriteTab.values().length, context.getApplicationContext(),
-				viewpager);
+		super(mgr, FavoriteTab.values().length,
+				context.getApplicationContext(), viewpager);
 		FavoriteTab[] values = FavoriteTab.values();
 		for (int i = 0; i < values.length; i++) {
 			Fragment fragment = null;
@@ -45,7 +45,8 @@ public final class FavoriteTabPagerAdapter extends SlidingTabPagerAdapter {
 			tabFragment.a(this);
 
 			Bundle args = new Bundle();
-			args.putInt(FavoriteFragment.BUNDLE_KEY_CATALOG, values[i].getCatalog());
+			args.putInt(FavoriteFragment.BUNDLE_KEY_CATALOG,
+					values[i].getCatalog());
 			tabFragment.setArguments(args);
 
 			fragments[values[i].getIdx()] = tabFragment;
@@ -53,7 +54,7 @@ public final class FavoriteTabPagerAdapter extends SlidingTabPagerAdapter {
 	}
 
 	public final int getCacheCount() {
-		return FavoriteTab.values().length;
+		return 3;
 	}
 
 	public final int getCount() {

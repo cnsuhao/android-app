@@ -47,6 +47,8 @@ import net.oschina.app.ui.TweetPub;
 import net.oschina.app.ui.UserFriend;
 import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
 import net.oschina.app.v2.activity.common.SimpleBackActivity;
+import net.oschina.app.v2.activity.friend.adapter.FriendTabPagerAdapter;
+import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
 import net.oschina.app.v2.activity.news.DetailActivity;
 import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
 import net.oschina.app.v2.activity.user.LoginActivity;
@@ -213,9 +215,9 @@ public class UIHelper {
 	 * @param tag
 	 */
 	public static void showQuestionListByTag(Context context, String tag) {
-		//Intent intent = new Intent(context, QuestionTag.class);
-		//intent.putExtra("post_tag", tag);
-		//context.startActivity(intent);
+		// Intent intent = new Intent(context, QuestionTag.class);
+		// intent.putExtra("post_tag", tag);
+		// context.startActivity(intent);
 		Bundle args = new Bundle();
 		args.putString(QuestionTagFragment.BUNDLE_KEY_TAG, tag);
 		showSimpleBack(context, SimpleBackPage.QUESTION_TAG, args);
@@ -227,8 +229,8 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showQuestionPub(Context context) {
-		//Intent intent = new Intent(context, QuestionPub.class);
-		//context.startActivity(intent);
+		// Intent intent = new Intent(context, QuestionPub.class);
+		// context.startActivity(intent);
 		showSimpleBack(context, SimpleBackPage.QUESTION_PUBLIC);
 	}
 
@@ -252,9 +254,10 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showTweetPub(Activity context) {
-		//Intent intent = new Intent(context, TweetPub.class);
-		//context.startActivityForResult(intent, REQUEST_CODE_FOR_RESULT);
-		showSimpleBackForResult(context, SimpleBackPage.TWEET_PUBLIC,REQUEST_CODE_FOR_RESULT);
+		// Intent intent = new Intent(context, TweetPub.class);
+		// context.startActivityForResult(intent, REQUEST_CODE_FOR_RESULT);
+		showSimpleBackForResult(context, SimpleBackPage.TWEET_PUBLIC,
+				REQUEST_CODE_FOR_RESULT);
 	}
 
 	public static void showTweetPub(Activity context, String atme, int atuid) {
@@ -842,12 +845,13 @@ public class UIHelper {
 		showSimpleBack(context, SimpleBackPage.SETTINGS);
 	}
 
-	public static void showSimpleBackForResult(Activity context, SimpleBackPage page, int requestCode) {
+	public static void showSimpleBackForResult(Activity context,
+			SimpleBackPage page, int requestCode) {
 		Intent intent = new Intent(context, SimpleBackActivity.class);
 		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
 		context.startActivityForResult(intent, requestCode);
 	}
-	
+
 	public static void showSimpleBack(Context context, SimpleBackPage page) {
 		Intent intent = new Intent(context, SimpleBackActivity.class);
 		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
@@ -929,14 +933,14 @@ public class UIHelper {
 	 */
 	public static void showUserCenter(Context context, int hisuid,
 			String hisname) {
-//		Intent intent = new Intent(context, UserCenter.class);
-//		intent.putExtra("his_id", hisuid);
-//		intent.putExtra("his_name", hisname);
-//		context.startActivity(intent);
+		// Intent intent = new Intent(context, UserCenter.class);
+		// intent.putExtra("his_id", hisuid);
+		// intent.putExtra("his_name", hisname);
+		// context.startActivity(intent);
 		Bundle args = new Bundle();
 		args.putInt("his_id", hisuid);
 		args.putString("his_name", hisname);
-		showSimpleBack(context, SimpleBackPage.USER_CENTER,args);
+		showSimpleBack(context, SimpleBackPage.USER_CENTER, args);
 	}
 
 	/**
@@ -1259,8 +1263,8 @@ public class UIHelper {
 		intent.putExtra("MSG_WHAT", what);
 		if (what == 1)
 			intent.putExtra("RESULT", res);
-		//else
-		//	intent.putExtra("TWEET", tweet);
+		// else
+		// intent.putExtra("TWEET", tweet);
 		context.sendBroadcast(intent);
 	}
 
@@ -1410,8 +1414,8 @@ public class UIHelper {
 	public static SpannableString parseActiveReply(String name, String body) {
 		SpannableString sp = new SpannableString(name + "：" + body.trim());
 		// 设置用户名字体加粗、高亮
-		//sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
-		//		name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		// sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
+		// name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		sp.setSpan(new ForegroundColorSpan(Color.parseColor("#576B95")), 0,
 				name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		return sp;
@@ -1850,11 +1854,13 @@ public class UIHelper {
 		context.sendBroadcast(intent);
 	}
 
-	public static void showFriends(Context context) {
-		showSimpleBack(context, SimpleBackPage.FRIENDS);
+	public static void showFriends(Context context, int tabIdx) {
+		Bundle args = new Bundle();
+		args.putInt(FriendViewPagerFragment.BUNDLE_KEY_TABIDX, tabIdx);
+		showSimpleBack(context, SimpleBackPage.FRIENDS, args);
 	}
 
-	public static void showBlogComment(Context context, int id,int ownerId) {
+	public static void showBlogComment(Context context, int id, int ownerId) {
 		Bundle args = new Bundle();
 		args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
 		args.putInt(CommentFrament.BUNDLE_KEY_OWNER_ID, ownerId);

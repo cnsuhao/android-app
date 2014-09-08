@@ -1,13 +1,14 @@
 package net.oschina.app.v2.activity.comment.fragment;
 
 import java.io.ByteArrayInputStream;
-import java.util.List;
+import java.io.InputStream;
+import java.io.Serializable;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.bean.BlogCommentList;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
-import net.oschina.app.bean.NewsList;
+import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.comment.adapter.CommentAdapter;
@@ -21,8 +22,6 @@ import net.oschina.app.v2.emoji.EmojiFragment;
 import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.v2.ui.dialog.CommonDialog;
 import net.oschina.app.v2.ui.dialog.DialogHelper;
-import net.oschina.app.v2.ui.empty.EmptyLayout;
-import net.oschina.app.v2.utils.TDevice;
 
 import org.apache.http.Header;
 
@@ -33,9 +32,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 
@@ -47,71 +44,13 @@ public class CommentFrament extends BaseListFragment implements
 	public static final String BUNDLE_KEY_ID = "BUNDLE_KEY_ID";
 	public static final String BUNDLE_KEY_OWNER_ID = "BUNDLE_KEY_OWNER_ID";
 	protected static final String TAG = NewsFragment.class.getSimpleName();
-	protected static final int STATE_NONE = 0;
-	protected static final int STATE_REFRESH = 1;
-	protected static final int STATE_LOADMORE = 2;
-
-	private int mCurrentPage = 0;
-	private int mCatalog = NewsList.CATALOG_ALL;
-	private int mState = STATE_NONE;
+	private static final String BLOG_CACHE_KEY_PREFIX = "blogcomment_list";
+	private static final String CACHE_KEY_PREFIX = "comment_list";
 	private int mId, mOwnerId;
 	private boolean mIsBlogComment;
 
 	private EmojiFragment mEmojiFragment;
 	private Comment mCurrentReplyComment;
-
-	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
-
-		@Override
-		public void onSuccess(int statusCode, Header[] headers,
-				byte[] responseBytes) {
-			try {
-				List<Comment> data = null;
-				if (mIsBlogComment) {
-					BlogCommentList list = BlogCommentList
-							.parse(new ByteArrayInputStream(responseBytes));
-					data = list.getCommentlist();
-				} else {
-					CommentList list = CommentList
-							.parse(new ByteArrayInputStream(responseBytes));
-					data = list.getCommentlist();
-				}
-
-				if (mState == STATE_REFRESH)
-					mAdapter.clear();
-
-				mAdapter.addData(data);
-				mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-				if (data.size() == 0 && mState == STATE_REFRESH) {
-					mErrorLayout.setErrorType(EmptyLayout.NODATA);
-				} else if (data.size() < TDevice.getPageSize()) {
-					if (mState == STATE_REFRESH)
-						mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-					else
-						mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-				} else {
-					mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
-				}// else {
-					// mAdapter.setState(ListBaseAdapter.STATE_LESS_ONE_PAGE);
-					// }
-			} catch (Exception e) {
-				e.printStackTrace();
-				onFailure(statusCode, headers, responseBytes, null);
-			}
-		}
-
-		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-		}
-
-		@Override
-		public void onFinish() {
-			executeOnLoadFinish();
-			mState = STATE_NONE;
-		}
-	};
 
 	private AsyncHttpResponseHandler mDeleteHandler = new AsyncHttpResponseHandler() {
 
@@ -204,8 +143,24 @@ public class CommentFrament extends BaseListFragment implements
 	}
 
 	@Override
-	protected void initViews(View view) {
-		super.initViews(view);
+	protected String getCacheKeyPrefix() {
+		return mIsBlogComment ? BLOG_CACHE_KEY_PREFIX : CACHE_KEY_PREFIX;
+	}
+
+	@Override
+	protected ListEntity parseList(InputStream is) throws Exception {
+		if (mIsBlogComment) {
+			return BlogCommentList.parse(is);
+		} else {
+			return CommentList.parse(is);
+		}
+	}
+
+	@Override
+	protected ListEntity readList(Serializable seri) {
+		if(mIsBlogComment)
+			return ((BlogCommentList) seri);
+		return ((CommentList) seri);
 	}
 
 	@Override
@@ -214,24 +169,6 @@ public class CommentFrament extends BaseListFragment implements
 			return mEmojiFragment.onBackPressed();
 		}
 		return super.onBackPressed();
-	}
-
-	@Override
-	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-		mCurrentPage = 0;
-		mState = STATE_REFRESH;
-		sendRequestData();
-	}
-
-	@Override
-	public void onLastItemVisible() {
-		if (mState == STATE_NONE) {
-			if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
-				mCurrentPage++;
-				mState = STATE_LOADMORE;
-				sendRequestData();
-			}
-		}
 	}
 
 	@Override
@@ -246,8 +183,6 @@ public class CommentFrament extends BaseListFragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		// News news = (News) mAdapter.getItem(position - 1);
-		// UIHelper.showNewsRedirect(view.getContext(), news);
 	}
 
 	@Override

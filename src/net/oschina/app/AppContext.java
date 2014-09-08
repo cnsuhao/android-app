@@ -48,8 +48,10 @@ import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.ApiHttpClient;
 import net.oschina.app.v2.base.BaseApplication;
+import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.emoji.EmojiHelper;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -205,10 +207,6 @@ public class AppContext extends BaseApplication {
 		return getPreferences().getString(KEY_ACCESS_TOKEN, null);
 	}
 
-	// public static boolean hasLogin() {
-	// return !TextUtils.isEmpty(getAccessToken());
-	// }
-
 	/**
 	 * 初始化
 	 */
@@ -348,6 +346,9 @@ public class AppContext extends BaseApplication {
 		this.cleanCookie();
 		this.login = false;
 		this.loginUid = 0;
+		
+		Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
+		sendBroadcast(intent);
 	}
 
 	/**
@@ -371,18 +372,6 @@ public class AppContext extends BaseApplication {
 			this.Logout();
 		}
 	}
-
-	// public boolean hasLogin() {
-	// User loginUser = getLoginInfo();
-	// if (loginUser != null && loginUser.getUid() > 0) {
-	// this.loginUid = loginUser.getUid();
-	// this.login = true;
-	// return true;
-	// } else {
-	// this.Logout();
-	// return false;
-	// }
-	// }
 
 	/**
 	 * 用户登录验证
@@ -622,26 +611,27 @@ public class AppContext extends BaseApplication {
 			throws AppException {
 		NewsList list = null;
 		String key = "newslist_" + catalog + "_" + pageIndex + "_" + PAGE_SIZE;
-		// if(isNetworkConnected() && (!isReadDataCache(key) || isRefresh)) {
-		try {
-			list = ApiClient.getNewsList(this, catalog, pageIndex, PAGE_SIZE);
-			if (list != null && pageIndex == 0) {
-				Notice notice = list.getNotice();
-				list.setNotice(null);
-				list.setCacheKey(key);
-				saveObject(list, key);
-				list.setNotice(notice);
+		if (isNetworkConnected() && (!isReadDataCache(key) || isRefresh)) {
+			try {
+				list = ApiClient.getNewsList(this, catalog, pageIndex,
+						PAGE_SIZE);
+				if (list != null && pageIndex == 0) {
+					Notice notice = list.getNotice();
+					list.setNotice(null);
+					list.setCacheKey(key);
+					saveObject(list, key);
+					list.setNotice(notice);
+				}
+			} catch (AppException e) {
+				list = (NewsList) readObject(key);
+				if (list == null)
+					throw e;
 			}
-		} catch (AppException e) {
+		} else {
 			list = (NewsList) readObject(key);
 			if (list == null)
-				throw e;
+				list = new NewsList();
 		}
-		// } else {
-		// list = (NewsList)readObject(key);
-		// if(list == null)
-		// list = new NewsList();
-		// }
 		return list;
 	}
 
@@ -2060,7 +2050,7 @@ public class AppContext extends BaseApplication {
 	public static int getLastQuestionCategoryIdx() {
 		return getPreferences().getInt(LAST_QUESTION_CATEGORY_IDX, 0);
 	}
-	
+
 	public static String getLastQuestionCategory() {
 		int idx = getLastQuestionCategoryIdx();
 		return resources().getStringArray(R.array.post_pub_options)[idx];

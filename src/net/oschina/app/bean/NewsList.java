@@ -20,7 +20,7 @@ import android.util.Xml;
  * @version 1.0
  * @created 2012-3-21
  */
-public class NewsList extends Entity {
+public class NewsList extends Entity implements ListEntity {
 
 	private static final long serialVersionUID = 1067118838408833362L;
 	public final static int CATALOG_ALL = 1;
@@ -139,6 +139,11 @@ public class NewsList extends Entity {
 		} finally {
 			inputStream.close();
 		}
+		return newslist;
+	}
+
+	@Override
+	public List<?> getList() {
 		return newslist;
 	}
 }

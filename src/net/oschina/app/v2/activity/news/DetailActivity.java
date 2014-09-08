@@ -84,7 +84,7 @@ public class DetailActivity extends BaseActivity  {
 		default:
 			break;
 		}
-		// setActionBarTitle(actionBarTitle);
+		setActionBarTitle(actionBarTitle);
 		FragmentTransaction trans = getSupportFragmentManager()
 				.beginTransaction();
 		mFragment = new WeakReference<BaseFragment>(fragment);

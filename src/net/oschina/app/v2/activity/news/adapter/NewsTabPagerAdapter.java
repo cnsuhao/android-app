@@ -43,17 +43,17 @@ public final class NewsTabPagerAdapter extends SlidingTabPagerAdapter {
 					e.printStackTrace();
 				}
 			tabFragment.a(this);
-			
+
 			Bundle args = new Bundle();
 			args.putInt(NewsFragment.BUNDLE_KEY_CATALOG, values[i].getCatalog());
 			tabFragment.setArguments(args);
-			
+
 			fragments[values[i].getIdx()] = tabFragment;
 		}
 	}
 
 	public final int getCacheCount() {
-		return NewsTab.values().length;
+		return 2;
 	}
 
 	public final int getCount() {
@@ -61,17 +61,13 @@ public final class NewsTabPagerAdapter extends SlidingTabPagerAdapter {
 	}
 
 	public final CharSequence getPageTitle(int i) {
-		NewsTab e1 = NewsTab.getTabByIdx(i);
-		int j;
-		Object obj;
-		if (e1 != null)
-			j = e1.getTitle();
-		else
-			j = 0;
-		if (j != 0)
-			obj = context.getText(j);
-		else
-			obj = "";
-		return ((CharSequence) (obj));
+		NewsTab tab = NewsTab.getTabByIdx(i);
+		int idx = 0;
+		CharSequence title = "";
+		if (tab != null)
+			idx = tab.getTitle();
+		if (idx != 0)
+			title = context.getText(idx);
+		return title;
 	}
 }

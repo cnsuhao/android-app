@@ -158,7 +158,7 @@
     <string name="actionbar_title_question">问答</string>
     <string name="actionbar_title_tweet">动弹</string>
     <string name="actionbar_title_detail">详情</string>
-    <string name="tip_logout_success">注销成功,你将无法看到你个人的动态更新.</string>
+    <string name="tip_logout_success">注销成功.</string>
     
     <string name="picture_save_path">图片保存路径</string>
     <string name="current_picture_save_path">目前路径：%s</string>

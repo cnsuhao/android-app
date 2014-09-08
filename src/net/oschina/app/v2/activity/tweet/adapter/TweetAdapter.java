@@ -1,12 +1,12 @@
 package net.oschina.app.v2.activity.tweet.adapter;
 
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
 import net.oschina.app.v2.ui.text.MyURLSpan;
 import net.oschina.app.v2.ui.text.TweetTextView;
+import net.oschina.app.v2.utils.DateUtil;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.text.Html;
@@ -62,7 +62,7 @@ public class TweetAdapter extends ListBaseAdapter {
 		vh.title.setText(span);
 		MyURLSpan.parseLinkText(vh.title, span);
 
-		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+		vh.time.setText(DateUtil.getFormatTime(item.getPubDate()));
 
 		switch (item.getAppClient()) {
 		default:

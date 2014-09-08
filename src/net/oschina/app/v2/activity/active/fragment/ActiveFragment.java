@@ -1,107 +1,94 @@
 package net.oschina.app.v2.activity.active.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.util.List;
+import java.io.InputStream;
+import java.io.Serializable;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.ActiveList;
-import net.oschina.app.bean.NewsList;
-import net.oschina.app.bean.User;
+import net.oschina.app.bean.ListEntity;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.active.adapter.ActiveAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
+import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
-import net.oschina.app.v2.utils.TDevice;
-
-import org.apache.http.Header;
-
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.tencent.mm.sdk.platformtools.Log;
 import com.tonlin.osc.happy.R;
 
 /**
+ * 动态
+ * 
  * @author william_sim
  */
 public class ActiveFragment extends BaseListFragment {
 
-	public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 	protected static final String TAG = ActiveFragment.class.getSimpleName();
-	protected static final int STATE_NONE = 0;
-	protected static final int STATE_REFRESH = 1;
-	protected static final int STATE_LOADMORE = 2;
+	private static final String CACHE_KEY_PREFIX = "active_list";
+	private boolean mIsWatingLogin;
 
-	private int mCurrentPage = 0;
-	private int mCatalog = NewsList.CATALOG_ALL;
-	private int mState = STATE_NONE;
-
-	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
 		@Override
-		public void onSuccess(int statusCode, Header[] headers,
-				byte[] responseBytes) {
-			try {
-				String str = new String(responseBytes);
-				Log.d(TAG, "" + str);
-
-				ActiveList list = ActiveList.parse(new ByteArrayInputStream(
-						responseBytes));
-				if (mState == STATE_REFRESH)
-					mAdapter.clear();
-				List<Active> data = list.getActivelist();
-				mAdapter.addData(data);
-				mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-				if (data.size() == 0 && mState == STATE_REFRESH) {
-					mErrorLayout.setErrorType(EmptyLayout.NODATA);
-				} else if (data.size() < TDevice.getPageSize()) {
-					if (mState == STATE_REFRESH)
-						mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-					else
-						mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-				} else {
-					mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
-				}// else {
-					// mAdapter.setState(ListBaseAdapter.STATE_LESS_ONE_PAGE);
-					// }
-			} catch (Exception e) {
-				e.printStackTrace();
-				onFailure(statusCode, headers, responseBytes, null);
+		public void onReceive(Context context, Intent intent) {
+			if (mErrorLayout != null) {
+				mIsWatingLogin = true;
+				mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+				mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
 			}
-		}
-
-		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-		}
-
-		@Override
-		public void onFinish() {
-			executeOnLoadFinish();
-			mState = STATE_NONE;
 		}
 	};
 
-	public void onCreate(android.os.Bundle savedInstanceState) {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Bundle args = getArguments();
-		if (args != null) {
-			mCatalog = args.getInt(BUNDLE_KEY_CATALOG);
+		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
+		getActivity().registerReceiver(mReceiver, filter);
+	}
+
+	@Override
+	public void onDestroy() {
+		getActivity().unregisterReceiver(mReceiver);
+		super.onDestroy();
+	}
+
+	@Override
+	public void onResume() {
+		if (mIsWatingLogin) {
+			mCurrentPage = 0;
+			mState = STATE_REFRESH;
+			requestData(false);
 		}
+		super.onResume();
 	}
 
 	@Override
 	protected ListBaseAdapter getListAdapter() {
 		return new ActiveAdapter();
+	}
+
+	@Override
+	protected String getCacheKeyPrefix() {
+		return CACHE_KEY_PREFIX;
+	}
+
+	@Override
+	protected ListEntity parseList(InputStream is) throws Exception {
+		ActiveList list = ActiveList.parse(is);
+		return list;
+	}
+
+	@Override
+	protected ListEntity readList(Serializable seri) {
+		return ((ActiveList) seri);
 	}
 
 	@Override
@@ -112,7 +99,7 @@ public class ActiveFragment extends BaseListFragment {
 			@Override
 			public void onClick(View v) {
 				if (AppContext.instance().isLogin()) {
-					onRefresh(null);
+					requestData(false);
 				} else {
 					UIHelper.showLogin(getActivity());
 				}
@@ -121,35 +108,22 @@ public class ActiveFragment extends BaseListFragment {
 	}
 
 	@Override
-	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-		mCurrentPage = 0;
-		mState = STATE_REFRESH;
-		sendRequestData();
-	}
-
-	@Override
-	public void onLastItemVisible() {
-		if (mState == STATE_NONE) {
-			if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
-				mCurrentPage++;
-				mState = STATE_LOADMORE;
-				sendRequestData();
-			}
+	protected void requestData(boolean refresh) {
+		mErrorLayout.setErrorMessage("");
+		if (AppContext.instance().isLogin()) {
+			mIsWatingLogin = false;
+			super.requestData(refresh);
+		} else {
+			mIsWatingLogin = true;
+			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+			mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
 		}
 	}
 
 	@Override
 	protected void sendRequestData() {
-		mErrorLayout.setErrorMessage("");
-
-		User user = AppContext.instance().getLoginInfo();
-		if (user != null && user.getUid() > 0) {
-			NewsApi.getActiveList(user.getUid(), mCatalog, mCurrentPage,
-					mHandler);
-		} else {
-			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-			mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
-		}
+		NewsApi.getActiveList(AppContext.instance().getLoginUid(), mCatalog,
+				mCurrentPage, mHandler);
 	}
 
 	@Override
@@ -157,21 +131,5 @@ public class ActiveFragment extends BaseListFragment {
 			long id) {
 		Active active = (Active) mAdapter.getItem(position - 1);
 		UIHelper.showActiveRedirect(view.getContext(), active);
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		// if(requestCode)
-		User user = AppContext.instance().getLoginInfo();
-		if (user != null && user.getUid() > 0) {
-
-		}
 	}
 }

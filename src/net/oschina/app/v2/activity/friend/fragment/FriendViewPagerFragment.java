@@ -16,10 +16,21 @@ import com.tonlin.osc.happy.R;
 public class FriendViewPagerFragment extends Fragment implements
 		OnPageChangeListener {
 
+	public static final String BUNDLE_KEY_TABIDX = "BUNDLE_KEY_TABIDX";
+	
 	private PagerSlidingTabStrip mTabStrip;
 	private ViewPager mViewPager;
 	private FriendTabPagerAdapter mTabAdapter;
 
+	private int mInitTabIdx;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Bundle args = getArguments();
+		mInitTabIdx = args.getInt(BUNDLE_KEY_TABIDX,0);
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,7 +47,8 @@ public class FriendViewPagerFragment extends Fragment implements
 		mViewPager.setAdapter(mTabAdapter);
 		mViewPager.setOnPageChangeListener(this);
 		mTabStrip.setViewPager(mViewPager);
-
+		
+		mViewPager.setCurrentItem(mInitTabIdx);
 		return view;
 	}
 

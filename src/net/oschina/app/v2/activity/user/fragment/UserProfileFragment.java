@@ -108,9 +108,9 @@ public class UserProfileFragment extends BaseFragment {
 	public void onClick(View v) {
 		final int id = v.getId();
 		if (id == R.id.ly_follower) {
-			UIHelper.showFriends(getActivity());
+			UIHelper.showFriends(getActivity(), 1);
 		} else if (id == R.id.ly_following) {
-			UIHelper.showFriends(getActivity());
+			UIHelper.showFriends(getActivity(), 0);
 		} else if (id == R.id.ly_favorite) {
 			UIHelper.showUserFavorite(getActivity());
 		} else if (id == R.id.btn_logout) {

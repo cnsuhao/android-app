@@ -1,8 +1,8 @@
 package net.oschina.app.v2.activity.blog.adapter;
 
 import net.oschina.app.bean.Blog;
-import net.oschina.app.common.StringUtils;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.utils.DateUtil;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +30,7 @@ public class BlogAdapter extends ListBaseAdapter {
 
 		vh.title.setText(item.getTitle());
 		vh.source.setText(item.getAuthor());
-		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+		vh.time.setText(DateUtil.getFormatTime(item.getPubDate()));
 		
 		vh.tip.setVisibility(View.VISIBLE);
 		if(item.getDocumentType() == Blog.DOC_TYPE_ORIGINAL){

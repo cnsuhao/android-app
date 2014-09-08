@@ -3,6 +3,8 @@ package net.oschina.app.v2.base;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.oschina.app.v2.utils.TDevice;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ public class ListBaseAdapter extends BaseAdapter {
 	public static final int STATE_NO_MORE = 2;
 	public static final int STATE_NO_DATA = 3;
 	public static final int STATE_LESS_ONE_PAGE = 4;
+	public static final int STATE_NETWORK_ERROR = 5;
 
 	protected int state = STATE_LESS_ONE_PAGE;
 
@@ -63,6 +66,7 @@ public class ListBaseAdapter extends BaseAdapter {
 		switch (state) {
 		case STATE_EMPTY_ITEM:
 			return getDataSize() + 1;
+		case STATE_NETWORK_ERROR:
 		case STATE_LOAD_MORE:
 			return getDataSize() + 1;
 		case STATE_NO_DATA:
@@ -150,14 +154,15 @@ public class ListBaseAdapter extends BaseAdapter {
 		_loadFinishText = loadFinishText;
 	}
 
-	@SuppressLint("InflateParams") @Override
+	@SuppressLint("InflateParams")
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (position == getCount() - 1) {// 最后一条
 			if (getState() == STATE_LOAD_MORE || getState() == STATE_NO_MORE
-					|| state == STATE_EMPTY_ITEM) {
+					|| state == STATE_EMPTY_ITEM || getState() == STATE_NETWORK_ERROR) {
 				LinearLayout loadmore = (LinearLayout) LayoutInflater.from(
-						parent.getContext()).inflate(R.layout.v2_list_cell_footer,
-						null);
+						parent.getContext()).inflate(
+						R.layout.v2_list_cell_footer, null);
 				ProgressBar progress = (ProgressBar) loadmore
 						.findViewById(R.id.progressbar);
 				TextView text = (TextView) loadmore.findViewById(R.id.text);
@@ -178,6 +183,16 @@ public class ListBaseAdapter extends BaseAdapter {
 					progress.setVisibility(View.GONE);
 					loadmore.setVisibility(View.GONE);
 					text.setVisibility(View.GONE);
+					break;
+				case STATE_NETWORK_ERROR:
+					loadmore.setVisibility(View.VISIBLE);
+					progress.setVisibility(View.GONE);
+					text.setVisibility(View.VISIBLE);
+					if(TDevice.hasInternet()){
+						text.setText("对不起,出错了");
+					} else {
+						text.setText("没有可用的网络");
+					}
 					break;
 				default:
 					progress.setVisibility(View.GONE);

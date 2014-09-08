@@ -1,9 +1,11 @@
 package net.oschina.app.v2.activity.blog.fragment;
 
-import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.bean.Blog;
+import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
@@ -15,11 +17,7 @@ import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.v2.service.PublicCommentTask;
 import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
-
-import org.apache.http.Header;
-
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
@@ -29,10 +27,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.TextView;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 
 public class BlogDetailFragment extends BaseDetailFragment implements
@@ -40,70 +36,13 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 
 	protected static final String TAG = BlogDetailFragment.class
 			.getSimpleName();
-	private EmptyLayout mEmptyLayout;
+	private static final String BLOG_CACHE_KEY = "blog_";
 	private TextView mTvTitle, mTvSource, mTvTime;
 	private TextView mTvCommentCount;
 	private WebView mWebView;
 	private int mBlogId;
 	private Blog mBlog;
 	private EmojiFragment mEmojiFragment;
-
-	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
-
-		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-			try {
-				mBlog = Blog.parse(new ByteArrayInputStream(arg2));
-				if (mBlog != null && mBlog.getId() > 0) {
-					fillUI();
-					fillWebViewBody();
-					mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-				} else {
-					throw new RuntimeException("load detail error");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				onFailure(arg0, arg1, arg2, e);
-			}
-		}
-
-		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-		}
-	};
-
-	private WebViewClient mWebClient = new WebViewClient() {
-
-		private boolean receivedError = false;
-
-		@Override
-		public void onPageStarted(WebView view, String url, Bitmap favicon) {
-			receivedError = false;
-		}
-
-		@Override
-		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			UIHelper.showUrlRedirect(view.getContext(), url);
-			return true;
-		}
-
-		@Override
-		public void onPageFinished(WebView view, String url) {
-			if (receivedError) {
-				mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-			} else {
-				mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-			}
-		}
-
-		@Override
-		public void onReceivedError(WebView view, int errorCode,
-				String description, String failingUrl) {
-			receivedError = true;
-		}
-	};
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -122,18 +61,6 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	}
 
 	@Override
-	public void onDestroyView() {
-		recycleWebView(mWebView);
-		super.onDestroyView();
-	}
-
-	@Override
-	public void onDestroy() {
-		recycleWebView(mWebView);
-		super.onDestroy();
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.v2_fragment_news_detail,
@@ -143,7 +70,6 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 
 		initViews(view);
 
-		initData();
 		return view;
 	}
 
@@ -157,9 +83,32 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 		initWebView(mWebView);
 	}
 
-	private void initData() {
+	@Override
+	protected String getCacheKey() {
+		return new StringBuilder(BLOG_CACHE_KEY).append(mBlogId).toString();
+	}
+
+	@Override
+	protected void sendRequestData() {
 		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 		NewsApi.getBlogDetail(mBlogId, mHandler);
+	}
+
+	@Override
+	protected Entity parseData(InputStream is) throws Exception {
+		return Blog.parse(is);
+	}
+
+	@Override
+	protected Entity readData(Serializable seri) {
+		return (Blog) seri;
+	}
+
+	@Override
+	protected void executeOnLoadDataSuccess(Entity entity) {
+		mBlog = (Blog) entity;
+		fillUI();
+		fillWebViewBody();
 	}
 
 	private void fillUI() {

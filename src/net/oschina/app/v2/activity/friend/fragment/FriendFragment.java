@@ -1,99 +1,30 @@
 package net.oschina.app.v2.activity.friend.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.util.List;
+import java.io.InputStream;
+import java.io.Serializable;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.bean.FriendList;
 import net.oschina.app.bean.FriendList.Friend;
-import net.oschina.app.bean.NewsList;
+import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.User;
+import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.friend.adapter.FriendAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;
-import net.oschina.app.v2.ui.empty.EmptyLayout;
-import net.oschina.app.v2.utils.TDevice;
-
-import org.apache.http.Header;
-
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
-
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
- * 新闻资讯
+ * 我的好友
  * 
  * @author william_sim
  */
 public class FriendFragment extends BaseListFragment {
 
-	public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 	protected static final String TAG = FriendFragment.class.getSimpleName();
-	protected static final int STATE_NONE = 0;
-	protected static final int STATE_REFRESH = 1;
-	protected static final int STATE_LOADMORE = 2;
-
-	private int mCurrentPage = 0;
-	private int mCatalog = NewsList.CATALOG_ALL;
-	private int mState = STATE_NONE;
-
-	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
-
-		@Override
-		public void onSuccess(int statusCode, Header[] headers,
-				byte[] responseBytes) {
-			try {
-				FriendList list = FriendList.parse(new ByteArrayInputStream(
-						responseBytes));
-				if (mState == STATE_REFRESH)
-					mAdapter.clear();
-				List<Friend> data = list.getFriendlist();
-				mAdapter.addData(data);
-				mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-				if (data.size() == 0 && mState == STATE_REFRESH) {
-					mErrorLayout.setErrorType(EmptyLayout.NODATA);
-				} else if (data.size() < TDevice.getPageSize()) {
-					if (mState == STATE_REFRESH)
-						mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-					else
-						mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-				} else {
-					mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
-				}
-				// else {
-				// mAdapter.setState(ListBaseAdapter.STATE_LESS_ONE_PAGE);
-				// }
-			} catch (Exception e) {
-				e.printStackTrace();
-				onFailure(statusCode, headers, responseBytes, null);
-			}
-		}
-
-		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-		}
-
-		@Override
-		public void onFinish() {
-			executeOnLoadFinish();
-			mState = STATE_NONE;
-		}
-	};
-
-	public void onCreate(android.os.Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Bundle args = getArguments();
-		if (args != null) {
-			mCatalog = args.getInt(BUNDLE_KEY_CATALOG);
-		}
-	}
+	private static final String CACHE_KEY_PREFIX = "friend_list";
 
 	@Override
 	protected ListBaseAdapter getListAdapter() {
@@ -101,21 +32,19 @@ public class FriendFragment extends BaseListFragment {
 	}
 
 	@Override
-	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-		mCurrentPage = 0;
-		mState = STATE_REFRESH;
-		sendRequestData();
+	protected String getCacheKeyPrefix() {
+		return CACHE_KEY_PREFIX;
 	}
 
 	@Override
-	public void onLastItemVisible() {
-		if (mState == STATE_NONE) {
-			if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
-				mCurrentPage++;
-				mState = STATE_LOADMORE;
-				sendRequestData();
-			}
-		}
+	protected ListEntity parseList(InputStream is) throws Exception {
+		FriendList list = FriendList.parse(is);
+		return list;
+	}
+
+	@Override
+	protected ListEntity readList(Serializable seri) {
+		return ((FriendList) seri);
 	}
 
 	@Override
@@ -127,7 +56,7 @@ public class FriendFragment extends BaseListFragment {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Friend tweet = (Friend) mAdapter.getItem(position - 1);
-		//UIHelper.showTweetDetail(view.getContext(), tweet.getId());
+		Friend item = (Friend) mAdapter.getItem(position - 1);
+		UIHelper.showUserCenter(getActivity(), item.getUserid(), item.getName());
 	}
 }

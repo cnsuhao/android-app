@@ -45,7 +45,8 @@ public final class FriendTabPagerAdapter extends SlidingTabPagerAdapter {
 			tabFragment.a(this);
 
 			Bundle args = new Bundle();
-			args.putInt(FriendFragment.BUNDLE_KEY_CATALOG, values[i].getCatalog());
+			args.putInt(FriendFragment.BUNDLE_KEY_CATALOG,
+					values[i].getCatalog());
 			tabFragment.setArguments(args);
 
 			fragments[values[i].getIdx()] = tabFragment;
@@ -53,7 +54,7 @@ public final class FriendTabPagerAdapter extends SlidingTabPagerAdapter {
 	}
 
 	public final int getCacheCount() {
-		return FriendTab.values().length;
+		return 1;
 	}
 
 	public final int getCount() {

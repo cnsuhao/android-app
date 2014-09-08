@@ -1,9 +1,9 @@
 package net.oschina.app.v2.activity.question.adapter;
 
 import net.oschina.app.bean.Post;
-import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.utils.DateUtil;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +33,7 @@ public class QuestionAdapter extends ListBaseAdapter {
 		vh.title.setText(item.getTitle());
 		vh.source.setText(item.getAuthor());
 		vh.avCount.setText(item.getAnswerCount()+"/"+item.getViewCount());
-		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+		vh.time.setText(DateUtil.getFormatTime(item.getPubDate()));
 		
 		ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
 		
