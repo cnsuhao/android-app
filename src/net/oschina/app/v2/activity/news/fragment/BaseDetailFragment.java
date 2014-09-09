@@ -9,6 +9,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.common.UIHelper;
+import net.oschina.app.v2.activity.news.view.ShareDialog;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.cache.CacheManager;
@@ -105,7 +106,8 @@ public class BaseDetailFragment extends BaseFragment implements
 
 	protected void recycleWebView(WebView webView) {
 		if (webView != null) {
-			webView.loadUrl("about:blank");
+			webView.removeAllViews();
+			//webView.loadUrl("about:blank");
 			webView.destroy();
 			webView = null;
 		}
@@ -309,12 +311,22 @@ public class BaseDetailFragment extends BaseFragment implements
 						getFavoriteTargetType(), mAddFavoriteHandler);
 			}
 		} else {
-			AppContext.showToastShort("分享");
+			handleShare();
 		}
 		if (mMenuWindow != null) {
 			mMenuWindow.dismiss();
 			mMenuWindow = null;
 		}
+	}
+
+	private void handleShare() {
+		ShareDialog dialog = new ShareDialog(getActivity());
+		dialog.setCancelable(true);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.setTitle(R.string.share_to);
+		//dialog.setMessage("这是窗口测试");
+		dialog.setNegativeButton(R.string.cancle, null);
+		dialog.show();
 	}
 
 	protected void notifyFavorite(boolean favorite) {

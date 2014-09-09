@@ -48,7 +48,7 @@ public class QuestionTagFragment extends BaseListFragment {
 
 	@Override
 	protected String getCacheKeyPrefix() {
-		return CACHE_KEY_PREFIX;
+		return new StringBuffer(CACHE_KEY_PREFIX).append(mTag).toString();
 	}
 
 	@Override

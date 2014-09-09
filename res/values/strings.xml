@@ -243,4 +243,6 @@
 	<string name="add_favorite_faile">收藏失败</string>
 	<string name="del_favorite_success">已取消收藏</string>
 	<string name="del_favorite_faile">取消收藏失败</string>
+	
+	<string name="share_to">分享到</string>
 </resources>

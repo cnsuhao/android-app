@@ -144,7 +144,9 @@ public class CommentFrament extends BaseListFragment implements
 
 	@Override
 	protected String getCacheKeyPrefix() {
-		return mIsBlogComment ? BLOG_CACHE_KEY_PREFIX : CACHE_KEY_PREFIX;
+		String str = mIsBlogComment ? BLOG_CACHE_KEY_PREFIX : CACHE_KEY_PREFIX;
+		return new StringBuilder(str).append("_").append(mId).append("_Owner")
+				.append(mOwnerId).toString();
 	}
 
 	@Override
@@ -158,7 +160,7 @@ public class CommentFrament extends BaseListFragment implements
 
 	@Override
 	protected ListEntity readList(Serializable seri) {
-		if(mIsBlogComment)
+		if (mIsBlogComment)
 			return ((BlogCommentList) seri);
 		return ((CommentList) seri);
 	}

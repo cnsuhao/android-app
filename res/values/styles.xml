@@ -52,6 +52,16 @@
         <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
     </style>
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <!-- sina weibo -->
     <style name="ContentOverlay" parent="android:style/Theme.Dialog">
         <item name="android:windowNoTitle">true</item>
@@ -441,6 +451,16 @@
         <item name="android:windowBackground">@drawable/dialog_background</item>
     </style>
 
+    <style name="dialog_bottom" parent="@style/dialog_common">
+        <item name="android:windowBackground">@drawable/dialog_bottom_background</item>
+        <item name="android:windowAnimationStyle">@style/dialog_animation</item>
+    </style>
+    
+    <style name="dialog_animation" parent="android:Animation">  
+        <item name="@android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="@android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>  
+    
     <style name="dialog_waiting" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@drawable/dialog_background</item>
     </style>

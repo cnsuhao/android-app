@@ -73,7 +73,7 @@
             android:id="@+id/tv_comment_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/space_8"
+            android:padding="@dimen/space_8"
             android:text="@string/comment_count"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_14" />
