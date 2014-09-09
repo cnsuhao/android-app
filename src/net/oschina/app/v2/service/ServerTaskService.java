@@ -1,25 +1,29 @@
 package net.oschina.app.v2.service;
 
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Post;
+import net.oschina.app.bean.Result;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.common.UIHelper;
+import net.oschina.app.v2.api.OperationResponseHandler;
 import net.oschina.app.v2.api.remote.NewsApi;
-
-import org.apache.http.Header;
-
 import android.app.IntentService;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 
 public class ServerTaskService extends IntentService {
+	private static final String SERVICE_NAME = "ServerTaskService";
 	public static final String ACTION_PUBLIC_BLOG_COMMENT = "net.oschina.app.v2.ACTION_PUBLIC_BLOG_COMMENT";
 	public static final String ACTION_PUBLIC_COMMENT = "net.oschina.app.v2.ACTION_PUBLIC_COMMENT";
 	public static final String ACTION_PUBLIC_POST = "net.oschina.app.v2.ACTION_PUBLIC_POST";
@@ -29,120 +33,174 @@ public class ServerTaskService extends IntentService {
 	public static final String BUNDLE_PUBLIC_POST_TASK = "BUNDLE_PUBLIC_POST_TASK";
 	public static final String BUNDLE_PUBLIC_TWEET_TASK = "BUNDLE_PUBLIC_TWEET_TASK";
 
-	private AsyncHttpResponseHandler mPublicBlogCommentHandler = new AsyncHttpResponseHandler() {
+	private static final String KEY_COMMENT = "comment_";
+	private static final String KEY_TWEET = "tweet_";
+	private static final String KEY_POST = "post_";
 
-		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-			int id = 1;// task.getId() * task.getUid();
-			// cancellNotification(id);
-			notifySimpleNotifycation(id, "成功发表评论", "评论", "成功发表评论", false, true);
-			new Handler().postDelayed(new Runnable() {
+	public static List<String> penddingTasks = new ArrayList<String>();
 
-				@Override
-				public void run() {
-					cancellNotification(1);
-				}
-			}, 3000);
+	class PublicCommentResponseHandler extends OperationResponseHandler {
+
+		public PublicCommentResponseHandler(Looper looper, Object... args) {
+			super(looper, args);
 		}
 
 		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			int id = 1;// task.getId() * task.getUid()
-			notifySimpleNotifycation(id, "发布评论失败", "评论", "发布评论失败", false, true);
+		public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
+				throws Exception {
+			PublicCommentTask task = (PublicCommentTask) args[0];
+			final boolean isBlog = (Boolean) args[1];
+			final int id = task.getId() * task.getUid();
+			Result res = Result.parse(is);
+			if (res.OK()) {
+				Comment comment = res.getComment();
+				UIHelper.sendBroadCastCommentChanged(ServerTaskService.this,
+						isBlog, task.getId(), task.getCatalog()
+						, Comment.OPT_ADD, comment);
+				notifySimpleNotifycation(id,
+						getString(R.string.comment_publish_success),
+						getString(R.string.comment_blog),
+						getString(R.string.comment_publish_success), false,
+						true);
+				new Handler().postDelayed(new Runnable() {
+
+					@Override
+					public void run() {
+						cancellNotification(id);
+					}
+				}, 3000);
+				removePenddingTask(KEY_COMMENT + id);
+			} else {
+				onFailure(code, res.getErrorMessage(), args);
+			}
+		}
+
+		@Override
+		public void onFailure(int code, String errorMessage, Object[] args) {
+			PublicCommentTask task = (PublicCommentTask) args[0];
+			int id = task.getId() * task.getUid();
+			notifySimpleNotifycation(id,
+					getString(R.string.comment_publish_faile),
+					getString(R.string.comment_blog),
+					getString(R.string.comment_publish_faile), false, true);
+			removePenddingTask(KEY_COMMENT + id);
 		}
 
 		public void onFinish() {
-			stopSelf();
+			tryToStopServie();
 		}
-	};
-	
-	private AsyncHttpResponseHandler mPublicCommentHandler = new AsyncHttpResponseHandler() {
+	}
 
-		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-			int id = 1;// task.getId() * task.getUid();
-			// cancellNotification(id);
-			notifySimpleNotifycation(id, "成功发表评论", "评论", "成功发表评论", false, true);
-			new Handler().postDelayed(new Runnable() {
+	class PublicPostResponseHandler extends OperationResponseHandler {
 
-				@Override
-				public void run() {
-					cancellNotification(1);
-				}
-			}, 3000);
+		public PublicPostResponseHandler(Looper looper, Object... args) {
+			super(looper, args);
 		}
 
 		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			int id = 1;// task.getId() * task.getUid()
-			notifySimpleNotifycation(id, "发布评论失败", "评论", "发布评论失败", false, true);
+		public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
+				throws Exception {
+			Post post = (Post) args[0];
+			final int id = post.getId();
+			Result res = Result.parse(is);
+			if (res.OK()) {
+				notifySimpleNotifycation(id,
+						getString(R.string.post_publish_success),
+						getString(R.string.post_public),
+						getString(R.string.post_publish_success), false, true);
+				new Handler().postDelayed(new Runnable() {
+
+					@Override
+					public void run() {
+						cancellNotification(id);
+					}
+				}, 3000);
+				removePenddingTask(KEY_POST + id);
+			} else {
+				onFailure(code, res.getErrorMessage(), args);
+			}
 		}
 
+		@Override
+		public void onFailure(int code, String errorMessage, Object[] args) {
+			Post post = (Post) args[0];
+			int id = post.getId();
+			notifySimpleNotifycation(id,
+					getString(R.string.post_publish_faile),
+					getString(R.string.post_public),
+					getString(R.string.post_publish_faile), false, true);
+			removePenddingTask(KEY_POST + id);
+		}
+
+		@Override
 		public void onFinish() {
-			stopSelf();
+			tryToStopServie();
 		}
-	};
+	}
 
-	private AsyncHttpResponseHandler mPublicPostHandler = new AsyncHttpResponseHandler() {
+	class PublicTweetResponseHandler extends OperationResponseHandler {
 
-		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-			int id = 2;// task.getId() * task.getUid();
-			// cancellNotification(id);
-			notifySimpleNotifycation(id, "成功发表帖子", "帖子", "成功发表帖子", false, true);
-			new Handler().postDelayed(new Runnable() {
-
-				@Override
-				public void run() {
-					cancellNotification(2);
-				}
-			}, 3000);
+		public PublicTweetResponseHandler(Looper looper, Object... args) {
+			super(looper, args);
 		}
 
 		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			int id = 2;// task.getId() * task.getUid()
-			notifySimpleNotifycation(id, "发布帖子失败", "帖子", "发布帖子失败", false, true);
+		public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
+				throws Exception {
+			Tweet tweet = (Tweet) args[0];
+			final int id = tweet.getId();
+			Result res = Result.parse(is);
+			if (res.OK()) {
+				notifySimpleNotifycation(id,
+						getString(R.string.tweet_publish_success),
+						getString(R.string.tweet_public),
+						getString(R.string.tweet_publish_success), false, true);
+				new Handler().postDelayed(new Runnable() {
+
+					@Override
+					public void run() {
+						cancellNotification(id);
+					}
+				}, 3000);
+				removePenddingTask(KEY_TWEET + id);
+			} else {
+				onFailure(code, res.getErrorMessage(), args);
+			}
 		}
 
+		@Override
+		public void onFailure(int code, String errorMessage, Object[] args) {
+			Tweet tweet = (Tweet) args[0];
+			int id = tweet.getId();
+			notifySimpleNotifycation(id,
+					getString(R.string.tweet_publish_faile),
+					getString(R.string.tweet_public),
+					getString(R.string.tweet_publish_faile), false, true);
+			removePenddingTask(KEY_TWEET + id);
+		}
+
+		@Override
 		public void onFinish() {
-			stopSelf();
+			tryToStopServie();
 		}
-	};
-
-	private AsyncHttpResponseHandler mPublicTweetHandler = new AsyncHttpResponseHandler() {
-
-		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-			int id = 3;// task.getId() * task.getUid();
-			// cancellNotification(id);
-			notifySimpleNotifycation(id, "成功发表动弹", "动弹", "成功发表动弹", false, true);
-			new Handler().postDelayed(new Runnable() {
-
-				@Override
-				public void run() {
-					cancellNotification(3);
-				}
-			}, 3000);
-		}
-
-		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			int id = 3;// task.getId() * task.getUid()
-			notifySimpleNotifycation(id, "发布动弹失败", "动弹", "发布动弹失败", false, true);
-		}
-
-		public void onFinish() {
-			stopSelf();
-		}
-	};
+	}
 
 	public ServerTaskService() {
-		this("ServerTaskService");
+		this(SERVICE_NAME);
+	}
+
+	private synchronized void tryToStopServie() {
+		if (penddingTasks == null || penddingTasks.size() == 0) {
+			stopSelf();
+		}
+	}
+
+	private synchronized void addPenddingTask(String key) {
+		penddingTasks.add(key);
+	}
+
+	private synchronized void removePenddingTask(String key) {
+		penddingTasks.remove(key);
 	}
 
 	public ServerTaskService(String name) {
@@ -182,30 +240,51 @@ public class ServerTaskService extends IntentService {
 			}
 		}
 	}
-	
+
 	private void publicBlogComment(final PublicCommentTask task) {
-		// task.getId() * task.getUid()
-		notifySimpleNotifycation(1, "正在发表你的评论..", "评论", "正在发布评论", true, false);
-		NewsApi.publicBlogComment(task.getId(), task.getUid(), task.getContent(), mPublicBlogCommentHandler);
+		int id = task.getId() * task.getUid();
+		addPenddingTask(KEY_COMMENT + id);
+
+		notifySimpleNotifycation(id, getString(R.string.comment_publishing),
+				getString(R.string.comment_blog),
+				getString(R.string.comment_publishing), true, false);
+
+		NewsApi.publicBlogComment(task.getId(), task.getUid(), task
+				.getContent(), new PublicCommentResponseHandler(
+				getMainLooper(), task, true));
 	}
 
 	private void publicComment(final PublicCommentTask task) {
-		// task.getId() * task.getUid()
-		notifySimpleNotifycation(1, "正在发表你的评论..", "评论", "正在发布评论", true, false);
+		int id = task.getId() * task.getUid();
+		addPenddingTask(KEY_COMMENT + id);
+
+		notifySimpleNotifycation(id, getString(R.string.comment_publishing),
+				getString(R.string.comment_blog),
+				getString(R.string.comment_publishing), true, false);
+
 		NewsApi.publicComment(task.getCatalog(), task.getId(), task.getUid(),
 				task.getContent(), task.getIsPostToMyZone(),
-				mPublicCommentHandler);
+				new PublicCommentResponseHandler(getMainLooper(), task, false));
 	}
 
 	private void publicPost(Post post) {
-		notifySimpleNotifycation(2, "正在发表你的帖子..", "帖子", "正在发布帖子", true, false);
-		NewsApi.publicPost(post, mPublicPostHandler);
+		int id = post.getId();
+		addPenddingTask(KEY_POST + id);
+		notifySimpleNotifycation(id, getString(R.string.post_publishing),
+				getString(R.string.post_public),
+				getString(R.string.post_publishing), true, false);
+		NewsApi.publicPost(post, new PublicPostResponseHandler(getMainLooper(),
+				post));
 	}
 
 	private void publicTweet(final Tweet tweet) {
-		// task.getId() * task.getUid()
-		notifySimpleNotifycation(3, "正在发表你的动弹..", "动弹", "正在发布动弹", true, false);
-		NewsApi.publicTweet(tweet, mPublicTweetHandler);
+		int id = tweet.getId();
+		addPenddingTask(KEY_TWEET + id);
+		notifySimpleNotifycation(id, getString(R.string.tweet_publishing),
+				getString(R.string.tweet_public),
+				getString(R.string.tweet_publishing), true, false);
+		NewsApi.publicTweet(tweet, new PublicTweetResponseHandler(
+				getMainLooper(), tweet));
 	}
 
 	private void notifySimpleNotifycation(int id, String ticker, String title,
@@ -226,9 +305,7 @@ public class ServerTaskService extends IntentService {
 		// notification.flags = Notification.DEFAULT_LIGHTS |
 		// Notification.FLAG_AUTO_CANCEL;
 		// }
-		// NotificationManagerCompat.from(this).notify(id, notification);
-		NotificationManager notifyMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		notifyMgr.notify(id, notification);
+		NotificationManagerCompat.from(this).notify(id, notification);
 	}
 
 	private void cancellNotification(int id) {

@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
@@ -106,6 +107,11 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
 		return (Post) seri;
 	}
 
+	@Override
+	protected void onCommentChanged(int opt, int id, int catalog,
+			boolean isBlog, Comment comment) {
+	}
+	
 	@Override
 	protected void executeOnLoadDataSuccess(Entity entity) {
 		mPost = (Post) entity;

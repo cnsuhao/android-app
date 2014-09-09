@@ -131,12 +131,12 @@ public class DateUtil {
 
 	public static String getFormatTime(String sdate) {
 		Date time = null;
-		if (TimeZoneUtil.isInEasternEightZones()) {
+		//if (TimeZoneUtil.isInEasternEightZones()) {
 			time = toDate(sdate);
-		} else {
-			time = TimeZoneUtil.transformTime(toDate(sdate),
-					TimeZone.getTimeZone("GMT+08"), TimeZone.getDefault());
-		}
+		//} else {
+		//	time = TimeZoneUtil.transformTime(toDate(sdate),
+		//			TimeZone.getTimeZone("GMT+08"), TimeZone.getDefault());
+		//}
 		return getFormatTime(time.getTime());
 	}
 

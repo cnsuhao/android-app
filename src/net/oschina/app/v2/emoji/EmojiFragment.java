@@ -14,7 +14,6 @@ import net.oschina.app.v2.utils.TDevice;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +97,6 @@ public class EmojiFragment extends BaseFragment implements
 		int size = 0;
 		boolean justAdd = false;
 		for (Emoji ej : allEmojis) {
-			Log.d(TAG, "emoji:" + ej.getIndex());
 			if (size == 0) {
 				es = new ArrayList<Emoji>();
 			}
@@ -239,6 +237,12 @@ public class EmojiFragment extends BaseFragment implements
 		}
 	}
 
+	public void hideKeyboard() {
+		if (mIsKeyboardVisible) {
+			TDevice.toogleSoftKeyboard(getActivity().getCurrentFocus());
+		}
+	}
+
 	public void setInputHint(String hint) {
 		if (mEtInput != null) {
 			mEtInput.setHint(hint);
@@ -247,7 +251,10 @@ public class EmojiFragment extends BaseFragment implements
 
 	public void reset() {
 		if (mIsKeyboardVisible) {
-			TDevice.hideSoftKeyboard(getActivity().getCurrentFocus());
+			TDevice.toogleSoftKeyboard(getActivity().getCurrentFocus());
+		}
+		if (mLyEmoji.getVisibility() == View.VISIBLE) {
+			hideEmojiPanel();
 		}
 		if (mEtInput != null) {
 			mEtInput.getText().clear();

@@ -183,7 +183,7 @@
     
     <string name="actionbar_title_question_public">提问</string>
     <string name="actionbar_title_tweet_public">动弹一下</string>
-    
+    <string name="actionbar_title_reply_comment">回复评论</string>
     <string name="choose_picture">选择图片</string>
     <string name="clear_message">清楚文字吗?</string>
     <string name="ok">确定</string>
@@ -218,8 +218,8 @@
     <string name="actionbar_title_comment">评论</string>
     <string name="actionbar_title_question_tag">%s相关</string>
     <string name="comment_count">评论:%s</string>
-    <string name="answer_count">回答:%s</string>
-    <string name="post_answer">回答</string>
+    <string name="answer_count">回复:%s</string>
+    <string name="post_answer">回复</string>
     <string name="comment_reply_count">共有%s条评论</string>
     <string name="comment_refer_author">引用来自%s的评论</string>
     <string name="tip_comment_content_empty">"请输入评论内容"</string>
@@ -245,4 +245,24 @@
 	<string name="del_favorite_faile">取消收藏失败</string>
 	
 	<string name="share_to">分享到</string>
+	
+	<string name="forward_to_my_center">转发到个人空间</string>
+	<string name="progress_submit">正在提交…</string>
+	
+	
+	<!-- notification messages -->
+	<string name="comment_blog">发布评论</string>
+	<string name="comment_publishing">正在发布你的评论…</string>
+	<string name="comment_publish_success">评论发布成功</string>
+	<string name="comment_publish_faile">发布评论失败</string>
+	
+	<string name="tweet_public">发布动弹</string>
+	<string name="tweet_publishing">正在发布你的动弹…</string>
+	<string name="tweet_publish_success">动弹发布成功</string>
+	<string name="tweet_publish_faile">发布动弹失败</string>
+	
+	<string name="post_public">发布帖子</string>
+	<string name="post_publishing">正在发布你的帖子…</string>
+	<string name="post_publish_success">帖子发布成功</string>
+	<string name="post_publish_faile">发布帖子失败</string>
 </resources>

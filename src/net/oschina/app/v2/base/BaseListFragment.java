@@ -92,7 +92,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
 			mCurrentPage = 0;
 			mState = STATE_REFRESH;
-			requestData(false);
+			requestData(true);
 		}
 		if (mStoreEmptyState != -1) {
 			mErrorLayout.setErrorType(mStoreEmptyState);
@@ -232,7 +232,8 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		@Override
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 				Throwable arg3) {
-			executeOnLoadDataError(null);
+			//executeOnLoadDataError(null);
+			readCacheData(getCacheKey());
 		}
 
 		@Override

@@ -17,7 +17,6 @@ import net.oschina.app.api.ApiClient;
 import net.oschina.app.bean.AccessInfo;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Messages;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.Notice;
@@ -38,7 +37,6 @@ import net.oschina.app.ui.Main;
 import net.oschina.app.ui.MessageDetail;
 import net.oschina.app.ui.MessageForward;
 import net.oschina.app.ui.MessagePub;
-import net.oschina.app.ui.QuestionPub;
 import net.oschina.app.ui.ReportUi;
 import net.oschina.app.ui.ScreenShotShare;
 import net.oschina.app.ui.Search;
@@ -46,12 +44,13 @@ import net.oschina.app.ui.Setting;
 import net.oschina.app.ui.TweetPub;
 import net.oschina.app.ui.UserFriend;
 import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
+import net.oschina.app.v2.activity.comment.fragment.CommentReplyFragment;
 import net.oschina.app.v2.activity.common.SimpleBackActivity;
-import net.oschina.app.v2.activity.friend.adapter.FriendTabPagerAdapter;
 import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
 import net.oschina.app.v2.activity.news.DetailActivity;
 import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
 import net.oschina.app.v2.activity.user.LoginActivity;
+import net.oschina.app.v2.base.Constants;
 import net.oschina.app.widget.LinkView;
 import net.oschina.app.widget.LinkView.MyURLSpan;
 import net.oschina.app.widget.PathChooseDialog;
@@ -74,6 +73,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
@@ -256,8 +256,8 @@ public class UIHelper {
 	public static void showTweetPub(Activity context) {
 		// Intent intent = new Intent(context, TweetPub.class);
 		// context.startActivityForResult(intent, REQUEST_CODE_FOR_RESULT);
-		showSimpleBackForResult(context, SimpleBackPage.TWEET_PUBLIC,
-				REQUEST_CODE_FOR_RESULT);
+		showSimpleBackForResult(context, REQUEST_CODE_FOR_RESULT,
+				SimpleBackPage.TWEET_PUBLIC);
 	}
 
 	public static void showTweetPub(Activity context, String atme, int atuid) {
@@ -399,10 +399,46 @@ public class UIHelper {
 		intent.putExtra("author_id", authorid);
 		intent.putExtra("author", author);
 		intent.putExtra("content", content);
-		if (catalog == CommentList.CATALOG_POST)
-			context.startActivityForResult(intent, REQUEST_CODE_FOR_REPLY);
-		else
-			context.startActivityForResult(intent, REQUEST_CODE_FOR_RESULT);
+		// if (catalog == CommentList.CATALOG_POST)
+		// context.startActivityForResult(intent, REQUEST_CODE_FOR_REPLY);
+		// else
+		// context.startActivityForResult(intent, REQUEST_CODE_FOR_RESULT);
+		Bundle args = new Bundle();
+		showSimpleBack(context, SimpleBackPage.REPLY_COMMENT, args);
+	}
+
+	public static void showReplyComment(Context context, boolean isBlog,
+			int mId, int mCatalog, Comment comment) {
+		Bundle args = new Bundle();
+		args.putBoolean(CommentReplyFragment.BUNDLE_KEY_IS_BLOG, isBlog);
+		args.putInt(CommentReplyFragment.BUNDLE_KEY_ID, mId);
+		args.putInt(CommentReplyFragment.BUNDLE_KEY_CATALOG, mCatalog);
+		args.putParcelable(CommentReplyFragment.BUNDLE_KEY_COMMENT, comment);
+		showSimpleBack(context, SimpleBackPage.REPLY_COMMENT, args);
+	}
+
+	public static void showReplyCommentForResult(Activity context,
+			int requestCode, boolean isBlog, int mId, int mCatalog,
+			Comment comment) {
+		Bundle args = new Bundle();
+		args.putBoolean(CommentReplyFragment.BUNDLE_KEY_IS_BLOG, isBlog);
+		args.putInt(CommentReplyFragment.BUNDLE_KEY_ID, mId);
+		args.putInt(CommentReplyFragment.BUNDLE_KEY_CATALOG, mCatalog);
+		args.putParcelable(CommentReplyFragment.BUNDLE_KEY_COMMENT, comment);
+		showSimpleBackForResult(context, requestCode,
+				SimpleBackPage.REPLY_COMMENT, args);
+	}
+
+	public static void showReplyCommentForResult(Fragment fragment,
+			int requestCode, boolean isBlog, int mId, int mCatalog,
+			Comment comment) {
+		Bundle args = new Bundle();
+		args.putBoolean(CommentReplyFragment.BUNDLE_KEY_IS_BLOG, isBlog);
+		args.putInt(CommentReplyFragment.BUNDLE_KEY_ID, mId);
+		args.putInt(CommentReplyFragment.BUNDLE_KEY_CATALOG, mCatalog);
+		args.putParcelable(CommentReplyFragment.BUNDLE_KEY_COMMENT, comment);
+		showSimpleBackForResult(fragment, requestCode,
+				SimpleBackPage.REPLY_COMMENT, args);
 	}
 
 	/**
@@ -845,8 +881,25 @@ public class UIHelper {
 		showSimpleBack(context, SimpleBackPage.SETTINGS);
 	}
 
+	public static void showSimpleBackForResult(Fragment fragment,
+			int requestCode, SimpleBackPage page, Bundle args) {
+		Intent intent = new Intent(fragment.getActivity(),
+				SimpleBackActivity.class);
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
+		fragment.startActivityForResult(intent, requestCode);
+	}
+
 	public static void showSimpleBackForResult(Activity context,
-			SimpleBackPage page, int requestCode) {
+			int requestCode, SimpleBackPage page, Bundle args) {
+		Intent intent = new Intent(context, SimpleBackActivity.class);
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
+		context.startActivityForResult(intent, requestCode);
+	}
+
+	public static void showSimpleBackForResult(Activity context,
+			int requestCode, SimpleBackPage page) {
 		Intent intent = new Intent(context, SimpleBackActivity.class);
 		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
 		context.startActivityForResult(intent, requestCode);
@@ -1873,5 +1926,28 @@ public class UIHelper {
 		args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
 		args.putInt(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
 		showSimpleBack(context, SimpleBackPage.COMMENT, args);
+	}
+	
+	/**
+	 * 发送广播告知评论发生变化
+	 * @param context
+	 * @param isBlog
+	 * @param id
+	 * @param catalog
+	 * @param operation
+	 * @param replyComment
+	 */
+	public static void sendBroadCastCommentChanged(Context context,
+			boolean isBlog, int id, int catalog, int operation,
+			Comment replyComment) {
+		Intent intent = new Intent(Constants.INTENT_ACTION_COMMENT_CHANGED);
+		Bundle args = new Bundle();
+		args.putInt(Comment.BUNDLE_KEY_ID, id);
+		args.putInt(Comment.BUNDLE_KEY_CATALOG, catalog);
+		args.putBoolean(Comment.BUNDLE_KEY_BLOG, isBlog);
+		args.putInt(Comment.BUNDLE_KEY_OPERATION, operation);
+		args.putParcelable(Comment.BUNDLE_KEY_COMMENT, replyComment);
+		intent.putExtras(args);
+		context.sendBroadcast(intent);
 	}
 }

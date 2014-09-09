@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
@@ -99,6 +100,21 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	@Override
 	protected Entity readData(Serializable seri) {
 		return (News) seri;
+	}
+
+	@Override
+	protected void onCommentChanged(int opt, int id, int catalog,
+			boolean isBlog, Comment comment) {
+		if (id == mNewsId && catalog == CommentList.CATALOG_NEWS && !isBlog) {
+			if (Comment.OPT_ADD == opt && mNews != null) {
+				mNews.setCommentCount(mNews.getCommentCount() + 1);
+				if (mTvCommentCount != null) {
+					mTvCommentCount.setVisibility(View.VISIBLE);
+					mTvCommentCount.setText(getString(R.string.comment_count,
+							mNews.getCommentCount()));
+				}
+			}
+		}
 	}
 
 	@Override

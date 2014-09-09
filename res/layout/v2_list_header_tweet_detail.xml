@@ -86,7 +86,7 @@
             android:orientation="horizontal" >
 
             <View
-                android:layout_width="30dp"
+                android:layout_width="20dp"
                 android:layout_height="1px"
                 android:background="@color/list_divider_color" />
 

@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/space_8"
         android:paddingRight="@dimen/space_8"
-        android:paddingTop="@dimen/space_8" >
+        android:paddingTop="@dimen/space_8"
+        android:paddingBottom="@dimen/space_8" >
 
         <ImageView
             android:id="@+id/iv_avatar"
@@ -88,6 +89,7 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:padding="@dimen/space_4"
+            android:contentDescription="@null"
             android:src="@drawable/btn_item_opt_more_selector" />
     </RelativeLayout>
 

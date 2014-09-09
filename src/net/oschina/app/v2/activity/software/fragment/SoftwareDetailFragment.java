@@ -100,6 +100,12 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 	}
 
 	@Override
+	protected boolean shouldRegisterCommentChangedReceiver() {
+		// software has no comment so we do not need it
+		return false;
+	}
+	
+	@Override
 	protected void executeOnLoadDataSuccess(Entity entity) {
 		mSoftware = (Software) entity;
 		fillUI();

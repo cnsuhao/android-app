@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.bean.Blog;
+import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.common.StringUtils;
@@ -103,6 +104,21 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 		return (Blog) seri;
 	}
 
+	@Override
+	protected void onCommentChanged(int opt, int id, int catalog,
+			boolean isBlog, Comment comment) {
+		if (id == mBlogId && isBlog) {
+			if (Comment.OPT_ADD == opt && mBlog != null) {
+				mBlog.setCommentCount(mBlog.getCommentCount() + 1);
+				if (mTvCommentCount != null) {
+					mTvCommentCount.setVisibility(View.VISIBLE);
+					mTvCommentCount.setText(getString(R.string.comment_count,
+							mBlog.getCommentCount()));
+				}
+			}
+		}
+	}
+	
 	@Override
 	protected void executeOnLoadDataSuccess(Entity entity) {
 		mBlog = (Blog) entity;

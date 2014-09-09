@@ -119,7 +119,10 @@ public class CommentPub extends BaseActivity{
 							}
 							//返回刚刚发表的评论
 							Intent intent = new Intent();
-							intent.putExtra("COMMENT_SERIALIZABLE", res.getComment());
+							//intent.putExtra(, );
+							Bundle data = new Bundle();
+							data.putParcelable("COMMENT_SERIALIZABLE", res.getComment());
+							intent.putExtras(data);
 							setResult(RESULT_OK, intent);
 							//跳转到文章详情
 							finish();

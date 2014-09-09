@@ -112,7 +112,10 @@ public class MessagePub extends BaseActivity{
 							ac.removeProperty(tempMessageKey);
 							//返回刚刚发表的评论
 							Intent intent = new Intent();
-							intent.putExtra("COMMENT_SERIALIZABLE", res.getComment());
+							//intent.putExtra("COMMENT_SERIALIZABLE", res.getComment());
+							Bundle data = new Bundle();
+							data.putParcelable("COMMENT_SERIALIZABLE", res.getComment());
+							intent.putExtras(data);
 							setResult(RESULT_OK, intent);
 							finish();
 						}

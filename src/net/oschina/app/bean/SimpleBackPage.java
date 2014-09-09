@@ -1,6 +1,7 @@
 package net.oschina.app.bean;
 
 import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
+import net.oschina.app.v2.activity.comment.fragment.CommentReplyFragment;
 import net.oschina.app.v2.activity.favorite.fragment.FavoriteViewPagerFragment;
 import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
 import net.oschina.app.v2.activity.question.fragment.QuestionPublicFragment;
@@ -26,7 +27,8 @@ public enum SimpleBackPage {
 	QUESTION_TAG(7, R.string.actionbar_title_question, QuestionTagFragment.class),
 	USER_CENTER(8, R.string.actionbar_title_user_center, UserCenterFragment.class),
 	QUESTION_PUBLIC(9, R.string.actionbar_title_question_public, QuestionPublicFragment.class),
-	TWEET_PUBLIC(10, R.string.actionbar_title_tweet_public, TweetPublicFragment.class);
+	TWEET_PUBLIC(10, R.string.actionbar_title_tweet_public, TweetPublicFragment.class),
+	REPLY_COMMENT(11, R.string.actionbar_title_reply_comment, CommentReplyFragment.class);
 
 	private int title;
 	private Class<?> clz;

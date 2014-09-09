@@ -180,6 +180,7 @@ public class CommentAdapter extends ListBaseAdapter {
 			}
 		});
 
+		vh.more.setVisibility(View.GONE);
 		vh.more.setOnClickListener(new View.OnClickListener() {
 
 			@Override

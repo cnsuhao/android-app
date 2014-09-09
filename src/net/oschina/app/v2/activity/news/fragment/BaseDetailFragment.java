@@ -6,12 +6,14 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.news.view.ShareDialog;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.cache.CacheManager;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.TDevice;
@@ -20,7 +22,10 @@ import org.apache.http.Header;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -104,38 +109,61 @@ public class BaseDetailFragment extends BaseFragment implements
 		UIHelper.addWebImageShow(getActivity(), webView);
 	}
 
-	protected void recycleWebView(WebView webView) {
-		if (webView != null) {
-			webView.removeAllViews();
-			//webView.loadUrl("about:blank");
-			webView.destroy();
-			webView = null;
+	protected void recycleWebView() {
+		if (mWebView != null) {
+			// webView.loadUrl("about:blank");
+			// webView.destroy();
+			// webView = null;
+			mWebView.setVisibility(View.GONE);
+			mWebView.removeAllViews();
+			mWebView.destroy();
+			mWebView = null;
 		}
 	}
+
+	protected boolean shouldRegisterCommentChangedReceiver() {
+		return true;
+	}
+
+	protected void onCommentChanged(int opt, int id, int catalog,
+			boolean isBlog, Comment comment) {
+	}
+
+	private CommentChangeReceiver mReceiver;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mMenuAdapter = new MenuAdapter();
 		setHasOptionsMenu(true);
+		
+		if (shouldRegisterCommentChangedReceiver()) {
+			mReceiver = new CommentChangeReceiver();
+			IntentFilter filter = new IntentFilter(
+					Constants.INTENT_ACTION_COMMENT_CHANGED);
+			getActivity().registerReceiver(mReceiver, filter);
+		}
 	}
 
 	@Override
 	public void onDestroyView() {
-		recycleWebView(mWebView);
+		recycleWebView();
 		super.onDestroyView();
 	}
 
 	@Override
 	public void onDestroy() {
-		recycleWebView(mWebView);
+		recycleWebView();
+		if (mReceiver != null) {
+			getActivity().unregisterReceiver(mReceiver);
+		}
 		super.onDestroy();
 	}
 
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		requestData(false);
+		requestData(true);
 	}
 
 	protected String getCacheKey() {
@@ -236,7 +264,8 @@ public class BaseDetailFragment extends BaseFragment implements
 		@Override
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 				Throwable arg3) {
-			executeOnLoadDataError(arg3.getMessage());
+			//executeOnLoadDataError(arg3.getMessage());
+			readCacheData(getCacheKey());
 		}
 	};
 
@@ -324,7 +353,7 @@ public class BaseDetailFragment extends BaseFragment implements
 		dialog.setCancelable(true);
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.setTitle(R.string.share_to);
-		//dialog.setMessage("这是窗口测试");
+		// dialog.setMessage("这是窗口测试");
 		dialog.setNegativeButton(R.string.cancle, null);
 		dialog.show();
 	}
@@ -444,4 +473,19 @@ public class BaseDetailFragment extends BaseFragment implements
 			AppContext.showToastShort(R.string.del_favorite_faile);
 		}
 	};
+
+	class CommentChangeReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			int opt = intent.getIntExtra(Comment.BUNDLE_KEY_OPERATION, 0);
+			int id = intent.getIntExtra(Comment.BUNDLE_KEY_ID, 0);
+			int catalog = intent.getIntExtra(Comment.BUNDLE_KEY_CATALOG, 0);
+			boolean isBlog = intent.getBooleanExtra(Comment.BUNDLE_KEY_BLOG,
+					false);
+			Comment comment = intent
+					.getParcelableExtra(Comment.BUNDLE_KEY_COMMENT);
+			onCommentChanged(opt, id, catalog, isBlog, comment);
+		}
+	}
 }
