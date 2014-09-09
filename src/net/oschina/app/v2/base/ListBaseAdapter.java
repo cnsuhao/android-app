@@ -63,7 +63,7 @@ public class ListBaseAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		switch (state) {
+		switch (getState()) {
 		case STATE_EMPTY_ITEM:
 			return getDataSize() + 1;
 		case STATE_NETWORK_ERROR:

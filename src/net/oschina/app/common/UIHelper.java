@@ -473,7 +473,9 @@ public class UIHelper {
 		intent.putExtra("friend_id", friendId);
 		intent.putExtra("friend_name", friendName);
 		intent.setClass(context, MessagePub.class);
-		context.startActivityForResult(intent, REQUEST_CODE_FOR_RESULT);
+//		context.startActivityForResult(intent, REQUEST_CODE_FOR_RESULT);
+		Bundle args = new Bundle();
+		showSimpleBack(context, SimpleBackPage.MESSAGE_PUBLIC, args);
 	}
 
 	/**

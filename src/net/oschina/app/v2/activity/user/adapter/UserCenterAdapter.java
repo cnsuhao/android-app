@@ -91,6 +91,12 @@ public class UserCenterAdapter extends ListBaseAdapter implements
 	@Override
 	public void setState(int state) {
 		mStates.put(mDisplayMode, state);
+		notifyDataSetChanged();
+	}
+
+	public void setState(DisplayMode mode, int state) {
+		mStates.put(mode, state);
+		notifyDataSetChanged();
 	}
 
 	@Override
@@ -106,6 +112,41 @@ public class UserCenterAdapter extends ListBaseAdapter implements
 			break;
 		}
 		return 0;
+	}
+
+	@Override
+	public Object getItem(int arg0) {
+		if (arg0 < 0)
+			return null;
+		switch (mDisplayMode) {
+		case ACTIVE:
+			if (actives.size() > arg0 && arg0 >= 0) {
+				return actives.get(arg0);
+			}
+			break;
+		case BLOG:
+			if (blogs.size() > arg0 && arg0 >= 0) {
+				return blogs.get(arg0);
+			}
+			break;
+		default:
+			break;
+		}
+		return super.getItem(arg0);
+	}
+
+	public void clear(DisplayMode mode) {
+		switch (mode) {
+		case ACTIVE:
+			actives.clear();
+			break;
+		case BLOG:
+			blogs.clear();
+			break;
+		default:
+			break;
+		}
+		notifyDataSetChanged();
 	}
 
 	public void setData(DisplayMode mode, ArrayList data) {
@@ -275,8 +316,8 @@ public class UserCenterAdapter extends ListBaseAdapter implements
 
 		if (!TextUtils.isEmpty(item.getTweetimage())) {
 			vh.pic.setVisibility(View.VISIBLE);
-			ImageLoader.getInstance().displayImage(item.getTweetimage(), vh.pic,
-					options);
+			ImageLoader.getInstance().displayImage(item.getTweetimage(),
+					vh.pic, options);
 		} else {
 			vh.pic.setVisibility(View.GONE);
 			vh.pic.setImageBitmap(null);
@@ -362,7 +403,7 @@ public class UserCenterAdapter extends ListBaseAdapter implements
 		public TextView name, from, time, action, actionName, commentCount,
 				retweetCount;
 		public TweetTextView body;
-		public ImageView avatar,pic;
+		public ImageView avatar, pic;
 
 		public ViewHolder(View view) {
 			name = (TextView) view.findViewById(R.id.tv_name);

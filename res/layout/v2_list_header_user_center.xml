@@ -31,12 +31,12 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_8"
                 android:drawablePadding="@dimen/space_4"
                 android:drawableRight="@drawable/userinfo_icon_male"
                 android:ellipsize="end"
-                android:singleLine="true"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="@dimen/space_8"
+                android:singleLine="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_19" />
 
@@ -81,7 +81,17 @@
             android:layout_above="@id/bottom"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/space_8"
+            android:contentDescription="@null"
             android:background="@drawable/ic_default_avatar" />
+
+        <View
+            android:layout_width="74dp"
+            android:layout_height="74dp"
+            android:layout_alignBottom="@id/iv_avatar"
+            android:layout_alignLeft="@id/iv_avatar"
+            android:layout_alignRight="@id/iv_avatar"
+            android:layout_alignTop="@id/iv_avatar"
+            android:background="@drawable/ic_avatar_cover" />
     </RelativeLayout>
 
     <View
@@ -93,10 +103,10 @@
         android:id="@+id/tv_latest_login_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/space_8"
-        android:text="@string/follower_count"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
+        android:padding="@dimen/space_8"
+        android:text="@string/follower_count"
         android:textColor="@color/main_gray"
         android:textSize="@dimen/text_size_14" />
 

@@ -36,6 +36,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,7 +46,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 
 public class UserCenterFragment extends BaseFragment implements
-		DislayModeChangeListener {
+		DislayModeChangeListener, OnItemClickListener {
 
 	private static final Object FEMALE = "女";
 	private StickyListHeadersListView mListView;
@@ -72,18 +74,23 @@ public class UserCenterFragment extends BaseFragment implements
 				fillUI();
 				List<Active> data = information.getActivelist();
 				if (mState == STATE_REFRESH)
-					mAdapter.clear();
+					mAdapter.clear(DisplayMode.ACTIVE);
 				mAdapter.addData(DisplayMode.ACTIVE, data);
 				mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
 				if (data.size() == 0 && mState == STATE_REFRESH) {
 					// mEmptyView.setErrorType(EmptyLayout.NODATA);
+					mAdapter.setState(DisplayMode.ACTIVE,
+							ListBaseAdapter.STATE_NO_MORE);
 				} else if (data.size() < TDevice.getPageSize()) {
 					if (mState == STATE_REFRESH)
-						mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+						mAdapter.setState(DisplayMode.ACTIVE,
+								ListBaseAdapter.STATE_NO_MORE);
 					else
-						mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+						mAdapter.setState(DisplayMode.ACTIVE,
+								ListBaseAdapter.STATE_NO_MORE);
 				} else {
-					mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
+					mAdapter.setState(DisplayMode.ACTIVE,
+							ListBaseAdapter.STATE_LOAD_MORE);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -111,18 +118,23 @@ public class UserCenterFragment extends BaseFragment implements
 				BlogList list = BlogList.parse(new ByteArrayInputStream(arg2));
 				List<Blog> data = list.getBloglist();
 				if (mBlogState == STATE_REFRESH)
-					mAdapter.clear();
+					mAdapter.clear(DisplayMode.BLOG);
 				mAdapter.addData(DisplayMode.BLOG, data);
 				mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
 				if (data.size() == 0 && mBlogState == STATE_REFRESH) {
 					// mEmptyView.setErrorType(EmptyLayout.NODATA);
+					mAdapter.setState(DisplayMode.BLOG,
+							ListBaseAdapter.STATE_NO_MORE);
 				} else if (data.size() < TDevice.getPageSize()) {
 					if (mBlogState == STATE_REFRESH)
-						mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+						mAdapter.setState(DisplayMode.BLOG,
+								ListBaseAdapter.STATE_NO_MORE);
 					else
-						mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+						mAdapter.setState(DisplayMode.BLOG,
+								ListBaseAdapter.STATE_NO_MORE);
 				} else {
-					mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
+					mAdapter.setState(DisplayMode.BLOG,
+							ListBaseAdapter.STATE_LOAD_MORE);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -202,6 +214,7 @@ public class UserCenterFragment extends BaseFragment implements
 		mListView = (StickyListHeadersListView) view
 				.findViewById(R.id.listview);
 		mListView.setOnScrollListener(mScrollListener);
+		mListView.setOnItemClickListener(this);
 		View header = LayoutInflater.from(getActivity()).inflate(
 				R.layout.v2_list_header_user_center, null);
 		mIvAvatar = (ImageView) header.findViewById(R.id.iv_avatar);
@@ -268,7 +281,8 @@ public class UserCenterFragment extends BaseFragment implements
 					R.drawable.ic_followed, 0, 0, 0);
 			mBtnFollowUser.setText(R.string.unfollow_user);
 			mBtnFollowUser.setTextColor(getResources().getColor(R.color.black));
-			mBtnFollowUser.setBackgroundResource(R.drawable.btn_small_white_selector);
+			mBtnFollowUser
+					.setBackgroundResource(R.drawable.btn_small_white_selector);
 			break;
 		case User.RELATION_TYPE_FANS_ME:
 			mBtnFollowUser.setCompoundDrawablesWithIntrinsicBounds(
@@ -283,7 +297,8 @@ public class UserCenterFragment extends BaseFragment implements
 					R.drawable.ic_add_follow, 0, 0, 0);
 			mBtnFollowUser.setText(R.string.follow_user);
 			mBtnFollowUser.setTextColor(getResources().getColor(R.color.white));
-			mBtnFollowUser.setBackgroundResource(R.drawable.btn_small_green_selector);
+			mBtnFollowUser
+					.setBackgroundResource(R.drawable.btn_small_green_selector);
 			break;
 		}
 	}
@@ -317,6 +332,8 @@ public class UserCenterFragment extends BaseFragment implements
 		final int id = v.getId();
 		if (id == R.id.tv_follow_user) {
 			handleUserRelation();
+		} else if(id == R.id.tv_private_message){
+			UIHelper.showMessagePub(getActivity(), mHisUid, mHisName);
 		}
 	}
 
@@ -382,31 +399,55 @@ public class UserCenterFragment extends BaseFragment implements
 							if (result.OK()) {
 								switch (mUser.getRelation()) {
 								case User.RELATION_TYPE_BOTH:
-									mBtnFollowUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_follow, 0, 0, 0);
-									mBtnFollowUser.setText(R.string.follow_user);
-									mBtnFollowUser.setTextColor(getResources().getColor(R.color.white));
-									mBtnFollowUser.setBackgroundResource(R.drawable.btn_small_green_selector);
+									mBtnFollowUser
+											.setCompoundDrawablesWithIntrinsicBounds(
+													R.drawable.ic_add_follow,
+													0, 0, 0);
+									mBtnFollowUser
+											.setText(R.string.follow_user);
+									mBtnFollowUser.setTextColor(getResources()
+											.getColor(R.color.white));
+									mBtnFollowUser
+											.setBackgroundResource(R.drawable.btn_small_green_selector);
 									mUser.setRelation(User.RELATION_TYPE_FANS_ME);
 									break;
 								case User.RELATION_TYPE_FANS_HIM:
-									mBtnFollowUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_follow, 0, 0, 0);
-									mBtnFollowUser.setText(R.string.follow_user);
-									mBtnFollowUser.setTextColor(getResources().getColor(R.color.white));
-									mBtnFollowUser.setBackgroundResource(R.drawable.btn_small_green_selector);
+									mBtnFollowUser
+											.setCompoundDrawablesWithIntrinsicBounds(
+													R.drawable.ic_add_follow,
+													0, 0, 0);
+									mBtnFollowUser
+											.setText(R.string.follow_user);
+									mBtnFollowUser.setTextColor(getResources()
+											.getColor(R.color.white));
+									mBtnFollowUser
+											.setBackgroundResource(R.drawable.btn_small_green_selector);
 									mUser.setRelation(User.RELATION_TYPE_NULL);
 									break;
 								case User.RELATION_TYPE_FANS_ME:
-									mBtnFollowUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_followed, 0, 0, 0);
-									mBtnFollowUser.setText(R.string.follow_each_other);
-									mBtnFollowUser.setTextColor(getResources().getColor(R.color.black));
-									mBtnFollowUser.setBackgroundResource(R.drawable.btn_small_white_selector);
+									mBtnFollowUser
+											.setCompoundDrawablesWithIntrinsicBounds(
+													R.drawable.ic_followed, 0,
+													0, 0);
+									mBtnFollowUser
+											.setText(R.string.follow_each_other);
+									mBtnFollowUser.setTextColor(getResources()
+											.getColor(R.color.black));
+									mBtnFollowUser
+											.setBackgroundResource(R.drawable.btn_small_white_selector);
 									mUser.setRelation(User.RELATION_TYPE_BOTH);
 									break;
 								case User.RELATION_TYPE_NULL:
-									mBtnFollowUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_followed, 0, 0, 0);
-									mBtnFollowUser.setText(R.string.unfollow_user);
-									mBtnFollowUser.setTextColor(getResources().getColor(R.color.black));
-									mBtnFollowUser.setBackgroundResource(R.drawable.btn_small_white_selector);
+									mBtnFollowUser
+											.setCompoundDrawablesWithIntrinsicBounds(
+													R.drawable.ic_followed, 0,
+													0, 0);
+									mBtnFollowUser
+											.setText(R.string.unfollow_user);
+									mBtnFollowUser.setTextColor(getResources()
+											.getColor(R.color.black));
+									mBtnFollowUser
+											.setBackgroundResource(R.drawable.btn_small_white_selector);
 									mUser.setRelation(User.RELATION_TYPE_FANS_HIM);
 									break;
 								}
@@ -435,5 +476,27 @@ public class UserCenterFragment extends BaseFragment implements
 		hasLoadBlog = true;
 		NewsApi.getUserBlogList(mHisUid, mHisName, mUid, mBlogPage,
 				mBlogHandler);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		DisplayMode mode = mAdapter.getDisplayMode();
+		switch (mode) {
+		case ACTIVE:
+			Active active = (Active) mAdapter.getItem(position - 1);
+			if (active != null) {
+				UIHelper.showActiveRedirect(view.getContext(), active);
+			}
+			break;
+		case BLOG:
+			Blog blog = (Blog) mAdapter.getItem(position - 1);
+			if (blog != null) {
+				UIHelper.showUrlRedirect(view.getContext(), blog.getUrl());
+			}
+			break;
+		default:
+			break;
+		}
 	}
 }

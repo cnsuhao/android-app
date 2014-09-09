@@ -7,8 +7,8 @@
     <View
         android:layout_width="wrap_content"
         android:layout_height="1px"
-        android:layout_marginTop="20dp"
-        android:background="@color/list_divider_color" />
+        android:background="@color/list_divider_color" 
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"
