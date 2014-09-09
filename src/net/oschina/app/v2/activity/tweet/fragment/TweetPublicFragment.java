@@ -126,8 +126,9 @@ public class TweetPublicFragment extends BaseFragment implements
 			UIHelper.showLogin(getActivity());
 			return;
 		}
-		String content = mEtInput.getText().toString();
+		String content = mEtInput.getText().toString().trim();
 		if (TextUtils.isEmpty(content)) {
+			mEtInput.requestFocus();
 			AppContext.showToastShort(R.string.tip_content_empty);
 			return;
 		}

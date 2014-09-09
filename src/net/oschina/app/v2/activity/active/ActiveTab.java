@@ -3,6 +3,7 @@ package net.oschina.app.v2.activity.active;
 
 import net.oschina.app.bean.ActiveList;
 import net.oschina.app.v2.activity.active.fragment.ActiveFragment;
+import net.oschina.app.v2.activity.message.fragment.MessageFragment;
 
 import com.tonlin.osc.happy.R;
 
@@ -11,7 +12,8 @@ public enum ActiveTab {
     LASTEST(0,ActiveList.CATALOG_LASTEST, R.string.frame_title_active_lastest, ActiveFragment.class),
     ATME(1, ActiveList.CATALOG_ATME,R.string.frame_title_active_atme, ActiveFragment.class),
     COMMENT(2,ActiveList.CATALOG_COMMENT, R.string.frame_title_active_comment, ActiveFragment.class),
-    MYSELF(3, ActiveList.CATALOG_MYSELF,R.string.frame_title_active_myself, ActiveFragment.class);
+    MYSELF(3, ActiveList.CATALOG_MYSELF,R.string.frame_title_active_myself, ActiveFragment.class),
+    MESSAGE(4, -1,R.string.frame_title_active_message, MessageFragment.class);
     
     private Class<?> clz;
     private int idx;

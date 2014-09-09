@@ -337,9 +337,13 @@ public class NewsApi extends BaseApi {
 
 	/**
 	 * 用户添加收藏
-	 * @param uid 用户UID
-	 * @param objid 比如是新闻ID 或者问答ID 或者动弹ID
-	 * @param type 1:软件 2:话题 3:博客 4:新闻 5:代码
+	 * 
+	 * @param uid
+	 *            用户UID
+	 * @param objid
+	 *            比如是新闻ID 或者问答ID 或者动弹ID
+	 * @param type
+	 *            1:软件 2:话题 3:博客 4:新闻 5:代码
 	 */
 	public static void addFavorite(int uid, int objid, int type,
 			AsyncHttpResponseHandler handler) {
@@ -380,5 +384,14 @@ public class NewsApi extends BaseApi {
 			params.put("memo", "其他原因");
 		}
 		ApiHttpClient.post("action/communityManage/report", params, handler);
+	}
+
+	public static void publicMessage(int uid, int receiver, String content,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("receiver", receiver);
+		params.put("content", content);
+		ApiHttpClient.post("action/api/message_pub", params, handler);
 	}
 }

@@ -266,4 +266,9 @@
 	<string name="post_publishing">正在发布你的帖子…</string>
 	<string name="post_publish_success">帖子发布成功</string>
 	<string name="post_publish_faile">发布帖子失败</string>
+	
+	<string name="send_message_to">发送留言给:</string>
+	<string name="hint_message">留言内容</string>
+	<string name="tip_message_public_success">发送成功</string>
+	<string name="tip_message_public_faile">发送失败</string>
 </resources>

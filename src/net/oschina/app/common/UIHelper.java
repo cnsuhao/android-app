@@ -47,6 +47,7 @@ import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
 import net.oschina.app.v2.activity.comment.fragment.CommentReplyFragment;
 import net.oschina.app.v2.activity.common.SimpleBackActivity;
 import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
+import net.oschina.app.v2.activity.message.fragment.MessagePublicFragment;
 import net.oschina.app.v2.activity.news.DetailActivity;
 import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
 import net.oschina.app.v2.activity.user.LoginActivity;
@@ -473,8 +474,12 @@ public class UIHelper {
 		intent.putExtra("friend_id", friendId);
 		intent.putExtra("friend_name", friendName);
 		intent.setClass(context, MessagePub.class);
-//		context.startActivityForResult(intent, REQUEST_CODE_FOR_RESULT);
+		// context.startActivityForResult(intent, REQUEST_CODE_FOR_RESULT);
 		Bundle args = new Bundle();
+		args.putInt(MessagePublicFragment.BUNDLE_KEY_UID,
+				((AppContext) context.getApplication()).getLoginUid());
+		args.putInt(MessagePublicFragment.BUNDLE_KEY_FID, friendId);
+		args.putString(MessagePublicFragment.BUNDLE_KEY_FNAME, friendName);
 		showSimpleBack(context, SimpleBackPage.MESSAGE_PUBLIC, args);
 	}
 
@@ -1929,9 +1934,10 @@ public class UIHelper {
 		args.putInt(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
 		showSimpleBack(context, SimpleBackPage.COMMENT, args);
 	}
-	
+
 	/**
 	 * 发送广播告知评论发生变化
+	 * 
 	 * @param context
 	 * @param isBlog
 	 * @param id
