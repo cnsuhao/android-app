@@ -88,11 +88,15 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 			mAdapter = getListAdapter();
 			// mListView.setRefreshing();
 			mListView.setAdapter(mAdapter);
-			mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-
-			mCurrentPage = 0;
-			mState = STATE_REFRESH;
-			requestData(true);
+			
+			if(requestDataIfViewCreated()) {
+				mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+				mCurrentPage = 0;
+				mState = STATE_REFRESH;
+				requestData(true);
+			} else {
+				mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+			}
 		}
 		if (mStoreEmptyState != -1) {
 			mErrorLayout.setErrorType(mStoreEmptyState);
@@ -106,7 +110,11 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	}
 
 	protected abstract ListBaseAdapter getListAdapter();
-
+	
+	protected boolean requestDataIfViewCreated(){
+		return true;
+	}
+	
 	protected String getCacheKeyPrefix() {
 		return null;
 	}

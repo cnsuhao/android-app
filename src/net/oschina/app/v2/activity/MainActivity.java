@@ -136,6 +136,7 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 			}
 			break;
 		case R.id.main_menu_search:
+			UIHelper.showSearch(this);
 			break;
 		case R.id.main_menu_more:
 			showMoreOptionMenu(findViewById(R.id.main_menu_more));

@@ -937,8 +937,9 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showSearch(Context context) {
-		Intent intent = new Intent(context, Search.class);
-		context.startActivity(intent);
+		//Intent intent = new Intent(context, Search.class);
+		//context.startActivity(intent);
+		showSimpleBack(context, SimpleBackPage.SEARCH);
 	}
 
 	/**

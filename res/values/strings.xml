@@ -274,4 +274,11 @@
 	<string name="tip_message_public_faile">发送失败</string>
 	<string name="send_to">发给</string>
 	<string name="message_count">%s条留言</string>
+	
+	<string name="actionbar_title_search">搜索</string>
+	<string name="tab_software">软件</string>
+	<string name="tab_qa">问答</string>
+	<string name="tab_blog">博客</string>
+	<string name="tab_news">新闻</string>
+	<string name="tab_code">代码</string>
 </resources>

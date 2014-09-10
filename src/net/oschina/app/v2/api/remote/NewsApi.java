@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.oschina.app.api.ApiClient;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
@@ -403,4 +404,15 @@ public class NewsApi extends BaseApi {
 		params.put("pageSize", DEF_PAGE_SIZE);
 		ApiHttpClient.get("action/api/message_list", params, handler);
 	}
+
+//	public static void getSearchList(String catalog, String content,
+//			int pageIndex, AsyncHttpResponseHandler handler) {
+//		RequestParams params = new RequestParams();
+//		params.put("catalog", catalog);
+//		params.put("content", content);
+//		params.put("pageIndex", pageIndex);
+//		params.put("pageSize", DEF_PAGE_SIZE);
+//		ApiHttpClient.get("action/api/search_list", params, handler);
+//	}
+
 }
