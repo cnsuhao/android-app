@@ -281,4 +281,8 @@
 	<string name="tab_blog">博客</string>
 	<string name="tab_news">新闻</string>
 	<string name="tab_code">代码</string>
+	<string name="tip_search_content_empty">请输入搜索内容</string>
+	<string name="hint_search">搜索内容</string>
+	
+	<string name="actionbar_title_lisence">开源协议</string>
 </resources>

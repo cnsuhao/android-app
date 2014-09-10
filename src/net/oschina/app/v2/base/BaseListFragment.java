@@ -41,7 +41,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	protected PullToRefreshListView mListView;
 	protected ListBaseAdapter mAdapter;
 	protected EmptyLayout mErrorLayout;
-	protected int mStoreEmptyState;
+	protected int mStoreEmptyState = -1;
 
 	protected int mCurrentPage = 0;
 	protected int mCatalog = NewsList.CATALOG_ALL;

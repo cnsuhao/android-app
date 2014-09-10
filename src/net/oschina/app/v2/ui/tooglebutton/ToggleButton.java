@@ -5,6 +5,7 @@ import net.oschina.app.v2.ui.tooglebutton.rebound.Spring;
 import net.oschina.app.v2.ui.tooglebutton.rebound.SpringConfig;
 import net.oschina.app.v2.ui.tooglebutton.rebound.SpringSystem;
 import net.oschina.app.v2.ui.tooglebutton.rebound.SpringUtil;
+import android.R.interpolator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -55,6 +56,12 @@ public class ToggleButton extends View {
 	/** 关闭时内部灰色带高度 */
 	private float offLineWidth;
 
+	public interface OnToggleChangedListener {
+		void onToggle(boolean flag);
+	}
+
+	private OnToggleChangedListener mListener;
+
 	private ToggleButton(Context context) {
 		super(context);
 	}
@@ -67,6 +74,10 @@ public class ToggleButton extends View {
 	public ToggleButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		setup(attrs);
+	}
+
+	public void setListener(OnToggleChangedListener lis) {
+		mListener = lis;
 	}
 
 	public void setup(AttributeSet attrs) {
@@ -84,6 +95,9 @@ public class ToggleButton extends View {
 			public void onClick(View arg0) {
 				spring.setEndValue(toggleOn ? 0 : 1);
 				toggleOn = !toggleOn;
+				if (mListener != null) {
+					mListener.onToggle(toggleOn);
+				}
 			}
 		});
 
@@ -100,6 +114,12 @@ public class ToggleButton extends View {
 		borderWidth = typedArray.getDimensionPixelSize(
 				R.styleable.ToggleButton_borderWidth, borderWidth);
 		typedArray.recycle();
+	}
+
+	public void setToggle(boolean flag) {
+		toggleOn = !flag;
+		spring.setEndValue(toggleOn ? 0 : 1);
+		invalidate();
 	}
 
 	@Override

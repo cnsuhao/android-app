@@ -9,6 +9,7 @@
         android:orientation="vertical" >
 
         <LinearLayout
+            android:id="@+id/ly_pic_path"
             style="@style/setting_item_container"
             android:layout_marginTop="@dimen/space_20"
             android:padding="@dimen/space_8" >
@@ -28,13 +29,22 @@
                     android:textSize="@dimen/text_size_16" />
 
                 <TextView
+                    android:id="@+id/tv_current_picture_save_path"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_2"
+                    android:singleLine="true"
                     android:text="@string/current_picture_save_path"
                     android:textColor="@color/main_gray"
                     android:textSize="@dimen/text_size_12" />
             </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space_8"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_item_goto_right_tip" />
         </LinearLayout>
 
         <View
@@ -70,6 +80,7 @@
             android:background="@color/list_divider_color" />
 
         <LinearLayout
+            android:id="@+id/ly_cache_size"
             style="@style/setting_item_container"
             android:padding="@dimen/space_16" >
 
@@ -78,9 +89,9 @@
                 android:text="@string/clear_cache" />
 
             <TextView
+                android:id="@+id/tv_cache_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12K"
                 android:textColor="@color/main_gray"
                 android:textSize="@dimen/text_size_14" />
 
@@ -88,6 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/space_8"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_item_goto_right_tip" />
         </LinearLayout>
 
@@ -99,6 +111,7 @@
             android:background="@color/list_divider_color" />
 
         <LinearLayout
+            android:id="@+id/ly_version_name"
             style="@style/setting_item_container"
             android:padding="@dimen/space_16" >
 
@@ -107,9 +120,9 @@
                 android:text="@string/check_udpdate" />
 
             <TextView
+                android:id="@+id/tv_version_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="V1.0.0beta"
                 android:textColor="@color/main_gray"
                 android:textSize="@dimen/text_size_14" />
 
@@ -117,6 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/space_8"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_item_goto_right_tip" />
         </LinearLayout>
 
@@ -129,6 +143,7 @@
             android:background="@color/list_divider_color" />
 
         <LinearLayout
+            android:id="@+id/ly_lisence"
             style="@style/setting_item_container"
             android:padding="@dimen/space_16" >
 
@@ -139,6 +154,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_item_goto_right_tip" />
         </LinearLayout>
 
@@ -160,6 +176,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_item_goto_right_tip" />
         </LinearLayout>
 
@@ -181,6 +198,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_item_goto_right_tip" />
         </LinearLayout>
 
@@ -203,6 +221,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_item_goto_right_tip" />
         </LinearLayout>
     </LinearLayout>

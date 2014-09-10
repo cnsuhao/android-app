@@ -34,12 +34,10 @@ import net.oschina.app.ui.ImageDialog;
 import net.oschina.app.ui.ImageZoomDialog;
 import net.oschina.app.ui.LoginDialog;
 import net.oschina.app.ui.Main;
-import net.oschina.app.ui.MessageDetail;
 import net.oschina.app.ui.MessageForward;
 import net.oschina.app.ui.MessagePub;
 import net.oschina.app.ui.ReportUi;
 import net.oschina.app.ui.ScreenShotShare;
-import net.oschina.app.ui.Search;
 import net.oschina.app.ui.Setting;
 import net.oschina.app.ui.TweetPub;
 import net.oschina.app.ui.UserFriend;
@@ -1941,6 +1939,10 @@ public class UIHelper {
 		showSimpleBack(context, SimpleBackPage.COMMENT, args);
 	}
 
+	public static void showLisence(Context context){
+		showSimpleBack(context, SimpleBackPage.LISENCE);
+	}
+	
 	/**
 	 * 发送广播告知评论发生变化
 	 * 

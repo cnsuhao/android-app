@@ -99,6 +99,7 @@ public class AppContext extends BaseApplication {
 	private static final int CACHE_TIME = 60 * 60000;// 缓存失效时间
 	private static final String KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN";
 	private static final String KEY_SOFTKEYBOARD_HEIGHT = "KEY_SOFTKEYBOARD_HEIGHT";
+	private static final String KEY_LOAD_IMAGE = "KEY_LOAD_IMAGE";
 	private static final String LAST_QUESTION_CATEGORY_IDX = "LAST_QUESTION_CATEGORY_IDX";
 
 	private boolean login = false; // 登录状态
@@ -207,6 +208,16 @@ public class AppContext extends BaseApplication {
 		return getPreferences().getString(KEY_ACCESS_TOKEN, null);
 	}
 
+	public static boolean shouldLoadImage(){
+		return getPreferences().getBoolean(KEY_LOAD_IMAGE, true);
+	}
+	
+	public static void setLoadImage(boolean flag){
+		Editor editor = getPreferences().edit();
+		editor.putBoolean(KEY_LOAD_IMAGE, flag);
+		apply(editor);
+	}
+	
 	/**
 	 * 初始化
 	 */
@@ -1646,6 +1657,7 @@ public class AppContext extends BaseApplication {
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	public boolean isLoadImage() {
 		String perf_loadimage = getProperty(AppConfig.CONF_LOAD_IMAGE);
 		// 默认是加载的
@@ -1660,6 +1672,7 @@ public class AppContext extends BaseApplication {
 	 * 
 	 * @param b
 	 */
+	@Deprecated
 	public void setConfigLoadimage(boolean b) {
 		setProperty(AppConfig.CONF_LOAD_IMAGE, String.valueOf(b));
 	}
