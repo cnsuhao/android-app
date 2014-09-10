@@ -154,15 +154,23 @@ public class ListBaseAdapter extends BaseAdapter {
 		_loadFinishText = loadFinishText;
 	}
 
+	protected boolean loadMoreHasBg() {
+		return true;
+	}
+
 	@SuppressLint("InflateParams")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (position == getCount() - 1) {// 最后一条
 			if (getState() == STATE_LOAD_MORE || getState() == STATE_NO_MORE
-					|| state == STATE_EMPTY_ITEM || getState() == STATE_NETWORK_ERROR) {
+					|| state == STATE_EMPTY_ITEM
+					|| getState() == STATE_NETWORK_ERROR) {
 				LinearLayout loadmore = (LinearLayout) LayoutInflater.from(
 						parent.getContext()).inflate(
 						R.layout.v2_list_cell_footer, null);
+				if (!loadMoreHasBg()) {
+					loadmore.setBackgroundDrawable(null);
+				}
 				ProgressBar progress = (ProgressBar) loadmore
 						.findViewById(R.id.progressbar);
 				TextView text = (TextView) loadmore.findViewById(R.id.text);
@@ -188,7 +196,7 @@ public class ListBaseAdapter extends BaseAdapter {
 					loadmore.setVisibility(View.VISIBLE);
 					progress.setVisibility(View.GONE);
 					text.setVisibility(View.VISIBLE);
-					if(TDevice.hasInternet()){
+					if (TDevice.hasInternet()) {
 						text.setText("对不起,出错了");
 					} else {
 						text.setText("没有可用的网络");

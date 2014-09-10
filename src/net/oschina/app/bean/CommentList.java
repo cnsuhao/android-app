@@ -3,6 +3,8 @@ package net.oschina.app.bean;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import net.oschina.app.AppException;
@@ -159,5 +161,15 @@ public class CommentList extends Entity implements ListEntity {
 	@Override
 	public List<?> getList() {
 		return commentlist;
+	}
+
+	public void sortList() {
+		Collections.sort(commentlist, new Comparator<Comment>() {
+
+			@Override
+			public int compare(Comment lhs, Comment rhs) {
+				return lhs.getPubDate().compareTo(rhs.getPubDate());
+			}
+		});
 	}
 }

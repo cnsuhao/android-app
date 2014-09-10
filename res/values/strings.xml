@@ -182,6 +182,7 @@
     <string name="academic_focus">专长领域:</string>
     
     <string name="actionbar_title_message_public">留言</string>
+    <string name="actionbar_title_message_detail">对话</string>
     <string name="actionbar_title_question_public">提问</string>
     <string name="actionbar_title_tweet_public">动弹一下</string>
     <string name="actionbar_title_reply_comment">回复评论</string>
@@ -271,4 +272,6 @@
 	<string name="hint_message">留言内容</string>
 	<string name="tip_message_public_success">发送成功</string>
 	<string name="tip_message_public_faile">发送失败</string>
+	<string name="send_to">发给</string>
+	<string name="message_count">%s条留言</string>
 </resources>

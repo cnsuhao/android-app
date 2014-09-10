@@ -394,4 +394,13 @@ public class NewsApi extends BaseApi {
 		params.put("content", content);
 		ApiHttpClient.post("action/api/message_pub", params, handler);
 	}
+
+	public static void getMessageList(int uid, int pageIndex,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("pageIndex", pageIndex);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/message_list", params, handler);
+	}
 }

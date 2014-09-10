@@ -4,6 +4,7 @@ import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
 import net.oschina.app.v2.activity.comment.fragment.CommentReplyFragment;
 import net.oschina.app.v2.activity.favorite.fragment.FavoriteViewPagerFragment;
 import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
+import net.oschina.app.v2.activity.message.fragment.MessageDetailFragment;
 import net.oschina.app.v2.activity.message.fragment.MessagePublicFragment;
 import net.oschina.app.v2.activity.question.fragment.QuestionPublicFragment;
 import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
@@ -30,7 +31,8 @@ public enum SimpleBackPage {
 	QUESTION_PUBLIC(9, R.string.actionbar_title_question_public, QuestionPublicFragment.class),
 	TWEET_PUBLIC(10, R.string.actionbar_title_tweet_public, TweetPublicFragment.class),
 	REPLY_COMMENT(11, R.string.actionbar_title_reply_comment, CommentReplyFragment.class),
-	MESSAGE_PUBLIC(12, R.string.actionbar_title_message_public, MessagePublicFragment.class);
+	MESSAGE_PUBLIC(12, R.string.actionbar_title_message_public, MessagePublicFragment.class),
+	MESSAGE_DETAIL(13, R.string.actionbar_title_message_detail, MessageDetailFragment.class);
 
 	private int title;
 	private Class<?> clz;
