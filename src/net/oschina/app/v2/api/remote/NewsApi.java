@@ -5,7 +5,6 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.oschina.app.api.ApiClient;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
@@ -396,6 +395,23 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.post("action/api/message_pub", params, handler);
 	}
 
+	public static void deleteMessage(int uid, int friendid,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("friendid", friendid);
+		ApiHttpClient.post("action/api/message_delete", params, handler);
+	}
+
+	public static void forwareMessage(int uid, String receiverName,
+			String content, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("receiverName", receiverName);
+		params.put("content", content);
+		ApiHttpClient.post("action/api/message_pub", params, handler);
+	}
+
 	public static void getMessageList(int uid, int pageIndex,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
@@ -405,14 +421,26 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.get("action/api/message_list", params, handler);
 	}
 
-	// public static void getSearchList(String catalog, String content,
-	// int pageIndex, AsyncHttpResponseHandler handler) {
-	// RequestParams params = new RequestParams();
-	// params.put("catalog", catalog);
-	// params.put("content", content);
-	// params.put("pageIndex", pageIndex);
-	// params.put("pageSize", DEF_PAGE_SIZE);
-	// ApiHttpClient.get("action/api/search_list", params, handler);
-	// }
+	public static void updatePortrait(int uid, File portrait,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		Map<String, File> files = new HashMap<String, File>();
+		files.put("portrait", portrait);
+		ApiHttpClient.post("action/api/portrait_update", params, handler);
+	}
 
+	public static void getNotices(int uid, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		ApiHttpClient.post("action/api/user_notice", params, handler);
+	}
+
+	public static void clearNotice(int uid, int type,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("type", type);
+		ApiHttpClient.post("action/api/notice_clear", params, handler);
+	}
 }
