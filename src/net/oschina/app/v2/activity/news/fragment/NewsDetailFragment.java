@@ -140,13 +140,13 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	private void fillWebViewBody() {
 		String body = UIHelper.WEB_STYLE + mNews.getBody();
 		// 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
-		boolean isLoadImage;
-		AppContext ac = (AppContext) getActivity().getApplication();
-		if (AppContext.NETTYPE_WIFI == ac.getNetworkType()) {
-			isLoadImage = true;
-		} else {
-			isLoadImage = ac.isLoadImage();
-		}
+		boolean isLoadImage = true;
+		//AppContext ac = (AppContext) getActivity().getApplication();
+		//if (AppContext.NETTYPE_WIFI == ac.getNetworkType()) {
+		//	isLoadImage = true;
+		//} else {
+		//	isLoadImage = ac.isLoadImage();
+		//}
 		if (isLoadImage) {
 			// 过滤掉 img标签的width,height属性
 			body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
@@ -186,6 +186,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 		body += "<div style='margin-bottom: 80px'/>";
 
 		mWebView.setWebViewClient(mWebClient);
+		UIHelper.addWebImageShow(getActivity(), mWebView);
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
 	}
 

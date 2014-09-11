@@ -46,6 +46,8 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	protected int mCurrentPage = 0;
 	protected int mCatalog = NewsList.CATALOG_ALL;
 
+	private AsyncTask<String, Void, ListEntity> mCacheTask;
+
 	protected int getLayoutRes() {
 		return R.layout.v2_fragment_pull_refresh_listview;
 	}
@@ -88,8 +90,8 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 			mAdapter = getListAdapter();
 			// mListView.setRefreshing();
 			mListView.setAdapter(mAdapter);
-			
-			if(requestDataIfViewCreated()) {
+
+			if (requestDataIfViewCreated()) {
 				mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 				mCurrentPage = 0;
 				mState = STATE_REFRESH;
@@ -109,12 +111,18 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		super.onDestroyView();
 	}
 
+	@Override
+	public void onDestroy() {
+		cancelReadCacheTask();
+		super.onDestroy();
+	}
+
 	protected abstract ListBaseAdapter getListAdapter();
-	
-	protected boolean requestDataIfViewCreated(){
+
+	protected boolean requestDataIfViewCreated() {
 		return true;
 	}
-	
+
 	protected String getCacheKeyPrefix() {
 		return null;
 	}
@@ -170,7 +178,15 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	}
 
 	private void readCacheData(String cacheKey) {
-		new CacheTask(getActivity()).execute(cacheKey);
+		cancelReadCacheTask();
+		mCacheTask = new CacheTask(getActivity()).execute(cacheKey);
+	}
+
+	private void cancelReadCacheTask() {
+		if (mCacheTask != null) {
+			mCacheTask.cancel(true);
+			mCacheTask = null;
+		}
 	}
 
 	private class CacheTask extends AsyncTask<String, Void, ListEntity> {
@@ -240,7 +256,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		@Override
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 				Throwable arg3) {
-			//executeOnLoadDataError(null);
+			// executeOnLoadDataError(null);
 			readCacheData(getCacheKey());
 		}
 

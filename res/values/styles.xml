@@ -52,16 +52,12 @@
         <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
     </style>
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    <style name="ActionBarBaseTheme.Preview" parent="@style/ActionBarBaseTheme">
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="actionBarStyle">@style/ActionBarBaseStyle.Transparent</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
     <!-- sina weibo -->
     <style name="ContentOverlay" parent="android:style/Theme.Dialog">
         <item name="android:windowNoTitle">true</item>
@@ -375,7 +371,7 @@
 
     <style name="popupMenu" parent="android:Animation">
         <item name="@android:windowEnterAnimation">@anim/head_in</item>
-  //进入时的动画                   <item name="@android:windowExitAnimation">@anim/head_out</item>
+  //进入时的动画                           <item name="@android:windowExitAnimation">@anim/head_out</item>
     //退出时的动画   </style>
 
     <!-- V2 styles -->
@@ -446,7 +442,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_16</item>
     </style>
-    
+
     <style name="dialog_common" parent="@style/Theme.Base.AppCompat.Dialog.FixedSize">
         <item name="android:windowBackground">@drawable/dialog_background</item>
     </style>
@@ -455,12 +451,12 @@
         <item name="android:windowBackground">@drawable/dialog_bottom_background</item>
         <item name="android:windowAnimationStyle">@style/dialog_animation</item>
     </style>
-    
-    <style name="dialog_animation" parent="android:Animation">  
+
+    <style name="dialog_animation" parent="android:Animation">
         <item name="@android:windowEnterAnimation">@anim/dialog_enter</item>
         <item name="@android:windowExitAnimation">@anim/dialog_exit</item>
-    </style>  
-    
+    </style>
+
     <style name="dialog_waiting" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@drawable/dialog_background</item>
     </style>

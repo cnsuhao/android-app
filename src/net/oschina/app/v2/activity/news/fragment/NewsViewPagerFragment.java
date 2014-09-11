@@ -28,7 +28,8 @@ public class NewsViewPagerFragment extends Fragment implements
 		mTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
 		mViewPager = (ViewPager) view.findViewById(R.id.main_tab_pager);
 
-		if (mTabAdapter == null) {
+		if (mViewPager.getAdapter() == null &&
+				mTabAdapter == null) {
 			mTabAdapter = new NewsTabPagerAdapter(getChildFragmentManager(),
 					getActivity(), mViewPager);
 		}

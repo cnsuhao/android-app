@@ -31,7 +31,6 @@ import net.oschina.app.ui.CaptureActivity;
 import net.oschina.app.ui.CommentPub;
 import net.oschina.app.ui.FeedBack;
 import net.oschina.app.ui.ImageDialog;
-import net.oschina.app.ui.ImageZoomDialog;
 import net.oschina.app.ui.LoginDialog;
 import net.oschina.app.ui.Main;
 import net.oschina.app.ui.ReportUi;
@@ -43,6 +42,7 @@ import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
 import net.oschina.app.v2.activity.comment.fragment.CommentReplyFragment;
 import net.oschina.app.v2.activity.common.SimpleBackActivity;
 import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
+import net.oschina.app.v2.activity.image.ImagePreviewActivity;
 import net.oschina.app.v2.activity.message.fragment.MessageDetailFragment;
 import net.oschina.app.v2.activity.message.fragment.MessageForwardFragment;
 import net.oschina.app.v2.activity.message.fragment.MessagePublicFragment;
@@ -449,10 +449,10 @@ public class UIHelper {
 	 */
 	public static void showMessageDetail(Context context, int friendid,
 			String friendname) {
-		//Intent intent = new Intent(context, MessageDetail.class);
-		//intent.putExtra("friend_name", friendname);
-		//intent.putExtra("friend_id", friendid);
-		//context.startActivity(intent);
+		// Intent intent = new Intent(context, MessageDetail.class);
+		// intent.putExtra("friend_name", friendname);
+		// intent.putExtra("friend_id", friendid);
+		// context.startActivity(intent);
 		Bundle args = new Bundle();
 		args.putInt(MessageDetailFragment.BUNDLE_KEY_FID, friendid);
 		args.putString(MessageDetailFragment.BUNDLE_KEY_FNAME, friendname);
@@ -470,12 +470,12 @@ public class UIHelper {
 	 */
 	public static void showMessagePub(Activity context, int friendId,
 			String friendName) {
-		//Intent intent = new Intent();
-		//intent.putExtra("user_id",
-		//		((AppContext) context.getApplication()).getLoginUid());
-		//intent.putExtra("friend_id", friendId);
-		//intent.putExtra("friend_name", friendName);
-		//intent.setClass(context, MessagePub.class);
+		// Intent intent = new Intent();
+		// intent.putExtra("user_id",
+		// ((AppContext) context.getApplication()).getLoginUid());
+		// intent.putExtra("friend_id", friendId);
+		// intent.putExtra("friend_name", friendName);
+		// intent.setClass(context, MessagePub.class);
 		// context.startActivityForResult(intent, REQUEST_CODE_FOR_RESULT);
 		Bundle args = new Bundle();
 		args.putInt(MessagePublicFragment.BUNDLE_KEY_UID,
@@ -496,18 +496,19 @@ public class UIHelper {
 	 */
 	public static void showMessageForward(Activity context, String friendName,
 			String messageContent) {
-//		Intent intent = new Intent();
-//		intent.putExtra("user_id",
-//				((AppContext) context.getApplication()).getLoginUid());
-//		intent.putExtra("friend_name", friendName);
-//		intent.putExtra("message_content", messageContent);
-//		intent.setClass(context, MessageForward.class);
-//		context.startActivity(intent);
+		// Intent intent = new Intent();
+		// intent.putExtra("user_id",
+		// ((AppContext) context.getApplication()).getLoginUid());
+		// intent.putExtra("friend_name", friendName);
+		// intent.putExtra("message_content", messageContent);
+		// intent.setClass(context, MessageForward.class);
+		// context.startActivity(intent);
 		Bundle args = new Bundle();
 		args.putInt(MessageForwardFragment.BUNDLE_KEY_UID,
 				((AppContext) context.getApplication()).getLoginUid());
 		args.putString(MessageForwardFragment.BUNDLE_KEY_FNAME, friendName);
-		args.putString(MessageForwardFragment.BUNDLE_KEY_CONTENT, messageContent);
+		args.putString(MessageForwardFragment.BUNDLE_KEY_CONTENT,
+				messageContent);
 		showSimpleBack(context, SimpleBackPage.MESSAGE_FORWARD, args);
 	}
 
@@ -880,9 +881,10 @@ public class UIHelper {
 	}
 
 	public static void showImageZoomDialog(Context context, String imgUrl) {
-		Intent intent = new Intent(context, ImageZoomDialog.class);
-		intent.putExtra("img_url", imgUrl);
-		context.startActivity(intent);
+		// Intent intent = new Intent(context, ImagePreviewActivity.class);
+		// intent.putExtra("img_url", imgUrl);
+		// intent.put
+		// context.startActivity(intent);
 	}
 
 	/**
@@ -940,8 +942,8 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showSearch(Context context) {
-		//Intent intent = new Intent(context, Search.class);
-		//context.startActivity(intent);
+		// Intent intent = new Intent(context, Search.class);
+		// context.startActivity(intent);
 		showSimpleBack(context, SimpleBackPage.SEARCH);
 	}
 
@@ -1833,15 +1835,17 @@ public class UIHelper {
 	/**
 	 * 添加网页的点击图片展示支持
 	 */
-	@SuppressLint({ "SetJavaScriptEnabled", "JavascriptInterface" })
+	@SuppressLint("JavascriptInterface")
 	public static void addWebImageShow(final Context cxt, WebView wv) {
 		wv.getSettings().setJavaScriptEnabled(true);
 		wv.addJavascriptInterface(new OnWebViewImageListener() {
 
 			@Override
 			public void onImageClick(String bigImageUrl) {
-				if (bigImageUrl != null)
-					UIHelper.showImageZoomDialog(cxt, bigImageUrl);
+				if (bigImageUrl != null) {
+					// UIHelper.showImageZoomDialog(cxt, bigImageUrl);
+					UIHelper.showImagePreview(cxt, new String[] { bigImageUrl });
+				}
 			}
 		}, "mWebViewImageListener");
 	}
@@ -1944,10 +1948,10 @@ public class UIHelper {
 		showSimpleBack(context, SimpleBackPage.COMMENT, args);
 	}
 
-	public static void showLisence(Context context){
+	public static void showLisence(Context context) {
 		showSimpleBack(context, SimpleBackPage.LISENCE);
 	}
-	
+
 	/**
 	 * 发送广播告知评论发生变化
 	 * 
@@ -1970,5 +1974,9 @@ public class UIHelper {
 		args.putParcelable(Comment.BUNDLE_KEY_COMMENT, replyComment);
 		intent.putExtras(args);
 		context.sendBroadcast(intent);
+	}
+
+	public static void showImagePreview(Context context, String[] imageUrls) {
+		ImagePreviewActivity.showImagePrivew(context, imageUrls);
 	}
 }

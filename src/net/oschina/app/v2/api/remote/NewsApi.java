@@ -1,6 +1,7 @@
 package net.oschina.app.v2.api.remote;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -288,12 +289,17 @@ public class NewsApi extends BaseApi {
 		params.put("uid", tweet.getAuthorId());
 		params.put("msg", tweet.getBody());
 
-		Map<String, File> files = new HashMap<String, File>();
+		//Map<String, File> files = new HashMap<String, File>();
 		if (!TextUtils.isEmpty(tweet.getImageFilePath())) {
-			files.put("img", new File(tweet.getImageFilePath()));
+			try {
+				params.put("img", new File(tweet.getImageFilePath()));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 		// if (tweet.getAmrFile() != null)
 		// files.put("amr", tweet.getAmrFile());
+		//params.put("img", file)l
 		ApiHttpClient.post("action/api/tweet_pub", params, handler);
 	}
 

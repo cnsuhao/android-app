@@ -102,6 +102,16 @@ public class TweetAdapter extends ListBaseAdapter {
 			vh.pic.setVisibility(View.VISIBLE);
 			ImageLoader.getInstance().displayImage(item.getImgSmall(), vh.pic,
 					options);
+			vh.pic.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// UIHelper.showImageZoomDialog(parent.getContext(),
+					// item.getImgBig());
+					UIHelper.showImagePreview(parent.getContext(),
+							new String[] { item.getImgBig() });
+				}
+			});
 		} else {
 			vh.pic.setVisibility(View.GONE);
 			vh.pic.setImageBitmap(null);

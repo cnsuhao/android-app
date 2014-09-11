@@ -136,14 +136,19 @@ public class TweetPublicFragment extends BaseFragment implements
 			AppContext.showToastShort(R.string.tip_content_empty);
 			return;
 		}
+		if (content.length() > MAX_TEXT_LENGTH) {
+			AppContext.showToastShort(R.string.tip_content_too_long);
+			return;
+		}
+
 		Tweet tweet = new Tweet();
 		tweet.setAuthorId(AppContext.instance().getLoginUid());
 		tweet.setBody(content);
-		//tweet.setImageFile(imgFile);
-		if(imgFile != null && imgFile.exists()){
+		// tweet.setImageFile(imgFile);
+		if (imgFile != null && imgFile.exists()) {
 			tweet.setImageFilePath(imgFile.getAbsolutePath());
 		}
-		ServerTaskUtils.publicTweet(getActivity(),tweet);
+		ServerTaskUtils.publicTweet(getActivity(), tweet);
 		getActivity().finish();
 	}
 

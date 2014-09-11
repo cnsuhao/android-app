@@ -24,6 +24,8 @@
     <string name="detail_menu_for_share">分享</string>
     <string name="detail_menu_for_report">举报</string>
     
+    <string name="image_menu_download">保存</string>
+    
     <string name="frame_title_news_lastest">最新资讯</string>
     <string name="frame_title_news_blog">最新博客</string>
     <string name="frame_title_news_recommend">推荐阅读</string>
@@ -162,7 +164,7 @@
     <string name="actionbar_title_detail">详情</string>
     <string name="tip_logout_success">注销成功.</string>
     
-    <string name="picture_save_path">图片保存路径</string>
+    <string name="picture_save_path">图片缓存路径</string>
     <string name="current_picture_save_path">目前路径：%s</string>
     <string name="load_picture">加载图片</string>
     <string name="clear_cache">清除缓存</string>
@@ -303,4 +305,8 @@
 	<string name="confirm_delete_message">确定要删除和\"%s\"的所有留言吗?</string>
 	<string name="tip_delete_success">删除成功</string>
 	<string name="tip_delete_faile">无法删除</string>
+	<string name="tip_content_too_long">内容长度超过限制</string>
+	
+	<string name="tip_save_image_suc">图片已保存在:%s</string>
+	<string name="tip_save_image_faile">无法保存图片</string>
 </resources>

@@ -12,6 +12,7 @@ import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
 import net.oschina.app.v2.ui.text.MyURLSpan;
 import net.oschina.app.v2.ui.text.TweetTextView;
+import net.oschina.app.v2.utils.DateUtil;
 import android.annotation.SuppressLint;
 import android.text.Html;
 import android.text.Spanned;
@@ -69,7 +70,7 @@ public class CommentAdapter extends ListBaseAdapter {
 		vh.content.setText(span);
 		MyURLSpan.parseLinkText(vh.content, span);
 
-		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+		vh.time.setText(DateUtil.getFormatTime(item.getPubDate()));
 
 		vh.from.setVisibility(View.VISIBLE);
 		switch (item.getAppClient()) {

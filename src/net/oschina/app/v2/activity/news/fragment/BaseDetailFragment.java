@@ -91,7 +91,7 @@ public class BaseDetailFragment extends BaseFragment implements
 		}
 	};
 
-	@SuppressLint("SetJavaScriptEnabled")
+	@SuppressLint({ "SetJavaScriptEnabled", "JavascriptInterface" })
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	protected void initWebView(WebView webView) {
 		WebSettings settings = webView.getSettings();
@@ -106,7 +106,27 @@ public class BaseDetailFragment extends BaseFragment implements
 			ZoomButtonsController zbc = new ZoomButtonsController(webView);
 			zbc.getZoomControls().setVisibility(View.GONE);
 		}
-		UIHelper.addWebImageShow(getActivity(), webView);
+		// UIHelper.addWebImageShow(getActivity(), webView);
+		JavaScriptInterface javascriptInterface = new JavaScriptInterface(
+				getActivity());
+		webView.addJavascriptInterface(javascriptInterface,
+				"mWebViewImageListener");
+	}
+
+	public class JavaScriptInterface {
+
+		private Context ctx;
+
+		public JavaScriptInterface(Context ctx) {
+			this.ctx = ctx;
+		}
+
+		public void onImageClick(String bigImageUrl) {
+			if (bigImageUrl != null) {
+				// UIHelper.showImageZoomDialog(cxt, bigImageUrl);
+				UIHelper.showImagePreview(ctx, new String[] { bigImageUrl });
+			}
+		}
 	}
 
 	protected void recycleWebView() {
@@ -130,6 +150,7 @@ public class BaseDetailFragment extends BaseFragment implements
 	}
 
 	private CommentChangeReceiver mReceiver;
+	private AsyncTask<String, Void, Entity> mCacheTask;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -157,6 +178,7 @@ public class BaseDetailFragment extends BaseFragment implements
 
 	@Override
 	public void onDestroy() {
+		cancelReadCache();
 		recycleWebView();
 		if (mReceiver != null) {
 			getActivity().unregisterReceiver(mReceiver);
@@ -196,7 +218,15 @@ public class BaseDetailFragment extends BaseFragment implements
 	}
 
 	private void readCacheData(String cacheKey) {
-		new CacheTask(getActivity()).execute(cacheKey);
+		cancelReadCache();
+		mCacheTask = new CacheTask(getActivity()).execute(cacheKey);
+	}
+
+	private void cancelReadCache() {
+		if (mCacheTask != null) {
+			mCacheTask.cancel(true);
+			mCacheTask = null;
+		}
 	}
 
 	private class CacheTask extends AsyncTask<String, Void, Entity> {
@@ -208,13 +238,16 @@ public class BaseDetailFragment extends BaseFragment implements
 
 		@Override
 		protected Entity doInBackground(String... params) {
-			Serializable seri = CacheManager.readObject(mContext.get(),
-					params[0]);
-			if (seri == null) {
-				return null;
-			} else {
-				return readData(seri);
+			if (mContext.get() != null) {
+				Serializable seri = CacheManager.readObject(mContext.get(),
+						params[0]);
+				if (seri == null) {
+					return null;
+				} else {
+					return readData(seri);
+				}
 			}
+			return null;
 		}
 
 		@Override

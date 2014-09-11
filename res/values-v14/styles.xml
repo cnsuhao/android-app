@@ -17,4 +17,10 @@
         <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
     </style>
 
+    <style name="ActionBarBaseTheme.Preview" parent="@style/ActionBarBaseTheme">
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:actionBarStyle">@style/ActionBarBaseStyle.Transparent</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
 </resources>
