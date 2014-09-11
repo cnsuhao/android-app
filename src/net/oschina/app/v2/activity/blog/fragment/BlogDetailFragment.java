@@ -8,8 +8,10 @@ import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
+import net.oschina.app.bean.Report;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
+import net.oschina.app.v2.activity.blog.view.ReportDialog;
 import net.oschina.app.v2.activity.news.fragment.BaseDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
 import net.oschina.app.v2.api.remote.NewsApi;
@@ -18,7 +20,11 @@ import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.v2.service.PublicCommentTask;
 import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+
+import org.apache.http.Header;
+
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
@@ -29,6 +35,8 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.TextView;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 
 public class BlogDetailFragment extends BaseDetailFragment implements
@@ -43,6 +51,29 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	private int mBlogId;
 	private Blog mBlog;
 	private EmojiFragment mEmojiFragment;
+
+	private AsyncHttpResponseHandler mReportHandler = new TextHttpResponseHandler() {
+
+		@Override
+		public void onSuccess(int arg0, Header[] arg1, String arg2) {
+			if (TextUtils.isEmpty(arg2)) {
+				AppContext.showToastShort(R.string.tip_report_success);
+			} else {
+				AppContext.showToastShort(R.string.tip_report_faile);
+			}
+		}
+
+		@Override
+		public void onFailure(int arg0, Header[] arg1, String arg2,
+				Throwable arg3) {
+			AppContext.showToastShort(R.string.tip_report_faile);
+		}
+
+		@Override
+		public void onFinish() {
+			hideWaitDialog();
+		}
+	};
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -84,6 +115,11 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	}
 
 	@Override
+	protected boolean hasReportMenu() {
+		return true;
+	}
+
+	@Override
 	protected String getCacheKey() {
 		return new StringBuilder(BLOG_CACHE_KEY).append(mBlogId).toString();
 	}
@@ -118,7 +154,7 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 			}
 		}
 	}
-	
+
 	@Override
 	protected void executeOnLoadDataSuccess(Entity entity) {
 		mBlog = (Blog) entity;
@@ -191,9 +227,38 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	protected int getFavoriteTargetId() {
 		return mBlog != null ? mBlog.getId() : -1;
 	}
-	
+
 	@Override
 	protected int getFavoriteTargetType() {
 		return mBlog != null ? FavoriteList.TYPE_BLOG : -1;
+	}
+
+	@Override
+	protected void onReportMenuClick() {
+		if (!AppContext.instance().isLogin()) {
+			UIHelper.showLogin(getActivity());
+			return;
+		}
+		int reportId = AppContext.instance().getLoginUid();
+		final ReportDialog dialog = new ReportDialog(getActivity(),
+				mBlog.getUrl(), reportId);
+		dialog.setCancelable(true);
+		dialog.setTitle(R.string.report);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.setNegativeButton(R.string.cancle, null);
+		dialog.setPositiveButton(R.string.ok,
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface d, int which) {
+						Report report = null;
+						if ((report = dialog.getReport()) != null) {
+							showWaitDialog(R.string.progress_submit);
+							NewsApi.report(report, mReportHandler);
+						}
+						d.dismiss();
+					}
+				});
+		dialog.show();
 	}
 }

@@ -134,15 +134,19 @@ public class BaseDetailFragment extends BaseFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mMenuAdapter = new MenuAdapter();
+		mMenuAdapter = new MenuAdapter(hasReportMenu());
 		setHasOptionsMenu(true);
-		
+
 		if (shouldRegisterCommentChangedReceiver()) {
 			mReceiver = new CommentChangeReceiver();
 			IntentFilter filter = new IntentFilter(
 					Constants.INTENT_ACTION_COMMENT_CHANGED);
 			getActivity().registerReceiver(mReceiver, filter);
 		}
+	}
+
+	protected boolean hasReportMenu() {
+		return false;
 	}
 
 	@Override
@@ -264,7 +268,7 @@ public class BaseDetailFragment extends BaseFragment implements
 		@Override
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 				Throwable arg3) {
-			//executeOnLoadDataError(arg3.getMessage());
+			// executeOnLoadDataError(arg3.getMessage());
 			readCacheData(getCacheKey());
 		}
 	};
@@ -339,13 +343,18 @@ public class BaseDetailFragment extends BaseFragment implements
 				NewsApi.addFavorite(uid, getFavoriteTargetId(),
 						getFavoriteTargetType(), mAddFavoriteHandler);
 			}
-		} else {
+		} else if (position == 1) {
 			handleShare();
+		} else if (position == 2) {
+			onReportMenuClick();
 		}
 		if (mMenuWindow != null) {
 			mMenuWindow.dismiss();
 			mMenuWindow = null;
 		}
+	}
+
+	protected void onReportMenuClick() {
 	}
 
 	private void handleShare() {
@@ -368,6 +377,11 @@ public class BaseDetailFragment extends BaseFragment implements
 	private static class MenuAdapter extends BaseAdapter {
 
 		private boolean isFavorite;
+		private boolean hasReport;
+
+		public MenuAdapter(boolean hasReport) {
+			this.hasReport = hasReport;
+		}
 
 		public boolean isFavorite() {
 			return isFavorite;
@@ -380,7 +394,7 @@ public class BaseDetailFragment extends BaseFragment implements
 
 		@Override
 		public int getCount() {
-			return 2;
+			return hasReport ? 3 : 2;
 		}
 
 		@Override
@@ -410,6 +424,10 @@ public class BaseDetailFragment extends BaseFragment implements
 				name.setText(parent.getResources().getString(
 						R.string.detail_menu_for_share));
 				iconResId = R.drawable.actionbar_menu_icn_share;
+			} else if (position == 2) {
+				name.setText(parent.getResources().getString(
+						R.string.detail_menu_for_report));
+				iconResId = R.drawable.actionbar_menu_icn_report;
 			}
 			Drawable drawable = AppContext.resources().getDrawable(iconResId);
 			drawable.setBounds(0, 0, drawable.getMinimumWidth(),

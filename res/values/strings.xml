@@ -22,6 +22,7 @@
     <string name="detail_menu_unfavorite">取消收藏</string>
     <string name="detail_menu_favorite">收藏</string>
     <string name="detail_menu_for_share">分享</string>
+    <string name="detail_menu_for_report">举报</string>
     
     <string name="frame_title_news_lastest">最新资讯</string>
     <string name="frame_title_news_blog">最新博客</string>
@@ -285,4 +286,11 @@
 	<string name="hint_search">搜索内容</string>
 	
 	<string name="actionbar_title_lisence">开源协议</string>
+	<string name="report">举报</string>
+	<string name="report_link">举报链接</string>
+	<string name="report_reson">举报原因</string>
+	<string name="hint_report_desc">详细描述(250字内)</string>
+	<string name="tip_report_other_reason_too_long">描述内容长度超过限制</string>
+	<string name="tip_report_success">举报成功</string>
+	<string name="tip_report_faile">举报失败</string>
 </resources>

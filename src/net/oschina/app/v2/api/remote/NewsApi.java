@@ -379,7 +379,7 @@ public class NewsApi extends BaseApi {
 		params.put("obj_id", report.getReportId());
 		params.put("url", report.getLinkAddress());
 		params.put("obj_type", report.getReason());
-		if (report.getOtherReason() != null) {
+		if (!TextUtils.isEmpty(report.getOtherReason())) {
 			params.put("memo", report.getOtherReason());
 		} else {
 			params.put("memo", "其他原因");
@@ -405,14 +405,14 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.get("action/api/message_list", params, handler);
 	}
 
-//	public static void getSearchList(String catalog, String content,
-//			int pageIndex, AsyncHttpResponseHandler handler) {
-//		RequestParams params = new RequestParams();
-//		params.put("catalog", catalog);
-//		params.put("content", content);
-//		params.put("pageIndex", pageIndex);
-//		params.put("pageSize", DEF_PAGE_SIZE);
-//		ApiHttpClient.get("action/api/search_list", params, handler);
-//	}
+	// public static void getSearchList(String catalog, String content,
+	// int pageIndex, AsyncHttpResponseHandler handler) {
+	// RequestParams params = new RequestParams();
+	// params.put("catalog", catalog);
+	// params.put("content", content);
+	// params.put("pageIndex", pageIndex);
+	// params.put("pageSize", DEF_PAGE_SIZE);
+	// ApiHttpClient.get("action/api/search_list", params, handler);
+	// }
 
 }
