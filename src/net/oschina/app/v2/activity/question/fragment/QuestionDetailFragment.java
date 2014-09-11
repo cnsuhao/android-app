@@ -21,6 +21,7 @@ import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.v2.service.PublicCommentTask;
 import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.utils.TDevice;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -182,6 +183,14 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	public void onSendClick(String text) {
+		if (!TDevice.hasInternet()) {
+			AppContext.showToastShort(R.string.tip_network_error);
+			return;
+		}
+		if (!AppContext.instance().isLogin()) {
+			UIHelper.showLogin(getActivity());
+			return;
+		}
 		if (TextUtils.isEmpty(text)) {
 			AppContext.showToastShort(R.string.tip_comment_content_empty);
 			mEmojiFragment.requestFocusInput();

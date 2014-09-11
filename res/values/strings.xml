@@ -123,6 +123,7 @@
     <string name="error_view_loading">加载中…</string>
     <string name="error_view_load_error_click_to_refresh">内容加载失败\r\n点击重新加载</string>
     <string name="error_view_network_error_click_to_refresh">没有可用的网络</string>
+    <string name="tip_network_error">没有可用的网络</string>
     
     <string name="loading">加载中…</string>
     <string name="loading_no_more">没有更多数据.</string>
@@ -188,7 +189,7 @@
     <string name="actionbar_title_tweet_public">动弹一下</string>
     <string name="actionbar_title_reply_comment">回复评论</string>
     <string name="choose_picture">选择图片</string>
-    <string name="clear_message">清楚文字吗?</string>
+    <string name="clear_message">清除文字吗?</string>
     <string name="ok">确定</string>
     
     <string name="question_title_hint">标题</string>

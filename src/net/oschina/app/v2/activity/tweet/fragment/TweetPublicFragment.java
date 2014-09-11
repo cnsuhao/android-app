@@ -122,6 +122,10 @@ public class TweetPublicFragment extends BaseFragment implements
 	}
 
 	private void handleSubmit() {
+		if (!TDevice.hasInternet()) {
+			AppContext.showToastShort(R.string.tip_network_error);
+			return;
+		}
 		if (!AppContext.instance().isLogin()) {
 			UIHelper.showLogin(getActivity());
 			return;

@@ -286,6 +286,10 @@ public class TweetDetailFragment extends BaseFragment implements
 
 	@Override
 	public void onSendClick(String text) {
+		if (!TDevice.hasInternet()) {
+			AppContext.showToastShort(R.string.tip_network_error);
+			return;
+		}
 		if (!AppContext.instance().isLogin()) {
 			UIHelper.showLogin(getActivity());
 			mEmojiFragment.hideKeyboard();

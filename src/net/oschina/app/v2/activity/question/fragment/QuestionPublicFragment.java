@@ -2,11 +2,13 @@ package net.oschina.app.v2.activity.question.fragment;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.bean.Post;
+import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.dialog.CommonDialog;
 import net.oschina.app.v2.ui.dialog.DialogHelper;
+import net.oschina.app.v2.utils.TDevice;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -111,6 +113,14 @@ public class QuestionPublicFragment extends BaseFragment {
 	}
 
 	private boolean prepareForSubmit() {
+		if (!TDevice.hasInternet()) {
+			AppContext.showToastShort(R.string.tip_network_error);
+			return false;
+		}
+		if (!AppContext.instance().isLogin()) {
+			UIHelper.showLogin(getActivity());
+			return false;
+		}
 		String title = mEtTitle.getText().toString().trim();
 		if (TextUtils.isEmpty(title.trim())) {
 			AppContext.showToastShort(R.string.tip_title_empty);
