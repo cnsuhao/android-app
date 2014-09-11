@@ -178,19 +178,10 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 
 	private void fillWebViewBody() {
 		String body = UIHelper.WEB_STYLE + mBlog.getBody();
-
 		// 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
-		boolean isLoadImage;
-		AppContext ac = (AppContext) getActivity().getApplication();
-		if (AppContext.NETTYPE_WIFI == ac.getNetworkType()) {
-			isLoadImage = true;
-		} else {
-			isLoadImage = ac.isLoadImage();
-		}
-		if (isLoadImage) {
+		if (AppContext.shouldLoadImage() || TDevice.isWifiOpen()) {
 			body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
 			body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
-
 			// 添加点击图片放大支持
 			body = body
 					.replaceAll("(<img[^>]+src=\")(\\S+)\"",
@@ -198,7 +189,6 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 		} else {
 			body = body.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "");
 		}
-
 		mWebView.setWebViewClient(mWebClient);
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
 	}

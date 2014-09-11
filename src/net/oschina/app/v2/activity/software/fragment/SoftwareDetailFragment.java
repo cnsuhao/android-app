@@ -11,6 +11,7 @@ import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.news.fragment.BaseDetailFragment;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.utils.TDevice;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -134,14 +135,7 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 	private void fillWebViewBody() {
 		String body = UIHelper.WEB_STYLE + mSoftware.getBody();
 		// 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
-		boolean isLoadImage;
-		AppContext ac = (AppContext) getActivity().getApplication();
-		if (AppContext.NETTYPE_WIFI == ac.getNetworkType()) {
-			isLoadImage = true;
-		} else {
-			isLoadImage = ac.isLoadImage();
-		}
-		if (isLoadImage) {
+		if (AppContext.shouldLoadImage() || TDevice.isWifiOpen()) {
 			body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
 			body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
 			// 添加点击图片放大支持

@@ -112,7 +112,7 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
 	protected void onCommentChanged(int opt, int id, int catalog,
 			boolean isBlog, Comment comment) {
 	}
-	
+
 	@Override
 	protected void executeOnLoadDataSuccess(Entity entity) {
 		mPost = (Post) entity;
@@ -129,25 +129,16 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
 			mTvCommentCount.setText(getString(R.string.answer_count,
 					mPost.getAnswerCount() + "/" + mPost.getViewCount()));
 		}
-		
+
 		notifyFavorite(mPost.getFavorite() == 1);
 	}
 
 	private void fillWebViewBody() {
 		// 显示标签
 		String tags = getPostTags(mPost.getTags());
-
 		String body = UIHelper.WEB_STYLE + mPost.getBody() + tags
 				+ "<div style=\"margin-bottom: 80px\" />";
-		// 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
-		boolean isLoadImage;
-		AppContext ac = (AppContext) getActivity().getApplication();
-		if (AppContext.NETTYPE_WIFI == ac.getNetworkType()) {
-			isLoadImage = true;
-		} else {
-			isLoadImage = ac.isLoadImage();
-		}
-		if (isLoadImage) {
+		if (AppContext.shouldLoadImage() || TDevice.isWifiOpen()) {
 			body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
 			body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
 			// 添加点击图片放大支持
@@ -210,7 +201,7 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
 	protected int getFavoriteTargetId() {
 		return mPost != null ? mPost.getId() : -1;
 	}
-	
+
 	@Override
 	protected int getFavoriteTargetType() {
 		return mPost != null ? FavoriteList.TYPE_POST : -1;
