@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>    
-    <string name="app_name">开源中国</string>
+    <string name="app_name">哎嘛</string>
     
     <string name="main_menu_login">登录</string>
     <string name="main_menu_logout">注销</string>
@@ -269,12 +269,17 @@
 	<string name="post_publish_success">帖子发布成功</string>
 	<string name="post_publish_faile">发布帖子失败</string>
 	
+	<string name="actionbar_title_message_forward">转发留言</string>
 	<string name="send_message_to">发送留言给:</string>
+	<string name="hint_user_name">对方昵称</string>
 	<string name="hint_message">留言内容</string>
 	<string name="tip_message_public_success">发送成功</string>
 	<string name="tip_message_public_faile">发送失败</string>
 	<string name="send_to">发给</string>
 	<string name="message_count">%s条留言</string>
+	<string name="tip_foward_username_empty">请输入对方昵称</string>
+	<string name="tip_message_forward_success">转发成功</string>
+	<string name="tip_message_forward_faile">转发失败</string>
 	
 	<string name="actionbar_title_search">搜索</string>
 	<string name="tab_software">软件</string>
@@ -293,4 +298,8 @@
 	<string name="tip_report_other_reason_too_long">描述内容长度超过限制</string>
 	<string name="tip_report_success">举报成功</string>
 	<string name="tip_report_faile">举报失败</string>
+	
+	<string name="confirm_delete_message">确定要删除和\"%s\"的所有留言吗?</string>
+	<string name="tip_delete_success">删除成功</string>
+	<string name="tip_delete_faile">无法删除</string>
 </resources>

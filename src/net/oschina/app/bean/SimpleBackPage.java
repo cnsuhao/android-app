@@ -5,6 +5,7 @@ import net.oschina.app.v2.activity.comment.fragment.CommentReplyFragment;
 import net.oschina.app.v2.activity.favorite.fragment.FavoriteViewPagerFragment;
 import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
 import net.oschina.app.v2.activity.message.fragment.MessageDetailFragment;
+import net.oschina.app.v2.activity.message.fragment.MessageForwardFragment;
 import net.oschina.app.v2.activity.message.fragment.MessagePublicFragment;
 import net.oschina.app.v2.activity.question.fragment.QuestionPublicFragment;
 import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
@@ -36,7 +37,8 @@ public enum SimpleBackPage {
 	MESSAGE_PUBLIC(12, R.string.actionbar_title_message_public, MessagePublicFragment.class),
 	MESSAGE_DETAIL(13, R.string.actionbar_title_message_detail, MessageDetailFragment.class),
 	SEARCH(14, R.string.actionbar_title_search, SearchViewPagerFragment.class),
-	LISENCE(16, R.string.actionbar_title_lisence, LisenceFragment.class);
+	LISENCE(16, R.string.actionbar_title_lisence, LisenceFragment.class),
+	MESSAGE_FORWARD(17, R.string.actionbar_title_message_forward, MessageForwardFragment.class);
 
 	private int title;
 	private Class<?> clz;

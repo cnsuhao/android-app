@@ -403,7 +403,7 @@ public class NewsApi extends BaseApi {
 		ApiHttpClient.post("action/api/message_delete", params, handler);
 	}
 
-	public static void forwareMessage(int uid, String receiverName,
+	public static void forwardMessage(int uid, String receiverName,
 			String content, AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
 		params.put("uid", uid);
