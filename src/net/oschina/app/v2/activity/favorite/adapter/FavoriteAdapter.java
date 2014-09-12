@@ -1,7 +1,7 @@
 package net.oschina.app.v2.activity.favorite.adapter;
 
-import net.oschina.app.bean.FavoriteList.Favorite;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.model.FavoriteList.Favorite;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;

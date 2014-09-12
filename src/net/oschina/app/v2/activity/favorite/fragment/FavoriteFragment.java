@@ -4,14 +4,14 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.bean.FavoriteList;
-import net.oschina.app.bean.FavoriteList.Favorite;
-import net.oschina.app.bean.ListEntity;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.favorite.adapter.FavoriteAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.model.FavoriteList;
+import net.oschina.app.v2.model.ListEntity;
+import net.oschina.app.v2.model.FavoriteList.Favorite;
+import net.oschina.app.v2.utils.UIHelper;
 import android.view.View;
 import android.widget.AdapterView;
 

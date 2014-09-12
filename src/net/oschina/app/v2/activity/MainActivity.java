@@ -1,9 +1,9 @@
 package net.oschina.app.v2.activity;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.bean.User;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.BaseActivity;
+import net.oschina.app.v2.model.User;
+import net.oschina.app.v2.utils.UIHelper;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.graphics.drawable.Drawable;

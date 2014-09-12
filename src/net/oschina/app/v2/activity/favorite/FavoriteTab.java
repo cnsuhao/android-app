@@ -1,7 +1,7 @@
 package net.oschina.app.v2.activity.favorite;
 
-import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.v2.activity.favorite.fragment.FavoriteFragment;
+import net.oschina.app.v2.model.FavoriteList;
 
 import com.tonlin.osc.happy.R;
 

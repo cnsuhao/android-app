@@ -4,24 +4,24 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.bean.Active;
-import net.oschina.app.bean.Blog;
-import net.oschina.app.bean.BlogList;
-import net.oschina.app.bean.Result;
-import net.oschina.app.bean.User;
-import net.oschina.app.bean.UserInformation;
-import net.oschina.app.common.StringUtils;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.user.adapter.UserCenterAdapter;
 import net.oschina.app.v2.activity.user.adapter.UserCenterAdapter.DislayModeChangeListener;
 import net.oschina.app.v2.activity.user.adapter.UserCenterAdapter.DisplayMode;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.model.Active;
+import net.oschina.app.v2.model.Blog;
+import net.oschina.app.v2.model.BlogList;
+import net.oschina.app.v2.model.Result;
+import net.oschina.app.v2.model.User;
+import net.oschina.app.v2.model.UserInformation;
 import net.oschina.app.v2.ui.dialog.CommonDialog;
 import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.utils.StringUtils;
 import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
 
 import org.apache.http.Header;
 

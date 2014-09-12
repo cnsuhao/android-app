@@ -3,19 +3,19 @@ package net.oschina.app.v2.activity.software.fragment;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import net.oschina.app.bean.SoftwareCatalogList;
-import net.oschina.app.bean.SoftwareCatalogList.SoftwareType;
-import net.oschina.app.bean.SoftwareList;
-import net.oschina.app.bean.SoftwareList.Software;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.software.adapter.SoftwareAdapter;
 import net.oschina.app.v2.activity.software.adapter.SoftwareCatalogAdapter;
+import net.oschina.app.v2.activity.software.view.ScrollLayout;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseTabFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.model.SoftwareCatalogList;
+import net.oschina.app.v2.model.SoftwareList;
+import net.oschina.app.v2.model.SoftwareCatalogList.SoftwareType;
+import net.oschina.app.v2.model.SoftwareList.Software;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.TDevice;
-import net.oschina.app.widget.ScrollLayout;
+import net.oschina.app.v2.utils.UIHelper;
 
 import org.apache.http.Header;
 

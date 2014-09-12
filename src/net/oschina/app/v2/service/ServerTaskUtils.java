@@ -1,7 +1,7 @@
 package net.oschina.app.v2.service;
 
-import net.oschina.app.bean.Post;
-import net.oschina.app.bean.Tweet;
+import net.oschina.app.v2.model.Post;
+import net.oschina.app.v2.model.Tweet;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;

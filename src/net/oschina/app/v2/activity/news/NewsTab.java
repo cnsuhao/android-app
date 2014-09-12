@@ -1,10 +1,10 @@
 
 package net.oschina.app.v2.activity.news;
 
-import net.oschina.app.bean.BlogList;
-import net.oschina.app.bean.NewsList;
 import net.oschina.app.v2.activity.blog.fragment.BlogFragment;
 import net.oschina.app.v2.activity.news.fragment.NewsFragment;
+import net.oschina.app.v2.model.BlogList;
+import net.oschina.app.v2.model.NewsList;
 
 import com.tonlin.osc.happy.R;
 

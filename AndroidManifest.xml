@@ -258,12 +258,6 @@
             android:theme="@style/Theme.HalfTranslucent"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
-        <receiver android:name="net.oschina.app.ui.BroadCast" >
-            <intent-filter>
-                <action android:name="net.oschina.app.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-        </receiver>
-
         <service android:name="net.oschina.app.v2.service.ServerTaskService" >
             <intent-filter>
                 <action android:name="net.oschina.app.v2.ACTION_PUBLIC_BLOG_COMMENT" />

@@ -3,8 +3,8 @@ package net.oschina.app.v2.ui.text;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.oschina.app.bean.URLs;
-import net.oschina.app.common.UIHelper;
+import net.oschina.app.v2.model.URLs;
+import net.oschina.app.v2.utils.UIHelper;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Html;

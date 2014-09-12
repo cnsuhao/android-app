@@ -3,13 +3,13 @@ package net.oschina.app.v2.activity.user.fragment;
 import java.io.ByteArrayInputStream;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.bean.MyInformation;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.model.MyInformation;
 import net.oschina.app.v2.ui.dialog.CommonDialog;
 import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.utils.UIHelper;
 
 import org.apache.http.Header;
 

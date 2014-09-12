@@ -141,4 +141,17 @@ public class ApiHttpClient {
 	public static void setCookie(String cookie) {
 		client.addHeader("Cookie", cookie);
 	}
+
+	private static String appCookie;
+
+	public static void cleanCookie() {
+		appCookie = "";
+	}
+
+	public static String getCookie(AppContext appContext) {
+		if (appCookie == null || appCookie == "") {
+			appCookie = appContext.getProperty("cookie");
+		}
+		return appCookie;
+	}
 }

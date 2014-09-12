@@ -3,13 +3,13 @@ package net.oschina.app.v2.activity.settings.fragment;
 import java.io.File;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.common.FileUtils;
-import net.oschina.app.common.MethodsCompat;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.ui.tooglebutton.ToggleButton;
 import net.oschina.app.v2.ui.tooglebutton.ToggleButton.OnToggleChangedListener;
+import net.oschina.app.v2.utils.FileUtils;
+import net.oschina.app.v2.utils.MethodsCompat;
 import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;

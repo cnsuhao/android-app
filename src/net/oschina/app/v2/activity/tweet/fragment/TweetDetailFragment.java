@@ -6,12 +6,6 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.CommentList;
-import net.oschina.app.bean.Result;
-import net.oschina.app.bean.Tweet;
-import net.oschina.app.common.StringUtils;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.comment.adapter.CommentAdapter;
 import net.oschina.app.v2.activity.comment.adapter.CommentAdapter.OnOperationListener;
 import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
@@ -23,12 +17,18 @@ import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.cache.CacheManager;
 import net.oschina.app.v2.emoji.EmojiFragment;
 import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
+import net.oschina.app.v2.model.Comment;
+import net.oschina.app.v2.model.CommentList;
+import net.oschina.app.v2.model.Result;
+import net.oschina.app.v2.model.Tweet;
 import net.oschina.app.v2.service.PublicCommentTask;
 import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.dialog.CommonDialog;
 import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.utils.StringUtils;
 import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
 
 import org.apache.http.Header;
 

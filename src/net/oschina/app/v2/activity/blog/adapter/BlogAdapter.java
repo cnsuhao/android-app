@@ -1,7 +1,7 @@
 package net.oschina.app.v2.activity.blog.adapter;
 
-import net.oschina.app.bean.Blog;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.model.Blog;
 import net.oschina.app.v2.utils.DateUtil;
 import android.annotation.SuppressLint;
 import android.view.View;

@@ -2,9 +2,9 @@ package net.oschina.app.v2.activity.common;
 
 import java.lang.ref.WeakReference;
 
-import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.v2.base.BaseActivity;
 import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.model.SimpleBackPage;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -6,10 +6,10 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.oschina.app.bean.Post;
-import net.oschina.app.bean.Report;
-import net.oschina.app.bean.Tweet;
 import net.oschina.app.v2.api.ApiHttpClient;
+import net.oschina.app.v2.model.Post;
+import net.oschina.app.v2.model.Report;
+import net.oschina.app.v2.model.Tweet;
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;

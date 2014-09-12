@@ -1,9 +1,9 @@
 package net.oschina.app.v2.activity.news.adapter;
 
-import net.oschina.app.bean.News;
-import net.oschina.app.common.StringUtils;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.model.News;
 import net.oschina.app.v2.utils.DateUtil;
+import net.oschina.app.v2.utils.StringUtils;
 import net.oschina.app.v2.utils.TLog;
 import android.annotation.SuppressLint;
 import android.view.View;

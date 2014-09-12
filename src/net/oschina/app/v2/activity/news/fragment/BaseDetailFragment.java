@@ -6,17 +6,17 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.Entity;
-import net.oschina.app.bean.Result;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.news.view.ShareDialog;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.cache.CacheManager;
+import net.oschina.app.v2.model.Comment;
+import net.oschina.app.v2.model.Entity;
+import net.oschina.app.v2.model.Result;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
 
 import org.apache.http.Header;
 

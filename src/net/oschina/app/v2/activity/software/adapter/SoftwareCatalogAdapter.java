@@ -1,7 +1,7 @@
 package net.oschina.app.v2.activity.software.adapter;
 
-import net.oschina.app.bean.SoftwareCatalogList.SoftwareType;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.model.SoftwareCatalogList.SoftwareType;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;

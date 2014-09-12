@@ -3,9 +3,9 @@ package net.oschina.app;
 import java.io.File;
 import java.util.List;
 
-import net.oschina.app.common.FileUtils;
-import net.oschina.app.common.StringUtils;
 import net.oschina.app.v2.activity.MainActivity;
+import net.oschina.app.v2.utils.FileUtils;
+import net.oschina.app.v2.utils.StringUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;

@@ -3,12 +3,11 @@ package net.oschina.app.v2.activity.user;
 import java.io.ByteArrayInputStream;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.api.ApiClient;
-import net.oschina.app.bean.Result;
-import net.oschina.app.bean.User;
 import net.oschina.app.v2.api.ApiHttpClient;
 import net.oschina.app.v2.api.remote.UserApi;
 import net.oschina.app.v2.base.BaseActivity;
+import net.oschina.app.v2.model.Result;
+import net.oschina.app.v2.model.User;
 import net.oschina.app.v2.utils.SimpleTextWatcher;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.TLog;
@@ -77,7 +76,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 					}
 					TLog.log(TAG, "cookies:" + tmpcookies);
 					AppContext.instance().setProperty("cookie", tmpcookies);
-					ApiHttpClient.setCookie(ApiClient.getCookie(AppContext
+					ApiHttpClient.setCookie(ApiHttpClient.getCookie(AppContext
 							.instance()));
 				}
 				User user = User.parse(new ByteArrayInputStream(arg2));

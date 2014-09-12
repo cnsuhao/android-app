@@ -1,9 +1,9 @@
 
 package net.oschina.app.v2.activity.active;
 
-import net.oschina.app.bean.ActiveList;
 import net.oschina.app.v2.activity.active.fragment.ActiveFragment;
 import net.oschina.app.v2.activity.message.fragment.MessageFragment;
+import net.oschina.app.v2.model.ActiveList;
 
 import com.tonlin.osc.happy.R;
 

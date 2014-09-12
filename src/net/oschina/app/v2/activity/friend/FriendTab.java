@@ -1,7 +1,7 @@
 package net.oschina.app.v2.activity.friend;
 
-import net.oschina.app.bean.FriendList;
 import net.oschina.app.v2.activity.friend.fragment.FriendFragment;
+import net.oschina.app.v2.model.FriendList;
 
 import com.tonlin.osc.happy.R;
 

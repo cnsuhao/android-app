@@ -1,9 +1,9 @@
 package net.oschina.app.v2.activity.question.adapter;
 
-import net.oschina.app.bean.Post;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.model.Post;
 import net.oschina.app.v2.utils.DateUtil;
+import net.oschina.app.v2.utils.UIHelper;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;

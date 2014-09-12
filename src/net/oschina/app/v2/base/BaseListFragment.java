@@ -6,9 +6,9 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import net.oschina.app.bean.ListEntity;
-import net.oschina.app.bean.NewsList;
 import net.oschina.app.v2.cache.CacheManager;
+import net.oschina.app.v2.model.ListEntity;
+import net.oschina.app.v2.model.NewsList;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.TDevice;
 

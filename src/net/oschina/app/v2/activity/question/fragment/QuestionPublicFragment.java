@@ -1,14 +1,14 @@
 package net.oschina.app.v2.activity.question.fragment;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.bean.Post;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.model.Post;
 import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.dialog.CommonDialog;
 import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;

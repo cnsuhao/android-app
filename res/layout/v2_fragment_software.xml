@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <net.oschina.app.widget.ScrollLayout
+    <net.oschina.app.v2.activity.software.view.ScrollLayout
         android:id="@+id/scrolllayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
@@ -40,7 +40,7 @@
             android:listSelector="@android:color/transparent"
             app:ptrDrawable="@drawable/ic_pullrefresh"
             app:ptrHeaderTextColor="@android:color/darker_gray" />
-    </net.oschina.app.widget.ScrollLayout>
+    </net.oschina.app.v2.activity.software.view.ScrollLayout>
 
     <net.oschina.app.v2.ui.empty.EmptyLayout
         android:id="@+id/error_layout"

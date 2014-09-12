@@ -1,9 +1,9 @@
 
 package net.oschina.app.v2.activity.software;
 
-import net.oschina.app.bean.SoftwareList;
 import net.oschina.app.v2.activity.software.fragment.SoftwareCataglogFragment;
 import net.oschina.app.v2.activity.software.fragment.SoftwareFragment;
+import net.oschina.app.v2.model.SoftwareList;
 
 import com.tonlin.osc.happy.R;
 

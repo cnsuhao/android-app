@@ -4,13 +4,13 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.Post;
-import net.oschina.app.bean.Result;
-import net.oschina.app.bean.Tweet;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.api.OperationResponseHandler;
 import net.oschina.app.v2.api.remote.NewsApi;
+import net.oschina.app.v2.model.Comment;
+import net.oschina.app.v2.model.Post;
+import net.oschina.app.v2.model.Result;
+import net.oschina.app.v2.model.Tweet;
+import net.oschina.app.v2.utils.UIHelper;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;

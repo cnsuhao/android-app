@@ -2,17 +2,17 @@ package net.oschina.app.v2.activity.comment.adapter;
 
 import java.util.List;
 
-import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.Comment.Refer;
-import net.oschina.app.bean.Comment.Reply;
-import net.oschina.app.bean.Tweet;
-import net.oschina.app.common.StringUtils;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.model.Comment;
+import net.oschina.app.v2.model.Tweet;
+import net.oschina.app.v2.model.Comment.Refer;
+import net.oschina.app.v2.model.Comment.Reply;
 import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
 import net.oschina.app.v2.ui.text.MyURLSpan;
 import net.oschina.app.v2.ui.text.TweetTextView;
 import net.oschina.app.v2.utils.DateUtil;
+import net.oschina.app.v2.utils.StringUtils;
+import net.oschina.app.v2.utils.UIHelper;
 import android.annotation.SuppressLint;
 import android.text.Html;
 import android.text.Spanned;

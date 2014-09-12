@@ -1,8 +1,8 @@
 package net.oschina.app.v2.activity.friend.adapter;
 
-import net.oschina.app.bean.FriendList.Friend;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.model.FriendList.Friend;
+import net.oschina.app.v2.utils.UIHelper;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;

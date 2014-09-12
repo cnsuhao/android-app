@@ -1,8 +1,8 @@
 
 package net.oschina.app.v2.activity.tweet;
 
-import net.oschina.app.bean.TweetList;
 import net.oschina.app.v2.activity.tweet.fragment.TweetFragment;
+import net.oschina.app.v2.model.TweetList;
 
 import com.tonlin.osc.happy.R;
 

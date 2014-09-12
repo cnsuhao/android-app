@@ -4,14 +4,14 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.bean.Entity;
-import net.oschina.app.bean.FavoriteList;
-import net.oschina.app.bean.Software;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.news.fragment.BaseDetailFragment;
 import net.oschina.app.v2.api.remote.NewsApi;
+import net.oschina.app.v2.model.Entity;
+import net.oschina.app.v2.model.FavoriteList;
+import net.oschina.app.v2.model.Software;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;

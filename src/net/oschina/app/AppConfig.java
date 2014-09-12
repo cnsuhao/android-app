@@ -5,8 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
-import net.oschina.app.bean.AccessInfo;
-import net.oschina.app.common.StringUtils;
+import net.oschina.app.v2.model.AccessInfo;
+import net.oschina.app.v2.utils.StringUtils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;

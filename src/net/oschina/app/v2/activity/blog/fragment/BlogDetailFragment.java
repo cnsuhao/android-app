@@ -4,23 +4,23 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.bean.Blog;
-import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.Entity;
-import net.oschina.app.bean.FavoriteList;
-import net.oschina.app.bean.Report;
-import net.oschina.app.common.StringUtils;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.blog.view.ReportDialog;
 import net.oschina.app.v2.activity.news.fragment.BaseDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.emoji.EmojiFragment;
 import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
+import net.oschina.app.v2.model.Blog;
+import net.oschina.app.v2.model.Comment;
+import net.oschina.app.v2.model.Entity;
+import net.oschina.app.v2.model.FavoriteList;
+import net.oschina.app.v2.model.Report;
 import net.oschina.app.v2.service.PublicCommentTask;
 import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.utils.StringUtils;
 import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
 
 import org.apache.http.Header;
 

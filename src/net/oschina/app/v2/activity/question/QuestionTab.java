@@ -1,8 +1,8 @@
 
 package net.oschina.app.v2.activity.question;
 
-import net.oschina.app.bean.PostList;
 import net.oschina.app.v2.activity.question.fragment.QuestionFragment;
+import net.oschina.app.v2.model.PostList;
 
 import com.tonlin.osc.happy.R;
 

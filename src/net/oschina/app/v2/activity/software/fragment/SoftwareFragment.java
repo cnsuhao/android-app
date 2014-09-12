@@ -3,14 +3,14 @@ package net.oschina.app.v2.activity.software.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import net.oschina.app.bean.ListEntity;
-import net.oschina.app.bean.SoftwareList;
-import net.oschina.app.bean.SoftwareList.Software;
-import net.oschina.app.common.UIHelper;
 import net.oschina.app.v2.activity.software.adapter.SoftwareAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.model.ListEntity;
+import net.oschina.app.v2.model.SoftwareList;
+import net.oschina.app.v2.model.SoftwareList.Software;
+import net.oschina.app.v2.utils.UIHelper;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
