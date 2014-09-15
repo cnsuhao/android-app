@@ -299,7 +299,7 @@ public class ServerTaskService extends IntentService {
 				.setOnlyAlertOnce(true)
 				.setContentIntent(
 						PendingIntent.getActivity(this, 0, new Intent(), 0))
-				.setSmallIcon(R.drawable.icon).build();
+				.setSmallIcon(R.drawable.ic_notification).build();
 		// if (autoCancel) {
 		// notification.flags = Notification.FLAG_AUTO_CANCEL;
 		// notification.flags = Notification.DEFAULT_LIGHTS |

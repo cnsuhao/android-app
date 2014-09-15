@@ -35,7 +35,7 @@ public class AppStart extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		final View view = View.inflate(this, R.layout.start, null);
+		final View view = View.inflate(this, R.layout.v2_activity_splash, null);
 		RelativeLayout wellcome = (RelativeLayout) view
 				.findViewById(R.id.app_start_view);
 		check(wellcome);
