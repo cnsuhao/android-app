@@ -93,7 +93,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:button="@drawable/btn_checkbox_selector"
+            android:button="@null"
+            android:drawableLeft="@drawable/btn_checkbox_selector"
             android:text="@string/question_public_let_me_know"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_16" />

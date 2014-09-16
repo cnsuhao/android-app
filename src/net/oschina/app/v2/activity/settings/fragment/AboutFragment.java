@@ -1,12 +1,14 @@
 package net.oschina.app.v2.activity.settings.fragment;
 
 import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
@@ -28,6 +30,10 @@ public class AboutFragment extends BaseFragment {
 		view.findViewById(R.id.ly_author).setOnClickListener(this);
 		view.findViewById(R.id.ly_osc_git).setOnClickListener(this);
 		view.findViewById(R.id.ly_lisence).setOnClickListener(this);
+
+		TextView tvVersionName = (TextView) view
+				.findViewById(R.id.tv_version_name);
+		tvVersionName.setText(TDevice.getVersionName());
 	}
 
 	@Override

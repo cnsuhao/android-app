@@ -16,10 +16,10 @@
             android:src="@drawable/about_logo" />
 
         <TextView
+            android:id="@+id/tv_version_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="1.0.0.0"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_16" />
 
