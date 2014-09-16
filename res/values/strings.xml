@@ -324,7 +324,17 @@
 	<string name="clearwords">确定要清除文字吗?</string>
 	
 	<string name="app_desc">
-	    哎嘛是一款采用GPL授权协议的OSC China第三方客户端，Fork于oschina/android-app。
+	    哎嘛是一款采用GPL授权协议的OSC(http://www.oschina.net)第三方客户端，Fork于oschina/android-app。
 	    你可以免费获取到本项目的所有源代码，如果你想使用它，请你务必采用GPL授权协议。	  
 	</string>
+	
+	<string name="platform_qq">QQ</string>
+	<string name="platform_qzone">QQ空间</string>
+	<string name="platform_tencent_weibo">腾讯微博</string>
+	<string name="platform_sina">微博</string>
+	<string name="platform_weichat">微信</string>
+	<string name="platform_weichat_circle">朋友圈</string>
+	<string name="share_title">哎嘛分享</string>
+	<string name="tip_start_share">开始分享</string>
+	<string name="tip_share_done">分享完成</string>
 </resources>

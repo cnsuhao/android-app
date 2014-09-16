@@ -11,13 +11,14 @@
         android:orientation="horizontal" >
 
         <LinearLayout
+            android:id="@+id/ly_share_qq"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="vertical" >
 
-            <ImageButton
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -27,19 +28,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_8"
-                android:text="QQ"
+                android:text="@string/platform_qq"
                 android:textColor="@color/main_gray"
                 android:textSize="@dimen/text_size_12" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ly_share_qzone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="vertical" >
 
-            <ImageButton
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -49,19 +51,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_8"
-                android:text="QQ空间"
+                android:text="@string/platform_qzone"
                 android:textColor="@color/main_gray"
                 android:textSize="@dimen/text_size_12" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ly_share_tencent_weibo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="vertical" >
 
-            <ImageButton
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -71,13 +74,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_8"
-                android:text="腾讯微博"
+                android:text="@string/platform_tencent_weibo"
                 android:textColor="@color/main_gray"
                 android:textSize="@dimen/text_size_12" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ly_share_sina_weibo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_16"
@@ -90,7 +94,7 @@
             android:gravity="center_horizontal"
             android:orientation="vertical" >
 
-            <ImageButton
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -100,19 +104,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_8"
-                android:text="微博"
+                android:text="@string/platform_sina"
                 android:textColor="@color/main_gray"
                 android:textSize="@dimen/text_size_12" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ly_share_weichat"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="vertical" >
 
-            <ImageButton
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -122,19 +127,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_8"
-                android:text="微信"
+                android:text="@string/platform_weichat"
                 android:textColor="@color/main_gray"
                 android:textSize="@dimen/text_size_12" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ly_share_weichat_circle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="vertical" >
 
-            <ImageButton
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -144,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_8"
-                android:text="朋友圈"
+                android:text="@string/platform_weichat_circle"
                 android:textColor="@color/main_gray"
                 android:textSize="@dimen/text_size_12" />
         </LinearLayout>

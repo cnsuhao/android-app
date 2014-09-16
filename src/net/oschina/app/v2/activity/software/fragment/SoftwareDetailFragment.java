@@ -175,6 +175,16 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 	}
 	
 	@Override
+	protected String getShareContent() {
+		return mSoftware.getTitle();
+	}
+
+	@Override
+	protected String getShareUrl() {
+		return mSoftware.getUrl();
+	}
+	
+	@Override
 	public void onResume() {
 		super.onResume();
 		MobclickAgent.onPageStart(SOFTWARE_DETAIL_SCREEN);

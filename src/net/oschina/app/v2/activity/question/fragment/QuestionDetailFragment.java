@@ -210,6 +210,16 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
 	}
 
 	@Override
+	protected String getShareContent() {
+		return mPost.getTitle();
+	}
+
+	@Override
+	protected String getShareUrl() {
+		return mPost.getUrl();
+	}
+	
+	@Override
 	public void onResume() {
 		super.onResume();
 		MobclickAgent.onPageStart(QUESTION_DETAIL_SCREEN);

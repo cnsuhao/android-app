@@ -10,4 +10,11 @@ public class Constants {
 			.getExternalStorageDirectory().getAbsolutePath() + "/HappyOSC/";
 	
 	public final static String IMAGE_SAVE_PAHT = BASE_DIR +"download_images";
+	
+	public static final String WEICHAT_APPID = "wx967daebe835fbeac";
+	public static final String WEICHAT_SECRET = "5fa9e68ca3970e87a1f83e563c8dcbce";
+	
+	public static final String QQ_APPID = "100424468";
+	public static final String QQ_APPKEY = "c7394704798a158208a74ab60104f0ba";
+	
 }

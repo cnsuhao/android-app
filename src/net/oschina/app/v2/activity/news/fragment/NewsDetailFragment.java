@@ -229,7 +229,17 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	protected int getFavoriteTargetType() {
 		return mNews != null ? FavoriteList.TYPE_NEWS : -1;
 	}
-	
+
+	@Override
+	protected String getShareContent() {
+		return mNews.getTitle();
+	}
+
+	@Override
+	protected String getShareUrl() {
+		return mNews.getUrl();
+	}
+
 	@Override
 	public void onResume() {
 		super.onResume();

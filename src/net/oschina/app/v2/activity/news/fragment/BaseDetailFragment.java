@@ -7,6 +7,7 @@ import java.lang.ref.WeakReference;
 
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.news.view.ShareDialog;
+import net.oschina.app.v2.activity.news.view.ShareDialog.OnSharePlatformClick;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.base.Constants;
@@ -50,9 +51,28 @@ import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.bean.SocializeEntity;
+import com.umeng.socialize.controller.UMServiceFactory;
+import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
+import com.umeng.socialize.controller.listener.SocializeListeners.UMAuthListener;
+import com.umeng.socialize.exception.SocializeException;
+import com.umeng.socialize.media.QZoneShareContent;
+import com.umeng.socialize.sso.QZoneSsoHandler;
+import com.umeng.socialize.sso.SinaSsoHandler;
+import com.umeng.socialize.sso.TencentWBSsoHandler;
+import com.umeng.socialize.sso.UMQQSsoHandler;
+import com.umeng.socialize.utils.OauthHelper;
+import com.umeng.socialize.weixin.controller.UMWXHandler;
+import com.umeng.socialize.weixin.media.CircleShareContent;
+import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 public class BaseDetailFragment extends BaseFragment implements
 		OnItemClickListener {
+	final UMSocialService mController = UMServiceFactory
+			.getUMSocialService("com.umeng.share");
+
 	private ListPopupWindow mMenuWindow;
 	private MenuAdapter mMenuAdapter;
 	protected EmptyLayout mEmptyLayout;
@@ -160,6 +180,8 @@ public class BaseDetailFragment extends BaseFragment implements
 					Constants.INTENT_ACTION_COMMENT_CHANGED);
 			getActivity().registerReceiver(mReceiver, filter);
 		}
+
+		mController.getConfig().closeToast();
 	}
 
 	protected boolean hasReportMenu() {
@@ -345,6 +367,18 @@ public class BaseDetailFragment extends BaseFragment implements
 		return -1;
 	}
 
+	protected String getShareUrl() {
+		return "";
+	}
+
+	protected String getShareTitle() {
+		return getString(R.string.share_title);
+	}
+
+	protected String getShareContent() {
+		return "";
+	}
+
 	private void showMoreOptionMenu(View view) {
 		mMenuWindow = new ListPopupWindow(getActivity());
 		mMenuWindow.setModal(true);
@@ -387,13 +421,232 @@ public class BaseDetailFragment extends BaseFragment implements
 	}
 
 	private void handleShare() {
-		ShareDialog dialog = new ShareDialog(getActivity());
+		final ShareDialog dialog = new ShareDialog(getActivity());
 		dialog.setCancelable(true);
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.setTitle(R.string.share_to);
-		// dialog.setMessage("这是窗口测试");
+		dialog.setOnPlatformClickListener(new OnSharePlatformClick() {
+
+			@Override
+			public void onPlatformClick(SHARE_MEDIA media) {
+				switch (media) {
+				case QQ:
+					shareToQQ(media);
+					break;
+				case QZONE:
+					shareToQZone();
+					break;
+				case TENCENT:
+					shareToTencentWeibo();
+					break;
+				case SINA:
+					shareToSinaWeibo();
+					break;
+				case WEIXIN:
+					shareToWeiChat();
+					break;
+				case WEIXIN_CIRCLE:
+					shareToWeiChatCircle();
+					break;
+				default:
+					break;
+				}
+				dialog.dismiss();
+			}
+		});
 		dialog.setNegativeButton(R.string.cancle, null);
 		dialog.show();
+	}
+
+	private void shareToWeiChatCircle() {
+		// 支持微信朋友圈
+		UMWXHandler wxCircleHandler = new UMWXHandler(getActivity(),
+				Constants.WEICHAT_APPID, Constants.WEICHAT_SECRET);
+		wxCircleHandler.setToCircle(true);
+		wxCircleHandler.addToSocialSDK();
+		// 设置微信朋友圈分享内容
+		CircleShareContent circleMedia = new CircleShareContent();
+		circleMedia.setShareContent(getShareContent());
+		// 设置朋友圈title
+		circleMedia.setTitle(getShareTitle());
+		// circleMedia.setShareImage(localImage);
+		circleMedia.setTargetUrl(getShareUrl());
+		mController.setShareMedia(circleMedia);
+		mController.postShare(getActivity(), SHARE_MEDIA.WEIXIN_CIRCLE,
+				new SnsPostListener() {
+
+					@Override
+					public void onStart() {
+						AppContext.showToastShort(R.string.tip_start_share);
+					}
+
+					@Override
+					public void onComplete(SHARE_MEDIA arg0, int arg1,
+							SocializeEntity arg2) {
+						AppContext.showToastShort(R.string.tip_share_done);
+					}
+				});
+	}
+
+	private void shareToWeiChat() {
+		// 添加微信平台
+		UMWXHandler wxHandler = new UMWXHandler(getActivity(),
+				Constants.WEICHAT_APPID, Constants.WEICHAT_SECRET);
+		wxHandler.addToSocialSDK();
+		// 设置微信好友分享内容
+		WeiXinShareContent weixinContent = new WeiXinShareContent();
+		// 设置分享文字
+		weixinContent.setShareContent(getShareContent());
+		// 设置title
+		weixinContent.setTitle(getShareTitle());
+		// 设置分享内容跳转URL
+		weixinContent.setTargetUrl(getShareUrl());
+		// 设置分享图片
+		// weixinContent.setShareImage(localImage);
+		mController.setShareMedia(weixinContent);
+		mController.postShare(getActivity(), SHARE_MEDIA.WEIXIN,
+				new SnsPostListener() {
+
+					@Override
+					public void onStart() {
+						AppContext.showToastShort(R.string.tip_start_share);
+					}
+
+					@Override
+					public void onComplete(SHARE_MEDIA arg0, int arg1,
+							SocializeEntity arg2) {
+						AppContext.showToastShort(R.string.tip_share_done);
+					}
+				});
+	}
+
+	private void shareToSinaWeibo() {
+		// 设置腾讯微博SSO handler
+		mController.getConfig().setSsoHandler(new SinaSsoHandler());
+		if (OauthHelper.isAuthenticated(getActivity(), SHARE_MEDIA.SINA)) {
+			shareContent(SHARE_MEDIA.SINA);
+		} else {
+			mController.doOauthVerify(getActivity(), SHARE_MEDIA.SINA,
+					new UMAuthListener() {
+
+						@Override
+						public void onStart(SHARE_MEDIA arg0) {
+						}
+
+						@Override
+						public void onError(SocializeException arg0,
+								SHARE_MEDIA arg1) {
+						}
+
+						@Override
+						public void onComplete(Bundle arg0, SHARE_MEDIA arg1) {
+							shareContent(SHARE_MEDIA.SINA);
+						}
+
+						@Override
+						public void onCancel(SHARE_MEDIA arg0) {
+						}
+					});
+		}
+	}
+
+	private void shareToTencentWeibo() {
+		// 设置腾讯微博SSO handler
+		mController.getConfig().setSsoHandler(new TencentWBSsoHandler());
+		if (OauthHelper.isAuthenticated(getActivity(), SHARE_MEDIA.TENCENT)) {
+			shareContent(SHARE_MEDIA.TENCENT);
+		} else {
+			mController.doOauthVerify(getActivity(), SHARE_MEDIA.TENCENT,
+					new UMAuthListener() {
+
+						@Override
+						public void onStart(SHARE_MEDIA arg0) {
+						}
+
+						@Override
+						public void onError(SocializeException arg0,
+								SHARE_MEDIA arg1) {
+						}
+
+						@Override
+						public void onComplete(Bundle arg0, SHARE_MEDIA arg1) {
+							shareContent(SHARE_MEDIA.TENCENT);
+						}
+
+						@Override
+						public void onCancel(SHARE_MEDIA arg0) {
+						}
+					});
+		}
+	}
+
+	private void shareContent(SHARE_MEDIA media) {
+		mController.setShareContent(getShareContent() + getShareUrl());
+		mController.directShare(getActivity(), media, new SnsPostListener() {
+
+			@Override
+			public void onStart() {
+				AppContext.showToastShort(R.string.tip_start_share);
+			}
+
+			@Override
+			public void onComplete(SHARE_MEDIA arg0, int arg1,
+					SocializeEntity arg2) {
+				AppContext.showToastShort(R.string.tip_share_done);
+			}
+		});
+	}
+
+	private void shareToQZone() {
+		QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(getActivity(),
+				Constants.QQ_APPID, Constants.QQ_APPKEY);
+		qZoneSsoHandler.addToSocialSDK();
+		QZoneShareContent qzone = new QZoneShareContent();
+		// 设置分享文字
+		qzone.setShareContent(getShareContent());
+		// 设置点击消息的跳转URL
+		qzone.setTargetUrl(getShareUrl());
+		// 设置分享内容的标题
+		qzone.setTitle(getShareTitle());
+		// 设置分享图片
+		// qzone.setShareImage(urlImage);
+		mController.setShareMedia(qzone);
+		mController.postShare(getActivity(), SHARE_MEDIA.QZONE,
+				new SnsPostListener() {
+
+					@Override
+					public void onStart() {
+						AppContext.showToastShort(R.string.tip_start_share);
+					}
+
+					@Override
+					public void onComplete(SHARE_MEDIA arg0, int arg1,
+							SocializeEntity arg2) {
+						AppContext.showToastShort(R.string.tip_share_done);
+					}
+				});
+	}
+
+	protected void shareToQQ(SHARE_MEDIA media) {
+		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(getActivity(),
+				Constants.QQ_APPID, Constants.QQ_APPKEY);
+		qqSsoHandler.setTargetUrl(getShareUrl());
+		qqSsoHandler.setTitle(getShareContent());
+		qqSsoHandler.addToSocialSDK();
+		mController.setShareContent(getShareContent());
+		mController.postShare(getActivity(), media, new SnsPostListener() {
+
+			@Override
+			public void onStart() {
+				AppContext.showToastShort(R.string.tip_start_share);
+			}
+
+			@Override
+			public void onComplete(SHARE_MEDIA arg0, int arg1,
+					SocializeEntity arg2) {
+				AppContext.showToastShort(R.string.tip_share_done);
+			}
+		});
 	}
 
 	protected void notifyFavorite(boolean favorite) {
