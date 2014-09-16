@@ -31,6 +31,7 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 public class NewsDetailFragment extends BaseDetailFragment implements
 		EmojiTextListener, EmojiFragmentControl {
@@ -38,6 +39,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	protected static final String TAG = NewsDetailFragment.class
 			.getSimpleName();
 	private static final String NEWS_CACHE_KEY = "news_";
+	private static final String NEWS_DETAIL_SCREEN = "news_detail_screen";
 	private TextView mTvTitle, mTvSource, mTvTime;
 	private int mNewsId;
 	private News mNews;
@@ -226,5 +228,19 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	@Override
 	protected int getFavoriteTargetType() {
 		return mNews != null ? FavoriteList.TYPE_NEWS : -1;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(NEWS_DETAIL_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(NEWS_DETAIL_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }

@@ -34,6 +34,7 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 public class QuestionDetailFragment extends BaseDetailFragment implements
 		EmojiTextListener, EmojiFragmentControl {
@@ -41,6 +42,7 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
 	protected static final String TAG = QuestionDetailFragment.class
 			.getSimpleName();
 	private static final String POST_CACHE_KEY = "post_";
+	private static final String QUESTION_DETAIL_SCREEN = "question_detail_screen";
 	private TextView mTvTitle, mTvSource, mTvTime;
 	private WebView mWebView;
 	private TextView mTvCommentCount;
@@ -205,5 +207,19 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
 	@Override
 	protected int getFavoriteTargetType() {
 		return mPost != null ? FavoriteList.TYPE_POST : -1;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(QUESTION_DETAIL_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(QUESTION_DETAIL_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }

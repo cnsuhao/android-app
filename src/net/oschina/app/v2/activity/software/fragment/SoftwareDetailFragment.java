@@ -26,6 +26,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 软件详情
@@ -38,6 +39,7 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 	protected static final String TAG = SoftwareDetailFragment.class
 			.getSimpleName();
 	private static final String SOFTWARE_CACHE_KEY = "software_";
+	private static final String SOFTWARE_DETAIL_SCREEN = "software_detail_screen";
 	private TextView mTvLicense, mTvLanguage, mTvOs, mTvRecordTime;
 	private TextView mTvTitle;
 	private WebView mWebView;
@@ -170,5 +172,19 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 	@Override
 	protected int getFavoriteTargetType() {
 		return mSoftware != null ? FavoriteList.TYPE_SOFTWARE : -1;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(SOFTWARE_DETAIL_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(SOFTWARE_DETAIL_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }

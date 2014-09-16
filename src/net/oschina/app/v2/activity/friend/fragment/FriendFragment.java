@@ -3,6 +3,8 @@ package net.oschina.app.v2.activity.friend.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import com.umeng.analytics.MobclickAgent;
+
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.friend.adapter.FriendAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
@@ -25,6 +27,7 @@ public class FriendFragment extends BaseListFragment {
 
 	protected static final String TAG = FriendFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "friend_list";
+	private static final String FRIEND_SCREEN = "friend_screen";
 
 	@Override
 	protected ListBaseAdapter getListAdapter() {
@@ -58,5 +61,19 @@ public class FriendFragment extends BaseListFragment {
 			long id) {
 		Friend item = (Friend) mAdapter.getItem(position - 1);
 		UIHelper.showUserCenter(getActivity(), item.getUserid(), item.getName());
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(FRIEND_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(FRIEND_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }

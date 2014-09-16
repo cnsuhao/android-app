@@ -59,6 +59,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 import com.viewpagerindicator.CirclePageIndicator;
 
 public class TweetPublicFragment extends BaseFragment implements
@@ -66,6 +67,7 @@ public class TweetPublicFragment extends BaseFragment implements
 	private static final int MAX_TEXT_LENGTH = 160;
 	private static final String TEXT_ATME = "@请输入用户名 ";
 	private static final String TEXT_SOFTWARE = "#请输入软件名#";
+	private static final String TWEET_PUBLIC_SCREEN = "tweet_public_screen";
 
 	private ViewPager mViewPager;
 	private CirclePageIndicator mIndicator;
@@ -587,5 +589,19 @@ public class TweetPublicFragment extends BaseFragment implements
 		}
 		mEtInput.getText().insert(mEtInput.getSelectionStart(), software);
 		mEtInput.setSelection(start, end);// 设置选中文字
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(TWEET_PUBLIC_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(TWEET_PUBLIC_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }

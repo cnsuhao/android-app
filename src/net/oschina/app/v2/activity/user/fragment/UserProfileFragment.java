@@ -25,8 +25,10 @@ import android.widget.TextView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 public class UserProfileFragment extends BaseFragment {
+	private static final String USER_PROFILE_SCREEN = "user_profile_screen";
 	private ImageView mIvAvatar, mIvGender;
 	private TextView mTvName;
 	private TextView mTvFavorite, mTvFollowing, mTvFollower;
@@ -140,5 +142,20 @@ public class UserProfileFragment extends BaseFragment {
 		mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
 		int uid = AppContext.instance().getLoginUid();
 		NewsApi.getMyInformation(uid, mHandler);
+	}
+	
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(USER_PROFILE_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(USER_PROFILE_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }

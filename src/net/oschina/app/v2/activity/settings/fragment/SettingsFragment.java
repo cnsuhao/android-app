@@ -19,9 +19,11 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 public class SettingsFragment extends BaseFragment {
 
+	private static final String SETTINGS_SCREEN = "settings_screen";
 	private TextView mTvPicPath;
 	private String mCachePicPath;
 	private ToggleButton mTbLoadImage;
@@ -36,12 +38,6 @@ public class SettingsFragment extends BaseFragment {
 		initViews(view);
 		initData();
 		return view;
-	}
-
-	@Override
-	public void onResume() {
-		mTbLoadImage.setToggle(AppContext.shouldLoadImage());
-		super.onResume();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -111,5 +107,20 @@ public class SettingsFragment extends BaseFragment {
 		} else if (id == R.id.ly_lisence) {
 			UIHelper.showLisence(getActivity());
 		}
+	}
+
+	@Override
+	public void onResume() {
+		mTbLoadImage.setToggle(AppContext.shouldLoadImage());
+		super.onResume();
+		MobclickAgent.onPageStart(SETTINGS_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(SETTINGS_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }

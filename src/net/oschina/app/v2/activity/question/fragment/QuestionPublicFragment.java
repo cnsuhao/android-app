@@ -1,7 +1,6 @@
 package net.oschina.app.v2.activity.question.fragment;
 
 import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.model.Post;
 import net.oschina.app.v2.service.ServerTaskUtils;
@@ -26,9 +25,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 public class QuestionPublicFragment extends BaseFragment {
 
+	private static final String QUESTION_PUBLIC_SCREEN = "question_public_screen";
 	private EditText mEtTitle, mEtContent;
 	private TextView mTvCategory;
 	private CheckBox mCbLetMeKnow;
@@ -151,5 +152,19 @@ public class QuestionPublicFragment extends BaseFragment {
 			post.setIsNoticeMe(1);
 		ServerTaskUtils.publicPost(getActivity(), post);
 		getActivity().finish();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(QUESTION_PUBLIC_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(QUESTION_PUBLIC_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }

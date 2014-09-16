@@ -3,6 +3,8 @@ package net.oschina.app.v2.activity.software.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import com.umeng.analytics.MobclickAgent;
+
 import net.oschina.app.v2.activity.software.adapter.SoftwareAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
@@ -23,6 +25,7 @@ public class SoftwareFragment extends BaseListFragment {
 
 	protected static final String TAG = SoftwareFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "software_list";
+	private static final String SOFTWARE_SCREEN = "software_screen";
 	private String mCatalog;
 
 	public void onCreate(android.os.Bundle savedInstanceState) {
@@ -33,6 +36,20 @@ public class SoftwareFragment extends BaseListFragment {
 		}
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(SOFTWARE_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(SOFTWARE_SCREEN);
+		MobclickAgent.onPause(getActivity());
+	}
+	
 	@Override
 	protected ListBaseAdapter getListAdapter() {
 		return new SoftwareAdapter();

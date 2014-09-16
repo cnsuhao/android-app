@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 相关问题
@@ -29,6 +30,7 @@ public class QuestionTagFragment extends BaseListFragment {
 	protected static final String TAG = QuestionTagFragment.class
 			.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "post_tag_";
+	private static final String QUESTION_TAG_SCREEN = "question_tag_screen";
 	private String mTag;
 
 	public void onCreate(android.os.Bundle savedInstanceState) {
@@ -72,5 +74,19 @@ public class QuestionTagFragment extends BaseListFragment {
 			long id) {
 		Post post = (Post) mAdapter.getItem(position - 1);
 		UIHelper.showQuestionDetail(view.getContext(), post.getId());
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(QUESTION_TAG_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(QUESTION_TAG_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }

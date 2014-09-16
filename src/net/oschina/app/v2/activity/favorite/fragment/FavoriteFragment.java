@@ -3,6 +3,8 @@ package net.oschina.app.v2.activity.favorite.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import com.umeng.analytics.MobclickAgent;
+
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.favorite.adapter.FavoriteAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
@@ -24,6 +26,7 @@ public class FavoriteFragment extends BaseListFragment {
 
 	protected static final String TAG = FavoriteFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "favorite_list";
+	private static final String FAVORITE_SCREEN = "favorite_screen";
 
 	@Override
 	protected ListBaseAdapter getListAdapter() {
@@ -57,5 +60,19 @@ public class FavoriteFragment extends BaseListFragment {
 			long id) {
 		Favorite item = (Favorite) mAdapter.getItem(position - 1);
 		UIHelper.showUrlRedirect(view.getContext(), item.url);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(FAVORITE_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(FAVORITE_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }

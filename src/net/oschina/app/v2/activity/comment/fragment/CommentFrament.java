@@ -33,6 +33,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 public class CommentFrament extends BaseListFragment implements
 		OnOperationListener, EmojiTextListener {
@@ -45,6 +46,7 @@ public class CommentFrament extends BaseListFragment implements
 	private static final String BLOG_CACHE_KEY_PREFIX = "blogcomment_list";
 	private static final String CACHE_KEY_PREFIX = "comment_list";
 	private static final int REQUEST_CODE = 0x10;
+	private static final String COMMENT_SCREEN = "comment_screen";
 
 	private int mId, mOwnerId;
 	private boolean mIsBlogComment;
@@ -245,5 +247,19 @@ public class CommentFrament extends BaseListFragment implements
 		public void onFailure(int code, String errorMessage, Object[] args) {
 			AppContext.showToastShort(R.string.delete_faile);
 		}
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(COMMENT_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(COMMENT_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }

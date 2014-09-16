@@ -44,11 +44,13 @@ import android.widget.TextView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 public class UserCenterFragment extends BaseFragment implements
 		DislayModeChangeListener, OnItemClickListener {
 
 	private static final Object FEMALE = "女";
+	private static final String USER_CENTER_SCREEN = "user_center_screen";
 	private StickyListHeadersListView mListView;
 	private EmptyLayout mEmptyView;
 	private ImageView mIvAvatar;
@@ -498,5 +500,19 @@ public class UserCenterFragment extends BaseFragment implements
 		default:
 			break;
 		}
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(USER_CENTER_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(USER_CENTER_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }

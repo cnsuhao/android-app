@@ -39,6 +39,7 @@ import android.widget.TextView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 public class BlogDetailFragment extends BaseDetailFragment implements
 		EmojiTextListener, EmojiFragmentControl {
@@ -46,6 +47,7 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	protected static final String TAG = BlogDetailFragment.class
 			.getSimpleName();
 	private static final String BLOG_CACHE_KEY = "blog_";
+	private static final String BLOG_DETAIL_SCREEN = "blog_detail_screen";
 	private TextView mTvTitle, mTvSource, mTvTime;
 	private TextView mTvCommentCount;
 	private WebView mWebView;
@@ -259,5 +261,19 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 					}
 				});
 		dialog.show();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(BLOG_DETAIL_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(BLOG_DETAIL_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }

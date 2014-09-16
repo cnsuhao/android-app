@@ -61,6 +61,7 @@ import android.widget.ZoomButtonsController;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 public class TweetDetailFragment extends BaseFragment implements
 		EmojiTextListener, EmojiFragmentControl, OnOperationListener,
@@ -70,6 +71,7 @@ public class TweetDetailFragment extends BaseFragment implements
 	private static final int REQUEST_CODE = 0x1;
 	private static final String CACHE_KEY_PREFIX = "tweet_";
 	private static final String CACHE_KEY_TWEET_COMMENT = "tweet_comment_";
+	private static final String TWEET_DETAIL_SCREEN = "tweet_detail_screen";
 	private ListView mListView;
 	private EmptyLayout mEmptyView;
 	private ImageView mIvAvatar;
@@ -621,5 +623,19 @@ public class TweetDetailFragment extends BaseFragment implements
 
 	private void executeOnLoadCommentDataError(Object object) {
 		mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(TWEET_DETAIL_SCREEN);
+		MobclickAgent.onResume(getActivity());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(TWEET_DETAIL_SCREEN);
+		MobclickAgent.onPause(getActivity());
 	}
 }
