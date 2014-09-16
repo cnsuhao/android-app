@@ -1,6 +1,6 @@
 package net.oschina.app.v2.model;
 
-import net.oschina.app.AppException;
+import net.oschina.app.v2.AppException;
 
 import org.json.JSONException;
 import org.json.JSONObject;

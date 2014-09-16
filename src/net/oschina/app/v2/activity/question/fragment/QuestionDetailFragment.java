@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.net.URLEncoder;
 import java.util.List;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.news.fragment.BaseDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
 import net.oschina.app.v2.api.remote.NewsApi;

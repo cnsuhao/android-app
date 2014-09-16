@@ -1,6 +1,6 @@
 package net.oschina.app.v2.api;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 
 public class ApiClientHelper {
 

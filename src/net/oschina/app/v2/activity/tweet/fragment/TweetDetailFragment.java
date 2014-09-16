@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.comment.adapter.CommentAdapter;
 import net.oschina.app.v2.activity.comment.adapter.CommentAdapter.OnOperationListener;
 import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;

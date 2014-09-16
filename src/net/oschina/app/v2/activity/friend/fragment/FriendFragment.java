@@ -3,7 +3,7 @@ package net.oschina.app.v2.activity.friend.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.friend.adapter.FriendAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;

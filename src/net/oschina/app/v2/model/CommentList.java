@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import net.oschina.app.AppException;
+import net.oschina.app.v2.AppException;
 import net.oschina.app.v2.model.Comment.Refer;
 import net.oschina.app.v2.model.Comment.Reply;
 import net.oschina.app.v2.utils.StringUtils;

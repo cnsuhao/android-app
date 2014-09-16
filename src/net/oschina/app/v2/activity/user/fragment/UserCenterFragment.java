@@ -3,7 +3,7 @@ package net.oschina.app.v2.activity.user.fragment;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.user.adapter.UserCenterAdapter;
 import net.oschina.app.v2.activity.user.adapter.UserCenterAdapter.DislayModeChangeListener;
 import net.oschina.app.v2.activity.user.adapter.UserCenterAdapter.DisplayMode;

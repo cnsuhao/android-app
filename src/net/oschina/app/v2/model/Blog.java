@@ -3,7 +3,7 @@ package net.oschina.app.v2.model;
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.oschina.app.AppException;
+import net.oschina.app.v2.AppException;
 import net.oschina.app.v2.utils.StringUtils;
 
 import org.xmlpull.v1.XmlPullParser;

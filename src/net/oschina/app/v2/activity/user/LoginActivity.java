@@ -2,7 +2,7 @@ package net.oschina.app.v2.activity.user;
 
 import java.io.ByteArrayInputStream;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.api.ApiHttpClient;
 import net.oschina.app.v2.api.remote.UserApi;
 import net.oschina.app.v2.base.BaseActivity;

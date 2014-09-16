@@ -2,7 +2,7 @@ package net.oschina.app.v2.activity.settings.fragment;
 
 import java.io.File;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.ui.tooglebutton.ToggleButton;
 import net.oschina.app.v2.ui.tooglebutton.ToggleButton.OnToggleChangedListener;

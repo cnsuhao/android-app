@@ -1,6 +1,6 @@
 package net.oschina.app.v2.activity.question.fragment;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.model.Post;

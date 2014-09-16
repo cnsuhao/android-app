@@ -1,6 +1,6 @@
 package net.oschina.app.v2.emoji;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import android.graphics.drawable.Drawable;
 import android.text.style.DynamicDrawableSpan;
 

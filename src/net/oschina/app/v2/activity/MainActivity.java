@@ -1,6 +1,6 @@
 package net.oschina.app.v2.activity;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.base.BaseActivity;
 import net.oschina.app.v2.model.User;
 import net.oschina.app.v2.utils.UIHelper;

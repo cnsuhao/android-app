@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.oschina.app.AppException;
+import net.oschina.app.v2.AppException;
 import net.oschina.app.v2.model.Active.ObjectReply;
 import net.oschina.app.v2.utils.StringUtils;
 

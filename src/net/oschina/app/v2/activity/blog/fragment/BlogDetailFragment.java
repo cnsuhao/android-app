@@ -3,7 +3,7 @@ package net.oschina.app.v2.activity.blog.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.blog.view.ReportDialog;
 import net.oschina.app.v2.activity.news.fragment.BaseDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;

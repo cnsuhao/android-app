@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.emoji.Emoji;
 import net.oschina.app.v2.emoji.EmojiEditText;

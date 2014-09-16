@@ -3,7 +3,7 @@ package net.oschina.app.v2.emoji;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import android.content.res.Resources;
 
 import com.tonlin.osc.happy.R;

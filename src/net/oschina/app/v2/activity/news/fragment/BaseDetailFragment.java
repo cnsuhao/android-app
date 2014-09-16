@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.news.view.ShareDialog;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;

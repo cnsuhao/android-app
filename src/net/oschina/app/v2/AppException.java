@@ -1,4 +1,4 @@
-package net.oschina.app;
+package net.oschina.app.v2;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -11,9 +11,6 @@ import java.net.UnknownHostException;
 import java.util.Date;
 
 import net.oschina.app.v2.utils.UIHelper;
-
-import org.apache.commons.httpclient.HttpException;
-
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.os.Environment;
@@ -179,9 +176,9 @@ public class AppException extends Exception implements UncaughtExceptionHandler{
 		if(e instanceof UnknownHostException || e instanceof ConnectException){
 			return new AppException(TYPE_NETWORK, 0, e);
 		}
-		else if(e instanceof HttpException){
-			return http(e);
-		}
+		//else if(e instanceof HttpException){
+		//	return http(e);
+		//}
 		else if(e instanceof SocketException){
 			return socket(e);
 		}

@@ -1,4 +1,4 @@
-package net.oschina.app;
+package net.oschina.app.v2;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,6 +55,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
@@ -87,7 +88,7 @@ public class AppContext extends BaseApplication {
 			if (msg.what == 1) {
 				UIHelper.ToastMessage(AppContext.this,
 						getString(R.string.msg_login_error));
-				//UIHelper.showLoginDialog(AppContext.this);
+				// UIHelper.showLoginDialog(AppContext.this);
 			}
 		}
 	};
@@ -110,6 +111,8 @@ public class AppContext extends BaseApplication {
 
 		EmojiHelper.initEmojis();
 		initImageLoader(this);
+
+		MobclickAgent.setDebugMode(true);
 	}
 
 	public static void initImageLoader(Context context) {
@@ -182,16 +185,16 @@ public class AppContext extends BaseApplication {
 		return getPreferences().getString(KEY_ACCESS_TOKEN, null);
 	}
 
-	public static boolean shouldLoadImage(){
+	public static boolean shouldLoadImage() {
 		return getPreferences().getBoolean(KEY_LOAD_IMAGE, true);
 	}
-	
-	public static void setLoadImage(boolean flag){
+
+	public static void setLoadImage(boolean flag) {
 		Editor editor = getPreferences().edit();
 		editor.putBoolean(KEY_LOAD_IMAGE, flag);
 		apply(editor);
 	}
-	
+
 	/**
 	 * 初始化
 	 */
@@ -331,7 +334,7 @@ public class AppContext extends BaseApplication {
 		this.cleanCookie();
 		this.login = false;
 		this.loginUid = 0;
-		
+
 		Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
 		sendBroadcast(intent);
 	}
@@ -350,15 +353,13 @@ public class AppContext extends BaseApplication {
 		User loginUser = getLoginInfo();
 		if (loginUser != null && loginUser.getUid() > 0
 				&& !TextUtils.isEmpty(ApiHttpClient.getCookie(this))) {// &&
-																	// loginUser.isRememberMe()
+																		// loginUser.isRememberMe()
 			this.loginUid = loginUser.getUid();
 			this.login = true;
 		} else {
 			this.Logout();
 		}
 	}
-
-
 
 	/**
 	 * 保存登录信息

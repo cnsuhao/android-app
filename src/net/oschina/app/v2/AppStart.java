@@ -1,4 +1,4 @@
-package net.oschina.app;
+package net.oschina.app.v2;
 
 import java.io.File;
 import java.util.List;

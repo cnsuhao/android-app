@@ -11,13 +11,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RESTART_PACKAGES" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -47,13 +43,13 @@
         android:xlargeScreens="true" />
 
     <application
-        android:name="net.oschina.app.AppContext"
+        android:name="net.oschina.app.v2.AppContext"
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:theme="@style/ActionBarBaseTheme" >
         <activity
-            android:name="net.oschina.app.AppStart"
+            android:name="net.oschina.app.v2.AppStart"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
@@ -104,6 +100,15 @@
                 <action android:name="net.oschina.app.v2.ACTION_PUBLIC_TWEET" />
             </intent-filter>
         </service>
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5417a42afd98c5660405e8cb" >
+        </meta-data>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="channel_osc" >
+        </meta-data>
     </application>
 
 </manifest>

@@ -2,8 +2,8 @@ package net.oschina.app.v2.utils;
 
 import java.util.regex.Pattern;
 
-import net.oschina.app.AppContext;
-import net.oschina.app.AppManager;
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.AppManager;
 import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
 import net.oschina.app.v2.activity.comment.fragment.CommentReplyFragment;
 import net.oschina.app.v2.activity.common.SimpleBackActivity;

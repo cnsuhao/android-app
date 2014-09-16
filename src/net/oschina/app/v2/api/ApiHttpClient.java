@@ -2,7 +2,7 @@ package net.oschina.app.v2.api;
 
 import java.util.Locale;
 
-import net.oschina.app.AppContext;
+import net.oschina.app.v2.AppContext;
 import android.content.Context;
 import android.util.Log;
 
