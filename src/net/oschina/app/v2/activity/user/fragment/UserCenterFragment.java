@@ -373,7 +373,7 @@ public class UserCenterFragment extends BaseFragment implements
 				.getPinterestDialogCancelable(getActivity());
 		// dialog.setTitle(R.string.app_name);
 		dialog.setMessage(dialogTitle);
-		dialog.setPositiveButton(R.string.sure,
+		dialog.setPositiveButton(R.string.ok,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						sendUpdateRelcationRequest(ra);

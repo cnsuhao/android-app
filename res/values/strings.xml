@@ -175,6 +175,12 @@
     <string name="about_us">关于</string>
     <string name="actionbar_title_settings">设置</string>
     <string name="actionbar_title_about">关于</string>
+    <string name="author">开发者</string>
+    <string name="author_name">Tonlin</string>
+    <string name="author_center">http://my.oschina.net/u/142883</string>
+    <string name="oscgit">OSC Git</string>
+    <string name="osc_git_path">http://git.oschina.net/tonlin/android-app</string>
+    
     
     <string name="actionbar_title_profile">个人中心</string>
     <string name="favorite">收藏</string>
@@ -309,4 +315,16 @@
 	
 	<string name="tip_save_image_suc">图片已保存在:%s</string>
 	<string name="tip_save_image_faile">无法保存图片</string>
+	
+	<string name="cancle">取消</string>
+	<string name="found_new_version">发现新版本:%s</string>
+	<string name="tip_checking_update">正在检查更新…</string>
+	<string name="tip_has_not_update">当前已是最新版本</string>
+	
+	<string name="clearwords">确定要清除文字吗?</string>
+	
+	<string name="app_desc">
+	    哎嘛是一款采用GPL授权协议的OSC China第三方客户端，Fork于oschina/android-app。
+	    你可以免费获取到本项目的所有源代码，如果你想使用它，请你务必采用GPL授权协议。	  
+	</string>
 </resources>

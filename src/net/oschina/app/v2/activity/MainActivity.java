@@ -43,6 +43,8 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 	private MenuAdapter mMenuAdapter;
 	private ListPopupWindow mMenuWindow;
 
+	//private Version mVersion;
+
 	@Override
 	protected int getLayoutId() {
 		return R.layout.v2_activity_main;
@@ -51,6 +53,12 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
+		//if (mVersion != null) {
+		//	UmengUpdateAgent.showUpdateDialog(getApplicationContext(),
+		//			mVersion.toVersion());
+		//	mVersion = null;
+		//}
+
 		if (mMenuAdapter != null) {
 			mMenuAdapter.notifyDataSetChanged();
 		}
@@ -69,6 +77,11 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 	@Override
 	protected void init(Bundle savedInstanceState) {
 		super.init(savedInstanceState);
+		//Intent intent = getIntent();
+		//if (intent != null) {
+		//	mVersion = intent.getParcelableExtra(Version.BUNDLE_KEY_VERSION);
+		//}
+
 		AppContext.instance().initLoginInfo();
 
 		mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);

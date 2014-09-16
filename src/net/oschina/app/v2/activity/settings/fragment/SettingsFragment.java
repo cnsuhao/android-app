@@ -20,6 +20,10 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
+import com.umeng.update.UpdateStatus;
 
 public class SettingsFragment extends BaseFragment {
 
@@ -29,6 +33,8 @@ public class SettingsFragment extends BaseFragment {
 	private ToggleButton mTbLoadImage;
 	private TextView mTvCacheSize;
 	private TextView mTvVersionName;
+	private UpdateResponse mUpdateInfo;
+	private boolean mIsCheckingUpdate;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,
@@ -38,6 +44,12 @@ public class SettingsFragment extends BaseFragment {
 		initViews(view);
 		initData();
 		return view;
+	}
+
+	@Override
+	public void onDestroyView() {
+		UmengUpdateAgent.setUpdateListener(null);
+		super.onDestroyView();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -50,6 +62,33 @@ public class SettingsFragment extends BaseFragment {
 		caculateCacheSize();
 
 		mTvVersionName.setText(TDevice.getVersionName());
+
+		UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+
+			@Override
+			public void onUpdateReturned(int updateStatus,
+					UpdateResponse updateInfo) {
+				mIsCheckingUpdate = false;
+				switch (updateStatus) {
+				case UpdateStatus.Yes: // has update
+					mUpdateInfo = updateInfo;
+					if (isAdded()) {
+						mTvVersionName
+								.setText(getString(R.string.found_new_version,
+										updateInfo.version));
+					}
+					break;
+				case UpdateStatus.No: // has no update
+					break;
+				case UpdateStatus.NoneWifi: // none wifi
+					break;
+				case UpdateStatus.Timeout: // time out
+					break;
+				}
+			}
+		});
+		mIsCheckingUpdate = true;
+		UmengUpdateAgent.update(getActivity().getApplicationContext());
 	}
 
 	private void initViews(View view) {
@@ -70,7 +109,7 @@ public class SettingsFragment extends BaseFragment {
 		mTvVersionName = (TextView) view.findViewById(R.id.tv_version_name);
 
 		view.findViewById(R.id.ly_version_name).setOnClickListener(this);
-		view.findViewById(R.id.ly_lisence).setOnClickListener(this);
+		view.findViewById(R.id.ly_open_market).setOnClickListener(this);
 	}
 
 	private void caculateCacheSize() {
@@ -103,9 +142,18 @@ public class SettingsFragment extends BaseFragment {
 			UIHelper.clearAppCache(getActivity());
 			mTvCacheSize.setText("0KB");
 		} else if (id == R.id.ly_version_name) {
-
-		} else if (id == R.id.ly_lisence) {
-			UIHelper.showLisence(getActivity());
+			if (mIsCheckingUpdate) {
+				AppContext.showToastShort(R.string.tip_checking_update);
+			} else {
+				if (mUpdateInfo != null) {
+					UmengUpdateAgent.showUpdateDialog(getActivity()
+							.getApplicationContext(), mUpdateInfo);
+				} else {
+					AppContext.showToastShort(R.string.tip_has_not_update);
+				}
+			}
+		} else if (id == R.id.ly_open_market) {
+			TDevice.openAppInMarket(getActivity());
 		}
 	}
 

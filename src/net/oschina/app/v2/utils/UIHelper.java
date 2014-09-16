@@ -650,34 +650,6 @@ public class UIHelper {
 	}
 
 	/**
-	 * 清除文字
-	 * 
-	 * @param cont
-	 * @param editer
-	 */
-	public static void showClearWordsDialog(final Context cont,
-			final EditText editer, final TextView numwords) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(cont);
-		builder.setTitle(R.string.clearwords);
-		builder.setPositiveButton(R.string.sure,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						// 清除文字
-						editer.setText("");
-						numwords.setText("160");
-					}
-				});
-		builder.setNegativeButton(R.string.cancle,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-		builder.show();
-	}
-
-	/**
 	 * 发送通知广播
 	 * 
 	 * @param context
@@ -943,22 +915,6 @@ public class UIHelper {
 		}
 	}
 
-	/**
-	 * 文章是否加载图片显示
-	 * 
-	 * @param activity
-	 */
-	public static void changeSettingIsLoadImage(Activity activity) {
-		AppContext ac = (AppContext) activity.getApplication();
-		if (ac.isLoadImage()) {
-			ac.setConfigLoadimage(false);
-			ToastMessage(activity, "已设置文章不加载图片");
-		} else {
-			ac.setConfigLoadimage(true);
-			ToastMessage(activity, "已设置文章加载图片");
-		}
-	}
-
 	public static void changeSettingIsLoadImage(Activity activity, boolean b) {
 		AppContext ac = (AppContext) activity.getApplication();
 		ac.setConfigLoadimage(b);
@@ -993,73 +949,6 @@ public class UIHelper {
 				handler.sendMessage(msg);
 			}
 		}.start();
-	}
-
-	/**
-	 * 发送App异常崩溃报告
-	 * 
-	 * @param cont
-	 * @param crashReport
-	 */
-	public static void sendAppCrashReport(final Context cont,
-			final String crashReport) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(cont);
-		builder.setIcon(android.R.drawable.ic_dialog_info);
-		builder.setTitle(R.string.app_error);
-		builder.setMessage(R.string.app_error_message);
-		builder.setPositiveButton(R.string.submit_report,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						// 发送异常报告
-						Intent i = new Intent(Intent.ACTION_SEND);
-						// i.setType("text/plain"); //模拟器
-						i.setType("message/rfc822"); // 真机
-						i.putExtra(Intent.EXTRA_EMAIL,
-								new String[] { "zhangdeyi@oschina.net" });
-						i.putExtra(Intent.EXTRA_SUBJECT,
-								"开源中国Android客户端 - 错误报告");
-						i.putExtra(Intent.EXTRA_TEXT, crashReport);
-						cont.startActivity(Intent.createChooser(i, "发送错误报告"));
-						// 退出
-						AppManager.getAppManager().AppExit(cont);
-					}
-				});
-		builder.setNegativeButton(R.string.sure,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						// 退出
-						AppManager.getAppManager().AppExit(cont);
-					}
-				});
-		builder.show();
-	}
-
-	/**
-	 * 退出程序
-	 * 
-	 * @param cont
-	 */
-	public static void Exit(final Context cont) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(cont);
-		builder.setIcon(android.R.drawable.ic_dialog_info);
-		builder.setTitle(R.string.app_menu_surelogout);
-		builder.setPositiveButton(R.string.sure,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						// 退出
-						AppManager.getAppManager().AppExit(cont);
-					}
-				});
-		builder.setNegativeButton(R.string.cancle,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-		builder.show();
 	}
 
 	/**
