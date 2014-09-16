@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
@@ -110,6 +111,7 @@ public class SettingsFragment extends BaseFragment {
 
 		view.findViewById(R.id.ly_version_name).setOnClickListener(this);
 		view.findViewById(R.id.ly_open_market).setOnClickListener(this);
+		view.findViewById(R.id.ly_feedback).setOnClickListener(this);
 	}
 
 	private void caculateCacheSize() {
@@ -154,6 +156,9 @@ public class SettingsFragment extends BaseFragment {
 			}
 		} else if (id == R.id.ly_open_market) {
 			TDevice.openAppInMarket(getActivity());
+		} else if (id == R.id.ly_feedback) {
+			FeedbackAgent agent = new FeedbackAgent(getActivity());
+			agent.startFeedbackActivity();
 		}
 	}
 

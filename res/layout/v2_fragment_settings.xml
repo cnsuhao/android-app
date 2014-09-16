@@ -146,6 +146,7 @@
        
       
         <LinearLayout
+            android:id="@+id/ly_feedback"
             style="@style/setting_item_container"
             android:padding="@dimen/space_16" >
 
