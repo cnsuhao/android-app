@@ -29,12 +29,14 @@ import android.widget.EditText;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
 	public static final int REQUEST_CODE_INIT = 0;
 	private static final String BUNDLE_KEY_REQUEST_CODE = "BUNDLE_KEY_REQUEST_CODE";
 	protected static final String TAG = LoginActivity.class.getSimpleName();
+	private static final String LOGIN_SCREEN = "LoginScreen";
 	private EditText mEtUserName, mEtPassword;
 	private View mIvClearUserName, mIvClearPassword;
 	private Button mBtnLogin;
@@ -198,5 +200,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 		data.putExtra(BUNDLE_KEY_REQUEST_CODE, requestCode);
 		setResult(RESULT_OK, data);
 		finish();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(LOGIN_SCREEN);
+		MobclickAgent.onResume(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(LOGIN_SCREEN);
+		MobclickAgent.onPause(this);
 	}
 }

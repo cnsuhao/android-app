@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 新闻资讯详情
@@ -30,6 +31,7 @@ public class DetailActivity extends BaseActivity  {
 	public static final int DISPLAY_QUESTION = 3;
 	public static final int DISPLAY_TWEET = 4;
 	public static final String BUNDLE_KEY_DISPLAY_TYPE = "BUNDLE_KEY_DISPLAY_TYPE";
+	private static final String DETAIL_SCREEN = "detail_screen";
 
 	private WeakReference<BaseFragment> mFragment, mEmojiFragment;
 
@@ -113,5 +115,19 @@ public class DetailActivity extends BaseActivity  {
 			}
 		}
 		super.onBackPressed();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(DETAIL_SCREEN);
+		MobclickAgent.onResume(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(DETAIL_SCREEN);
+		MobclickAgent.onPause(this);
 	}
 }

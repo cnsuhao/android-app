@@ -79,7 +79,7 @@ public class SimpleBackActivity extends BaseActivity {
 			super.onBackPressed();
 		}
 	}
-	
+
 	@Override
 	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
 		super.onActivityResult(arg0, arg1, arg2);

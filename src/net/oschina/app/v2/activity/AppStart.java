@@ -1,9 +1,9 @@
-package net.oschina.app.v2;
+package net.oschina.app.v2.activity;
 
 import java.io.File;
 import java.util.List;
 
-import net.oschina.app.v2.activity.MainActivity;
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.utils.FileUtils;
 import net.oschina.app.v2.utils.StringUtils;
 import android.app.Activity;
@@ -14,10 +14,10 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 应用程序启动类：显示欢迎界面并跳转到主界面
@@ -28,8 +28,22 @@ import com.tonlin.osc.happy.R;
  */
 public class AppStart extends Activity {
 
-	private static final String TAG = "AppStart";
+	private static final String SPLASH_SCREEN = "SplashScreen";
 	final AppContext ac = (AppContext) getApplication();
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(SPLASH_SCREEN); // 统计页面
+		MobclickAgent.onResume(this); // 统计时长
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(SPLASH_SCREEN); // 保证 onPageEnd 在onPause
+		MobclickAgent.onPause(this);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -123,14 +137,8 @@ public class AppStart extends Activity {
 	 * 跳转到...
 	 */
 	private void redirectTo() {
-		// if (AppContext.hasLogin()) {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 		finish();
-		// } else {
-		// Intent intent = new Intent(this, AuthorizeActivity.class);
-		// startActivity(intent);
-		// finish();
-		// }
 	}
 }
