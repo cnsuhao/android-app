@@ -74,7 +74,10 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
 			@Override
 			public void onClick(View v) {
-				onRefresh(null);
+				mCurrentPage = 0;
+				mState = STATE_REFRESH;
+				mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+				requestData(true);
 			}
 		});
 		mListView = (PullToRefreshListView) view.findViewById(R.id.listview);

@@ -148,6 +148,7 @@ public class UserCenterFragment extends BaseFragment implements
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 				Throwable arg3) {
 			mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
+
 		}
 
 		@Override
@@ -336,7 +337,7 @@ public class UserCenterFragment extends BaseFragment implements
 		final int id = v.getId();
 		if (id == R.id.tv_follow_user) {
 			handleUserRelation();
-		} else if(id == R.id.tv_private_message){
+		} else if (id == R.id.tv_private_message) {
 			UIHelper.showMessagePub(getActivity(), mHisUid, mHisName);
 		}
 	}
@@ -395,81 +396,82 @@ public class UserCenterFragment extends BaseFragment implements
 		NewsApi.updateRelation(mUid, mHisUid, ra,
 				new AsyncHttpResponseHandler() {
 
-			@Override
-			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-				try {
-					Result result = Result
-							.parse(new ByteArrayInputStream(arg2));
-					if (result.OK()) {
-						switch (mUser.getRelation()) {
-						case User.RELATION_TYPE_BOTH:
-							mBtnFollowUser
-									.setCompoundDrawablesWithIntrinsicBounds(
-											R.drawable.ic_add_follow,
-											0, 0, 0);
-							mBtnFollowUser
-									.setText(R.string.follow_user);
-							mBtnFollowUser.setTextColor(getResources()
-									.getColor(R.color.white));
-							mBtnFollowUser
-									.setBackgroundResource(R.drawable.btn_small_green_selector);
-							mUser.setRelation(User.RELATION_TYPE_FANS_ME);
-							break;
-						case User.RELATION_TYPE_FANS_HIM:
-							mBtnFollowUser
-									.setCompoundDrawablesWithIntrinsicBounds(
-											R.drawable.ic_add_follow,
-											0, 0, 0);
-							mBtnFollowUser
-									.setText(R.string.follow_user);
-							mBtnFollowUser.setTextColor(getResources()
-									.getColor(R.color.white));
-							mBtnFollowUser
-									.setBackgroundResource(R.drawable.btn_small_green_selector);
-							mUser.setRelation(User.RELATION_TYPE_NULL);
-							break;
-						case User.RELATION_TYPE_FANS_ME:
-							mBtnFollowUser
-									.setCompoundDrawablesWithIntrinsicBounds(
-											R.drawable.ic_followed, 0,
-											0, 0);
-							mBtnFollowUser
-									.setText(R.string.follow_each_other);
-							mBtnFollowUser.setTextColor(getResources()
-									.getColor(R.color.black));
-							mBtnFollowUser
-									.setBackgroundResource(R.drawable.btn_small_white_selector);
-							mUser.setRelation(User.RELATION_TYPE_BOTH);
-							break;
-						case User.RELATION_TYPE_NULL:
-							mBtnFollowUser
-									.setCompoundDrawablesWithIntrinsicBounds(
-											R.drawable.ic_followed, 0,
-											0, 0);
-							mBtnFollowUser
-									.setText(R.string.unfollow_user);
-							mBtnFollowUser.setTextColor(getResources()
-									.getColor(R.color.black));
-							mBtnFollowUser
-									.setBackgroundResource(R.drawable.btn_small_white_selector);
-							mUser.setRelation(User.RELATION_TYPE_FANS_HIM);
-							break;
+					@Override
+					public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+						try {
+							Result result = Result
+									.parse(new ByteArrayInputStream(arg2));
+							if (result.OK()) {
+								switch (mUser.getRelation()) {
+								case User.RELATION_TYPE_BOTH:
+									mBtnFollowUser
+											.setCompoundDrawablesWithIntrinsicBounds(
+													R.drawable.ic_add_follow,
+													0, 0, 0);
+									mBtnFollowUser
+											.setText(R.string.follow_user);
+									mBtnFollowUser.setTextColor(getResources()
+											.getColor(R.color.white));
+									mBtnFollowUser
+											.setBackgroundResource(R.drawable.btn_small_green_selector);
+									mUser.setRelation(User.RELATION_TYPE_FANS_ME);
+									break;
+								case User.RELATION_TYPE_FANS_HIM:
+									mBtnFollowUser
+											.setCompoundDrawablesWithIntrinsicBounds(
+													R.drawable.ic_add_follow,
+													0, 0, 0);
+									mBtnFollowUser
+											.setText(R.string.follow_user);
+									mBtnFollowUser.setTextColor(getResources()
+											.getColor(R.color.white));
+									mBtnFollowUser
+											.setBackgroundResource(R.drawable.btn_small_green_selector);
+									mUser.setRelation(User.RELATION_TYPE_NULL);
+									break;
+								case User.RELATION_TYPE_FANS_ME:
+									mBtnFollowUser
+											.setCompoundDrawablesWithIntrinsicBounds(
+													R.drawable.ic_followed, 0,
+													0, 0);
+									mBtnFollowUser
+											.setText(R.string.follow_each_other);
+									mBtnFollowUser.setTextColor(getResources()
+											.getColor(R.color.black));
+									mBtnFollowUser
+											.setBackgroundResource(R.drawable.btn_small_white_selector);
+									mUser.setRelation(User.RELATION_TYPE_BOTH);
+									break;
+								case User.RELATION_TYPE_NULL:
+									mBtnFollowUser
+											.setCompoundDrawablesWithIntrinsicBounds(
+													R.drawable.ic_followed, 0,
+													0, 0);
+									mBtnFollowUser
+											.setText(R.string.unfollow_user);
+									mBtnFollowUser.setTextColor(getResources()
+											.getColor(R.color.black));
+									mBtnFollowUser
+											.setBackgroundResource(R.drawable.btn_small_white_selector);
+									mUser.setRelation(User.RELATION_TYPE_FANS_HIM);
+									break;
+								}
+								int padding = (int) TDevice.dpToPixel(20);
+								mBtnFollowUser.setPadding(padding, 0, padding,
+										0);
+							}
+							AppContext.showToastShort(result.getErrorMessage());
+						} catch (Exception e) {
+							e.printStackTrace();
+							onFailure(arg0, arg1, arg2, e);
 						}
-						int padding = (int) TDevice.dpToPixel(20);
-						mBtnFollowUser.setPadding(padding, 0, padding, 0);
 					}
-					AppContext.showToastShort(result.getErrorMessage());
-				} catch (Exception e) {
-					e.printStackTrace();
-					onFailure(arg0, arg1, arg2, e);
-				}
-			}
 
-			@Override
-			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-					Throwable arg3) {
-			}
-		});
+					@Override
+					public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+							Throwable arg3) {
+					}
+				});
 	}
 
 	private void sendGetUserInfomation() {
@@ -505,7 +507,7 @@ public class UserCenterFragment extends BaseFragment implements
 			break;
 		}
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();

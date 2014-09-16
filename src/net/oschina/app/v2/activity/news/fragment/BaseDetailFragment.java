@@ -334,6 +334,15 @@ public class BaseDetailFragment extends BaseFragment implements
 
 	protected void executeOnLoadDataError(String object) {
 		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+		mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mState = STATE_REFRESH;
+				mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+				requestData(true);
+			}
+		});
 	}
 
 	protected void executeOnLoadFinish() {
