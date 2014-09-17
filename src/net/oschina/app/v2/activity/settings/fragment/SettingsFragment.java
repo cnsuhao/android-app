@@ -59,6 +59,11 @@ public class SettingsFragment extends BaseFragment {
 
 	@SuppressWarnings("deprecation")
 	private void initData() {
+		if (AppContext.shouldLoadImage())
+			mTbLoadImage.setToggleOn();
+		else
+			mTbLoadImage.setToggleOff();
+		
 		mCachePicPath = ImageLoader.getInstance().getDiskCache().getDirectory()
 				.getAbsolutePath();
 
@@ -100,11 +105,6 @@ public class SettingsFragment extends BaseFragment {
 		} else {
 			mBtnLogout.setVisibility(View.GONE);
 		}
-		
-		if (AppContext.shouldLoadImage())
-			mTbLoadImage.setToggleOn();
-		else
-			mTbLoadImage.setToggleOff();
 	}
 
 	private void initViews(View view) {
