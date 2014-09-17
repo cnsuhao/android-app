@@ -211,14 +211,14 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected String getShareContent() {
-		return mPost.getTitle();
+		return mPost != null ? mPost.getTitle() : null;
 	}
 
 	@Override
 	protected String getShareUrl() {
-		return mPost.getUrl();
+		return mPost != null ? mPost.getUrl() : null;
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();

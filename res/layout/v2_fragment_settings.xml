@@ -143,8 +143,6 @@
             android:layout_marginTop="@dimen/space_20"
             android:background="@color/list_divider_color" />
 
-       
-      
         <LinearLayout
             android:id="@+id/ly_feedback"
             style="@style/setting_item_container"
@@ -206,6 +204,14 @@
                 android:contentDescription="@null"
                 android:src="@drawable/ic_item_goto_right_tip" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_logout"
+            style="@style/button_common_red"
+            android:layout_marginLeft="@dimen/space_10"
+            android:layout_marginRight="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_10"
+            android:text="@string/logout" />
     </LinearLayout>
 
 </ScrollView>

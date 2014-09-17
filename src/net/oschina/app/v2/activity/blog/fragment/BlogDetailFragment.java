@@ -236,14 +236,14 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected String getShareContent() {
-		return mBlog.getTitle();
+		return mBlog != null ? mBlog.getTitle() : null;
 	}
 
 	@Override
 	protected String getShareUrl() {
-		return mBlog.getUrl();
+		return mBlog != null ? mBlog.getUrl() : null;
 	}
-	
+
 	@Override
 	protected void onReportMenuClick() {
 		if (!AppContext.instance().isLogin()) {

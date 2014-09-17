@@ -48,6 +48,8 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
 	private AsyncTask<String, Void, ListEntity> mCacheTask;
 
+	
+	
 	protected int getLayoutRes() {
 		return R.layout.v2_fragment_pull_refresh_listview;
 	}

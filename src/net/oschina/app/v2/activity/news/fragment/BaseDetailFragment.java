@@ -34,6 +34,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.internal.widget.ListPopupWindow;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -335,7 +336,7 @@ public class BaseDetailFragment extends BaseFragment implements
 	protected void executeOnLoadDataError(String object) {
 		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
 		mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				mState = STATE_REFRESH;
@@ -407,6 +408,9 @@ public class BaseDetailFragment extends BaseFragment implements
 				UIHelper.showLogin(getActivity());
 				return;
 			}
+			if (getFavoriteTargetId() == -1 || getFavoriteTargetType() == -1) {
+				return;
+			}
 			int uid = AppContext.instance().getLoginUid();
 			if (mMenuAdapter.isFavorite()) {
 				NewsApi.delFavorite(uid, getFavoriteTargetId(),
@@ -430,6 +434,10 @@ public class BaseDetailFragment extends BaseFragment implements
 	}
 
 	private void handleShare() {
+		if (TextUtils.isEmpty(getShareContent())
+				|| TextUtils.isEmpty(getShareUrl())) {
+			return;
+		}
 		final ShareDialog dialog = new ShareDialog(getActivity());
 		dialog.setCancelable(true);
 		dialog.setCanceledOnTouchOutside(true);

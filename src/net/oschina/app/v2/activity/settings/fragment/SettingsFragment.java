@@ -4,12 +4,15 @@ import java.io.File;
 
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.ui.dialog.CommonDialog;
+import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.ui.tooglebutton.ToggleButton;
 import net.oschina.app.v2.ui.tooglebutton.ToggleButton.OnToggleChangedListener;
 import net.oschina.app.v2.utils.FileUtils;
 import net.oschina.app.v2.utils.MethodsCompat;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -36,6 +39,7 @@ public class SettingsFragment extends BaseFragment {
 	private TextView mTvVersionName;
 	private UpdateResponse mUpdateInfo;
 	private boolean mIsCheckingUpdate;
+	private View mBtnLogout;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,
@@ -90,6 +94,12 @@ public class SettingsFragment extends BaseFragment {
 		});
 		mIsCheckingUpdate = true;
 		UmengUpdateAgent.update(getActivity().getApplicationContext());
+
+		if (AppContext.instance().isLogin()) {
+			mBtnLogout.setVisibility(View.VISIBLE);
+		} else {
+			mBtnLogout.setVisibility(View.GONE);
+		}
 	}
 
 	private void initViews(View view) {
@@ -112,6 +122,8 @@ public class SettingsFragment extends BaseFragment {
 		view.findViewById(R.id.ly_version_name).setOnClickListener(this);
 		view.findViewById(R.id.ly_open_market).setOnClickListener(this);
 		view.findViewById(R.id.ly_feedback).setOnClickListener(this);
+		mBtnLogout = view.findViewById(R.id.btn_logout);
+		mBtnLogout.setOnClickListener(this);
 	}
 
 	private void caculateCacheSize() {
@@ -159,7 +171,27 @@ public class SettingsFragment extends BaseFragment {
 		} else if (id == R.id.ly_feedback) {
 			FeedbackAgent agent = new FeedbackAgent(getActivity());
 			agent.startFeedbackActivity();
+		} else if (id == R.id.btn_logout) {
+			handleLogout();
 		}
+	}
+
+	private void handleLogout() {
+		CommonDialog dialog = DialogHelper
+				.getPinterestDialogCancelable(getActivity());
+		dialog.setMessage(R.string.message_logout);
+		dialog.setPositiveButton(R.string.ok,
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						AppContext.instance().Logout();
+						AppContext.showToastShort(R.string.tip_logout_success);
+						getActivity().finish();
+					}
+				});
+		dialog.setNegativeButton(R.string.cancle, null);
+		dialog.show();
 	}
 
 	@Override

@@ -232,12 +232,12 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected String getShareContent() {
-		return mNews.getTitle();
+		return mNews != null ? mNews.getTitle() : null;
 	}
 
 	@Override
 	protected String getShareUrl() {
-		return mNews.getUrl();
+		return mNews != null ? mNews.getUrl() : null;
 	}
 
 	@Override

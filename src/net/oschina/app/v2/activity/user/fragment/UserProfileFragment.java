@@ -42,8 +42,12 @@ public class UserProfileFragment extends BaseFragment {
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			try {
 				mInfo = MyInformation.parse(new ByteArrayInputStream(arg2));
-				fillUI();
-				mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
+				if (mInfo != null) {
+					fillUI();
+					mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
+				} else {
+					onFailure(arg0, arg1, arg2, new Throwable());
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				onFailure(arg0, arg1, arg2, e);
@@ -69,6 +73,13 @@ public class UserProfileFragment extends BaseFragment {
 
 	private void initViews(View view) {
 		mEmptyView = (EmptyLayout) view.findViewById(R.id.error_layout);
+		mEmptyView.setOnLayoutClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				sendLoadInfoRequest();
+			}
+		});
 		mIvAvatar = (ImageView) view.findViewById(R.id.iv_avatar);
 		mTvName = (TextView) view.findViewById(R.id.tv_name);
 		mIvGender = (ImageView) view.findViewById(R.id.iv_gender);
@@ -143,8 +154,7 @@ public class UserProfileFragment extends BaseFragment {
 		int uid = AppContext.instance().getLoginUid();
 		NewsApi.getMyInformation(uid, mHandler);
 	}
-	
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();

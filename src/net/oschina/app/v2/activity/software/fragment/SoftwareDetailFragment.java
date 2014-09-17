@@ -46,7 +46,7 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 	private ImageView mIvLogo;
 	private String mIdent;
 	private Software mSoftware;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 		// mNewsContainer = (ScrollView)
 		// view.findViewById(R.id.sv_news_container);
 		mTvTitle = (TextView) view.findViewById(R.id.tv_title);
-		
+
 		mWebView = (WebView) view.findViewById(R.id.webview);
 		initWebView(mWebView);
 
@@ -74,8 +74,8 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 		mTvOs = (TextView) view.findViewById(R.id.tv_software_os);
 		mTvRecordTime = (TextView) view
 				.findViewById(R.id.tv_software_recordtime);
-		mIvLogo = (ImageView)view.findViewById(R.id.iv_logo);
-		
+		mIvLogo = (ImageView) view.findViewById(R.id.iv_logo);
+
 		view.findViewById(R.id.btn_software_index).setOnClickListener(this);
 		view.findViewById(R.id.btn_software_download).setOnClickListener(this);
 		view.findViewById(R.id.btn_software_document).setOnClickListener(this);
@@ -107,30 +107,32 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 		// software has no comment so we do not need it
 		return false;
 	}
-	
+
 	@Override
 	protected void executeOnLoadDataSuccess(Entity entity) {
 		mSoftware = (Software) entity;
 		fillUI();
 		fillWebViewBody();
 	}
-	
+
 	private void fillUI() {
 		mTvTitle.setText(mSoftware.getTitle());
 		mTvLicense.setText(mSoftware.getLicense());
 		mTvLanguage.setText(mSoftware.getLanguage());
 		mTvOs.setText(mSoftware.getOs());
 		mTvRecordTime.setText(mSoftware.getRecordtime());
-		DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-				.cacheOnDisk(true).postProcessor(new BitmapProcessor() {
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.cacheInMemory(true).cacheOnDisk(true)
+				.postProcessor(new BitmapProcessor() {
 
 					@Override
 					public Bitmap process(Bitmap arg0) {
 						return arg0;
 					}
 				}).build();
-		ImageLoader.getInstance().displayImage(mSoftware.getLogo(), mIvLogo,options);
-		
+		ImageLoader.getInstance().displayImage(mSoftware.getLogo(), mIvLogo,
+				options);
+
 		notifyFavorite(mSoftware.getFavorite() == 1);
 	}
 
@@ -168,22 +170,22 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
 	protected int getFavoriteTargetId() {
 		return mSoftware != null ? mSoftware.getId() : -1;
 	}
-	
+
 	@Override
 	protected int getFavoriteTargetType() {
 		return mSoftware != null ? FavoriteList.TYPE_SOFTWARE : -1;
 	}
-	
+
 	@Override
 	protected String getShareContent() {
-		return mSoftware.getTitle();
+		return mSoftware != null ? mSoftware.getTitle() : "";
 	}
 
 	@Override
 	protected String getShareUrl() {
-		return mSoftware.getUrl();
+		return mSoftware != null ? mSoftware.getUrl() : "";
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
