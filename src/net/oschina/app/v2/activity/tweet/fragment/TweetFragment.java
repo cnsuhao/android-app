@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.tweet.adapter.TweetAdapter;
+import net.oschina.app.v2.api.OperationResponseHandler;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;
@@ -24,11 +25,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 
 /**
  * 动弹
+ * 
  * @author william_sim
  */
 public class TweetFragment extends BaseListFragment implements
@@ -36,21 +37,27 @@ public class TweetFragment extends BaseListFragment implements
 	protected static final String TAG = TweetFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "tweet_list";
 
-	private AsyncHttpResponseHandler mDelTweetHandler = new AsyncHttpResponseHandler() {
+	class DeleteTweetResponseHandler extends OperationResponseHandler {
+
+		DeleteTweetResponseHandler(Object... args) {
+			super(args);
+		}
 
 		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+		public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
+				throws Exception {
 			try {
-				Result res = Result.parse(new ByteArrayInputStream(arg2));
+				Result res = Result.parse(is);
 				if (res != null && res.OK()) {
 					AppContext.showToastShort(R.string.tip_del_tweet_success);
+					Tweet tweet = (Tweet) args[0];
+					mAdapter.removeItem(tweet);
 				} else {
-					onFailure(arg0, arg1, arg2,
-							new Throwable(res.getErrorMessage()));
+					onFailure(code, res.getErrorMessage(), args);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				onFailure(arg0, arg1, arg2, e);
+				onFailure(code, e.getMessage(), args);
 			}
 		}
 
@@ -59,7 +66,7 @@ public class TweetFragment extends BaseListFragment implements
 				Throwable arg3) {
 			AppContext.showToastShort(R.string.tip_del_tweet_faile);
 		}
-	};
+	}
 
 	@Override
 	protected void initViews(View view) {
@@ -123,7 +130,7 @@ public class TweetFragment extends BaseListFragment implements
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						NewsApi.deleteTweet(tweet.getAuthorId(), tweet.getId(),
-								mDelTweetHandler);
+								new DeleteTweetResponseHandler(tweet));
 					}
 				});
 		dialog.setNegativeButton(R.string.cancle, null);

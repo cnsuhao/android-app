@@ -7,7 +7,7 @@ import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.ui.dialog.CommonDialog;
 import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.ui.tooglebutton.ToggleButton;
-import net.oschina.app.v2.ui.tooglebutton.ToggleButton.OnToggleChangedListener;
+import net.oschina.app.v2.ui.tooglebutton.ToggleButton.OnToggleChanged;
 import net.oschina.app.v2.utils.FileUtils;
 import net.oschina.app.v2.utils.MethodsCompat;
 import net.oschina.app.v2.utils.TDevice;
@@ -100,6 +100,11 @@ public class SettingsFragment extends BaseFragment {
 		} else {
 			mBtnLogout.setVisibility(View.GONE);
 		}
+		
+		if (AppContext.shouldLoadImage())
+			mTbLoadImage.setToggleOn();
+		else
+			mTbLoadImage.setToggleOff();
 	}
 
 	private void initViews(View view) {
@@ -108,11 +113,11 @@ public class SettingsFragment extends BaseFragment {
 		mTvPicPath = (TextView) view
 				.findViewById(R.id.tv_current_picture_save_path);
 		mTbLoadImage = (ToggleButton) view.findViewById(R.id.tb_load_picture);
-		mTbLoadImage.setListener(new OnToggleChangedListener() {
+		mTbLoadImage.setOnToggleChanged(new OnToggleChanged() {
 
 			@Override
-			public void onToggle(boolean flag) {
-				AppContext.setLoadImage(flag);
+			public void onToggle(boolean on) {
+				AppContext.setLoadImage(on);
 			}
 		});
 		view.findViewById(R.id.ly_cache_size).setOnClickListener(this);
@@ -196,7 +201,6 @@ public class SettingsFragment extends BaseFragment {
 
 	@Override
 	public void onResume() {
-		mTbLoadImage.setToggle(AppContext.shouldLoadImage());
 		super.onResume();
 		MobclickAgent.onPageStart(SETTINGS_SCREEN);
 		MobclickAgent.onResume(getActivity());
