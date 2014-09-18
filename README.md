@@ -15,3 +15,12 @@ android-app
 
 **本项目采用 GPL 授权协议，欢迎大家在这个基础上进行改进，并与大家分享。**
 
+**应用截图**
+1-资讯页
+<img src="http://git.oschina.net/tonlin/android-app/raw/master/screenshots/1-%E8%B5%84%E8%AE%AF%E9%A1%B5.png"/>
+2-帖子
+<img src="http://git.oschina.net/tonlin/android-app/blob/master/screenshots/2-%E9%97%AE%E7%AD%94%E9%A1%B5.png"/>
+3-动弹
+<img src="http://git.oschina.net/tonlin/android-app/blob/master/screenshots/3-%E5%8A%A8%E5%BC%B9%E9%A1%B5.png"/>
+4-发布动弹
+<img src="http://git.oschina.net/tonlin/android-app/blob/master/screenshots/5-%E5%8A%A8%E5%BC%B9%E5%8F%91%E5%B8%83%E9%A1%B5.png"/>
