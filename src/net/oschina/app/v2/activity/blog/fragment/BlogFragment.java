@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 
 /**
  * 博客列表
+ * 
  * @author william_sim
  */
 public class BlogFragment extends BaseListFragment {
@@ -55,6 +56,7 @@ public class BlogFragment extends BaseListFragment {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Blog blog = (Blog) mAdapter.getItem(position - 1);
-		UIHelper.showUrlRedirect(view.getContext(), blog.getUrl());
+		if (blog != null)
+			UIHelper.showUrlRedirect(view.getContext(), blog.getUrl());
 	}
 }

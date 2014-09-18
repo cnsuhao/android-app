@@ -60,9 +60,11 @@ public class FriendFragment extends BaseListFragment {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Friend item = (Friend) mAdapter.getItem(position - 1);
-		UIHelper.showUserCenter(getActivity(), item.getUserid(), item.getName());
+		if (item != null)
+			UIHelper.showUserCenter(getActivity(), item.getUserid(),
+					item.getName());
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();

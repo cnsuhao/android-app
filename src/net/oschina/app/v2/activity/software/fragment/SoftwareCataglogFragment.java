@@ -86,7 +86,7 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
 				Throwable arg3) {
 			mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
 		}
-		
+
 		public void onFinish() {
 			mState = STATE_NONE;
 		}
@@ -120,7 +120,7 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
 				Throwable arg3) {
 			mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
 		}
-		
+
 		public void onFinish() {
 			mState = STATE_NONE;
 		}
@@ -165,7 +165,7 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
 				Throwable arg3) {
 			mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
 		}
-		
+
 		public void onFinish() {
 			mState = STATE_NONE;
 			mLvSoftware.onRefreshComplete();
@@ -201,7 +201,7 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
 				curScreen = SCREEN_SOFTWARE;
 				mScrollLayout.scrollToScreen(curScreen);
 				mCurrentTag = type.tag;
-				
+
 				mState = STATE_REFRESH;
 				mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
 				sendRequestTagData();
@@ -253,19 +253,20 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Software software = (Software) mSoftwareAdapter.getItem(position - 1);
-		UIHelper.showUrlRedirect(view.getContext(), software.url);
+		if (software != null)
+			UIHelper.showUrlRedirect(view.getContext(), software.url);
 	}
 
 	@Override
 	public boolean onBackPressed() {
 		switch (curScreen) {
 		case SCREEN_SOFTWARE:
-			//mTitle.setText(curTitleLV1);
+			// mTitle.setText(curTitleLV1);
 			curScreen = SCREEN_TAG;
 			mScrollLayout.scrollToScreen(SCREEN_TAG);
 			return true;
 		case SCREEN_TAG:
-			//mTitle.setText("开源软件库");
+			// mTitle.setText("开源软件库");
 			curScreen = SCREEN_CATALOG;
 			mScrollLayout.scrollToScreen(SCREEN_CATALOG);
 			return true;
@@ -274,7 +275,7 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
 		}
 		return super.onBackPressed();
 	}
-	
+
 	@Override
 	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 		mCurrentPage = 0;
@@ -285,8 +286,7 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
 	@Override
 	public void onLastItemVisible() {
 		if (mState == STATE_NONE) {
-			if (mSoftwareAdapter.getState() 
-					== ListBaseAdapter.STATE_LOAD_MORE) {
+			if (mSoftwareAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
 				mCurrentPage++;
 				mState = STATE_LOADMORE;
 				sendRequestTagData();

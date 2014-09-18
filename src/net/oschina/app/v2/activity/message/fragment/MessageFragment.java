@@ -34,7 +34,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import com.tonlin.osc.happy.R;
 
 public class MessageFragment extends BaseListFragment implements
-		OnItemLongClickListener { 
+		OnItemLongClickListener {
 	protected static final String TAG = ActiveFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "message_list";
 	private boolean mIsWatingLogin;
@@ -57,7 +57,7 @@ public class MessageFragment extends BaseListFragment implements
 		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
 		getActivity().registerReceiver(mReceiver, filter);
 	}
- 
+
 	@Override
 	public void onDestroy() {
 		getActivity().unregisterReceiver(mReceiver);
@@ -137,8 +137,9 @@ public class MessageFragment extends BaseListFragment implements
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Messages message = (Messages) mAdapter.getItem(position - 1);
-		UIHelper.showMessageDetail(getActivity(), message.getFriendId(),
-				message.getFriendName());
+		if (message != null)
+			UIHelper.showMessageDetail(getActivity(), message.getFriendId(),
+					message.getFriendName());
 	}
 
 	@Override

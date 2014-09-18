@@ -2,14 +2,7 @@ package net.oschina.app.v2;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InvalidClassException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.Hashtable;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -23,7 +16,6 @@ import net.oschina.app.v2.utils.FileUtils;
 import net.oschina.app.v2.utils.ImageUtils;
 import net.oschina.app.v2.utils.MethodsCompat;
 import net.oschina.app.v2.utils.StringUtils;
-import net.oschina.app.v2.utils.UIHelper;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
@@ -76,6 +68,7 @@ public class AppContext extends BaseApplication {
 	private static final String KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN";
 	private static final String KEY_SOFTKEYBOARD_HEIGHT = "KEY_SOFTKEYBOARD_HEIGHT";
 	private static final String KEY_LOAD_IMAGE = "KEY_LOAD_IMAGE";
+	private static final String KEY_NOTIFICATION_SOUND = "KEY_NOTIFICATION_SOUND";
 	private static final String LAST_QUESTION_CATEGORY_IDX = "LAST_QUESTION_CATEGORY_IDX";
 
 	private boolean login = false; // 登录状态
@@ -717,5 +710,15 @@ public class AppContext extends BaseApplication {
 	public static String getLastQuestionCategory() {
 		int idx = getLastQuestionCategoryIdx();
 		return resources().getStringArray(R.array.post_pub_options)[idx];
+	}
+
+	public static boolean isNotificationSoundEnable() {
+		return getPreferences().getBoolean(KEY_NOTIFICATION_SOUND, false);
+	}
+	
+	public static void setNotificationSoundEnable(boolean enable){
+		Editor editor = getPreferences().edit();
+		editor.putBoolean(KEY_NOTIFICATION_SOUND, enable);
+		apply(editor);
 	}
 }

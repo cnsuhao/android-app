@@ -123,7 +123,28 @@
                 android:contentDescription="@null"
                 android:src="@drawable/ic_item_goto_right_tip" />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/space_8"
+            android:layout_marginRight="@dimen/space_8"
+            android:background="@color/list_divider_color" />
+		<LinearLayout
+            android:id="@+id/ly_change_log"
+            style="@style/setting_item_container"
+            android:padding="@dimen/space_16" >
 
+            <TextView
+                style="@style/setting_item_text"
+                android:text="@string/changelog" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_item_goto_right_tip" />
+        </LinearLayout>
+        
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content" 

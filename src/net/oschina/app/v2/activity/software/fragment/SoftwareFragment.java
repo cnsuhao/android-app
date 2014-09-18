@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 
 /**
  * 软件列表
+ * 
  * @author william_sim
  */
 public class SoftwareFragment extends BaseListFragment {
@@ -49,12 +50,12 @@ public class SoftwareFragment extends BaseListFragment {
 		MobclickAgent.onPageEnd(SOFTWARE_SCREEN);
 		MobclickAgent.onPause(getActivity());
 	}
-	
+
 	@Override
 	protected ListBaseAdapter getListAdapter() {
 		return new SoftwareAdapter();
 	}
-	
+
 	@Override
 	protected String getCacheKeyPrefix() {
 		return CACHE_KEY_PREFIX;
@@ -80,6 +81,7 @@ public class SoftwareFragment extends BaseListFragment {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Software software = (Software) mAdapter.getItem(position - 1);
-		UIHelper.showUrlRedirect(view.getContext(), software.url);
+		if (software != null)
+			UIHelper.showUrlRedirect(view.getContext(), software.url);
 	}
 }

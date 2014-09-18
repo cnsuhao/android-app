@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.api.OperationResponseHandler;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.model.Comment;
@@ -55,8 +56,8 @@ public class ServerTaskService extends IntentService {
 			if (res.OK()) {
 				Comment comment = res.getComment();
 				UIHelper.sendBroadCastCommentChanged(ServerTaskService.this,
-						isBlog, task.getId(), task.getCatalog()
-						, Comment.OPT_ADD, comment);
+						isBlog, task.getId(), task.getCatalog(),
+						Comment.OPT_ADD, comment);
 				notifySimpleNotifycation(id,
 						getString(R.string.comment_publish_success),
 						getString(R.string.comment_blog),
@@ -71,7 +72,7 @@ public class ServerTaskService extends IntentService {
 				}, 3000);
 				removePenddingTask(KEY_COMMENT + id);
 			} else {
-				onFailure(code, res.getErrorMessage(), args);
+				onFailure(100, res.getErrorMessage(), args);
 			}
 		}
 
@@ -82,7 +83,9 @@ public class ServerTaskService extends IntentService {
 			notifySimpleNotifycation(id,
 					getString(R.string.comment_publish_faile),
 					getString(R.string.comment_blog),
-					getString(R.string.comment_publish_faile), false, true);
+					code == 100 ? errorMessage
+							: getString(R.string.comment_publish_faile), false,
+					true);
 			removePenddingTask(KEY_COMMENT + id);
 		}
 
@@ -117,7 +120,7 @@ public class ServerTaskService extends IntentService {
 				}, 3000);
 				removePenddingTask(KEY_POST + id);
 			} else {
-				onFailure(code, res.getErrorMessage(), args);
+				onFailure(100, res.getErrorMessage(), args);
 			}
 		}
 
@@ -127,8 +130,9 @@ public class ServerTaskService extends IntentService {
 			int id = post.getId();
 			notifySimpleNotifycation(id,
 					getString(R.string.post_publish_faile),
-					getString(R.string.post_public),
-					getString(R.string.post_publish_faile), false, true);
+					getString(R.string.post_public), code == 100 ? errorMessage
+							: getString(R.string.post_publish_faile), false,
+					true);
 			removePenddingTask(KEY_POST + id);
 		}
 
@@ -164,7 +168,7 @@ public class ServerTaskService extends IntentService {
 				}, 3000);
 				removePenddingTask(KEY_TWEET + id);
 			} else {
-				onFailure(code, res.getErrorMessage(), args);
+				onFailure(100, res.getErrorMessage(), args);
 			}
 		}
 
@@ -175,7 +179,9 @@ public class ServerTaskService extends IntentService {
 			notifySimpleNotifycation(id,
 					getString(R.string.tweet_publish_faile),
 					getString(R.string.tweet_public),
-					getString(R.string.tweet_publish_faile), false, true);
+					code == 100 ? errorMessage
+							: getString(R.string.tweet_publish_faile), false,
+					true);
 			removePenddingTask(KEY_TWEET + id);
 		}
 
@@ -242,6 +248,7 @@ public class ServerTaskService extends IntentService {
 	}
 
 	private void publicBlogComment(final PublicCommentTask task) {
+		task.setId((int) System.currentTimeMillis());
 		int id = task.getId() * task.getUid();
 		addPenddingTask(KEY_COMMENT + id);
 
@@ -255,6 +262,7 @@ public class ServerTaskService extends IntentService {
 	}
 
 	private void publicComment(final PublicCommentTask task) {
+		task.setId((int) System.currentTimeMillis());
 		int id = task.getId() * task.getUid();
 		addPenddingTask(KEY_COMMENT + id);
 
@@ -268,6 +276,7 @@ public class ServerTaskService extends IntentService {
 	}
 
 	private void publicPost(Post post) {
+		post.setId((int) System.currentTimeMillis());
 		int id = post.getId();
 		addPenddingTask(KEY_POST + id);
 		notifySimpleNotifycation(id, getString(R.string.post_publishing),
@@ -278,6 +287,7 @@ public class ServerTaskService extends IntentService {
 	}
 
 	private void publicTweet(final Tweet tweet) {
+		tweet.setId((int) System.currentTimeMillis());
 		int id = tweet.getId();
 		addPenddingTask(KEY_TWEET + id);
 		notifySimpleNotifycation(id, getString(R.string.tweet_publishing),
@@ -289,22 +299,35 @@ public class ServerTaskService extends IntentService {
 
 	private void notifySimpleNotifycation(int id, String ticker, String title,
 			String content, boolean ongoing, boolean autoCancel) {
-		Notification notification = new NotificationCompat.Builder(this)
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(
+				this)
 				.setTicker(ticker)
 				.setContentTitle(title)
 				.setContentText(content)
 				.setAutoCancel(true)
 				.setOngoing(false)
-				.setDefaults(Notification.DEFAULT_SOUND)
 				.setOnlyAlertOnce(true)
 				.setContentIntent(
 						PendingIntent.getActivity(this, 0, new Intent(), 0))
-				.setSmallIcon(R.drawable.ic_notification).build();
-		// if (autoCancel) {
-		// notification.flags = Notification.FLAG_AUTO_CANCEL;
-		// notification.flags = Notification.DEFAULT_LIGHTS |
-		// Notification.FLAG_AUTO_CANCEL;
+				.setSmallIcon(R.drawable.ic_notification);
+
+		if(AppContext.isNotificationSoundEnable()){
+			builder.setDefaults(Notification.DEFAULT_SOUND);
+		}
+		
+		Notification notification = builder.build();
+		
+		// notification.flags = Notification.DEFAULT_ALL;
+		// if (AppContext.isNotificationSoundEnable()) {
+		// notification.flags |= Notification.DEFAULT_SOUND;
 		// }
+		// if (autoCancel) {
+		// notification.flags |= Notification.FLAG_AUTO_CANCEL;
+		// // notification.flags = Notification.FLAG_AUTO_CANCEL;
+		// // notification.flags = Notification.DEFAULT_LIGHTS |
+		// // Notification.FLAG_AUTO_CANCEL;
+		// }
+
 		NotificationManagerCompat.from(this).notify(id, notification);
 	}
 

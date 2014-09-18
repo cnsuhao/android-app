@@ -325,6 +325,8 @@ public class BaseDetailFragment extends BaseFragment implements
 		}
 	};
 
+	private boolean mIsFavorited;
+
 	protected void saveCache(Entity entity) {
 		new SaveCacheTask(getActivity(), entity, getCacheKey()).execute();
 	}
@@ -350,17 +352,41 @@ public class BaseDetailFragment extends BaseFragment implements
 	}
 
 	protected void onFavoriteChanged(boolean flag) {
-
 	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.detail_menu, menu);
+		MenuItem item = menu.findItem(R.id.detail_menu_favorite);
+		if (AppContext.instance().isLogin()
+				&& mIsFavorited) {
+			item.setIcon(R.drawable.actionbar_unfavorite_icon);
+			item.setTitle(R.string.detail_menu_unfavorite);
+		} else {
+			item.setIcon(R.drawable.actionbar_favorite_icon);
+			item.setTitle(R.string.detail_menu_favorite);
+		}
+		
+		MenuItem share = menu.findItem(R.id.detail_menu_share);
+		MenuItem more = menu.findItem(R.id.detail_menu_more);
+		if(hasReportMenu()) {
+			more.setVisible(true);
+			share.setVisible(false);
+		} else {
+			more.setVisible(false);
+			share.setVisible(true);
+		}
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.detail_menu_favorite:
+			handleFavoriteOrNot();
+			break;
+		case R.id.detail_menu_share:
+			handleShare();
+			break;
 		case R.id.detail_menu_more:
 			showMoreOptionMenu(getActivity()
 					.findViewById(R.id.detail_menu_more));
@@ -404,25 +430,12 @@ public class BaseDetailFragment extends BaseFragment implements
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		if (position == 0) {
-			if (!AppContext.instance().isLogin()) {
-				UIHelper.showLogin(getActivity());
-				return;
-			}
-			if (getFavoriteTargetId() == -1 || getFavoriteTargetType() == -1) {
-				return;
-			}
-			int uid = AppContext.instance().getLoginUid();
-			if (mMenuAdapter.isFavorite()) {
-				NewsApi.delFavorite(uid, getFavoriteTargetId(),
-						getFavoriteTargetType(), mDelFavoriteHandler);
-			} else {
-				NewsApi.addFavorite(uid, getFavoriteTargetId(),
-						getFavoriteTargetType(), mAddFavoriteHandler);
-			}
-		} else if (position == 1) {
+			//handleFavoriteOrNot();
 			handleShare();
-		} else if (position == 2) {
+		} else if (position == 1) {
 			onReportMenuClick();
+		} else if (position == 2) {
+
 		}
 		if (mMenuWindow != null) {
 			mMenuWindow.dismiss();
@@ -431,6 +444,28 @@ public class BaseDetailFragment extends BaseFragment implements
 	}
 
 	protected void onReportMenuClick() {
+	}
+
+	private void handleFavoriteOrNot() {
+		if(!TDevice.hasInternet()){
+			AppContext.showToastShort(R.string.tip_no_internet);
+			return;
+		}
+		if (!AppContext.instance().isLogin()) {
+			UIHelper.showLogin(getActivity());
+			return;
+		}
+		if (getFavoriteTargetId() == -1 || getFavoriteTargetType() == -1) {
+			return;
+		}
+		int uid = AppContext.instance().getLoginUid();
+		if (mIsFavorited) {//mMenuAdapter.isFavorite()
+			NewsApi.delFavorite(uid, getFavoriteTargetId(),
+					getFavoriteTargetType(), mDelFavoriteHandler);
+		} else {
+			NewsApi.addFavorite(uid, getFavoriteTargetId(),
+					getFavoriteTargetType(), mAddFavoriteHandler);
+		}
 	}
 
 	private void handleShare() {
@@ -667,6 +702,8 @@ public class BaseDetailFragment extends BaseFragment implements
 	}
 
 	protected void notifyFavorite(boolean favorite) {
+		mIsFavorited = favorite;
+		getActivity().supportInvalidateOptionsMenu();
 		if (mMenuAdapter != null) {
 			mMenuAdapter.setFavorite(favorite);
 		}
@@ -693,7 +730,7 @@ public class BaseDetailFragment extends BaseFragment implements
 
 		@Override
 		public int getCount() {
-			return hasReport ? 3 : 2;
+			return 2;//hasReport ? 3 : 2;
 		}
 
 		@Override
@@ -714,16 +751,17 @@ public class BaseDetailFragment extends BaseFragment implements
 			TextView name = (TextView) convertView.findViewById(R.id.tv_name);
 
 			int iconResId = 0;
+			//if (position == 0) {
+			//	name.setText(isFavorite ? R.string.detail_menu_unfavorite
+			//			: R.string.detail_menu_favorite);
+			//	iconResId = isFavorite ? R.drawable.actionbar_menu_icn_unfavoirite
+			//			: R.drawable.actionbar_menu_icn_favoirite;
+			//} else 
 			if (position == 0) {
-				name.setText(isFavorite ? R.string.detail_menu_unfavorite
-						: R.string.detail_menu_favorite);
-				iconResId = isFavorite ? R.drawable.actionbar_menu_icn_unfavoirite
-						: R.drawable.actionbar_menu_icn_favoirite;
-			} else if (position == 1) {
 				name.setText(parent.getResources().getString(
 						R.string.detail_menu_for_share));
 				iconResId = R.drawable.actionbar_menu_icn_share;
-			} else if (position == 2) {
+			} else if (position == 1) {
 				name.setText(parent.getResources().getString(
 						R.string.detail_menu_for_report));
 				iconResId = R.drawable.actionbar_menu_icn_report;
@@ -746,6 +784,8 @@ public class BaseDetailFragment extends BaseFragment implements
 					AppContext.showToastShort(R.string.add_favorite_success);
 					mMenuAdapter.setFavorite(true);
 					mMenuAdapter.notifyDataSetChanged();
+					mIsFavorited = true;
+					getActivity().supportInvalidateOptionsMenu();
 					onFavoriteChanged(true);
 				} else {
 					AppContext.showToastShort(res.getErrorMessage());
@@ -774,6 +814,8 @@ public class BaseDetailFragment extends BaseFragment implements
 					AppContext.showToastShort(R.string.del_favorite_success);
 					mMenuAdapter.setFavorite(false);
 					mMenuAdapter.notifyDataSetChanged();
+					mIsFavorited = false;
+					getActivity().supportInvalidateOptionsMenu();
 					onFavoriteChanged(false);
 				} else {
 					AppContext.showToastShort(res.getErrorMessage());

@@ -104,7 +104,8 @@ public class TweetFragment extends BaseListFragment implements
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Tweet tweet = (Tweet) mAdapter.getItem(position - 1);
-		UIHelper.showTweetDetail(view.getContext(), tweet.getId());
+		if (tweet != null)
+			UIHelper.showTweetDetail(view.getContext(), tweet.getId());
 	}
 
 	@Override

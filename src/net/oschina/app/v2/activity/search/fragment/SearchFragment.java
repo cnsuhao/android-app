@@ -86,7 +86,8 @@ public class SearchFragment extends BaseListFragment {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		SearchList.Result res = (Result) mAdapter.getItem(position - 1);
-		UIHelper.showUrlRedirect(view.getContext(), res.getUrl());
+		if (res != null)
+			UIHelper.showUrlRedirect(view.getContext(), res.getUrl());
 	}
 
 	@Override

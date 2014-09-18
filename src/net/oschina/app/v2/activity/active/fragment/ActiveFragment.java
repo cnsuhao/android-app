@@ -3,6 +3,8 @@ package net.oschina.app.v2.activity.active.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import u.aly.ac;
+
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.active.adapter.ActiveAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
@@ -130,6 +132,7 @@ public class ActiveFragment extends BaseListFragment {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Active active = (Active) mAdapter.getItem(position - 1);
-		UIHelper.showActiveRedirect(view.getContext(), active);
+		if (active != null)
+			UIHelper.showActiveRedirect(view.getContext(), active);
 	}
 }

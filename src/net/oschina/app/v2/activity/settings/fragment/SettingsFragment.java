@@ -34,7 +34,7 @@ public class SettingsFragment extends BaseFragment {
 	private static final String SETTINGS_SCREEN = "settings_screen";
 	private TextView mTvPicPath;
 	private String mCachePicPath;
-	private ToggleButton mTbLoadImage;
+	private ToggleButton mTbLoadImage, mTbNotificationSound;
 	private TextView mTvCacheSize;
 	private TextView mTvVersionName;
 	private UpdateResponse mUpdateInfo;
@@ -57,13 +57,52 @@ public class SettingsFragment extends BaseFragment {
 		super.onDestroyView();
 	}
 
+	private void initViews(View view) {
+		view.findViewById(R.id.ly_about).setOnClickListener(this);
+		view.findViewById(R.id.ly_pic_path).setOnClickListener(this);
+		mTvPicPath = (TextView) view
+				.findViewById(R.id.tv_current_picture_save_path);
+		mTbLoadImage = (ToggleButton) view.findViewById(R.id.tb_load_picture);
+		mTbLoadImage.setOnToggleChanged(new OnToggleChanged() {
+
+			@Override
+			public void onToggle(boolean on) {
+				AppContext.setLoadImage(on);
+			}
+		});
+
+		mTbNotificationSound = (ToggleButton) view
+				.findViewById(R.id.tb_notification_sound);
+		mTbNotificationSound.setOnToggleChanged(new OnToggleChanged() {
+
+			@Override
+			public void onToggle(boolean on) {
+				AppContext.setNotificationSoundEnable(on);
+			}
+		});
+		view.findViewById(R.id.ly_cache_size).setOnClickListener(this);
+		mTvCacheSize = (TextView) view.findViewById(R.id.tv_cache_size);
+		mTvVersionName = (TextView) view.findViewById(R.id.tv_version_name);
+
+		view.findViewById(R.id.ly_version_name).setOnClickListener(this);
+		view.findViewById(R.id.ly_open_market).setOnClickListener(this);
+		view.findViewById(R.id.ly_feedback).setOnClickListener(this);
+		mBtnLogout = view.findViewById(R.id.btn_logout);
+		mBtnLogout.setOnClickListener(this);
+	}
+
 	@SuppressWarnings("deprecation")
 	private void initData() {
 		if (AppContext.shouldLoadImage())
 			mTbLoadImage.setToggleOn();
 		else
 			mTbLoadImage.setToggleOff();
-		
+		if (AppContext.isNotificationSoundEnable()) {
+			mTbNotificationSound.setToggleOn();
+		} else {
+			mTbNotificationSound.setToggleOff();
+		}
+
 		mCachePicPath = ImageLoader.getInstance().getDiskCache().getDirectory()
 				.getAbsolutePath();
 
@@ -105,30 +144,6 @@ public class SettingsFragment extends BaseFragment {
 		} else {
 			mBtnLogout.setVisibility(View.GONE);
 		}
-	}
-
-	private void initViews(View view) {
-		view.findViewById(R.id.ly_about).setOnClickListener(this);
-		view.findViewById(R.id.ly_pic_path).setOnClickListener(this);
-		mTvPicPath = (TextView) view
-				.findViewById(R.id.tv_current_picture_save_path);
-		mTbLoadImage = (ToggleButton) view.findViewById(R.id.tb_load_picture);
-		mTbLoadImage.setOnToggleChanged(new OnToggleChanged() {
-
-			@Override
-			public void onToggle(boolean on) {
-				AppContext.setLoadImage(on);
-			}
-		});
-		view.findViewById(R.id.ly_cache_size).setOnClickListener(this);
-		mTvCacheSize = (TextView) view.findViewById(R.id.tv_cache_size);
-		mTvVersionName = (TextView) view.findViewById(R.id.tv_version_name);
-
-		view.findViewById(R.id.ly_version_name).setOnClickListener(this);
-		view.findViewById(R.id.ly_open_market).setOnClickListener(this);
-		view.findViewById(R.id.ly_feedback).setOnClickListener(this);
-		mBtnLogout = view.findViewById(R.id.btn_logout);
-		mBtnLogout.setOnClickListener(this);
 	}
 
 	private void caculateCacheSize() {

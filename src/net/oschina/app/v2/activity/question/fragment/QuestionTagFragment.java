@@ -73,9 +73,10 @@ public class QuestionTagFragment extends BaseListFragment {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Post post = (Post) mAdapter.getItem(position - 1);
-		UIHelper.showQuestionDetail(view.getContext(), post.getId());
+		if (post != null)
+			UIHelper.showQuestionDetail(view.getContext(), post.getId());
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();

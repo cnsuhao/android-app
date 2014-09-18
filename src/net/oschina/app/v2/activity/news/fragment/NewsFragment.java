@@ -28,7 +28,7 @@ public class NewsFragment extends BaseListFragment {
 	protected ListBaseAdapter getListAdapter() {
 		return new NewsAdapter();
 	}
-	
+
 	@Override
 	protected String getCacheKeyPrefix() {
 		return CACHE_KEY_PREFIX;
@@ -54,6 +54,7 @@ public class NewsFragment extends BaseListFragment {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		News news = (News) mAdapter.getItem(position - 1);
-		UIHelper.showNewsRedirect(view.getContext(), news);
+		if (news != null)
+			UIHelper.showNewsRedirect(view.getContext(), news);
 	}
 }

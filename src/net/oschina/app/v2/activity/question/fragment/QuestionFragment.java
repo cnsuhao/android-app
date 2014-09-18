@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 
 /**
  * 问答
+ * 
  * @author william_sim
  */
 public class QuestionFragment extends BaseListFragment {
@@ -53,6 +54,7 @@ public class QuestionFragment extends BaseListFragment {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Post post = (Post) mAdapter.getItem(position - 1);
-		UIHelper.showQuestionDetail(view.getContext(), post.getId());
+		if (post != null)
+			UIHelper.showQuestionDetail(view.getContext(), post.getId());
 	}
 }

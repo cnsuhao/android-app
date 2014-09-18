@@ -159,7 +159,7 @@
     <string name="actionbar_title_news">资讯</string>
     <string name="actionbar_title_blog">博客</string>
     <string name="actionbar_title_software">软件</string>
-    <string name="actionbar_title_question">问答</string>
+    <string name="actionbar_title_question">帖子</string>
     <string name="actionbar_title_tweet">动弹</string>
     <string name="actionbar_title_detail">详情</string>
     <string name="tip_logout_success">注销成功.</string>
@@ -337,4 +337,7 @@
 	<string name="share_title">哎嘛分享</string>
 	<string name="tip_start_share">开始分享</string>
 	<string name="tip_share_done">分享完成</string>
+	
+	<string name="changelog">更新日志</string>
+	<string name="notification_sound">通知声音</string>
 </resources>

@@ -59,9 +59,10 @@ public class FavoriteFragment extends BaseListFragment {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Favorite item = (Favorite) mAdapter.getItem(position - 1);
-		UIHelper.showUrlRedirect(view.getContext(), item.url);
+		if (item != null)
+			UIHelper.showUrlRedirect(view.getContext(), item.url);
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();

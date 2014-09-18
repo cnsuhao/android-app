@@ -1,5 +1,6 @@
 package net.oschina.app.v2.activity.settings.fragment;
 
+import net.oschina.app.v2.activity.settings.view.ChangeLogDialog;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
@@ -30,7 +31,8 @@ public class AboutFragment extends BaseFragment {
 		view.findViewById(R.id.ly_author).setOnClickListener(this);
 		view.findViewById(R.id.ly_osc_git).setOnClickListener(this);
 		view.findViewById(R.id.ly_lisence).setOnClickListener(this);
-
+		view.findViewById(R.id.ly_change_log).setOnClickListener(this);
+		
 		TextView tvVersionName = (TextView) view
 				.findViewById(R.id.tv_version_name);
 		tvVersionName.setText(TDevice.getVersionName());
@@ -47,6 +49,9 @@ public class AboutFragment extends BaseFragment {
 		} else if (id == R.id.ly_osc_git) {
 			UIHelper.showUrlRedirect(getActivity(),
 					getString(R.string.osc_git_path));
+		} else if(id == R.id.ly_change_log){
+			ChangeLogDialog dialog = new ChangeLogDialog(getActivity());
+			dialog.show();
 		}
 	}
 
