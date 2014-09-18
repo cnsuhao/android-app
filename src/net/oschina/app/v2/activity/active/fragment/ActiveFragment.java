@@ -3,8 +3,6 @@ package net.oschina.app.v2.activity.active.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import u.aly.ac;
-
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.active.adapter.ActiveAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
@@ -79,7 +77,8 @@ public class ActiveFragment extends BaseListFragment {
 
 	@Override
 	protected String getCacheKeyPrefix() {
-		return CACHE_KEY_PREFIX;
+		return new StringBuffer(CACHE_KEY_PREFIX).append(
+				AppContext.instance().getLoginUid()).toString();
 	}
 
 	@Override

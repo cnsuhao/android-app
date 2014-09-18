@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import net.oschina.app.v2.ui.dialog.CommonDialog;
 
@@ -49,9 +50,11 @@ public class ChangeLogDialog extends CommonDialog {
 		setTitle(R.string.changelog);
 		
 		String _HTML = GetHTMLChangelog(R.xml.changelog, _Resource);
-		WebView _WebView = new WebView(context);
-		_WebView.loadData(_HTML, "text/html; charset=UTF-8", null);
-		setContent(_WebView, 0);
+		WebView webView = new WebView(context);
+		WebSettings settings = webView.getSettings();
+		settings.setDefaultTextEncodingName("utf-8");
+		webView.loadData(_HTML, "text/html; charset=UTF-8", "UTF-8");
+		setContent(webView, 0);
 		
 		setCancelable(true);
 		setCanceledOnTouchOutside(true);

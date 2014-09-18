@@ -1,12 +1,13 @@
 package net.oschina.app.v2.api.remote;
 
 import net.oschina.app.v2.api.ApiHttpClient;
+import net.oschina.app.v2.utils.TDevice;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 public class BaseApi {
-	public static final int DEF_PAGE_SIZE = 20;
+	public static final int DEF_PAGE_SIZE = TDevice.getPageSize();
 	private static final String CLIENT_ID = "F6QtiYRetdUEwsYKYvNR";
 	private static final String REDIRECT_URI = "http://my.oschina.net/u/142883";
 
@@ -58,7 +59,7 @@ public class BaseApi {
 		params.put("client_id", CLIENT_ID);
 		params.put("response_type", "code");
 		params.put("redirect_uri", REDIRECT_URI);
-		ApiHttpClient.get("action/oauth2/authorize",params, handler);
+		ApiHttpClient.get("action/oauth2/authorize", params, handler);
 	}
 
 }

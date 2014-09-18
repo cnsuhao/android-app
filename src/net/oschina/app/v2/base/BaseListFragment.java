@@ -47,8 +47,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	protected int mCatalog = NewsList.CATALOG_ALL;
 
 	private AsyncTask<String, Void, ListEntity> mCacheTask;
-
-	
+	private ParserTask mParserTask;
 	
 	protected int getLayoutRes() {
 		return R.layout.v2_fragment_pull_refresh_listview;
@@ -119,6 +118,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	@Override
 	public void onDestroy() {
 		cancelReadCacheTask();
+		cancelParserTask();
 		super.onDestroy();
 	}
 
@@ -247,15 +247,12 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		@Override
 		public void onSuccess(int statusCode, Header[] headers,
 				byte[] responseBytes) {
-			try {
-				ListEntity data = parseList(new ByteArrayInputStream(
-						responseBytes));
-				executeOnLoadDataSuccess(data.getList());
-				new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
-			} catch (Exception e) {
-				e.printStackTrace();
-				onFailure(statusCode, headers, responseBytes, null);
-			}
+			// try {
+			executeParserTask(responseBytes);
+			// } catch (Exception e) {
+			// e.printStackTrace();
+			// onFailure(statusCode, headers, responseBytes, null);
+			// }
 		}
 
 		@Override
@@ -267,7 +264,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
 		@Override
 		public void onFinish() {
-			executeOnLoadFinish();
+			// executeOnLoadFinish();
 		}
 	};
 
@@ -301,5 +298,54 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	protected void executeOnLoadFinish() {
 		mListView.onRefreshComplete();
 		mState = STATE_NONE;
+	}
+
+	private void executeParserTask(byte[] data) {
+		cancelParserTask();
+		mParserTask = new ParserTask(data);
+		mParserTask.execute();
+	}
+
+	private void cancelParserTask() {
+		if (mParserTask != null) {
+			mParserTask.cancel(true);
+			mParserTask = null;
+		}
+	}
+
+	class ParserTask extends AsyncTask<Void, Void, String> {
+
+		private byte[] reponseData;
+		private boolean parserError;
+		private List<?> list;
+
+		public ParserTask(byte[] data) {
+			this.reponseData = data;
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			try {
+				ListEntity data = parseList(new ByteArrayInputStream(
+						reponseData));
+				new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
+				list = data.getList();
+			} catch (Exception e) {
+				e.printStackTrace();
+				parserError = true;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			if (parserError) {
+				readCacheData(getCacheKey());
+			} else {
+				executeOnLoadDataSuccess(list);
+				executeOnLoadFinish();
+			}
+		}
 	}
 }

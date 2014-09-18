@@ -311,22 +311,19 @@ public class ServerTaskService extends IntentService {
 						PendingIntent.getActivity(this, 0, new Intent(), 0))
 				.setSmallIcon(R.drawable.ic_notification);
 
-		if(AppContext.isNotificationSoundEnable()){
+//		builder.addAction(R.drawable.ic_notification_action_cancel, "取消",
+//				PendingIntent.getBroadcast(this, 0, new Intent(),
+//						PendingIntent.FLAG_CANCEL_CURRENT));
+//		builder.addAction(R.drawable.ic_notification_action_retry, "重试",
+//				PendingIntent.getBroadcast(this, 0, new Intent(), 0));
+//		builder.addAction(R.drawable.ic_notification_action_edit, "编辑",
+//				PendingIntent.getActivity(this, 0, new Intent(), 0));
+
+		if (AppContext.isNotificationSoundEnable()) {
 			builder.setDefaults(Notification.DEFAULT_SOUND);
 		}
-		
+
 		Notification notification = builder.build();
-		
-		// notification.flags = Notification.DEFAULT_ALL;
-		// if (AppContext.isNotificationSoundEnable()) {
-		// notification.flags |= Notification.DEFAULT_SOUND;
-		// }
-		// if (autoCancel) {
-		// notification.flags |= Notification.FLAG_AUTO_CANCEL;
-		// // notification.flags = Notification.FLAG_AUTO_CANCEL;
-		// // notification.flags = Notification.DEFAULT_LIGHTS |
-		// // Notification.FLAG_AUTO_CANCEL;
-		// }
 
 		NotificationManagerCompat.from(this).notify(id, notification);
 	}

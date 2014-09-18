@@ -47,7 +47,7 @@
         <item name="android:windowBackground">@color/window_background</item>
         <item name="actionBarStyle">@style/ActionBarBaseStyle</item>
         <item name="actionOverflowButtonStyle">@style/OverflowButton</item>
-        <item name="actionBarItemBackground">@drawable/actionbar_item_background_selector</item>
+        <item name="actionBarItemBackground">@drawable/umeng_socialize_titlebar_item_background_selector</item>
         <item name="dropDownListViewStyle">@style/DrapDownListView</item>
         <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
     </style>
