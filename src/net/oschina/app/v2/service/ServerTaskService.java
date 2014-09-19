@@ -248,7 +248,6 @@ public class ServerTaskService extends IntentService {
 	}
 
 	private void publicBlogComment(final PublicCommentTask task) {
-		task.setId((int) System.currentTimeMillis());
 		int id = task.getId() * task.getUid();
 		addPenddingTask(KEY_COMMENT + id);
 
@@ -262,7 +261,6 @@ public class ServerTaskService extends IntentService {
 	}
 
 	private void publicComment(final PublicCommentTask task) {
-		task.setId((int) System.currentTimeMillis());
 		int id = task.getId() * task.getUid();
 		addPenddingTask(KEY_COMMENT + id);
 
