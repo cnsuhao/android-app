@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class TLog {
 	public static final String LOG_TAG = "SIMICO";
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 
 	public TLog() {
 	}

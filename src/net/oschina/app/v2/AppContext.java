@@ -105,8 +105,8 @@ public class AppContext extends BaseApplication {
 		EmojiHelper.initEmojis();
 		initImageLoader(this);
 
-		MobclickAgent.setDebugMode(true);
-		UpdateConfig.setDebug(true);
+		MobclickAgent.setDebugMode(false);
+		UpdateConfig.setDebug(false);
 	}
 
 	public static void initImageLoader(Context context) {

@@ -39,6 +39,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -59,7 +60,9 @@ import android.widget.TextView;
 import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -74,7 +77,7 @@ public class TweetDetailFragment extends BaseFragment implements
 	private static final String TWEET_DETAIL_SCREEN = "tweet_detail_screen";
 	private ListView mListView;
 	private EmptyLayout mEmptyView;
-	private ImageView mIvAvatar;
+	private ImageView mIvAvatar, mIvPic;
 	private TextView mTvName, mTvFrom, mTvTime, mTvCommentCount;
 	private WebView mContent;
 	private int mTweetId;
@@ -129,10 +132,10 @@ public class TweetDetailFragment extends BaseFragment implements
 			Comment comment = data
 					.getParcelableExtra(Comment.BUNDLE_KEY_COMMENT);
 			if (comment != null && mTweet != null) {
-				//mAdapter.addItem(0, comment);
-				//mTweet.setCommentCount(mTweet.getCommentCount() + 1);
-				//mTvCommentCount.setText(getString(R.string.comment_count,
-				//		mTweet.getCommentCount()));
+				// mAdapter.addItem(0, comment);
+				// mTweet.setCommentCount(mTweet.getCommentCount() + 1);
+				// mTvCommentCount.setText(getString(R.string.comment_count,
+				// mTweet.getCommentCount()));
 			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
@@ -145,7 +148,7 @@ public class TweetDetailFragment extends BaseFragment implements
 			if (mTweet != null && mTvCommentCount != null) {
 				mTweet.setCommentCount(mTweet.getCommentCount() + 1);
 
-				mAdapter.addItem(0,comment);
+				mAdapter.addItem(0, comment);
 				mTvCommentCount.setText(getString(R.string.comment_count,
 						mTweet.getCommentCount()));
 			}
@@ -200,11 +203,23 @@ public class TweetDetailFragment extends BaseFragment implements
 						mTweet.getAuthor());
 			}
 		});
+
 		mTvName = (TextView) header.findViewById(R.id.tv_name);
 		mTvFrom = (TextView) header.findViewById(R.id.tv_from);
 		mTvTime = (TextView) header.findViewById(R.id.tv_time);
 		mTvCommentCount = (TextView) header.findViewById(R.id.tv_comment_count);
 		mContent = (WebView) header.findViewById(R.id.webview);
+		mIvPic = (ImageView) header.findViewById(R.id.iv_pic);
+		mIvPic.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (mTweet != null && !TextUtils.isEmpty(mTweet.getImgSmall())) {
+					UIHelper.showImagePreview(getActivity(),
+							new String[] { mTweet.getImgBig() });
+				}
+			}
+		});
 		initWebView(mContent);
 
 		mListView.addHeaderView(header);
@@ -267,6 +282,22 @@ public class TweetDetailFragment extends BaseFragment implements
 
 		mContent.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
 		mContent.setWebViewClient(UIHelper.getWebViewClient());
+
+		if (TextUtils.isEmpty(mTweet.getImgSmall())) {
+			return;
+		}
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.cacheInMemory(true).cacheOnDisk(true)
+				.postProcessor(new BitmapProcessor() {
+
+					@Override
+					public Bitmap process(Bitmap arg0) {
+						return arg0;
+					}
+				}).build();
+		mIvPic.setVisibility(View.VISIBLE);
+		ImageLoader.getInstance().displayImage(mTweet.getImgSmall(), mIvPic,
+				options);
 	}
 
 	private void sendRequestData() {
@@ -624,7 +655,7 @@ public class TweetDetailFragment extends BaseFragment implements
 	private void executeOnLoadCommentDataError(Object object) {
 		mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();

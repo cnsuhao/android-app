@@ -132,6 +132,7 @@ public class ApiHttpClient {
 		client.addHeader("Host", HOST);
 		client.addHeader("Connection", "Keep-Alive");
 		setUserAgent(ApiClientHelper.getUserAgent(AppContext.instance()));
+		//setUserAgent("OSChina.NET/1.0.0.4_29/Android/4.4.4/Nexus 4/1cd6bd26-fe78-4fbd-8bcf-1dd4d121ef1d");
 	}
 
 	public static void setUserAgent(String userAgent) {

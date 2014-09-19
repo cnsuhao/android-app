@@ -73,7 +73,7 @@ public class NewsApi extends BaseApi {
 		params.put("uid", uid);
 		params.put("pageIndex", page);
 		params.put("pageSize", DEF_PAGE_SIZE);
-		params.put("dataType", "json");
+		//params.put("dataType", "json");
 		ApiHttpClient.get("action/api/tweet_list", params, handler);
 	}
 
