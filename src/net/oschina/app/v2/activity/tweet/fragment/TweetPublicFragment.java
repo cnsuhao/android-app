@@ -151,6 +151,9 @@ public class TweetPublicFragment extends BaseFragment implements
 			tweet.setImageFilePath(imgFile.getAbsolutePath());
 		}
 		ServerTaskUtils.publicTweet(getActivity(), tweet);
+		if (mIsKeyboardVisible) {
+			TDevice.hideSoftKeyboard(getActivity().getCurrentFocus());
+		}
 		getActivity().finish();
 	}
 
@@ -590,7 +593,7 @@ public class TweetPublicFragment extends BaseFragment implements
 		mEtInput.getText().insert(mEtInput.getSelectionStart(), software);
 		mEtInput.setSelection(start, end);// 设置选中文字
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
