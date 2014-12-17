@@ -118,7 +118,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
                         LayoutParams.MATCH_PARENT);
                 //actionBar.addView(view, params);
             }
-
+            // This is Test
 			//View view = inflateView(layoutRes == 0 ? R.layout.v2_actionbar_custom_backtitle
 			//		: layoutRes);
 			//View back = view.findViewById(R.id.btn_back);
