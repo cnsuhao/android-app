@@ -7,7 +7,9 @@ import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.blog.adapter.BlogAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
+import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.Blog;
 import net.oschina.app.v2.model.BlogList;
 import net.oschina.app.v2.model.ListEntity;
@@ -20,7 +22,7 @@ import android.widget.AdapterView;
  * 
  * @author william_sim
  */
-public class BlogFragment extends BaseListFragment {
+public class BlogFragment extends BaseRecycleViewFragment {
 
 	protected static final String TAG = BlogFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "blog_list";
@@ -33,7 +35,7 @@ public class BlogFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected RecycleBaseAdapter getListAdapter() {
 		return new BlogAdapter();
 	}
 
@@ -61,9 +63,8 @@ public class BlogFragment extends BaseListFragment {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Blog blog = (Blog) mAdapter.getItem(position - 1);
+	public void onItemClick(View view,  int position) {
+		Blog blog = (Blog) mAdapter.getItem(position);
 		if (blog != null)
 			UIHelper.showUrlRedirect(view.getContext(), blog.getUrl());
 	}

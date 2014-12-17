@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,15 +23,19 @@ import java.util.List;
 public class NewsRecycleAdapter extends RecycleBaseAdapter {
 
     @Override
-    protected RecycleBaseAdapter.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
-        View view = getLayoutInflater(parent.getContext()).inflate(R.layout.v2_list_cell_news,null);
-        return new ViewHolder(viewType,view);
+    public View onCreateItemView(ViewGroup parent, int viewType) {
+        return getLayoutInflater(parent.getContext()).inflate(R.layout.v2_list_cell_news,null);
+    }
+
+    @Override
+    protected RecycleBaseAdapter.ViewHolder onCreateItemViewHolder(View view, int viewType) {
+        return  new ViewHolder(viewType,view);
     }
 
     @Override
     protected void onBindItemViewHolder(RecycleBaseAdapter.ViewHolder vh, int position) {
         super.onBindItemViewHolder(vh, position);
-         NewsRecycleAdapter.ViewHolder holder = ( NewsRecycleAdapter.ViewHolder)vh;
+        NewsRecycleAdapter.ViewHolder holder = ( NewsRecycleAdapter.ViewHolder)vh;
         News news = (News) _data.get(position);
         holder.title.setText(news.getTitle());
         holder.source.setText(news.getAuthor());
@@ -42,7 +47,8 @@ public class NewsRecycleAdapter extends RecycleBaseAdapter {
         } else {
             holder.tip.setVisibility(View.GONE);
         }
-        //vh.commentCount.setText(parent.getResources().getString(R.string.comment_count, news.getCommentCount()));
+        holder.commentCount.setText(holder.commentCount.getContext().getResources()
+                .getString(R.string.comment_count, news.getCommentCount()));
     }
 
     //    @Override

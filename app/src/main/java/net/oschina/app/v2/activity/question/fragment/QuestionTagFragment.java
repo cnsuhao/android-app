@@ -7,7 +7,9 @@ import net.oschina.app.v2.activity.question.adapter.QuestionAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseActivity;
 import net.oschina.app.v2.base.BaseListFragment;
+import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.Post;
 import net.oschina.app.v2.model.PostList;
@@ -24,7 +26,7 @@ import com.umeng.analytics.MobclickAgent;
  * 
  * @author william_sim
  */
-public class QuestionTagFragment extends BaseListFragment {
+public class QuestionTagFragment extends BaseRecycleViewFragment {
 
 	public static final String BUNDLE_KEY_TAG = "BUNDLE_KEY_TAG";
 	protected static final String TAG = QuestionTagFragment.class
@@ -44,7 +46,7 @@ public class QuestionTagFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected RecycleBaseAdapter getListAdapter() {
 		return new QuestionAdapter();
 	}
 
@@ -70,9 +72,8 @@ public class QuestionTagFragment extends BaseListFragment {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Post post = (Post) mAdapter.getItem(position - 1);
+	public void onItemClick(View view, int position) {
+		Post post = (Post) mAdapter.getItem(position);
 		if (post != null)
 			UIHelper.showQuestionDetail(view.getContext(), post.getId());
 	}

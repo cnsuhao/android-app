@@ -6,7 +6,9 @@ import java.io.Serializable;
 import net.oschina.app.v2.activity.question.adapter.QuestionAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
+import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.Post;
 import net.oschina.app.v2.model.PostList;
@@ -19,13 +21,13 @@ import android.widget.AdapterView;
  * 
  * @author william_sim
  */
-public class QuestionFragment extends BaseListFragment {
+public class QuestionFragment extends BaseRecycleViewFragment {
 
 	protected static final String TAG = QuestionFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "post_list";
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected RecycleBaseAdapter getListAdapter() {
 		return new QuestionAdapter();
 	}
 
@@ -51,9 +53,8 @@ public class QuestionFragment extends BaseListFragment {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Post post = (Post) mAdapter.getItem(position - 1);
+	public void onItemClick(View view, int position) {
+		Post post = (Post) mAdapter.getItem(position);
 		if (post != null)
 			UIHelper.showQuestionDetail(view.getContext(), post.getId());
 	}

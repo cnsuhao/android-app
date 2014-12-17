@@ -1,6 +1,7 @@
 package net.oschina.app.v2.activity.question.adapter;
 
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.Post;
 import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.utils.DateUtil;
@@ -11,38 +12,38 @@ import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
 
-public class QuestionAdapter extends ListBaseAdapter {
+public class QuestionAdapter extends RecycleBaseAdapter {
 
-	@SuppressLint("InflateParams")
-	@Override
-	protected View getRealView(int position, View convertView,final ViewGroup parent) {
-		ViewHolder vh = null;
-		if (convertView == null || convertView.getTag() == null) {
-			convertView = getLayoutInflater(parent.getContext()).inflate(
-					R.layout.v2_list_cell_post, null);
-			vh = new ViewHolder(convertView);
-			convertView.setTag(vh);
-		} else {
-			vh = (ViewHolder) convertView.getTag();
-		}
+    @Override
+    protected View onCreateItemView(ViewGroup parent, int viewType) {
+        return getLayoutInflater(parent.getContext()).inflate(R.layout.v2_list_cell_post,null);
+    }
 
-		final Post item = (Post) _data.get(position);
+    @Override
+    protected RecycleBaseAdapter.ViewHolder onCreateItemViewHolder(View view, int viewType) {
+        return new ViewHolder(viewType,view);
+    }
 
-		vh.title.setText(item.getTitle());
-		vh.source.setText(item.getAuthor());
-		vh.avCount.setText(item.getAnswerCount()+"/"+item.getViewCount());
-		vh.time.setText(DateUtil.getFormatTime(item.getPubDate()));
-		
-		vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
-		vh.avatar.setAvatarUrl(item.getFace());
-		
-		return convertView;
-	}
+    @Override
+    protected void onBindItemViewHolder(RecycleBaseAdapter.ViewHolder holder, int position) {
+        super.onBindItemViewHolder(holder, position);
+        ViewHolder vh = (ViewHolder)holder;
+        final Post item = (Post) _data.get(position);
 
-	static class ViewHolder {
+        vh.title.setText(item.getTitle());
+        vh.source.setText(item.getAuthor());
+        vh.avCount.setText(item.getAnswerCount()+"/"+item.getViewCount());
+        vh.time.setText(DateUtil.getFormatTime(item.getPubDate()));
+
+        vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
+        vh.avatar.setAvatarUrl(item.getFace());
+    }
+
+    static class ViewHolder extends RecycleBaseAdapter.ViewHolder {
 		public TextView title, source,avCount, time;
 		public AvatarView avatar;
-		public ViewHolder(View view) {
+		public ViewHolder(int viewType,View view) {
+            super(viewType,view);
 			title = (TextView) view.findViewById(R.id.tv_title);
 			source = (TextView) view.findViewById(R.id.tv_source);
 			avCount = (TextView) view.findViewById(R.id.tv_answer_view_count);

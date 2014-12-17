@@ -83,21 +83,21 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="joda-time-2.2" level="project" />
-    <orderEntry type="library" exported="" name="android-async-http-loader" level="project" />
-    <orderEntry type="library" exported="" name="universal-image-loader-1.9.3-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="umeng-analytics-v5.2.4" level="project" />
-    <orderEntry type="library" exported="" name="recyclerview-v7-21.0.3" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="umeng-feedback-v4.3" level="project" />
-    <orderEntry type="library" exported="" name="commons-lang3-3.3.2" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="umeng-update-v2.4.2" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
+    <orderEntry type="library" exported="" name="universal-image-loader-1.9.3-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="recyclerview-v7-21.0.3" level="project" />
+    <orderEntry type="library" exported="" name="android-async-http-loader" level="project" />
+    <orderEntry type="library" exported="" name="umeng-analytics-v5.2.4" level="project" />
+    <orderEntry type="library" exported="" name="commons-lang3-3.3.2" level="project" />
+    <orderEntry type="library" exported="" name="joda-time-2.2" level="project" />
     <orderEntry type="module" module-name="library-pulltorefresh" exported="" />
     <orderEntry type="module" module-name="library-photoview" exported="" />
-    <orderEntry type="module" module-name="library-sticky-listheaders" exported="" />
-    <orderEntry type="module" module-name="library-viewpager-indicator" exported="" />
     <orderEntry type="module" module-name="library-umengshare" exported="" />
+    <orderEntry type="module" module-name="library-viewpager-indicator" exported="" />
+    <orderEntry type="module" module-name="library-sticky-listheaders" exported="" />
   </component>
 </module>
 

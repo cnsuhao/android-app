@@ -152,8 +152,11 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 	}
 
     @Override
-    public void onItemClick(View v, int position, Object item) {
+    public void onItemClick(View view) {
+        onItemClick(view,mListView.getChildPosition(view));
+    }
 
+    protected void onItemClick(View view,int position) {
     }
 
     protected abstract RecycleBaseAdapter getListAdapter();
