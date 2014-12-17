@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ActionBarBaseTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="actionOverflowButtonStyle">@style/OverflowButton</item>
+        <item name="actionBarItemBackground">@drawable/umeng_socialize_titlebar_item_background_selector</item>
+        <item name="dropDownListViewStyle">@style/DrapDownListView</item>
+        <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
+
+
+
+        <item name="colorPrimary">@color/actionbar_background</item>
+        <item name="colorPrimaryDark">@color/theme_primary_dark</item>
+        <item name="android:textColorPrimary">@color/white</item>
+
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
+</resources>
