@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.MySwipeRefreshLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
+//import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -14,12 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+//import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+//import com.handmark.pulltorefresh.library.PullToRefreshBase;
+//import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+//import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 
@@ -44,14 +44,13 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
-		OnRefreshListener<ListView>, OnLastItemVisibleListener,
-		OnItemClickListener {
+        RecycleBaseAdapter.OnItemClickListener {
 
 	public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 
     protected MySwipeRefreshLayout mSwipeRefresh;
 	protected FixedRecyclerView mListView;
-    protected MyLayoutManager mLayoutManager;
+    protected LinearLayoutManager mLayoutManager;
 	protected RecycleBaseAdapter mAdapter;
 	protected EmptyLayout mErrorLayout;
 	protected int mStoreEmptyState = -1;
@@ -101,18 +100,18 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         mSwipeRefresh.setOnRefreshListener(new MySwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-               BaseRecycleViewFragment.this.onRefresh(null);
+               refresh();
             }
         });
         //int y = mListView.getScrollY();
 
 		mListView = (FixedRecyclerView) view.findViewById(R.id.recycleView);
-		//mListView.;//setOnItemClickListener(this);
         mListView.setOnScrollListener(mScrollListener);
         // use a linear layout manager
         mListView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
-        mLayoutManager = new MyLayoutManager(getActivity());
-        //mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mListView.setLayoutManager(mLayoutManager);
         mListView.setHasFixedSize(true);
 
@@ -121,6 +120,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 			mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 		} else {
 			mAdapter = getListAdapter();
+            mAdapter.setOnItemClickListener(this);
 			// mListView.setRefreshing();
 			mListView.setAdapter(mAdapter);
 
@@ -151,7 +151,12 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 		super.onDestroy();
 	}
 
-	protected abstract RecycleBaseAdapter getListAdapter();
+    @Override
+    public void onItemClick(View v, int position, Object item) {
+
+    }
+
+    protected abstract RecycleBaseAdapter getListAdapter();
 	
 	protected boolean requestDataFromNetWork() {
 		return false;
@@ -173,20 +178,13 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 		return null;
 	}
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-	}
-
-	@Override
-	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+    public void refresh() {
 		mCurrentPage = 0;
 		mState = STATE_REFRESH;
 		requestData(true);
 	}
 
-	@Override
-	public void onLastItemVisible() {
+	public void loadMore() {
 		if (mState == STATE_NONE) {
 			if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
 				mCurrentPage++;
@@ -396,15 +394,14 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            //int lastVisibleItem = ((MyLayoutManager) mLayoutManager).findLastVisibleItemPosition();
-            //int totalItemCount = mLayoutManager.getItemCount();
-            //if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
-            //    if (mState== STATE_NONE && mAdapter != null
-            //            && mAdapter.getDataSize() > 0) {
-            //        onLastItemVisible();
-           //     }
-            //}
-            //mListView.setDy(dy);
+            int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+            int totalItemCount = mLayoutManager.getItemCount();
+            if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
+                if (mState== STATE_NONE && mAdapter != null
+                        && mAdapter.getDataSize() > 0) {
+                    loadMore();
+                }
+            }
         }
     };
 
@@ -596,5 +593,4 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             }
         }
     }
-
 }

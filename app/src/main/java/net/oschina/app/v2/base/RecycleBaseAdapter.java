@@ -15,10 +15,11 @@ import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.utils.TDevice;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class RecycleBaseAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter {
+public class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBaseAdapter.ViewHolder> {
 
 	public static final int STATE_EMPTY_ITEM = 0;
 	public static final int STATE_LOAD_MORE = 1;
@@ -27,6 +28,9 @@ public abstract class RecycleBaseAdapter<VH extends RecyclerView.ViewHolder> ext
 	public static final int STATE_LESS_ONE_PAGE = 4;
 	public static final int STATE_NETWORK_ERROR = 5;
 
+    public static final int TYPE_FOOTER = 0x101;
+    public static final int TYPE_HEADER = 0x102;
+
 	protected int state = STATE_LESS_ONE_PAGE;
 
 	protected int _loadmoreText;
@@ -34,6 +38,15 @@ public abstract class RecycleBaseAdapter<VH extends RecyclerView.ViewHolder> ext
 	protected int mScreenWidth;
 
 	private LayoutInflater mInflater;
+
+    @SuppressWarnings("rawtypes")
+    protected ArrayList _data = new ArrayList();
+
+    private WeakReference<OnItemClickListener> mListener;
+
+    public interface OnItemClickListener {
+       public void onItemClick(View view,int position,Object item);
+    }
 
     protected LayoutInflater getLayoutInflater(Context context) {
 		if (mInflater == null) {
@@ -55,15 +68,12 @@ public abstract class RecycleBaseAdapter<VH extends RecyclerView.ViewHolder> ext
 		return this.state;
 	}
 
-	@SuppressWarnings("rawtypes")
-	protected ArrayList _data = new ArrayList();
-
 	public RecycleBaseAdapter() {
 		_loadmoreText = R.string.loading;
 		_loadFinishText = R.string.loading_no_more;
 	}
 
-	@Override
+    @Override
 	public int getItemCount() {
 		switch (getState()) {
 		case STATE_EMPTY_ITEM:
@@ -161,86 +171,144 @@ public abstract class RecycleBaseAdapter<VH extends RecyclerView.ViewHolder> ext
 		return true;
 	}
 
-//	@SuppressLint("InflateParams")
-//	@Override
-//	public View getView(int position, View convertView, ViewGroup parent) {
-//		if (position == getItemCount() - 1) {// 最后一条
-//			if (getState() == STATE_LOAD_MORE || getState() == STATE_NO_MORE
-//					|| state == STATE_EMPTY_ITEM
-//					|| getState() == STATE_NETWORK_ERROR) {
-//				LinearLayout loadmore = (LinearLayout) LayoutInflater.from(
-//						parent.getContext()).inflate(
-//						R.layout.v2_list_cell_footer, null);
-//				if (!loadMoreHasBg()) {
-//					loadmore.setBackgroundDrawable(null);
-//				}
-//				ProgressBar progress = (ProgressBar) loadmore
-//						.findViewById(R.id.progressbar);
-//				TextView text = (TextView) loadmore.findViewById(R.id.text);
-//				switch (getState()) {
-//				case STATE_LOAD_MORE:
-//					loadmore.setVisibility(View.VISIBLE);
-//					progress.setVisibility(View.VISIBLE);
-//					text.setVisibility(View.VISIBLE);
-//					text.setText(_loadmoreText);
-//					break;
-//				case STATE_NO_MORE:
-//					loadmore.setVisibility(View.VISIBLE);
-//					progress.setVisibility(View.GONE);
-//					text.setVisibility(View.VISIBLE);
-//					text.setText(_loadFinishText);
-//					break;
-//				case STATE_EMPTY_ITEM:
-//					progress.setVisibility(View.GONE);
-//					loadmore.setVisibility(View.GONE);
-//					text.setVisibility(View.GONE);
-//					break;
-//				case STATE_NETWORK_ERROR:
-//					loadmore.setVisibility(View.VISIBLE);
-//					progress.setVisibility(View.GONE);
-//					text.setVisibility(View.VISIBLE);
-//					if (TDevice.hasInternet()) {
-//						text.setText("对不起,出错了");
-//					} else {
-//						text.setText("没有可用的网络");
-//					}
-//					break;
-//				default:
-//					progress.setVisibility(View.GONE);
-//					loadmore.setVisibility(View.GONE);
-//					text.setVisibility(View.GONE);
-//					break;
-//				}
-//				return loadmore;
-//			}
-//		}
-//		return getRealView(position, convertView, parent);
-//	}
-//
-//	protected View getRealView(int position, View convertView, ViewGroup parent) {
-//		return null;
-//	}
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener = new WeakReference<OnItemClickListener>(listener);
+    }
 
-//    @Override
-//    public int getItemViewType(int position) {
-//        if (position == getItemCount() - 1) {// 最后一条
-//            if (getState() == STATE_LOAD_MORE || getState() == STATE_NO_MORE
-//                    || state == STATE_EMPTY_ITEM
-//                    || getState() == STATE_NETWORK_ERROR) {
-//                return 2;
-//            }
-//        }
-//        return 1;
-//    }
-//
-//    public RecyclerBaseAdapter.ViewHolder onCreateRealViewHolder(ViewGroup parent, int viewType) {
-//        return null;
-//    }
-//
-//    public static class ViewHolder extends RecyclerView.ViewHolder {
-//        private int type;
-//        public ViewHolder(View v) {
-//            super(v);
-//        }
-//    }
+
+    private boolean hasHeader(){
+        return false;
+    }
+
+    private boolean hasFooter(int position){
+        switch (getState()) {
+            case STATE_EMPTY_ITEM:
+            case STATE_LOAD_MORE:
+            case STATE_NO_MORE:
+                return true;
+            default:
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(position == 0 && hasHeader()) {
+            return TYPE_HEADER;
+        } else if(position == getItemCount()-1 && hasFooter(position)) {
+            return TYPE_FOOTER;
+        }
+        return super.getItemViewType(position);
+    }
+
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        ViewHolder vh;
+        if(viewType == TYPE_FOOTER) {
+            View v = getLayoutInflater(parent.getContext())
+                    .inflate(R.layout.v2_list_cell_footer, null);
+            vh = new FooterViewHolder(viewType,v);
+        } else if(viewType == TYPE_HEADER) {
+            vh = onCreateHeaderViewHolder(parent, viewType);
+        } else {
+            vh = onCreateItemViewHolder(parent,viewType);
+        }
+        return vh;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        if(holder.viewType == TYPE_HEADER) {
+            onBindHeaderViewHolder(holder,position);
+        } else if(holder.viewType == TYPE_FOOTER) {
+            onBindFooterViewHolder(holder,position);
+        } else {
+            onBindItemViewHolder(holder,position);
+        }
+    }
+
+    private void onBindFooterViewHolder(ViewHolder holder,int position){
+        FooterViewHolder vh = (FooterViewHolder)holder;
+        if (!loadMoreHasBg()) {
+			vh.loadmore.setBackgroundDrawable(null);
+        }
+        switch (getState()) {
+            case STATE_LOAD_MORE:
+                vh.loadmore.setVisibility(View.VISIBLE);
+                vh.progress.setVisibility(View.VISIBLE);
+                vh.text.setVisibility(View.VISIBLE);
+                vh.text.setText(_loadmoreText);
+                break;
+            case STATE_NO_MORE:
+                vh.loadmore.setVisibility(View.VISIBLE);
+                vh.progress.setVisibility(View.GONE);
+                vh.text.setVisibility(View.VISIBLE);
+                vh.text.setText(_loadFinishText);
+                break;
+            case STATE_EMPTY_ITEM:
+                vh.progress.setVisibility(View.GONE);
+                vh.loadmore.setVisibility(View.GONE);
+                vh.text.setVisibility(View.GONE);
+                break;
+            case STATE_NETWORK_ERROR:
+                vh.loadmore.setVisibility(View.VISIBLE);
+                vh.progress.setVisibility(View.GONE);
+                vh.text.setVisibility(View.VISIBLE);
+                if (TDevice.hasInternet()) {
+                    vh.text.setText("对不起,出错了");
+                } else {
+                    vh.text.setText("没有可用的网络");
+                }
+                break;
+            default:
+                vh.loadmore.setVisibility(View.GONE);
+                vh.progress.setVisibility(View.GONE);
+                vh.text.setVisibility(View.GONE);
+                break;
+        }
+    }
+
+    protected ViewHolder onCreateHeaderViewHolder(ViewGroup parent,int viewType){
+        if(hasHeader()) {
+            throw new RuntimeException("hasHeader return true, you must implement onCreateHeaderViewHolder");
+        }
+        //TODO do nothing...
+        return null;
+    }
+
+    protected ViewHolder onCreateItemViewHolder(ViewGroup parent,int viewType){
+        //TODO do nothing...
+        throw new RuntimeException(" you must implement onCreateItemViewHolder");
+    }
+
+    protected void onBindHeaderViewHolder(ViewHolder holder,int position){
+        //TODO do nothing...
+    }
+
+    protected void onBindItemViewHolder(ViewHolder holder,int position){
+        //TODO do nothing...
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public int viewType;
+
+        public ViewHolder(int viewType,View v) {
+            super(v);
+            this.viewType = viewType;
+        }
+    }
+
+    public static class FooterViewHolder extends ViewHolder {
+        public ProgressBar progress;
+        public TextView text;
+        public View loadmore;
+        public FooterViewHolder(int viewType, View v) {
+            super(viewType, v);
+            loadmore = v;
+            progress = (ProgressBar) v.findViewById(R.id.progressbar);
+            text = (TextView)v.findViewById(R.id.text);
+        }
+    }
 }

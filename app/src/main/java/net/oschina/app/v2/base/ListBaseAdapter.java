@@ -166,7 +166,7 @@ public class ListBaseAdapter extends BaseAdapter {
 			if (getState() == STATE_LOAD_MORE || getState() == STATE_NO_MORE
 					|| state == STATE_EMPTY_ITEM
 					|| getState() == STATE_NETWORK_ERROR) {
-				LinearLayout loadmore = (LinearLayout) LayoutInflater.from(
+				View loadmore = (LinearLayout) LayoutInflater.from(
 						parent.getContext()).inflate(
 						R.layout.v2_list_cell_footer, null);
 				if (!loadMoreHasBg()) {
