@@ -205,4 +205,11 @@ public class EmptyLayout extends LinearLayout implements
 			mErrorState = HIDE_LAYOUT;
 		super.setVisibility(visibility);
 	}
+
+    public String getMessage() {
+        if(tv != null) {
+            return tv.getText().toString();
+        }
+        return "";
+    }
 }

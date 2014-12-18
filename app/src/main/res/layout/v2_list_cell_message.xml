@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:padding="@dimen/space_8" >
 
     <ImageView
@@ -13,9 +12,9 @@
         android:contentDescription="@null" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_toRightOf="@id/iv_avatar"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -50,7 +49,7 @@
             android:layout_marginTop="@dimen/space_4"
             android:background="@drawable/messages_left_bubble_selector"
             android:orientation="vertical"
-            android:padding="@dimen/space_8" >
+            android:padding="@dimen/space_8">
 
             <net.oschina.app.v2.ui.text.TweetTextView
                 android:id="@+id/tv_content"
@@ -85,4 +84,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

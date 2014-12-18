@@ -1,17 +1,25 @@
 package net.oschina.app.v2.activity.message.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.Serializable;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+
+import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.active.fragment.ActiveFragment;
 import net.oschina.app.v2.activity.message.adapter.MessageAdapter;
 import net.oschina.app.v2.api.OperationResponseHandler;
 import net.oschina.app.v2.api.remote.NewsApi;
-import net.oschina.app.v2.base.BaseListFragment;
+import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.Constants;
-import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.MessageList;
 import net.oschina.app.v2.model.Messages;
@@ -22,21 +30,12 @@ import net.oschina.app.v2.ui.dialog.CommonDialog;
 import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.UIHelper;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 
-import com.tonlin.osc.happy.R;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 
-public class MessageFragment extends BaseListFragment implements
-		OnItemLongClickListener {
+public class MessageFragment extends BaseRecycleViewFragment {
 	protected static final String TAG = ActiveFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "message_list";
 	private boolean mIsWatingLogin;
@@ -77,9 +76,8 @@ public class MessageFragment extends BaseListFragment implements
 	}
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
-        ListBaseAdapter adapter = new MessageAdapter();
-        adapter.setLoadMoreHasBg(false);
+	protected RecycleBaseAdapter getListAdapter() {
+        RecycleBaseAdapter adapter = new MessageAdapter();
         return adapter;
 	}
 
@@ -102,9 +100,9 @@ public class MessageFragment extends BaseListFragment implements
 	@Override
 	protected void initViews(View view) {
 		super.initViews(view);
-		mListView.setOnItemLongClickListener(this);
-		mListView.setDivider(null);
-		mListView.setDividerHeight(0);
+		//mListView.setOnItemLongClickListener(this);
+		//mListView.setDivider(null);
+		//mListView.setDividerHeight(0);
 		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
 			@Override
@@ -137,7 +135,7 @@ public class MessageFragment extends BaseListFragment implements
 	@Override
 	protected void sendRequestData() {
 		NewsApi.getMessageList(AppContext.instance().getLoginUid(),
-				mCurrentPage, mHandler);
+				mCurrentPage, getResponseHandler());
 	}
 
 	@Override
@@ -146,8 +144,7 @@ public class MessageFragment extends BaseListFragment implements
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
+	public void onItemClick(View view, int position) {
 		Messages message = (Messages) mAdapter.getItem(position);
 		if (message != null)
 			UIHelper.showMessageDetail(getActivity(), message.getFriendId(),
@@ -155,9 +152,8 @@ public class MessageFragment extends BaseListFragment implements
 	}
 
 	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view,
-			int position, long id) {
-		final Messages message = (Messages) mAdapter.getItem(position - 1);
+	public boolean onItemLongClick(View view, int position) {
+		final Messages message = (Messages) mAdapter.getItem(position);
 		final CommonDialog dialog = DialogHelper
 				.getPinterestDialogCancelable(getActivity());
 		dialog.setItemsWithoutChk(
@@ -195,6 +191,7 @@ public class MessageFragment extends BaseListFragment implements
 	private void handleDeleteMessage(final Messages message) {
 		CommonDialog dialog = DialogHelper
 				.getPinterestDialogCancelable(getActivity());
+        dialog.setTitle(R.string.operation);
 		dialog.setMessage(getString(R.string.confirm_delete_message,
 				message.getFriendName()));
 		dialog.setNegativeButton(R.string.cancle, null);
