@@ -33,14 +33,4 @@ public class FixedRecyclerView extends RecyclerView {
         return super.canScrollVertically(direction);
 
     }
-
-    private int dy;
-
-    public int getDy(){
-        return dy;
-    }
-
-    public void setDy(int dy){
-        this.dy = dy;
-    }
 }

@@ -7,8 +7,10 @@ import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.active.adapter.ActiveAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
+import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.Active;
 import net.oschina.app.v2.model.ActiveList;
 import net.oschina.app.v2.model.ListEntity;
@@ -27,8 +29,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
+//import android.widget.AdapterView.OnItemClickListener;
+//import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.tonlin.osc.happy.R;
 
@@ -37,8 +39,7 @@ import com.tonlin.osc.happy.R;
  * 
  * @author william_sim
  */
-public class ActiveFragment extends BaseListFragment implements
-		OnItemLongClickListener {
+public class ActiveFragment extends BaseRecycleViewFragment {
 
 	protected static final String TAG = ActiveFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "active_list";
@@ -80,8 +81,10 @@ public class ActiveFragment extends BaseListFragment implements
 	}
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
-		return new ActiveAdapter();
+	protected RecycleBaseAdapter getListAdapter() {
+		RecycleBaseAdapter adapter = new ActiveAdapter();
+        adapter.setOnItemLongClickListener(this);
+        return adapter;
 	}
 
 	@Override
@@ -104,7 +107,6 @@ public class ActiveFragment extends BaseListFragment implements
 	@Override
 	protected void initViews(View view) {
 		super.initViews(view);
-		mListView.setOnItemLongClickListener(this);
 		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
 			@Override
@@ -166,17 +168,15 @@ public class ActiveFragment extends BaseListFragment implements
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Active active = (Active) mAdapter.getItem(position - 1);
+	public void onItemClick(View view, int position) {
+		Active active = (Active) mAdapter.getItem(position);
 		if (active != null)
 			UIHelper.showActiveRedirect(view.getContext(), active);
 	}
 
 	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view,
-			int position, long id) {
-		final Active active = (Active) mAdapter.getItem(position - 1);
+	protected boolean onItemLongClick(View view, int position) {
+		final Active active = (Active) mAdapter.getItem(position);
 		if (active == null)
 			return false;
 		String[] items = new String[] {
@@ -186,7 +186,7 @@ public class ActiveFragment extends BaseListFragment implements
 				.getPinterestDialogCancelable(getActivity());
 		dialog.setTitle(R.string.operation);
 		dialog.setNegativeButton(R.string.cancle, null);
-		dialog.setItemsWithoutChk(items, new OnItemClickListener() {
+		dialog.setItemsWithoutChk(items, new AdapterView.OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,

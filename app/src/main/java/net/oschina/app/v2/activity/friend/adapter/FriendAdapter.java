@@ -1,9 +1,6 @@
 package net.oschina.app.v2.activity.friend.adapter;
 
-import net.oschina.app.v2.base.ListBaseAdapter;
-import net.oschina.app.v2.model.FriendList.Friend;
-import net.oschina.app.v2.utils.UIHelper;
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,48 +9,53 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 
-public class FriendAdapter extends ListBaseAdapter {
+import net.oschina.app.v2.base.RecycleBaseAdapter;
+import net.oschina.app.v2.model.FriendList.Friend;
+import net.oschina.app.v2.utils.UIHelper;
 
-	@SuppressLint("InflateParams")
-	@Override
-	protected View getRealView(int position, View convertView,
-			final ViewGroup parent) {
-		ViewHolder vh = null;
-		if (convertView == null || convertView.getTag() == null) {
-			convertView = getLayoutInflater(parent.getContext()).inflate(
-					R.layout.v2_list_cell_friend, null);
-			vh = new ViewHolder(convertView);
-			convertView.setTag(vh);
-		} else {
-			vh = (ViewHolder) convertView.getTag();
-		}
+public class FriendAdapter extends RecycleBaseAdapter {
 
-		final Friend item = (Friend) _data.get(position);
+    @Override
+    protected View onCreateItemView(ViewGroup parent, int viewType) {
+        return getLayoutInflater(parent.getContext()).inflate(
+                R.layout.v2_list_cell_friend, null);
+    }
 
-		vh.name.setText(item.getName());
-		vh.desc.setText(item.getExpertise());
-		vh.gender.setImageResource(item.getGender() == 1 ? R.drawable.list_male
-				: R.drawable.list_female);
+    @Override
+    protected RecycleBaseAdapter.ViewHolder onCreateItemViewHolder(View view, int viewType) {
+        return new ViewHolder(viewType, view);
+    }
 
-		ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
-		vh.avatar.setOnClickListener(new View.OnClickListener() {
+    @Override
+    protected void onBindItemViewHolder(RecycleBaseAdapter.ViewHolder holder, int position) {
+        super.onBindItemViewHolder(holder, position);
+        ViewHolder vh = (ViewHolder)holder;
+        final Friend item = (Friend) _data.get(position);
 
-			@Override
-			public void onClick(View v) {
-				UIHelper.showUserCenter(parent.getContext(), item.getUserid(),
-						item.getName());
-			}
-		});
+        vh.name.setText(item.getName());
+        vh.desc.setText(item.getExpertise());
+        vh.gender.setImageResource(item.getGender() == 1 ? R.drawable.list_male
+                : R.drawable.list_female);
 
-		return convertView;
-	}
+        ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
+        final Context context = vh.avatar.getContext();
+        vh.avatar.setOnClickListener(new View.OnClickListener() {
 
-	static class ViewHolder {
+            @Override
+            public void onClick(View v) {
+                UIHelper.showUserCenter(context, item.getUserid(),
+                        item.getName());
+            }
+        });
+    }
+
+	static class ViewHolder extends RecycleBaseAdapter.ViewHolder {
 		public TextView name, desc;
 		public ImageView gender;
 		public ImageView avatar;
 
-		public ViewHolder(View view) {
+		public ViewHolder(int viewType,View view) {
+            super(viewType,view);
 			name = (TextView) view.findViewById(R.id.tv_name);
 			desc = (TextView) view.findViewById(R.id.tv_desc);
 			gender = (ImageView) view.findViewById(R.id.iv_gender);

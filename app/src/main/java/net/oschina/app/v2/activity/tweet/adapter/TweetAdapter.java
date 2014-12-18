@@ -1,6 +1,7 @@
 package net.oschina.app.v2.activity.tweet.adapter;
 
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.Tweet;
 import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
@@ -9,6 +10,7 @@ import net.oschina.app.v2.ui.text.TweetTextView;
 import net.oschina.app.v2.utils.DateUtil;
 import net.oschina.app.v2.utils.UIHelper;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.Html;
 import android.text.Spanned;
@@ -24,118 +26,114 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.tonlin.osc.happy.R;
 
-public class TweetAdapter extends ListBaseAdapter {
+public class TweetAdapter extends RecycleBaseAdapter {
 
 	private DisplayImageOptions options;
 
 	public TweetAdapter() {
 		options = new DisplayImageOptions.Builder().cacheInMemory(true)
-				.cacheOnDisk(true).postProcessor(new BitmapProcessor() {
-
-					@Override
-					public Bitmap process(Bitmap arg0) {
-						return arg0;
-					}
-				}).build();
+				.cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565).build();
 	}
 
-	@SuppressLint("InflateParams")
-	@Override
-	protected View getRealView(int position, View convertView,
-			final ViewGroup parent) {
-		ViewHolder vh = null;
-		if (convertView == null || convertView.getTag() == null) {
-			convertView = getLayoutInflater(parent.getContext()).inflate(
-					R.layout.v2_list_cell_tweet, null);
-			vh = new ViewHolder(convertView);
-			convertView.setTag(vh);
-		} else {
-			vh = (ViewHolder) convertView.getTag();
-		}
+    @Override
+    protected View onCreateItemView(ViewGroup parent, int viewType) {
+        return getLayoutInflater(parent.getContext()).inflate(
+                R.layout.v2_list_cell_tweet, null);
+    }
 
-		final Tweet item = (Tweet) _data.get(position);
-		vh.name.setText(item.getAuthor());
+    @Override
+    protected RecycleBaseAdapter.ViewHolder onCreateItemViewHolder(View view, int viewType) {
+        return new ViewHolder(viewType,view);
+    }
 
-		vh.title.setMovementMethod(MyLinkMovementMethod.a());
-		vh.title.setFocusable(false);
-		vh.title.setDispatchToParent(true);
-		vh.title.setLongClickable(false);
-		Spanned span = Html.fromHtml(item.getBody());
-		vh.title.setText(span);
-		MyURLSpan.parseLinkText(vh.title, span);
+    @Override
+    protected void onBindItemViewHolder(RecycleBaseAdapter.ViewHolder holder, int position) {
+        super.onBindItemViewHolder(holder, position);
+        ViewHolder vh = (ViewHolder)holder;
 
-		vh.time.setText(DateUtil.getFormatTime(item.getPubDate()));
+        final Tweet item = (Tweet) _data.get(position);
+        vh.name.setText(item.getAuthor());
 
-		switch (item.getAppClient()) {
-		default:
-			vh.from.setText("");
-			break;
-		case Tweet.CLIENT_MOBILE:
-			vh.from.setText(R.string.from_mobile);
-			break;
-		case Tweet.CLIENT_ANDROID:
-			vh.from.setText(R.string.from_android);
-			break;
-		case Tweet.CLIENT_IPHONE:
-			vh.from.setText(R.string.from_iphone);
-			break;
-		case Tweet.CLIENT_WINDOWS_PHONE:
-			vh.from.setText(R.string.from_windows_phone);
-			break;
-		case Tweet.CLIENT_WECHAT:
-			vh.from.setText(R.string.from_wechat);
-			break;
-		}
+        vh.title.setMovementMethod(MyLinkMovementMethod.a());
+        vh.title.setFocusable(false);
+        vh.title.setDispatchToParent(true);
+        vh.title.setLongClickable(false);
+        Spanned span = Html.fromHtml(item.getBody());
+        vh.title.setText(span);
+        MyURLSpan.parseLinkText(vh.title, span);
 
-		vh.commentCount.setText(String.valueOf(item.getCommentCount()));
+        vh.time.setText(DateUtil.getFormatTime(item.getPubDate()));
 
-		vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
-		vh.avatar.setAvatarUrl(item.getFace());
+        switch (item.getAppClient()) {
+            default:
+                vh.from.setText("");
+                break;
+            case Tweet.CLIENT_MOBILE:
+                vh.from.setText(R.string.from_mobile);
+                break;
+            case Tweet.CLIENT_ANDROID:
+                vh.from.setText(R.string.from_android);
+                break;
+            case Tweet.CLIENT_IPHONE:
+                vh.from.setText(R.string.from_iphone);
+                break;
+            case Tweet.CLIENT_WINDOWS_PHONE:
+                vh.from.setText(R.string.from_windows_phone);
+                break;
+            case Tweet.CLIENT_WECHAT:
+                vh.from.setText(R.string.from_wechat);
+                break;
+        }
 
-		vh.longPicTip.setVisibility(View.GONE);
-		if (!TextUtils.isEmpty(item.getImgSmall())) {
-			vh.pic.setVisibility(View.VISIBLE);
-			final View longPicTip = vh.longPicTip;
-			ImageLoader.getInstance().displayImage(item.getImgSmall(), vh.pic,
-					options, new SimpleImageLoadingListener() {
-						@Override
-						public void onLoadingComplete(String imageUri,
-								View view, Bitmap loadedImage) {
-							ImageView v = (ImageView) view;
-							if (loadedImage.getHeight() > 4 * loadedImage
-									.getWidth()) {
-								v.setImageResource(R.drawable.ic_long_picture);
-								longPicTip.setVisibility(View.VISIBLE);
-							} else {
-								longPicTip.setVisibility(View.GONE);
-							}
-						}
-					});
-			vh.pic.setOnClickListener(new View.OnClickListener() {
+        vh.commentCount.setText(String.valueOf(item.getCommentCount()));
 
-				@Override
-				public void onClick(View v) {
-					// UIHelper.showImageZoomDialog(parent.getContext(),
-					// item.getImgBig());
-					UIHelper.showImagePreview(parent.getContext(),
-							new String[] { item.getImgBig() });
-				}
-			});
-		} else {
-			vh.pic.setVisibility(View.GONE);
-			vh.pic.setImageBitmap(null);
-		}
+        vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
+        vh.avatar.setAvatarUrl(item.getFace());
 
-		return convertView;
-	}
+        vh.longPicTip.setVisibility(View.GONE);
+        if (!TextUtils.isEmpty(item.getImgSmall())) {
+            vh.pic.setVisibility(View.VISIBLE);
+            final View longPicTip = vh.longPicTip;
+            ImageLoader.getInstance().displayImage(item.getImgSmall(), vh.pic,
+                    options, new SimpleImageLoadingListener() {
+                        @Override
+                        public void onLoadingComplete(String imageUri,
+                                                      View view, Bitmap loadedImage) {
+                            ImageView v = (ImageView) view;
+                            if (loadedImage.getHeight() > 4 * loadedImage
+                                    .getWidth()) {
+                                v.setImageResource(R.drawable.ic_long_picture);
+                                longPicTip.setVisibility(View.VISIBLE);
+                            } else {
+                                longPicTip.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+            final Context context = vh.pic.getContext();
+            vh.pic.setOnClickListener(new View.OnClickListener() {
 
-	static class ViewHolder {
+                @Override
+                public void onClick(View v) {
+                    // UIHelper.showImageZoomDialog(parent.getContext(),
+                    // item.getImgBig());
+                    UIHelper.showImagePreview(context,
+                            new String[] { item.getImgBig() });
+                }
+            });
+        } else {
+            vh.pic.setVisibility(View.GONE);
+            vh.pic.setImageBitmap(null);
+        }
+    }
+
+	static class ViewHolder extends RecycleBaseAdapter.ViewHolder {
 		public TextView name, from, time, commentCount, longPicTip;
 		public TweetTextView title;
 		public ImageView pic;
 		public AvatarView avatar;
 
-		public ViewHolder(View view) {
+		public ViewHolder(int viewType,View view) {
+            super(viewType,view);
 			longPicTip = (TextView) view.findViewById(R.id.long_pic_tip);
 			name = (TextView) view.findViewById(R.id.tv_name);
 			title = (TweetTextView) view.findViewById(R.id.tv_title);

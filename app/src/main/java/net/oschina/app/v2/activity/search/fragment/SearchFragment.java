@@ -6,7 +6,9 @@ import java.io.Serializable;
 import net.oschina.app.v2.activity.search.adapter.SearchAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
+import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.SearchList;
 import net.oschina.app.v2.model.SearchList.Result;
@@ -19,7 +21,7 @@ import android.widget.AdapterView;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class SearchFragment extends BaseListFragment {
+public class SearchFragment extends BaseRecycleViewFragment {
 	protected static final String TAG = SearchFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "search_list_";
 	private static final String SEARCH_SCREEN = "search_screen";
@@ -57,7 +59,7 @@ public class SearchFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected RecycleBaseAdapter getListAdapter() {
 		return new SearchAdapter();
 	}
 
@@ -83,9 +85,8 @@ public class SearchFragment extends BaseListFragment {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Result res = (Result) mAdapter.getItem(position - 1);
+	public void onItemClick(View view, int position) {
+		Result res = (Result) mAdapter.getItem(position);
 		if (res != null)
 			UIHelper.showUrlRedirect(view.getContext(), res.getUrl());
 	}

@@ -23,7 +23,7 @@ import com.umeng.analytics.MobclickAgent;
 
 public class ImagePreviewActivity extends BaseActivity implements
 		OnPageChangeListener, OnPagerClickListener {
-
+    public static final String TAG = ImagePreviewActivity.class.getSimpleName();
 	public static final String BUNDLE_KEY_IMAGES = "bundle_key_images";
 	private static final String BUNDLE_KEY_INDEX = "bundle_key_index";
 	private static final String IMAGE_PREVIEW_SCREEN = "image_preview_screen";
@@ -93,6 +93,10 @@ public class ImagePreviewActivity extends BaseActivity implements
 		mImageUrls = getIntent().getStringArrayExtra(BUNDLE_KEY_IMAGES);
 		int index = getIntent().getIntExtra(BUNDLE_KEY_INDEX, 0);
 
+        for(String s:mImageUrls) {
+            TLog.log(TAG,"url:"+s);
+        }
+        
 		mAdapter = new SamplePagerAdapter(mImageUrls, this);
 		mViewPager.setAdapter(mAdapter);
 		mViewPager.setOnPageChangeListener(this);

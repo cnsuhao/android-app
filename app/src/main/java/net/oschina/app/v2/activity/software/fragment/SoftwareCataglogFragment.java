@@ -1,7 +1,19 @@
 package net.oschina.app.v2.activity.software.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.util.List;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.MySwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.activity.software.adapter.SoftwareAdapter;
 import net.oschina.app.v2.activity.software.adapter.SoftwareCatalogAdapter;
@@ -14,30 +26,18 @@ import net.oschina.app.v2.model.SoftwareCatalogList.SoftwareType;
 import net.oschina.app.v2.model.SoftwareList;
 import net.oschina.app.v2.model.SoftwareList.Software;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.ui.widget.FixedRecyclerView;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
 
 import org.apache.http.Header;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.tonlin.osc.happy.R;
+import java.io.ByteArrayInputStream;
+import java.util.List;
 
 public class SoftwareCataglogFragment extends BaseTabFragment implements
-		OnItemClickListener, OnRefreshListener<ListView>,
-		OnLastItemVisibleListener {
+		OnItemClickListener //, OnRefreshListener<ListView>, OnLastItemVisibleListener
+    {
 	protected static final int STATE_NONE = 0;
 	protected static final int STATE_REFRESH = 1;
 	protected static final int STATE_LOADMORE = 2;
@@ -48,7 +48,9 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
 
 	private ScrollLayout mScrollLayout;
 	private ListView mLvCatalog, mLvTag;
-	private PullToRefreshListView mLvSoftware;
+    private LinearLayoutManager mLayoutManager;
+    private MySwipeRefreshLayout mRefreshView;
+	private FixedRecyclerView mLvSoftware;
 	private EmptyLayout mEmptyView;
 	private SoftwareCatalogAdapter mCatalogAdapter, mTagAdapter;
 	private SoftwareAdapter mSoftwareAdapter;
@@ -168,7 +170,7 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
 
 		public void onFinish() {
 			mState = STATE_NONE;
-			mLvSoftware.onRefreshComplete();
+            mRefreshView.setRefreshing(false);
 		}
 	};
 
@@ -209,7 +211,8 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
 		}
 	};
 
-	@Override
+
+        @Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.v2_fragment_software, container,
@@ -227,11 +230,25 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
 		mLvCatalog.setOnItemClickListener(mCatalogOnItemClick);
 		mLvTag = (ListView) view.findViewById(R.id.lv_tag);
 		mLvTag.setOnItemClickListener(mTagOnItemClick);
-		mLvSoftware = (PullToRefreshListView) view
-				.findViewById(R.id.lv_software);
-		mLvSoftware.setOnRefreshListener(this);
-		mLvSoftware.setOnLastItemVisibleListener(this);
-		mLvSoftware.setOnItemClickListener(this);
+
+        mRefreshView = (MySwipeRefreshLayout)view.findViewById(R.id.srl_refresh);
+        mRefreshView.setOnRefreshListener(new MySwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
+        mLvSoftware = (FixedRecyclerView) view.findViewById(R.id.rv_software);
+        mLvSoftware.setOnScrollListener(mScrollListener);
+
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mLvSoftware.setLayoutManager(mLayoutManager);
+        mLvSoftware.setHasFixedSize(true);
+		//mLvSoftware.setOnRefreshListener(this);
+		//mLvSoftware.setOnLastItemVisibleListener(this);
+		//mLvSoftware.setOnItemClickListener(this);
+
 		if (mCatalogAdapter == null) {
 			mCatalogAdapter = new SoftwareCatalogAdapter();
 			sendRequestCatalogData(mCatalogHandler);
@@ -276,15 +293,13 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
 		return super.onBackPressed();
 	}
 
-	@Override
-	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+	public void refresh() {
 		mCurrentPage = 0;
 		mState = STATE_REFRESH;
 		sendRequestTagData();
 	}
 
-	@Override
-	public void onLastItemVisible() {
+	public void loadMore() {
 		if (mState == STATE_NONE) {
 			if (mSoftwareAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
 				mCurrentPage++;
@@ -303,4 +318,20 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
 	private void sendRequestTagData() {
 		NewsApi.getSoftwareTagList(mCurrentTag, mCurrentPage, mSoftwareHandler);
 	}
+
+    private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+            int totalItemCount = mLayoutManager.getItemCount();
+            if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
+                if (mState== STATE_NONE && mSoftwareAdapter != null
+                        && mSoftwareAdapter.getDataSize() > 0) {
+                    loadMore();
+                }
+            }
+        }
+    };
 }

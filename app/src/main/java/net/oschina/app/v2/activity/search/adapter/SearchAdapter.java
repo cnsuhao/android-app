@@ -1,9 +1,5 @@
 package net.oschina.app.v2.activity.search.adapter;
 
-import net.oschina.app.v2.base.ListBaseAdapter;
-import net.oschina.app.v2.model.SearchList.Result;
-import net.oschina.app.v2.utils.DateUtil;
-import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,36 +7,41 @@ import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
 
-public class SearchAdapter extends ListBaseAdapter {
+import net.oschina.app.v2.base.RecycleBaseAdapter;
+import net.oschina.app.v2.model.SearchList.Result;
+import net.oschina.app.v2.utils.DateUtil;
 
-	@SuppressLint("InflateParams")
-	@Override
-	protected View getRealView(int position, View convertView, ViewGroup parent) {
-		ViewHolder vh = null;
-		if (convertView == null || convertView.getTag() == null) {
-			convertView = getLayoutInflater(parent.getContext()).inflate(
-					R.layout.v2_list_cell_news, null);
-			vh = new ViewHolder(convertView);
-			convertView.setTag(vh);
-		} else {
-			vh = (ViewHolder) convertView.getTag();
-		}
+public class SearchAdapter extends RecycleBaseAdapter {
 
-		Result item = (Result) _data.get(position);
+    @Override
+    protected View onCreateItemView(ViewGroup parent, int viewType) {
+        return getLayoutInflater(parent.getContext()).inflate(
+                R.layout.v2_list_cell_news, null);
+    }
 
-		vh.title.setText(item.getTitle());
-		vh.source.setText(item.getAuthor());
-		vh.time.setText(DateUtil.getFormatTime(item.getPubDate()));
-		vh.tip.setVisibility(View.GONE);
+    @Override
+    protected RecycleBaseAdapter.ViewHolder onCreateItemViewHolder(View view, int viewType) {
+        return new ViewHolder(viewType, view);
+    }
 
-		return convertView;
-	}
+    @Override
+    protected void onBindItemViewHolder(RecycleBaseAdapter.ViewHolder holder, int position) {
+        super.onBindItemViewHolder(holder, position);
+        ViewHolder vh = (ViewHolder)holder;
+        Result item = (Result) _data.get(position);
 
-	static class ViewHolder {
+        vh.title.setText(item.getTitle());
+        vh.source.setText(item.getAuthor());
+        vh.time.setText(DateUtil.getFormatTime(item.getPubDate()));
+        vh.tip.setVisibility(View.GONE);
+    }
+
+	static class ViewHolder extends RecycleBaseAdapter.ViewHolder{
 		public TextView title, source, time;
 		public ImageView tip;
 
-		public ViewHolder(View view) {
+		public ViewHolder(int viewType,View view) {
+            super(viewType,view);
 			title = (TextView) view.findViewById(R.id.tv_title);
 			source = (TextView) view.findViewById(R.id.tv_source);
 			time = (TextView) view.findViewById(R.id.tv_time);

@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class TLog {
 	public static final String LOG_TAG = "Tonlin";
-	public static boolean DEBUG = false;
+	public static boolean DEBUG = true;
 
 	public TLog() {
 	}

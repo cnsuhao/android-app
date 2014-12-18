@@ -11,8 +11,7 @@
         <net.oschina.app.v2.ui.widget.FixedRecyclerView
             android:id="@+id/recycleView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-             />
+            android:layout_height="match_parent"/>
         <!--android:descendantFocusability="blocksDescendants"-->
     </android.support.v4.widget.MySwipeRefreshLayout>
 

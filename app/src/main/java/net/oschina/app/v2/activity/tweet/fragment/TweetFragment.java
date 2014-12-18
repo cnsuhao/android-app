@@ -9,8 +9,10 @@ import net.oschina.app.v2.activity.tweet.adapter.TweetAdapter;
 import net.oschina.app.v2.api.OperationResponseHandler;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
+import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.Result;
 import net.oschina.app.v2.model.Tweet;
@@ -42,8 +44,7 @@ import com.tonlin.osc.happy.R;
  * 
  * @author william_sim
  */
-public class TweetFragment extends BaseListFragment implements
-		OnItemLongClickListener {
+public class TweetFragment extends BaseRecycleViewFragment{
 	protected static final String TAG = TweetFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "tweet_list";
 	private boolean mIsWatingLogin;
@@ -117,7 +118,6 @@ public class TweetFragment extends BaseListFragment implements
 	@Override
 	protected void initViews(View view) {
 		super.initViews(view);
-		mListView.setOnItemLongClickListener(this);
 		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
 			@Override
@@ -132,8 +132,10 @@ public class TweetFragment extends BaseListFragment implements
 	}
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
-		return new TweetAdapter();
+	protected RecycleBaseAdapter getListAdapter() {
+        RecycleBaseAdapter adapter = new TweetAdapter();
+        adapter.setOnItemLongClickListener(this);
+		return adapter;
 	}
 
 	@Override
@@ -177,17 +179,15 @@ public class TweetFragment extends BaseListFragment implements
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Tweet tweet = (Tweet) mAdapter.getItem(position - 1);
+	public void onItemClick(View view, int position) {
+		Tweet tweet = (Tweet) mAdapter.getItem(position);
 		if (tweet != null)
 			UIHelper.showTweetDetail(view.getContext(), tweet.getId());
 	}
 
 	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view,
-			int position, long id) {
-		Tweet tweet = (Tweet) mAdapter.getItem(position - 1);
+	public boolean onItemLongClick(View view,int position) {
+		Tweet tweet = (Tweet) mAdapter.getItem(position);
 		if (tweet != null) {
 			handleLongClick(tweet);
 			return true;
@@ -196,7 +196,7 @@ public class TweetFragment extends BaseListFragment implements
 	}
 
 	private void handleLongClick(final Tweet tweet) {
-		String[] items = null;
+		String[] items;
 		if (AppContext.instance().getLoginUid() == tweet.getAuthorId()) {
 			items = new String[] { getResources().getString(R.string.view),
 					getResources().getString(R.string.copy),

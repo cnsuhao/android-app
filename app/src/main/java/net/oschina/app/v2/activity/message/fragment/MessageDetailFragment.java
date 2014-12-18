@@ -154,7 +154,6 @@ public class MessageDetailFragment extends BaseListFragment implements
 	@Override
 	protected void initViews(View view) {
 		super.initViews(view);
-		//mListView.getRefreshableView().setStackFromBottom(true);
 		mListView.setDivider(null);
 		mListView.setDividerHeight(0);
 		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {

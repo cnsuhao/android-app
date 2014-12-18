@@ -7,7 +7,9 @@ import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.favorite.adapter.FavoriteAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
+import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.FavoriteList;
 import net.oschina.app.v2.model.FavoriteList.Favorite;
 import net.oschina.app.v2.model.ListEntity;
@@ -22,14 +24,14 @@ import com.umeng.analytics.MobclickAgent;
  * 
  * @author william_sim
  */
-public class FavoriteFragment extends BaseListFragment {
+public class FavoriteFragment extends BaseRecycleViewFragment {
 
 	protected static final String TAG = FavoriteFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "favorite_list";
 	private static final String FAVORITE_SCREEN = "favorite_screen";
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected RecycleBaseAdapter getListAdapter() {
 		return new FavoriteAdapter();
 	}
 
@@ -56,9 +58,8 @@ public class FavoriteFragment extends BaseListFragment {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Favorite item = (Favorite) mAdapter.getItem(position - 1);
+	public void onItemClick(View view, int position) {
+		Favorite item = (Favorite) mAdapter.getItem(position);
 		if (item != null)
 			UIHelper.showUrlRedirect(view.getContext(), item.url);
 	}

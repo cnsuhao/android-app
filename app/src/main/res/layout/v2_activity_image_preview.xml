@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black" >
-
-    <include layout="@layout/v2_view_actionbar"/>
+    android:background="@color/black"
+    android:orientation="vertical">
 
     <net.oschina.app.v2.activity.image.HackyViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="match_parent"/>
 
-</LinearLayout>
+    <include layout="@layout/v2_view_actionbar_preview"/>
+</RelativeLayout>

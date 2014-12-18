@@ -101,15 +101,12 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		mListView = (ListView) view.findViewById(R.id.listview);
 		mListView.setOnItemClickListener(this);
         mListView.setOnScrollListener(mScrollListener);
-		//mListView.setOnRefreshListener(this);
-		//mListView.setOnLastItemVisibleListener(this);
 
 		if (mAdapter != null) {
 			mListView.setAdapter(mAdapter);
 			mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 		} else {
 			mAdapter = getListAdapter();
-			// mListView.setRefreshing();
 			mListView.setAdapter(mAdapter);
 
 			if (requestDataIfViewCreated()) {
@@ -319,7 +316,6 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	}
 
 	protected void executeOnLoadFinish() {
-		//mListView.onRefreshComplete();
         mSwipeRefresh.setRefreshing(false);
 		mState = STATE_NONE;
 	}

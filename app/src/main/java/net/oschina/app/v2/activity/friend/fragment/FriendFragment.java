@@ -7,7 +7,9 @@ import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.friend.adapter.FriendAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
+import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.FriendList;
 import net.oschina.app.v2.model.FriendList.Friend;
 import net.oschina.app.v2.model.ListEntity;
@@ -25,7 +27,7 @@ import com.umeng.analytics.MobclickAgent;
  * 
  * @author william_sim
  */
-public class FriendFragment extends BaseListFragment {
+public class FriendFragment extends BaseRecycleViewFragment {
 
 	protected static final String TAG = FriendFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "friend_list";
@@ -38,7 +40,7 @@ public class FriendFragment extends BaseListFragment {
 	}
 	
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected RecycleBaseAdapter getListAdapter() {
 		return new FriendAdapter();
 	}
 
@@ -72,9 +74,8 @@ public class FriendFragment extends BaseListFragment {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Friend item = (Friend) mAdapter.getItem(position - 1);
+	public void onItemClick(View view, int position) {
+		Friend item = (Friend) mAdapter.getItem(position);
 		if (item != null)
 			UIHelper.showUserCenter(getActivity(), item.getUserid(),
 					item.getName());

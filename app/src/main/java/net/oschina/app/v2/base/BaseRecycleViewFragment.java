@@ -12,10 +12,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 //import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
 //import com.handmark.pulltorefresh.library.PullToRefreshBase;
 //import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
@@ -44,12 +41,12 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
-        RecycleBaseAdapter.OnItemClickListener {
+        RecycleBaseAdapter.OnItemClickListener, RecycleBaseAdapter.OnItemLongClickListener {
 
 	public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 
     protected MySwipeRefreshLayout mSwipeRefresh;
-	protected FixedRecyclerView mListView;
+	protected FixedRecyclerView mRecycleView;
     protected LinearLayoutManager mLayoutManager;
 	protected RecycleBaseAdapter mAdapter;
 	protected EmptyLayout mErrorLayout;
@@ -96,33 +93,31 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 
         mSwipeRefresh = (MySwipeRefreshLayout)view.findViewById(R.id.srl_refresh);
         mSwipeRefresh.setColorSchemeColors(R.color.main_green);
-        //mSwipeRefresh.canChildScrollUp();
         mSwipeRefresh.setOnRefreshListener(new MySwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                refresh();
             }
         });
-        //int y = mListView.getScrollY();
 
-		mListView = (FixedRecyclerView) view.findViewById(R.id.recycleView);
-        mListView.setOnScrollListener(mScrollListener);
+		mRecycleView = (FixedRecyclerView) view.findViewById(R.id.recycleView);
+        mRecycleView.setOnScrollListener(mScrollListener);
         // use a linear layout manager
-        mListView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        mRecycleView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mListView.setLayoutManager(mLayoutManager);
-        mListView.setHasFixedSize(true);
+        mRecycleView.setLayoutManager(mLayoutManager);
+        mRecycleView.setHasFixedSize(true);
 
         if (mAdapter != null) {
-			mListView.setAdapter(mAdapter);
+			mRecycleView.setAdapter(mAdapter);
 			mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 		} else {
 			mAdapter = getListAdapter();
             mAdapter.setOnItemClickListener(this);
-			// mListView.setRefreshing();
-			mListView.setAdapter(mAdapter);
+            mAdapter.setOnItemLongClickListener(this);
+			mRecycleView.setAdapter(mAdapter);
 
 			if (requestDataIfViewCreated()) {
 				mCurrentPage = 0;
@@ -153,10 +148,19 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 
     @Override
     public void onItemClick(View view) {
-        onItemClick(view,mListView.getChildPosition(view));
+        onItemClick(view, mRecycleView.getChildPosition(view));
     }
 
     protected void onItemClick(View view,int position) {
+    }
+
+    @Override
+    public boolean onItemLongClick(View view) {
+       return onItemLongClick(view,mRecycleView.getChildPosition(view));
+    }
+
+    protected boolean onItemLongClick(View view,int position) {
+        return false;
     }
 
     protected abstract RecycleBaseAdapter getListAdapter();
@@ -228,7 +232,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 		}
 	}
 
-	private class CacheTask extends AsyncTask<String, Void, ListEntity> {
+    private class CacheTask extends AsyncTask<String, Void, ListEntity> {
 		private WeakReference<Context> mContext;
 
 		private CacheTask(Context context) {
@@ -332,7 +336,6 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 	}
 
 	protected void executeOnLoadFinish() {
-		//mListView.onRefreshComplete();
         mSwipeRefresh.setRefreshing(false);
 		mState = STATE_NONE;
 	}
@@ -407,193 +410,4 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             }
         }
     };
-
-    private static final int SCROLL_DISTANCE = 80; // dp
-
-    class MyLayoutManager extends RecyclerView.LayoutManager {
-
-        private static final String TAG = "MyLayoutManager";
-
-        private int mFirstPosition;
-
-        private final int mScrollDistance;
-
-        public MyLayoutManager(Context c) {
-            final DisplayMetrics dm = c.getResources().getDisplayMetrics();
-            mScrollDistance = (int) (SCROLL_DISTANCE * dm.density + 0.5f);
-        }
-
-        @Override
-        public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
-            final int parentBottom = getHeight() - getPaddingBottom();
-            final View oldTopView = getChildCount() > 0 ? getChildAt(0) : null;
-            int oldTop = getPaddingTop();
-            if (oldTopView != null) {
-                oldTop = oldTopView.getTop();
-            }
-
-            detachAndScrapAttachedViews(recycler);
-
-            int top = oldTop;
-            int bottom;
-            final int left = getPaddingLeft();
-            final int right = getWidth() - getPaddingRight();
-
-            final int count = state.getItemCount();
-            for (int i = 0; mFirstPosition + i < count && top < parentBottom; i++, top = bottom) {
-                View v = recycler.getViewForPosition(mFirstPosition + i);
-                addView(v, i);
-                measureChildWithMargins(v, 0, 0);
-                bottom = top + getDecoratedMeasuredHeight(v);
-                layoutDecorated(v, left, top, right, bottom);
-            }
-        }
-
-        @Override
-        public RecyclerView.LayoutParams generateDefaultLayoutParams() {
-            return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
-
-        @Override
-        public boolean canScrollVertically() {
-            return true;
-        }
-
-        @Override
-        public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler,
-                                      RecyclerView.State state) {
-            if (getChildCount() == 0) {
-                return 0;
-            }
-
-            int scrolled = 0;
-            final int left = getPaddingLeft();
-            final int right = getWidth() - getPaddingRight();
-            if (dy < 0) {
-                while (scrolled > dy) {
-                    final View topView = getChildAt(0);
-                    final int hangingTop = Math.max(-getDecoratedTop(topView), 0);
-                    final int scrollBy = Math.min(scrolled - dy, hangingTop);
-                    scrolled -= scrollBy;
-                    offsetChildrenVertical(scrollBy);
-                    if (mFirstPosition > 0 && scrolled > dy) {
-                        mFirstPosition--;
-                        View v = recycler.getViewForPosition(mFirstPosition);
-                        addView(v, 0);
-                        measureChildWithMargins(v, 0, 0);
-                        final int bottom = getDecoratedTop(topView);
-                        final int top = bottom - getDecoratedMeasuredHeight(v);
-                        layoutDecorated(v, left, top, right, bottom);
-                    } else {
-                        break;
-                    }
-                }
-            } else if (dy > 0) {
-                final int parentHeight = getHeight();
-                while (scrolled < dy) {
-                    final View bottomView = getChildAt(getChildCount() - 1);
-                    final int hangingBottom =
-                            Math.max(getDecoratedBottom(bottomView) - parentHeight, 0);
-                    final int scrollBy = -Math.min(dy - scrolled, hangingBottom);
-                    scrolled -= scrollBy;
-                    offsetChildrenVertical(scrollBy);
-                    if (scrolled < dy && state.getItemCount() > mFirstPosition + getChildCount()) {
-                        View v = recycler.getViewForPosition(mFirstPosition + getChildCount());
-                        final int top = getDecoratedBottom(getChildAt(getChildCount() - 1));
-                        addView(v);
-                        measureChildWithMargins(v, 0, 0);
-                        final int bottom = top + getDecoratedMeasuredHeight(v);
-                        layoutDecorated(v, left, top, right, bottom);
-                    } else {
-                        break;
-                    }
-                }
-            }
-            recycleViewsOutOfBounds(recycler);
-           // mListView.setDy(scrolled);
-            return scrolled;
-        }
-
-        @Override
-        public View onFocusSearchFailed(View focused, int direction,
-                                        RecyclerView.Recycler recycler, RecyclerView.State state) {
-            final int oldCount = getChildCount();
-
-            if (oldCount == 0) {
-                return null;
-            }
-
-            final int left = getPaddingLeft();
-            final int right = getWidth() - getPaddingRight();
-
-            View toFocus = null;
-            int newViewsHeight = 0;
-            if (direction == View.FOCUS_UP || direction == View.FOCUS_BACKWARD) {
-                while (mFirstPosition > 0 && newViewsHeight < mScrollDistance) {
-                    mFirstPosition--;
-                    View v = recycler.getViewForPosition(mFirstPosition);
-                    final int bottom = getDecoratedTop(getChildAt(0));
-                    addView(v, 0);
-                    measureChildWithMargins(v, 0, 0);
-                    final int top = bottom - getDecoratedMeasuredHeight(v);
-                    layoutDecorated(v, left, top, right, bottom);
-                    if (v.isFocusable()) {
-                        toFocus = v;
-                        break;
-                    }
-                }
-            }
-            if (direction == View.FOCUS_DOWN || direction == View.FOCUS_FORWARD) {
-                while (mFirstPosition + getChildCount() < state.getItemCount() &&
-                        newViewsHeight < mScrollDistance) {
-                    View v = recycler.getViewForPosition(mFirstPosition + getChildCount());
-                    final int top = getDecoratedBottom(getChildAt(getChildCount() - 1));
-                    addView(v);
-                    measureChildWithMargins(v, 0, 0);
-                    final int bottom = top + getDecoratedMeasuredHeight(v);
-                    layoutDecorated(v, left, top, right, bottom);
-                    if (v.isFocusable()) {
-                        toFocus = v;
-                        break;
-                    }
-                }
-            }
-
-            return toFocus;
-        }
-
-        public void recycleViewsOutOfBounds(RecyclerView.Recycler recycler) {
-            final int childCount = getChildCount();
-            final int parentWidth = getWidth();
-            final int parentHeight = getHeight();
-            boolean foundFirst = false;
-            int first = 0;
-            int last = 0;
-            for (int i = 0; i < childCount; i++) {
-                final View v = getChildAt(i);
-                if (v.hasFocus() || (getDecoratedRight(v) >= 0 &&
-                        getDecoratedLeft(v) <= parentWidth &&
-                        getDecoratedBottom(v) >= 0 &&
-                        getDecoratedTop(v) <= parentHeight)) {
-                    if (!foundFirst) {
-                        first = i;
-                        foundFirst = true;
-                    }
-                    last = i;
-                }
-            }
-            for (int i = childCount - 1; i > last; i--) {
-                removeAndRecycleViewAt(i, recycler);
-            }
-            for (int i = first - 1; i >= 0; i--) {
-                removeAndRecycleViewAt(i, recycler);
-            }
-            if (getChildCount() == 0) {
-                mFirstPosition = 0;
-            } else {
-                mFirstPosition += first;
-            }
-        }
-    }
 }
