@@ -49,7 +49,7 @@ public class QuestionFragment extends BaseRecycleViewFragment {
 
 	@Override
 	protected void sendRequestData() {
-		NewsApi.getPostList(mCatalog, mCurrentPage, mHandler);
+		NewsApi.getPostList(mCatalog, mCurrentPage, getResponseHandler());
 	}
 
 	@Override

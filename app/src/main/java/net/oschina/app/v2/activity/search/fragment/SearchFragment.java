@@ -81,7 +81,7 @@ public class SearchFragment extends BaseRecycleViewFragment {
 
 	@Override
 	protected void sendRequestData() {
-		NewsApi.getSearchList(mCatalog, mSearch, mCurrentPage, mHandler);
+		NewsApi.getSearchList(mCatalog, mSearch, mCurrentPage, getResponseHandler());
 	}
 
 	@Override

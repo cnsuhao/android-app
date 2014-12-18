@@ -59,7 +59,7 @@ public class BlogFragment extends BaseRecycleViewFragment {
 	protected void sendRequestData() {
 		NewsApi.getBlogList(
 				mCatalog == BlogList.CATALOG_RECOMMEND ? "recommend" : "latest",
-				mCurrentPage, mHandler);
+				mCurrentPage, getResponseHandler());
 	}
 
 	@Override

@@ -68,7 +68,7 @@ public class QuestionTagFragment extends BaseRecycleViewFragment {
 
 	@Override
 	protected void sendRequestData() {
-		NewsApi.getPostListByTag(mTag, mCurrentPage, mHandler);
+		NewsApi.getPostListByTag(mTag, mCurrentPage, getResponseHandler());
 	}
 
 	@Override

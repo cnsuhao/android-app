@@ -145,9 +145,9 @@ public class CommentFrament extends BaseRecycleViewFragment implements
 	@Override
 	protected void sendRequestData() {
 		if (mIsBlogComment) {
-			NewsApi.getBlogCommentList(mId, mCurrentPage, mHandler);
+			NewsApi.getBlogCommentList(mId, mCurrentPage, getResponseHandler());
 		} else {
-			NewsApi.getCommentList(mId, mCatalog, mCurrentPage, mHandler);
+			NewsApi.getCommentList(mId, mCatalog, mCurrentPage, getResponseHandler());
 		}
 	}
 

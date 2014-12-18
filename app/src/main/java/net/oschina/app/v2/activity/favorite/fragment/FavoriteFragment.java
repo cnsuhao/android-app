@@ -54,7 +54,7 @@ public class FavoriteFragment extends BaseRecycleViewFragment {
 	@Override
 	protected void sendRequestData() {
 		NewsApi.getFavoriteList(AppContext.instance().getLoginUid(), mCatalog,
-				mCurrentPage, mHandler);
+				mCurrentPage, getResponseHandler());
 	}
 
 	@Override

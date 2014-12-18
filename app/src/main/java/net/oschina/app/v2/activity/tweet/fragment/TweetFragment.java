@@ -175,7 +175,7 @@ public class TweetFragment extends BaseRecycleViewFragment{
 
 	@Override
 	protected void sendRequestData() {
-		NewsApi.getTweetList(mCatalog, mCurrentPage, mHandler);
+		NewsApi.getTweetList(mCatalog, mCurrentPage, getResponseHandler());
 	}
 
 	@Override

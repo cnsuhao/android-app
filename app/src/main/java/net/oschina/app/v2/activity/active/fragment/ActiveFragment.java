@@ -148,7 +148,7 @@ public class ActiveFragment extends BaseRecycleViewFragment {
 	@Override
 	protected void sendRequestData() {
 		NewsApi.getActiveList(AppContext.instance().getLoginUid(), mCatalog,
-				mCurrentPage, mHandler);
+				mCurrentPage, getResponseHandler());
 	}
 
 	@Override

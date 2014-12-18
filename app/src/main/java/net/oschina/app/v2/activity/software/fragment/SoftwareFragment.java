@@ -77,7 +77,7 @@ public class SoftwareFragment extends BaseRecycleViewFragment {
 
     @Override
     protected void sendRequestData() {
-        NewsApi.getSoftwareList(mCatalog, mCurrentPage, mHandler);
+        NewsApi.getSoftwareList(mCatalog, mCurrentPage, getResponseHandler());
     }
 
     @Override

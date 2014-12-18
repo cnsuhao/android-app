@@ -55,7 +55,7 @@ public class NewsFragment extends BaseRecycleViewFragment {
 
 	@Override
 	protected void sendRequestData() {
-		NewsApi.getNewsList(mCatalog, mCurrentPage, mHandler);
+		NewsApi.getNewsList(mCatalog, mCurrentPage, getResponseHandler());
 	}
 
     @Override

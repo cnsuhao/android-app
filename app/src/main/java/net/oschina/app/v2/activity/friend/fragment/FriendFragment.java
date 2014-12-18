@@ -63,7 +63,7 @@ public class FriendFragment extends BaseRecycleViewFragment {
 	@Override
 	protected void sendRequestData() {
 		User user = AppContext.instance().getLoginInfo();
-		NewsApi.getFriendList(user.getUid(), mCatalog, mCurrentPage, mHandler);
+		NewsApi.getFriendList(user.getUid(), mCatalog, mCurrentPage, getResponseHandler());
 	}
 
 	@Override

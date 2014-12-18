@@ -185,6 +185,10 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 		return null;
 	}
 
+    protected AsyncHttpResponseHandler getResponseHandler(){
+        return new ResponseHandler(this);
+    }
+
     public void refresh() {
 		mCurrentPage = 0;
 		mState = STATE_REFRESH;
@@ -280,29 +284,62 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 		}
 	}
 
-	protected AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
+    static class ResponseHandler extends AsyncHttpResponseHandler{
+        private WeakReference<BaseRecycleViewFragment> mInstance;
 
-		@Override
-		public void onSuccess(int statusCode, Header[] headers,
-				byte[] responseBytes) {
-			if (isAdded()) {
-				if (mState == STATE_REFRESH) {
-					onRefreshNetworkSuccess();
-					AppContext.setRefreshTime(getCacheKey(),
-							System.currentTimeMillis());
-				}
-				executeParserTask(responseBytes);
-			}
-		}
+        ResponseHandler(BaseRecycleViewFragment instance){
+            mInstance = new WeakReference<BaseRecycleViewFragment>(instance);
+        }
 
-		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			if (isAdded()) {
-				readCacheData(getCacheKey());
-			}
-		}
-	};
+        @Override
+        public void onSuccess(int i, Header[] headers, byte[] responseBytes) {
+            if(mInstance!=null) {
+                BaseRecycleViewFragment instance = mInstance.get();
+                if (instance.isAdded()) {
+                    if (instance.mState == STATE_REFRESH) {
+                        instance.onRefreshNetworkSuccess();
+                        AppContext.setRefreshTime(instance.getCacheKey(),
+                                System.currentTimeMillis());
+                    }
+                    instance. executeParserTask(responseBytes);
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+            if(mInstance!=null) {
+                BaseRecycleViewFragment instance = mInstance.get();
+                if (instance.isAdded()) {
+                    instance.readCacheData(instance.getCacheKey());
+                }
+            }
+        }
+    }
+
+//	protected AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
+//
+//		@Override
+//		public void onSuccess(int statusCode, Header[] headers,
+//				byte[] responseBytes) {
+//			if (isAdded()) {
+//				if (mState == STATE_REFRESH) {
+//					onRefreshNetworkSuccess();
+//					AppContext.setRefreshTime(getCacheKey(),
+//							System.currentTimeMillis());
+//				}
+//				executeParserTask(responseBytes);
+//			}
+//		}
+//
+//		@Override
+//		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+//				Throwable arg3) {
+//			if (isAdded()) {
+//				readCacheData(getCacheKey());
+//			}
+//		}
+//	};
 
 	protected void executeOnLoadDataSuccess(List<?> data) {
 		if (mState == STATE_REFRESH)
@@ -400,7 +437,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+            int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
             int totalItemCount = mLayoutManager.getItemCount();
             if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
                 if (mState== STATE_NONE && mAdapter != null
