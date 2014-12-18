@@ -129,8 +129,10 @@ public class MessageDetailFragment extends BaseListFragment implements
 
 	@Override
 	protected ListBaseAdapter getListAdapter() {
-		return new MessageDetailAdapter();
-	}
+        ListBaseAdapter adapter = new MessageDetailAdapter();
+	    adapter.setLoadMoreHasBg(false);
+        return adapter;
+    }
 
 	@Override
 	protected String getCacheKeyPrefix() {

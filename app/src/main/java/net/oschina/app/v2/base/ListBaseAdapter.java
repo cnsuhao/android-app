@@ -31,8 +31,9 @@ public class ListBaseAdapter extends BaseAdapter {
 	protected int mScreenWidth;
 
 	private LayoutInflater mInflater;
+    private boolean mLoadMoreHasBg = true;
 
-	protected LayoutInflater getLayoutInflater(Context context) {
+    protected LayoutInflater getLayoutInflater(Context context) {
 		if (mInflater == null) {
 			mInflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -155,8 +156,12 @@ public class ListBaseAdapter extends BaseAdapter {
 		_loadFinishText = loadFinishText;
 	}
 
-	protected boolean loadMoreHasBg() {
-		return true;
+	public void setLoadMoreHasBg(boolean flag){
+        this.mLoadMoreHasBg = flag;
+    }
+
+    protected boolean loadMoreHasBg() {
+		return mLoadMoreHasBg;
 	}
 
 	@SuppressLint("InflateParams")
@@ -170,7 +175,7 @@ public class ListBaseAdapter extends BaseAdapter {
 						parent.getContext()).inflate(
 						R.layout.v2_list_cell_footer, null);
 				if (!loadMoreHasBg()) {
-					loadmore.setBackgroundDrawable(null);
+					loadmore.setBackgroundColor(parent.getContext().getResources().getColor(R.color.transparent));
 				}
 				ProgressBar progress = (ProgressBar) loadmore
 						.findViewById(R.id.progressbar);

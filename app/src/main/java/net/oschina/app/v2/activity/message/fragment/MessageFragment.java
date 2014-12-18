@@ -78,7 +78,9 @@ public class MessageFragment extends BaseListFragment implements
 
 	@Override
 	protected ListBaseAdapter getListAdapter() {
-		return new MessageAdapter();
+        ListBaseAdapter adapter = new MessageAdapter();
+        adapter.setLoadMoreHasBg(false);
+        return adapter;
 	}
 
 	@Override
@@ -146,7 +148,7 @@ public class MessageFragment extends BaseListFragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Messages message = (Messages) mAdapter.getItem(position - 1);
+		Messages message = (Messages) mAdapter.getItem(position);
 		if (message != null)
 			UIHelper.showMessageDetail(getActivity(), message.getFriendId(),
 					message.getFriendName());

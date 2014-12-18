@@ -1,8 +1,16 @@
 package net.oschina.app.v2.activity.comment.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.Serializable;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+
+import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.comment.adapter.CommentAdapter;
@@ -11,8 +19,8 @@ import net.oschina.app.v2.activity.news.fragment.NewsFragment;
 import net.oschina.app.v2.api.OperationResponseHandler;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseActivity;
-import net.oschina.app.v2.base.BaseListFragment;
-import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.base.BaseRecycleViewFragment;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.emoji.EmojiFragment;
 import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.v2.model.BlogCommentList;
@@ -25,21 +33,13 @@ import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.utils.HTMLSpirit;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 
-import com.tonlin.osc.happy.R;
-import com.umeng.analytics.MobclickAgent;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 
-public class CommentFrament extends BaseListFragment implements
-		OnOperationListener, EmojiTextListener, OnItemLongClickListener {
+public class CommentFrament extends BaseRecycleViewFragment implements
+		OnOperationListener, EmojiTextListener {
 
 	public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 	public static final String BUNDLE_KEY_BLOG = "BUNDLE_KEY_BLOG";
@@ -67,12 +67,6 @@ public class CommentFrament extends BaseListFragment implements
 		trans.replace(R.id.emoji_container, mEmojiFragment);
 		trans.commit();
 		activity.findViewById(R.id.emoji_container).setVisibility(View.GONE);
-	}
-
-	@Override
-	protected void initViews(View view) {
-		super.initViews(view);
-		mListView.setOnItemLongClickListener(this);
 	}
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -113,8 +107,8 @@ public class CommentFrament extends BaseListFragment implements
 	}
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
-		return new CommentAdapter(this);
+	protected RecycleBaseAdapter getListAdapter() {
+        return new CommentAdapter(this);
 	}
 
 	@Override
@@ -158,18 +152,16 @@ public class CommentFrament extends BaseListFragment implements
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		final Comment comment = (Comment) mAdapter.getItem(position - 1);
+	public void onItemClick(View view, int position) {
+		final Comment comment = (Comment) mAdapter.getItem(position);
 		if (comment == null)
 			return;
 		handleReplyComment(comment);
 	}
 
 	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view,
-			int position, long id) {
-		final Comment item = (Comment) mAdapter.getItem(position - 1);
+	public boolean onItemLongClick(View view,int position) {
+		final Comment item = (Comment) mAdapter.getItem(position);
 		if (item == null)
 			return false;
 		String[] items;

@@ -1,38 +1,5 @@
 package net.oschina.app.v2.activity.tweet.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.Serializable;
-import java.lang.ref.WeakReference;
-import java.util.List;
-
-import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.activity.comment.adapter.CommentAdapter;
-import net.oschina.app.v2.activity.comment.adapter.CommentAdapter.OnOperationListener;
-import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
-import net.oschina.app.v2.api.OperationResponseHandler;
-import net.oschina.app.v2.api.remote.NewsApi;
-import net.oschina.app.v2.base.BaseFragment;
-import net.oschina.app.v2.base.Constants;
-import net.oschina.app.v2.base.ListBaseAdapter;
-import net.oschina.app.v2.cache.CacheManager;
-import net.oschina.app.v2.emoji.EmojiFragment;
-import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
-import net.oschina.app.v2.model.Comment;
-import net.oschina.app.v2.model.CommentList;
-import net.oschina.app.v2.model.Result;
-import net.oschina.app.v2.model.Tweet;
-import net.oschina.app.v2.service.PublicCommentTask;
-import net.oschina.app.v2.service.ServerTaskUtils;
-import net.oschina.app.v2.ui.dialog.CommonDialog;
-import net.oschina.app.v2.ui.dialog.DialogHelper;
-import net.oschina.app.v2.ui.empty.EmptyLayout;
-import net.oschina.app.v2.utils.HTMLSpirit;
-import net.oschina.app.v2.utils.StringUtils;
-import net.oschina.app.v2.utils.TDevice;
-import net.oschina.app.v2.utils.UIHelper;
-
-import org.apache.http.Header;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -45,19 +12,17 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ZoomButtonsController;
 
@@ -68,16 +33,51 @@ import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
 
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.activity.comment.adapter.CommentAdapter;
+import net.oschina.app.v2.activity.comment.adapter.CommentAdapter.OnOperationListener;
+import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
+import net.oschina.app.v2.api.OperationResponseHandler;
+import net.oschina.app.v2.api.remote.NewsApi;
+import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.base.Constants;
+import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
+import net.oschina.app.v2.cache.CacheManager;
+import net.oschina.app.v2.emoji.EmojiFragment;
+import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
+import net.oschina.app.v2.model.Comment;
+import net.oschina.app.v2.model.CommentList;
+import net.oschina.app.v2.model.Result;
+import net.oschina.app.v2.model.Tweet;
+import net.oschina.app.v2.service.PublicCommentTask;
+import net.oschina.app.v2.service.ServerTaskUtils;
+import net.oschina.app.v2.ui.dialog.CommonDialog;
+import net.oschina.app.v2.ui.dialog.DialogHelper;
+import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.ui.widget.FixedRecyclerView;
+import net.oschina.app.v2.utils.HTMLSpirit;
+import net.oschina.app.v2.utils.StringUtils;
+import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
+
+import org.apache.http.Header;
+
+import java.io.ByteArrayInputStream;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
+import java.util.List;
+
 public class TweetDetailFragment extends BaseFragment implements
 		EmojiTextListener, EmojiFragmentControl, OnOperationListener,
-		OnItemClickListener, OnItemLongClickListener {
+        RecycleBaseAdapter.OnItemClickListener, RecycleBaseAdapter.OnItemLongClickListener {
 	protected static final String TAG = TweetDetailFragment.class
 			.getSimpleName();
 	private static final int REQUEST_CODE = 0x1;
 	private static final String CACHE_KEY_PREFIX = "tweet_";
 	private static final String CACHE_KEY_TWEET_COMMENT = "tweet_comment_";
 	private static final String TWEET_DETAIL_SCREEN = "tweet_detail_screen";
-	private ListView mListView;
+	private FixedRecyclerView mListView;
 	private EmptyLayout mEmptyView;
 	private ImageView mIvAvatar, mIvPic;
 	private TextView mTvName, mTvFrom, mTvTime, mTvCommentCount;
@@ -88,8 +88,11 @@ public class TweetDetailFragment extends BaseFragment implements
 	private CommentAdapter mAdapter;
 	private EmojiFragment mEmojiFragment;
 	private BroadcastReceiver mCommentReceiver;
+    private LinearLayoutManager mLayoutManager;
 
-	class CommentChangeReceiver extends BroadcastReceiver {
+
+
+    class CommentChangeReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -104,29 +107,23 @@ public class TweetDetailFragment extends BaseFragment implements
 		}
 	}
 
-	private OnScrollListener mScrollListener = new OnScrollListener() {
+    private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
 
-		@Override
-		public void onScrollStateChanged(AbsListView view, int scrollState) {
-		}
-
-		@Override
-		public void onScroll(AbsListView view, int firstVisibleItem,
-				int visibleItemCount, int totalItemCount) {
-			if (mAdapter != null
-					&& mAdapter.getDataSize() > 0
-					&& mListView.getLastVisiblePosition() == (mListView
-							.getCount() - 1)) {
-				if (mState == STATE_NONE
-						&& mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
-					mState = STATE_LOADMORE;
-					mCurrentPage++;
-					requestTweetCommentData(true);
-					// sendRequestCommentData();
-				}
-			}
-		}
-	};
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+            int totalItemCount = mLayoutManager.getItemCount();
+            if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
+                if (mState== STATE_NONE && mAdapter != null
+                        && mAdapter.getDataSize() > 0) {
+                    mState = STATE_LOADMORE;
+                    mCurrentPage++;
+                    requestTweetCommentData(true);
+                }
+            }
+        }
+    };
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -191,10 +188,10 @@ public class TweetDetailFragment extends BaseFragment implements
 	@SuppressLint("InflateParams")
 	private void initViews(View view) {
 		mEmptyView = (EmptyLayout) view.findViewById(R.id.error_layout);
-		mListView = (ListView) view.findViewById(R.id.listview);
-		mListView.setOnScrollListener(mScrollListener);
-		mListView.setOnItemClickListener(this);
-		mListView.setOnItemLongClickListener(this);
+		mListView = (FixedRecyclerView) view.findViewById(R.id.recycleView);
+		//mListView.setOnScrollListener(mScrollListener);
+		//mListView.setOnItemClickListener(this);
+		//mListView.setOnItemLongClickListener(this);
 		View header = LayoutInflater.from(getActivity()).inflate(
 				R.layout.v2_list_header_tweet_detail, null);
 		mIvAvatar = (ImageView) header.findViewById(R.id.iv_avatar);
@@ -225,9 +222,19 @@ public class TweetDetailFragment extends BaseFragment implements
 		});
 		initWebView(mContent);
 
-		mListView.addHeaderView(header);
+		//mListView.addHeaderView(header);
+
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mListView.setLayoutManager(mLayoutManager);
+        mListView.setHasFixedSize(true);
+        mListView.setOnScrollListener(mScrollListener);
+
 		mAdapter = new CommentAdapter(this, true);
-		mListView.setAdapter(mAdapter);
+		mAdapter.setHeaderView(header);
+        mAdapter.setOnItemClickListener(this);
+        mAdapter.setOnItemLongClickListener(this);
+        mListView.setAdapter(mAdapter);
 	}
 
 	@SuppressLint("SetJavaScriptEnabled")
@@ -347,20 +354,20 @@ public class TweetDetailFragment extends BaseFragment implements
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		final Comment comment = (Comment) mAdapter.getItem(position - 1);
+	public void onItemClick(View view) {
+        int position = mListView.getChildPosition(view);
+		final Comment comment = (Comment) mAdapter.getItem(position-1);
 		if (comment == null)
 			return;
 		handleReplyComment(comment);
 	}
 
 	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view,
-			int position, long id) {
+	public boolean onItemLongClick(View view) {
+        int position = mListView.getChildPosition(view);
 		if (position == 0)
 			return false;
-		final Comment item = (Comment) mAdapter.getItem(position - 1);
+		final Comment item = (Comment) mAdapter.getItem(position-1);
 		if (item == null)
 			return false;
 

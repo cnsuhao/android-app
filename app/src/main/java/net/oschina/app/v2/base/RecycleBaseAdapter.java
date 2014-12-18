@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.TLog;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -36,11 +37,14 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
 
     private LayoutInflater mInflater;
 
+
     @SuppressWarnings("rawtypes")
     protected ArrayList _data = new ArrayList();
 
     private WeakReference<OnItemClickListener> mListener;
     private WeakReference<OnItemLongClickListener> mLongListener;
+    private View mHeaderView;
+
 
     public interface OnItemClickListener {
         public void onItemClick(View view);
@@ -77,20 +81,15 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
 
     @Override
     public int getItemCount() {
-        switch (getState()) {
-            case STATE_EMPTY_ITEM:
-            case STATE_NETWORK_ERROR:
-            case STATE_LOAD_MORE:
-            case STATE_NO_MORE:
-                return getDataSize() + 1;
-            case STATE_NO_DATA:
-                return 0;
-            case STATE_LESS_ONE_PAGE:
-                return getDataSize();
-            default:
-                break;
+        int size = getDataSize();
+        if (hasFooter()) {
+            size += 1;
         }
-        return getDataSize();
+        if (hasHeader()) {
+            size += 1;
+        }
+        TLog.log("get item count:"+size +" data size:"+getDataSize());
+        return size;
     }
 
     public int getDataSize() {
@@ -179,11 +178,15 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
         this.mLongListener = new WeakReference<OnItemLongClickListener>(listener);
     }
 
-    private boolean hasHeader() {
-        return false;
+    public boolean hasHeader() {
+        return mHeaderView != null;
     }
 
-    private boolean hasFooter(int position) {
+    public void setHeaderView(View headerView) {
+        mHeaderView = headerView;
+    }
+
+    private boolean hasFooter() {
         switch (getState()) {
             case STATE_EMPTY_ITEM:
             case STATE_LOAD_MORE:
@@ -198,8 +201,9 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
     @Override
     public int getItemViewType(int position) {
         if (position == 0 && hasHeader()) {
+            // TLog.log("getItemViewType: hasHeader");
             return TYPE_HEADER;
-        } else if (position == getItemCount() - 1 && hasFooter(position)) {
+        } else if (position == getItemCount() - 1 && hasFooter()) {
             return TYPE_FOOTER;
         }
         return super.getItemViewType(position);
@@ -208,17 +212,21 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        //TLog.log("onCreateViewHolder: viewType:" + viewType);
         ViewHolder vh;
         if (viewType == TYPE_FOOTER) {
             View v = getLayoutInflater(parent.getContext())
                     .inflate(R.layout.v2_list_cell_footer, null);
             vh = new FooterViewHolder(viewType, v);
+        } else if (viewType == TYPE_HEADER) {
+            if (mHeaderView == null) {
+                throw new RuntimeException("Header view is null");
+            }
+            vh = new HeaderViewHolder(viewType, mHeaderView);
         } else {
-            if (viewType == TYPE_HEADER) {
-                vh = onCreateHeaderViewHolder(parent, viewType);
-            } else {
-                final View itemView = onCreateItemView(parent, viewType);
-                if (itemView != null) {
+            final View itemView = onCreateItemView(parent, viewType);
+            if (itemView != null) {
+                if (mListener != null)
                     itemView.setOnClickListener(new View.OnClickListener() {
 
                         @Override
@@ -229,6 +237,7 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
                             }
                         }
                     });
+                if (mLongListener != null)
                     itemView.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
@@ -239,21 +248,26 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
                             return false;
                         }
                     });
-                }
-                vh = onCreateItemViewHolder(itemView, viewType);
             }
+            vh = onCreateItemViewHolder(itemView, viewType);
         }
         return vh;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (holder.viewType == TYPE_HEADER) {
+        //TLog.log("onBindViewHolder:"+holder.viewType +" pos:"+position+" "+ holder);
+        if ((getItemViewType(position) == TYPE_HEADER && position == 0)
+                || holder instanceof HeaderViewHolder) {
+            TLog.log("bind Header view:" + position + " " + holder.viewType);
             onBindHeaderViewHolder(holder, position);
-        } else if (holder.viewType == TYPE_FOOTER) {
+        } else if ((getItemViewType(position) == TYPE_FOOTER
+                && position == getItemCount() - 1) || holder instanceof FooterViewHolder) {
+            TLog.log("bind Footer view:" + position + " " + holder.viewType);
             onBindFooterViewHolder(holder, position);
         } else {
-            onBindItemViewHolder(holder, position);
+            TLog.log("bind item view:" + position + " " + holder.viewType);
+            onBindItemViewHolder(holder, hasHeader() ? position -1:position);
         }
     }
 
@@ -302,13 +316,13 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
 
     protected abstract ViewHolder onCreateItemViewHolder(View view, int viewType);
 
-    protected ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
-        if (hasHeader()) {
-            throw new RuntimeException("hasHeader return true, you must implement onCreateHeaderViewHolder");
-        }
-        //TODO do nothing...
-        return null;
-    }
+//    private ViewHolder onCreateHeaderViewHolder(View headerView, int viewType) {
+//        if (hasHeader()) {
+//            throw new RuntimeException("hasHeader return true, you must implement onCreateHeaderViewHolder");
+//        }
+//        //TODO do nothing...
+//        return null;
+//    }
 
     protected void onBindHeaderViewHolder(ViewHolder holder, int position) {
         //TODO do nothing...
@@ -324,6 +338,13 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
         public ViewHolder(int viewType, View v) {
             super(v);
             this.viewType = viewType;
+        }
+    }
+
+    public static class HeaderViewHolder extends ViewHolder {
+
+        public HeaderViewHolder(int viewType, View v) {
+            super(viewType, v);
         }
     }
 

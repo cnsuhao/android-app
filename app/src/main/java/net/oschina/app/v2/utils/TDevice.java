@@ -567,9 +567,13 @@ public class TDevice {
 	public static void copyTextToBoard(String string) {
 		if (TextUtils.isEmpty(string))
 			return;
-		ClipboardManager clip = (ClipboardManager) BaseApplication.context()
-				.getSystemService(Context.CLIPBOARD_SERVICE);
-		clip.setText(string);
+        try {
+            ClipboardManager clip = (ClipboardManager) BaseApplication.context()
+                    .getSystemService(Context.CLIPBOARD_SERVICE);
+            clip.setText(string);
+        }catch (Exception e){
+            e.printStackTrace();;
+        }
 	}
 
 	public static void sendEmail(Context context, String email, String content) {
