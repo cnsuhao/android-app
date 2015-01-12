@@ -176,12 +176,12 @@ public abstract class BaseActivity extends ActionBarActivity implements
             //actionBar.setLogo(0);
             actionBar.setPadding((int)TDevice.dpToPixel(16),0,0,0);
 		}
-        actionBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        /*actionBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 return onOptionsItemSelected(menuItem);
             }
-        });
+        });*/
 	}
 
 	public void setActionBarTitle(int resId) {
