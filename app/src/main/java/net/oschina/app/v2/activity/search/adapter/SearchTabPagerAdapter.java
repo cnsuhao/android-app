@@ -7,7 +7,7 @@ import net.oschina.app.v2.activity.search.SearchTab;
 import net.oschina.app.v2.activity.search.fragment.SearchFragment;
 import net.oschina.app.v2.base.BaseListFragment;
 import net.oschina.app.v2.base.BaseTabFragment;
-import net.oschina.app.v2.ui.pagertab.SlidingTabPagerAdapter;
+import net.oschina.app.v2.ui.tab.SlidingTabPagerAdapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

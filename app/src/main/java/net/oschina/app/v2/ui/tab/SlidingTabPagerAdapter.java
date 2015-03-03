@@ -1,15 +1,15 @@
-package net.oschina.app.v2.ui.pagertab;
+package net.oschina.app.v2.ui.tab;
 
 import net.oschina.app.v2.base.BaseTabFragment;
 import net.oschina.app.v2.base.BaseTabFragment.TabChangedListener;
-import net.oschina.app.v2.ui.pagertab.PagerSlidingTabStrip.OnTabClickListener;
+//import net.oschina.app.v2.ui.pagertab.PagerSlidingTabStrip.OnTabClickListener;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 public abstract class SlidingTabPagerAdapter extends FragmentPagerAdapter
-		implements TabChangedListener, OnTabClickListener {
+		implements TabChangedListener {//}, OnTabClickListener {
 
 	protected final Context context;
 	protected final BaseTabFragment[] fragments;
@@ -86,10 +86,10 @@ public abstract class SlidingTabPagerAdapter extends FragmentPagerAdapter
 		}
 	}
 
-	@Override
-	public void onTabClicked(int i) {
-		BaseTabFragment fragment = getFragmentByPosition(i);
-		if (fragment != null)
-			fragment.i();
-	}
+//	@Override
+//	public void onTabClicked(int i) {
+//		BaseTabFragment fragment = getFragmentByPosition(i);
+//		if (fragment != null)
+//			fragment.i();
+//	}
 }

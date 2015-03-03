@@ -32,6 +32,13 @@
         <item name="centered">true</item>
     </style>
 
+    <style name="ActivityTransitions" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter_slide_in_left</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit_fade_back</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter_fade_forward</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit_slide_out_right</item>
+    </style>
+
     <style name="ActionBarBaseStyle" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="background">@color/actionbar_background</item>
         <item name="titleTextStyle">@style/TitleStyle</item>
@@ -51,11 +58,12 @@
         <item name="dropDownListViewStyle">@style/DrapDownListView</item>
         <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
 
-
         <item name="colorPrimary">@color/actionbar_background</item>
         <item name="colorPrimaryDark">@color/theme_primary_dark</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
+        <item name="android:windowAnimationStyle">@style/ActivityTransitions</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">

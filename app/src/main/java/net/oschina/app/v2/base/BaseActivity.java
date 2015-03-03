@@ -116,7 +116,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
                 View view = inflateView(layoutRes);
                 Toolbar.LayoutParams params = new Toolbar.LayoutParams(LayoutParams.MATCH_PARENT,
                         LayoutParams.MATCH_PARENT);
-                //actionBar.addView(view, params);
+                actionBar.addView(view, params);
             }
             // This is Test
 			//View view = inflateView(layoutRes == 0 ? R.layout.v2_actionbar_custom_backtitle

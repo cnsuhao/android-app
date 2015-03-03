@@ -11,6 +11,7 @@ import net.oschina.app.v2.activity.message.fragment.MessageForwardFragment;
 import net.oschina.app.v2.activity.message.fragment.MessagePublicFragment;
 import net.oschina.app.v2.activity.news.DetailActivity;
 import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
+import net.oschina.app.v2.activity.search.SearchActivity;
 import net.oschina.app.v2.activity.user.LoginActivity;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.model.Active;
@@ -461,7 +462,9 @@ import com.tonlin.osc.happy.R;
 	public static void showSearch(Context context) {
 		// Intent intent = new Intent(context, Search.class);
 		// context.startActivity(intent);
-		showSimpleBack(context, SimpleBackPage.SEARCH);
+		//showSimpleBack(context, SimpleBackPage.SEARCH);
+        Intent intent = new Intent(context, SearchActivity.class);
+        context.startActivity(intent);
 	}
 
 	/**

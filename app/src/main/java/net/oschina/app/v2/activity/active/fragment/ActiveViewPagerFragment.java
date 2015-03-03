@@ -2,19 +2,18 @@ package net.oschina.app.v2.activity.active.fragment;
 
 import net.oschina.app.v2.activity.active.adapter.ActiveTabPagerAdapter;
 import net.oschina.app.v2.base.Constants;
-import net.oschina.app.v2.ui.BadgeView;
-import net.oschina.app.v2.ui.pagertab.PagerSlidingTabStrip;
+import net.oschina.app.v2.ui.tab.SlidingTabLayout;
 import net.oschina.app.v2.utils.TLog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +23,11 @@ import com.tonlin.osc.happy.R;
 public class ActiveViewPagerFragment extends Fragment implements
 		OnPageChangeListener {
 
-	private PagerSlidingTabStrip mTabStrip;
+	//private PagerSlidingTabStrip mTabStrip;
+    private SlidingTabLayout mSlidingTabLayout;
 	private ViewPager mViewPager;
 	private ActiveTabPagerAdapter mTabAdapter;
-	private BadgeView mBvAtMe,mBvComment,mBvMsg;
+	//private BadgeView mBvAtMe,mBvComment,mBvMsg;
 
 	private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
 
@@ -43,30 +43,34 @@ public class ActiveViewPagerFragment extends Fragment implements
 					+ reviewCount + " newFans:" + newFansCount + " active:"
 					+ activeCount);
 
+            mSlidingTabLayout.setMessageCount(0,atmeCount);
 			if (atmeCount > 0) {
-				mBvAtMe.setText(atmeCount + "");
-				mBvAtMe.show();
+				//mBvAtMe.setText(atmeCount + "");
+				//mBvAtMe.show();
 			} else {
-				mBvAtMe.hide();
+				//mBvAtMe.hide();
 			}
-			
+
+            mSlidingTabLayout.setMessageCount(2,reviewCount);
 			if (reviewCount > 0) {
-				mBvComment.setText(reviewCount + "");
-				mBvComment.show();
+				//mBvComment.setText(reviewCount + "");
+				//mBvComment.show();
 			} else {
-				mBvComment.hide();
+				//mBvComment.hide();
 			}
-			
+
+            mSlidingTabLayout.setMessageCount(4,msgCount);
 			if (msgCount > 0) {
-				mBvMsg.setText(msgCount + "");
-				mBvMsg.show();
+				//mBvMsg.setText(msgCount + "");
+				//mBvMsg.show();
 			} else {
-				mBvMsg.hide();
+				//mBvMsg.hide();
 			}
 		}
 	};
 
-	@Override
+
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_NOTICE);
@@ -84,7 +88,9 @@ public class ActiveViewPagerFragment extends Fragment implements
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.v2_fragment_viewpager, container,
 				false);
-		mTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
+		//mTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
+        mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setCustomTabView(R.layout.v2_tab_indicator2, R.id.tv_name);
 		mViewPager = (ViewPager) view.findViewById(R.id.main_tab_pager);
 
 		if (mTabAdapter == null) {
@@ -94,39 +100,47 @@ public class ActiveViewPagerFragment extends Fragment implements
 		mViewPager.setOffscreenPageLimit(mTabAdapter.getCacheCount());
 		mViewPager.setAdapter(mTabAdapter);
 		mViewPager.setOnPageChangeListener(this);
-		mTabStrip.setViewPager(mViewPager);
+		//mTabStrip.setViewPager(mViewPager);
 
-		mBvAtMe = new BadgeView(getActivity(), mTabStrip.getBadgeView(1));
-		mBvAtMe.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-		mBvAtMe.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
-		mBvAtMe.setBackgroundResource(R.drawable.tab_notification_bg);
+        Resources res = getResources();
+        mSlidingTabLayout.setSelectedIndicatorColors(res.getColor(R.color.tab_selected_strip));
+        mSlidingTabLayout.setDistributeEvenly(true);
+        mSlidingTabLayout.setViewPager(mViewPager);
 
-		mBvComment = new BadgeView(getActivity(), mTabStrip.getBadgeView(2));
-		mBvComment.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-		mBvComment.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
-		mBvComment.setBackgroundResource(R.drawable.tab_notification_bg);
-		
-		mBvMsg = new BadgeView(getActivity(), mTabStrip.getBadgeView(4));
-		mBvMsg.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-		mBvMsg.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
-		mBvMsg.setBackgroundResource(R.drawable.tab_notification_bg);
+		//mBvAtMe = new BadgeView(getActivity(), mSlidingTabLayout.getBadgeView(1));
+        //mBvAtMe.setBadgeMargin(0);
+        //mBvAtMe.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+		//mBvAtMe.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+		//mBvAtMe.setBackgroundResource(R.drawable.tab_notification_bg);
+
+		//mBvComment = new BadgeView(getActivity(), mSlidingTabLayout.getBadgeView(2));
+        //mBvComment.setBadgeMargin(0);
+		//mBvComment.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+		//mBvComment.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+		//mBvComment.setBackgroundResource(R.drawable.tab_notification_bg);
+
+		//mBvMsg = new BadgeView(getActivity(), mSlidingTabLayout.getBadgeView(4));
+        //mBvMsg.setBadgeMargin(0);
+		//mBvMsg.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+		//mBvMsg.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+		//mBvMsg.setBackgroundResource(R.drawable.tab_notification_bg);
 		return view;
 	}
 
 	@Override
 	public void onPageScrollStateChanged(int arg0) {
-		mTabStrip.onPageScrollStateChanged(arg0);
+		//mTabStrip.onPageScrollStateChanged(arg0);
 	}
 
 	@Override
 	public void onPageScrolled(int arg0, float arg1, int arg2) {
-		mTabStrip.onPageScrolled(arg0, arg1, arg2);
+		//mTabStrip.onPageScrolled(arg0, arg1, arg2);
 		mTabAdapter.onPageScrolled(arg0);
 	}
 
 	@Override
 	public void onPageSelected(int arg0) {
-		mTabStrip.onPageSelected(arg0);
+		//mTabStrip.onPageSelected(arg0);
 		mTabAdapter.onPageSelected(arg0);
 	}
 }

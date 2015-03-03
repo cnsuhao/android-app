@@ -16,7 +16,8 @@
     
     <color name="actionbar_item_background_normal">@color/transparent</color>
     <color name="actionbar_item_background_pressed">#0b751e</color>
-    
+
+    <color name="tab_selected_strip">#ffffff</color>
     <color name="tab_strip_text_selected">@color/main_green</color>
     <color name="tab_strip_text_unselected">@color/main_black</color>
     <color name="tab_strip_background">#66fafafa</color>

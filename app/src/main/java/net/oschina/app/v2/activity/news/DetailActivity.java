@@ -60,7 +60,7 @@ public class DetailActivity extends BaseActivity implements
 
 	@Override
 	protected int getActionBarCustomView() {
-		return R.layout.v2_actionbar_custom_detail;
+		return 0;//R.layout.v2_actionbar_custom_detail;
 	}
 
 	@Override

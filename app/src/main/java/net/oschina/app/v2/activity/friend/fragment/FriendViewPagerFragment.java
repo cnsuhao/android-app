@@ -2,18 +2,18 @@ package net.oschina.app.v2.activity.friend.fragment;
 
 import net.oschina.app.v2.activity.friend.adapter.FriendTabPagerAdapter;
 import net.oschina.app.v2.base.Constants;
-import net.oschina.app.v2.ui.BadgeView;
-import net.oschina.app.v2.ui.pagertab.PagerSlidingTabStrip;
+import net.oschina.app.v2.ui.tab.SlidingTabLayout;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,28 +25,31 @@ public class FriendViewPagerFragment extends Fragment implements
 
 	public static final String BUNDLE_KEY_TABIDX = "BUNDLE_KEY_TABIDX";
 
-	private PagerSlidingTabStrip mTabStrip;
+	//private PagerSlidingTabStrip mTabStrip;
+    private SlidingTabLayout mSlidingTabLayout;
 	private ViewPager mViewPager;
 	private FriendTabPagerAdapter mTabAdapter;
 
 	private int mInitTabIdx;
-	private BadgeView mBvNewFans;
+	//private BadgeView mBvNewFans;
 
 	private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			int newFansCount = intent.getIntExtra("newFansCount", 0);// 新粉丝
+            mSlidingTabLayout.setMessageCount(1,newFansCount);
 			if (newFansCount > 0) {
-				mBvNewFans.setText(newFansCount + "");
-				mBvNewFans.show();
+				//mBvNewFans.setText(newFansCount + "");
+				//mBvNewFans.show();
 			} else {
-				mBvNewFans.hide();
+				//mBvNewFans.hide();
 			}
 		}
 	};
 
-	@Override
+
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle args = getArguments();
@@ -67,7 +70,9 @@ public class FriendViewPagerFragment extends Fragment implements
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.v2_fragment_viewpager, container,
 				false);
-		mTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
+		//mTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
+        mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setCustomTabView(R.layout.v2_tab_indicator2, R.id.tv_name);
 		mViewPager = (ViewPager) view.findViewById(R.id.main_tab_pager);
 
 		if (mTabAdapter == null) {
@@ -77,31 +82,35 @@ public class FriendViewPagerFragment extends Fragment implements
 		mViewPager.setOffscreenPageLimit(mTabAdapter.getCacheCount());
 		mViewPager.setAdapter(mTabAdapter);
 		mViewPager.setOnPageChangeListener(this);
-		mTabStrip.setViewPager(mViewPager);
+		//mTabStrip.setViewPager(mViewPager);
 
 		mViewPager.setCurrentItem(mInitTabIdx);
 
-		mBvNewFans = new BadgeView(getActivity(), mTabStrip.getBadgeView(1));
-		mBvNewFans.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-		mBvNewFans.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
-		mBvNewFans.setBackgroundResource(R.drawable.tab_notification_bg);
+        Resources res = getResources();
+        mSlidingTabLayout.setSelectedIndicatorColors(res.getColor(R.color.tab_selected_strip));
+        mSlidingTabLayout.setDistributeEvenly(true);
+        mSlidingTabLayout.setViewPager(mViewPager);
+		//mBvNewFans = new BadgeView(getActivity(), mTabStrip.getBadgeView(1));
+		//mBvNewFans.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+		//mBvNewFans.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+		//mBvNewFans.setBackgroundResource(R.drawable.tab_notification_bg);
 		return view;
 	}
 
 	@Override
 	public void onPageScrollStateChanged(int arg0) {
-		mTabStrip.onPageScrollStateChanged(arg0);
+		//mTabStrip.onPageScrollStateChanged(arg0);
 	}
 
 	@Override
 	public void onPageScrolled(int arg0, float arg1, int arg2) {
-		mTabStrip.onPageScrolled(arg0, arg1, arg2);
+		//mTabStrip.onPageScrolled(arg0, arg1, arg2);
 		mTabAdapter.onPageScrolled(arg0);
 	}
 
 	@Override
 	public void onPageSelected(int arg0) {
-		mTabStrip.onPageSelected(arg0);
+		//mTabStrip.onPageSelected(arg0);
 		mTabAdapter.onPageSelected(arg0);
 	}
 }

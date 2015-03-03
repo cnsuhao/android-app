@@ -6,7 +6,7 @@ import java.util.List;
 import net.oschina.app.v2.activity.favorite.FavoriteTab;
 import net.oschina.app.v2.activity.favorite.fragment.FavoriteFragment;
 import net.oschina.app.v2.base.BaseTabFragment;
-import net.oschina.app.v2.ui.pagertab.SlidingTabPagerAdapter;
+import net.oschina.app.v2.ui.tab.SlidingTabPagerAdapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

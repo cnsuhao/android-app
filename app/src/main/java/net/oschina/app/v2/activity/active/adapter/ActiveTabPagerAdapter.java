@@ -6,7 +6,7 @@ import java.util.List;
 import net.oschina.app.v2.activity.active.ActiveTab;
 import net.oschina.app.v2.activity.active.fragment.ActiveFragment;
 import net.oschina.app.v2.base.BaseTabFragment;
-import net.oschina.app.v2.ui.pagertab.SlidingTabPagerAdapter;
+import net.oschina.app.v2.ui.tab.SlidingTabPagerAdapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

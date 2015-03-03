@@ -6,7 +6,7 @@ import java.util.List;
 import net.oschina.app.v2.activity.news.NewsTab;
 import net.oschina.app.v2.activity.news.fragment.NewsFragment;
 import net.oschina.app.v2.base.BaseTabFragment;
-import net.oschina.app.v2.ui.pagertab.SlidingTabPagerAdapter;
+import net.oschina.app.v2.ui.tab.SlidingTabPagerAdapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -61,6 +61,7 @@ public final class NewsTabPagerAdapter extends SlidingTabPagerAdapter {
 		return NewsTab.values().length;
 	}
 
+    @Override
 	public final CharSequence getPageTitle(int i) {
 		NewsTab tab = NewsTab.getTabByIdx(i);
 		int idx = 0;

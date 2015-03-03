@@ -10,6 +10,7 @@
         android:layout_height="match_parent">
         <net.oschina.app.v2.ui.widget.FixedRecyclerView
             android:id="@+id/recycleView"
+            android:listDivider="@color/red"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <!--android:descendantFocusability="blocksDescendants"-->

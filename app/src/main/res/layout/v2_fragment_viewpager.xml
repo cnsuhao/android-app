@@ -3,16 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <net.oschina.app.v2.ui.pagertab.PagerSlidingTabStrip
-        android:id="@+id/tabs"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/pager_sliding_tab_strip_height"
-        android:background="@color/white" />
+    <net.oschina.app.v2.ui.tab.SlidingTabLayout
+        android:id="@+id/sliding_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/actionbar_background"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/main_tab_pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tabs" />
+        android:layout_below="@id/sliding_tabs" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sliding_tabs"
+        android:background="@drawable/header_shadow"/>
 
 </RelativeLayout>

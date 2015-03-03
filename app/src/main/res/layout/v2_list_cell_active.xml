@@ -123,7 +123,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:drawableLeft="@drawable/ic_comment_count"
+            android:drawableRight="@drawable/ic_comment_count"
             android:drawablePadding="@dimen/space_2"
             android:gravity="center_vertical"
             android:textColor="@color/main_gray"
