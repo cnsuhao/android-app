@@ -40,7 +40,12 @@
             android:textColor="#ffffff"
             android:textSize="18sp" />
     </LinearLayout>
-
+    <ImageView
+        android:id="@+id/iv_actionbar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/umeng_fb_conversation_header"
+        android:background="@drawable/header_shadow" />
     <RelativeLayout
         android:id="@+id/umeng_fb_conversation_contact_entry"
         android:layout_width="fill_parent"

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 
 import com.tonlin.osc.happy.R;
 
@@ -84,4 +85,8 @@ public class SimpleBackActivity extends BaseActivity {
 	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
 		super.onActivityResult(arg0, arg1, arg2);
 	}
+
+    public void hideActionBarShadow() {
+        findViewById(R.id.iv_actionbar_shadow).setVisibility(View.GONE);
+    }
 }

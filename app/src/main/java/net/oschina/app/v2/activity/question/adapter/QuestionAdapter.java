@@ -6,6 +6,7 @@ import net.oschina.app.v2.model.Post;
 import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.utils.DateUtil;
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -37,13 +38,20 @@ public class QuestionAdapter extends RecycleBaseAdapter {
 
         vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
         vh.avatar.setAvatarUrl(item.getFace());
+
+        vh.body.setText(item.getBody());
+        if(TextUtils.isEmpty(item.getBody()))
+            vh.body.setVisibility(View.GONE);
+        else
+            vh.body.setVisibility(View.VISIBLE);
     }
 
     static class ViewHolder extends RecycleBaseAdapter.ViewHolder {
-		public TextView title, source,avCount, time;
+		public TextView title, source,avCount, time,body;
 		public AvatarView avatar;
 		public ViewHolder(int viewType,View view) {
             super(viewType,view);
+            body = (TextView) view.findViewById(R.id.tv_body);
 			title = (TextView) view.findViewById(R.id.tv_title);
 			source = (TextView) view.findViewById(R.id.tv_source);
 			avCount = (TextView) view.findViewById(R.id.tv_answer_view_count);

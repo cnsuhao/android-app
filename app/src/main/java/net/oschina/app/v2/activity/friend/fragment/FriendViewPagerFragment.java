@@ -1,5 +1,6 @@
 package net.oschina.app.v2.activity.friend.fragment;
 
+import net.oschina.app.v2.activity.common.SimpleBackActivity;
 import net.oschina.app.v2.activity.friend.adapter.FriendTabPagerAdapter;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.ui.tab.SlidingTabLayout;
@@ -94,6 +95,8 @@ public class FriendViewPagerFragment extends Fragment implements
 		//mBvNewFans.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 		//mBvNewFans.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
 		//mBvNewFans.setBackgroundResource(R.drawable.tab_notification_bg);
+
+        ((SimpleBackActivity)getActivity()).hideActionBarShadow();
 		return view;
 	}
 

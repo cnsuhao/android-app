@@ -88,7 +88,7 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
         if (hasHeader()) {
             size += 1;
         }
-        TLog.log("get item count:"+size +" data size:"+getDataSize());
+        //TLog.log("get item count:"+size +" data size:"+getDataSize());
         return size;
     }
 

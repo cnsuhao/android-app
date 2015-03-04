@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <include layout="@layout/v2_view_actionbar" />
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/v2_view_actionbar" />
 
-    <FrameLayout
-        android:id="@+id/container"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/actionBar"
+        android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/emoji_container"
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <FrameLayout
+            android:id="@+id/emoji_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_actionbar_shadow"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/actionBar"
+        android:background="@drawable/header_shadow" />
+</RelativeLayout>

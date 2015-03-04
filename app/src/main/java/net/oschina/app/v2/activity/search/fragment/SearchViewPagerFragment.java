@@ -34,10 +34,8 @@ public class SearchViewPagerFragment extends BaseFragment implements
 	private ViewPager mViewPager;
 	private SearchTabPagerAdapter mTabAdapter;
 
-	private EditText mEtSearch;
-	private View mRlContent;
-	private ImageButton mIbClear;
-	private View mIbSearch;
+    private View mRlContent;
+
     private SlidingTabLayout mSlidingTabLayout;
 
     @Override
@@ -71,39 +69,7 @@ public class SearchViewPagerFragment extends BaseFragment implements
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setViewPager(mViewPager);
 
-		mIbSearch = view.findViewById(R.id.ib_search);
-		mIbSearch.setOnClickListener(this);
-		mIbClear = (ImageButton) view.findViewById(R.id.ib_clear);
-		mIbClear.setOnClickListener(this);
-		mEtSearch = (EditText) view.findViewById(R.id.et_content);
-		mEtSearch.setOnClickListener(this);
-		mEtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-		mEtSearch.addTextChangedListener(new SimpleTextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				if (mEtSearch.getText().toString().length() > 0) {
-					mIbClear.setVisibility(View.VISIBLE);
-					mIbSearch.setVisibility(View.VISIBLE);
-				} else {
-					mIbClear.setVisibility(View.GONE);
-					mIbSearch.setVisibility(View.GONE);
-				}
-			}
-		});
-		mEtSearch.setOnEditorActionListener(new OnEditorActionListener() {
-			public boolean onEditorAction(TextView v, int actionId,
-					KeyEvent event) {
-				if (actionId == EditorInfo.IME_ACTION_SEARCH
-						|| (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-					handleSearch();
-					return true;
-				}
-				return false;
-			}
-		});
-		mEtSearch.requestFocus();
-		mRlContent = view.findViewById(R.id.rl_content);
+        mRlContent = view.findViewById(R.id.rl_content);
 		return view;
 	}
 
@@ -124,24 +90,10 @@ public class SearchViewPagerFragment extends BaseFragment implements
 		mTabAdapter.onPageSelected(arg0);
 	}
 
-	@Override
-	public void onClick(View v) {
-		final int id = v.getId();
-		if (id == R.id.ib_search) {
-			handleSearch();
-		} else if (id == R.id.ib_clear) {
-			mEtSearch.getText().clear();
-		}
-	}
-
-	private void handleSearch() {
-		String content = mEtSearch.getText().toString().trim();
+	public void handleSearch(String content) {
 		if (!TextUtils.isEmpty(content)) {
 			mTabAdapter.search(content);
 			mRlContent.setVisibility(View.VISIBLE);
-			TDevice.hideSoftKeyboard(mEtSearch);
-		} else {
-			AppContext.showToastShort(R.string.tip_search_content_empty);
 		}
 	}
 }

@@ -3,6 +3,7 @@ package net.oschina.app.v2.activity.news.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,11 @@ public class NewsRecycleAdapter extends RecycleBaseAdapter {
         NewsRecycleAdapter.ViewHolder holder = ( NewsRecycleAdapter.ViewHolder)vh;
         News news = (News) _data.get(position);
         holder.title.setText(news.getTitle());
+        holder.body.setText(news.getBody());
+        if(TextUtils.isEmpty(news.getBody()))
+            holder.body.setVisibility(View.GONE);
+        else
+            holder.body.setVisibility(View.VISIBLE);
         holder.source.setText(news.getAuthor());
         holder.time.setText(DateUtil.getFormatTime(news.getPubDate()));
         //StringUtils.friendly_time(news.getPubDate())
@@ -112,11 +118,12 @@ public class NewsRecycleAdapter extends RecycleBaseAdapter {
 //	}
 
 	public static class ViewHolder extends RecycleBaseAdapter.ViewHolder {
-		public TextView title, source, time,commentCount;
+		public TextView title, source, time,commentCount,body;
 		public ImageView tip;
 		public ViewHolder(int viewType,View view) {
             super(viewType,view);
 			title = (TextView) view.findViewById(R.id.tv_title);
+            body = (TextView) view.findViewById(R.id.tv_body);
 			source = (TextView) view.findViewById(R.id.tv_source);
 			time = (TextView) view.findViewById(R.id.tv_time);
 			commentCount = (TextView) view.findViewById(R.id.tv_comment_count);

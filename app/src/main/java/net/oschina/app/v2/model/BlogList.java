@@ -74,7 +74,9 @@ public class BlogList extends Entity implements ListEntity {
 									.toInt(xmlParser.nextText(), 0);
 						} else if (tag.equalsIgnoreCase("title")) {
 							blog.setTitle(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("url")) {
+						} else if (tag.equalsIgnoreCase("body")) {
+                            blog.setBody(xmlParser.nextText());
+                        }  else if (tag.equalsIgnoreCase("url")) {
 							blog.setUrl(xmlParser.nextText());
 						} else if (tag.equalsIgnoreCase("pubDate")) {
 							blog.setPubDate(xmlParser.nextText());

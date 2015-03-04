@@ -1,5 +1,6 @@
 package net.oschina.app.v2.activity.favorite.fragment;
 
+import net.oschina.app.v2.activity.common.SimpleBackActivity;
 import net.oschina.app.v2.activity.favorite.adapter.FavoriteTabPagerAdapter;
 import net.oschina.app.v2.ui.tab.SlidingTabLayout;
 
@@ -46,6 +47,8 @@ public class FavoriteViewPagerFragment extends Fragment implements
         mSlidingTabLayout.setSelectedIndicatorColors(res.getColor(R.color.tab_selected_strip));
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setViewPager(mViewPager);
+
+        ((SimpleBackActivity)getActivity()).hideActionBarShadow();
 		return view;
 	}
 

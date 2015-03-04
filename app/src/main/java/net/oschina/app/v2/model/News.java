@@ -25,13 +25,13 @@ public class News extends Entity{
 	public final static String NODE_ID = "id";
 	public final static String NODE_TITLE = "title";
 	public final static String NODE_URL = "url";
-	public final static String NODE_BODY = "body";
 	public final static String NODE_AUTHORID = "authorid";
 	public final static String NODE_AUTHOR = "author";
 	public final static String NODE_PUBDATE = "pubDate";
 	public final static String NODE_COMMENTCOUNT = "commentCount";
 	public final static String NODE_FAVORITE = "favorite";
 	public final static String NODE_START = "news";
+    public final static String NODE_BODY = "body";
 	
 	public final static String NODE_SOFTWARELINK = "softwarelink";
 	public final static String NODE_SOFTWARENAME = "softwarename";

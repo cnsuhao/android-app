@@ -5,6 +5,7 @@ import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.Blog;
 import net.oschina.app.v2.utils.DateUtil;
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -40,14 +41,21 @@ public class BlogAdapter extends RecycleBaseAdapter {
         }
         vh.commentCount.setText(vh.commentCount.getContext().getString(
                 R.string.comment_count, item.getCommentCount()));
+
+        vh.body.setText(TextUtils.isEmpty(item.getBody())?"":item.getBody().trim());
+        if(TextUtils.isEmpty(item.getBody()))
+            vh.body.setVisibility(View.GONE);
+        else
+            vh.body.setVisibility(View.VISIBLE);
     }
 
     static class ViewHolder extends RecycleBaseAdapter.ViewHolder{
-		public TextView title, source, time, commentCount;
+		public TextView title, source, time, commentCount,body;
 		public ImageView tip;
 
 		public ViewHolder(int viewType,View view) {
             super(viewType,view);
+            body = (TextView) view.findViewById(R.id.tv_body);
 			title = (TextView) view.findViewById(R.id.tv_title);
 			source = (TextView) view.findViewById(R.id.tv_source);
 			time = (TextView) view.findViewById(R.id.tv_time);

@@ -75,9 +75,13 @@ public class PostList extends Entity implements ListEntity {
 							post.setTitle(xmlParser.nextText());
 						} else if (tag.equalsIgnoreCase(Post.NODE_FACE)) {
 							post.setFace(xmlParser.nextText());
+						}  else if (tag.equalsIgnoreCase(Post.NODE_FACE)) {
+                            post.setFace(xmlParser.nextText());
+                        } else if (tag.equalsIgnoreCase(Post.NODE_BODY)) {
+							post.setBody(xmlParser.nextText());
 						} else if (tag.equalsIgnoreCase(Post.NODE_AUTHOR)) {
-							post.setAuthor(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase(Post.NODE_AUTHORID)) {
+                            post.setAuthor(xmlParser.nextText());
+                        }  else if (tag.equalsIgnoreCase(Post.NODE_AUTHORID)) {
 							post.setAuthorId(StringUtils.toInt(
 									xmlParser.nextText(), 0));
 						} else if (tag.equalsIgnoreCase(Post.NODE_ANSWERCOUNT)) {

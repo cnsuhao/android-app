@@ -78,7 +78,9 @@ public class NewsList extends Entity implements ListEntity {
 						if (tag.equalsIgnoreCase(News.NODE_ID)) {
 							news.id = StringUtils
 									.toInt(xmlParser.nextText(), 0);
-						} else if (tag.equalsIgnoreCase(News.NODE_TITLE)) {
+						}  else if (tag.equalsIgnoreCase(News.NODE_BODY)) {
+                            news.setBody(xmlParser.nextText());
+                        } else if (tag.equalsIgnoreCase(News.NODE_TITLE)) {
 							news.setTitle(xmlParser.nextText());
 						} else if (tag.equalsIgnoreCase(News.NODE_URL)) {
 							news.setUrl(xmlParser.nextText());

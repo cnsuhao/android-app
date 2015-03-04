@@ -1,5 +1,6 @@
 package net.oschina.app.v2.activity.software.fragment;
 
+import net.oschina.app.v2.activity.common.SimpleBackActivity;
 import net.oschina.app.v2.activity.software.adapter.SoftwareTabPagerAdapter;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.base.BaseTabFragment;
@@ -47,6 +48,8 @@ public class SoftwareViewPagerFragment extends BaseFragment implements
         mSlidingTabLayout.setSelectedIndicatorColors(res.getColor(R.color.tab_selected_strip));
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setViewPager(mViewPager);
+
+        ((SimpleBackActivity)getActivity()).hideActionBarShadow();
 		return view;
 	}
 	
