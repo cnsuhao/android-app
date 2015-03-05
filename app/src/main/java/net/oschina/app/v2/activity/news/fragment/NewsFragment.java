@@ -12,8 +12,14 @@ import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.News;
 import net.oschina.app.v2.model.NewsList;
 import net.oschina.app.v2.utils.UIHelper;
+
+import android.app.Activity;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 
 /**
  * 新闻资讯
@@ -26,7 +32,28 @@ public class NewsFragment extends BaseRecycleViewFragment {
 	private static final String CACHE_KEY_PREFIX = "newslist_";
 	private static final long MAX_CACAHE_TIME = 12 * 3600 * 1000;// 资讯的缓存最长时间为12小时
 
-	@Override
+    @Override
+    protected void initViews(View view) {
+        super.initViews(view);
+        Activity parentActivity = getActivity();
+
+        if (parentActivity instanceof ObservableScrollViewCallbacks) {
+            // Scroll to the specified offset after layout
+            //Bundle args = getArguments();
+            //if (args != null && args.containsKey(ARG_INITIAL_POSITION)) {
+            //    final int initialPosition = args.getInt(ARG_INITIAL_POSITION, 0);
+            //    ScrollUtils.addOnGlobalLayoutListener(recyclerView, new Runnable() {
+            //        @Override
+            //        public void run() {
+            //            recyclerView.scrollVerticallyToPosition(initialPosition);
+            //        }
+            //    });
+            //}
+            mRecycleView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
+        }
+    }
+
+    @Override
 	protected boolean requestDataFromNetWork() {
 		return System.currentTimeMillis()
 				- AppContext.getRefreshTime(getCacheKey()) > MAX_CACAHE_TIME;

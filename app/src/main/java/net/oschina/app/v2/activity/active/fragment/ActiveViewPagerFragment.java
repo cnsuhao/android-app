@@ -1,5 +1,6 @@
 package net.oschina.app.v2.activity.active.fragment;
 
+import net.oschina.app.v2.activity.MainActivity;
 import net.oschina.app.v2.activity.active.adapter.ActiveTabPagerAdapter;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.ui.tab.SlidingTabLayout;
@@ -86,10 +87,11 @@ public class ActiveViewPagerFragment extends Fragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.v2_fragment_viewpager, container,
+		View view = inflater.inflate(R.layout.v2_fragment_viewpager2, container,
 				false);
 		//mTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
-        mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout = ((MainActivity)getActivity()).getSlidingTabLayout();
+        //(SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setCustomTabView(R.layout.v2_tab_indicator2, R.id.tv_name);
 		mViewPager = (ViewPager) view.findViewById(R.id.main_tab_pager);
 

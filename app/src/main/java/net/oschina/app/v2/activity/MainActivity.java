@@ -6,6 +6,7 @@ import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.model.User;
 import net.oschina.app.v2.service.NoticeUtils;
 import net.oschina.app.v2.ui.BadgeView;
+import net.oschina.app.v2.ui.tab.SlidingTabLayout;
 import net.oschina.app.v2.utils.TLog;
 import net.oschina.app.v2.utils.UIHelper;
 import android.annotation.SuppressLint;
@@ -17,7 +18,9 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.ListPopupWindow;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -26,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+//import android.view.ViewPropertyAnimator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -35,6 +39,12 @@ import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.github.ksoichiro.android.observablescrollview.Scrollable;
+import com.nineoldandroids.view.ViewHelper;
+import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
@@ -50,7 +60,7 @@ import com.umeng.update.UpdateStatus;
  * @since 2014/08
  */
 public class MainActivity extends BaseActivity implements OnTabChangeListener,
-		OnItemClickListener {
+		OnItemClickListener , ObservableScrollViewCallbacks {
 
 	private static final String MAIN_SCREEN = "MainScreen";
 	private FragmentTabHost mTabHost;
@@ -59,6 +69,10 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 
 	// private Version mVersion;
 	private BadgeView mBvTweet;
+
+    private View mHeaderView;
+    private View mToolbarView;
+    private int mBaseTranslationY;
 
 	private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
 
@@ -84,8 +98,9 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 			}
 		}
 	};
+    private SlidingTabLayout mSlidingTabLayout;
 
-	@Override
+    @Override
 	protected int getLayoutId() {
 		return R.layout.v2_activity_main;
 	}
@@ -149,6 +164,12 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 		// }
 
 		AppContext.instance().initLoginInfo();
+
+        mHeaderView = findViewById(R.id.header);
+        //ViewCompat.setElevation(mHeaderView, getResources().getDimension(R.dimen.toolbar_elevation));
+        mToolbarView = findViewById(R.id.actionBar);
+
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
 
 		mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
 		mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
@@ -332,67 +353,158 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 		}
 	}
 
-	private static class MenuAdapter extends BaseAdapter {
+    public SlidingTabLayout getSlidingTabLayout() {
+        return mSlidingTabLayout;
+    }
 
-		@Override
-		public int getCount() {
-			return 4;
-		}
+    @Override
+    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+        if (dragging) {
+            int toolbarHeight = mToolbarView.getHeight();
+            float currentHeaderTranslationY = ViewHelper.getTranslationY(mHeaderView);
+            if (firstScroll) {
+                if (-toolbarHeight < currentHeaderTranslationY) {
+                    mBaseTranslationY = scrollY;
+                }
+            }
+            float headerTranslationY = ScrollUtils.getFloat(-(scrollY - mBaseTranslationY), -toolbarHeight, 0);
+            ViewPropertyAnimator.animate(mHeaderView).cancel();
+            ViewHelper.setTranslationY(mHeaderView, headerTranslationY);
+        }
+    }
 
-		@Override
-		public Object getItem(int position) {
-			return null;
-		}
+    @Override
+    public void onDownMotionEvent() {
 
-		@Override
-		public long getItemId(int position) {
-			return 0;
-		}
+    }
 
-		@SuppressLint("InflateParams")
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			if (position == 0) {
-				convertView = LayoutInflater.from(parent.getContext()).inflate(
-						R.layout.v2_list_cell_popup_menu_userinfo, null);
-				TextView name = (TextView) convertView
-						.findViewById(R.id.tv_name);
-				ImageView avatar = (ImageView) convertView
-						.findViewById(R.id.iv_avatar);
-				AppContext.instance().initLoginInfo();
-				if (AppContext.instance().isLogin()) {
-					User user = AppContext.instance().getLoginInfo();
-					name.setText(user.getName());
-					ImageLoader.getInstance().displayImage(user.getFace(),
-							avatar);
-				} else {
-					name.setText(R.string.unlogin);
-					avatar.setImageBitmap(null);
-				}
-			} else {
-				convertView = LayoutInflater.from(parent.getContext()).inflate(
-						R.layout.v2_list_cell_popup_menu, null);
-				TextView name = (TextView) convertView
-						.findViewById(R.id.tv_name);
-				int iconResId = 0;
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+        mBaseTranslationY = 0;
 
-				if (position == 1) {
-					name.setText(R.string.main_menu_software);
-					iconResId = R.drawable.actionbar_menu_icn_software;
-				} else if (position == 2) {
-					name.setText(R.string.main_menu_setting);
-					iconResId = R.drawable.actionbar_menu_icn_set;
-				} else if (position == 3) {
-					name.setText(R.string.main_menu_exit);
-					iconResId = R.drawable.actionbar_menu_icn_exit;
-				}
-				Drawable drawable = AppContext.resources().getDrawable(
-						iconResId);
-				drawable.setBounds(0, 0, drawable.getMinimumWidth(),
-						drawable.getMinimumHeight());
-				name.setCompoundDrawables(drawable, null, null, null);
-			}
-			return convertView;
-		}
-	}
+        Fragment fragment = getCurrentFragment();
+        if (fragment == null) {
+            return;
+        }
+        View view = fragment.getView();
+        if (view == null) {
+            return;
+        }
+
+        // ObservableXxxViews have same API
+        // but currently they don't have any common interfaces.
+        adjustToolbar(scrollState, view);
+    }
+
+    private void adjustToolbar(ScrollState scrollState, View view) {
+        int toolbarHeight = mToolbarView.getHeight();
+        final Scrollable scrollView = (Scrollable) view.findViewById(R.id.recycleView);
+        if (scrollView == null) {
+            return;
+        }
+        int scrollY = scrollView.getCurrentScrollY();
+        if (scrollState == ScrollState.DOWN) {
+            showToolbar();
+        } else if (scrollState == ScrollState.UP) {
+            if (toolbarHeight <= scrollY) {
+                hideToolbar();
+            } else {
+                showToolbar();
+            }
+        } else {
+            // Even if onScrollChanged occurs without scrollY changing, toolbar should be adjusted
+            if (toolbarIsShown() || toolbarIsHidden()) {
+                // Toolbar is completely moved, so just keep its state
+                // and propagate it to other pages
+                propagateToolbarState(toolbarIsShown());
+            } else {
+                // Toolbar is moving but doesn't know which to move:
+                // you can change this to hideToolbar()
+                showToolbar();
+            }
+        }
+    }
+
+    private Fragment getCurrentFragment() {
+        MainTab[] tabs = MainTab.values();
+
+        MainTab tab = tabs[mTabHost.getCurrentTab()];
+
+        return getSupportFragmentManager().findFragmentByTag(getString(tab.getResName()));
+    }
+
+    private void propagateToolbarState(boolean isShown) {
+        int toolbarHeight = mToolbarView.getHeight();
+
+        // Set scrollY for the fragments that are not created yet
+//        mPagerAdapter.setScrollY(isShown ? 0 : toolbarHeight);
+//
+//        // Set scrollY for the active fragments
+//        for (int i = 0; i < mPagerAdapter.getCount(); i++) {
+//            // Skip current item
+//            if (i == mPager.getCurrentItem()) {
+//                continue;
+//            }
+//
+//            // Skip destroyed or not created item
+//            Fragment f = mPagerAdapter.getItemAt(i);
+//            if (f == null) {
+//                continue;
+//            }
+//
+//            View view = f.getView();
+//            if (view == null) {
+//                continue;
+//            }
+//            propagateToolbarState(isShown, view, toolbarHeight);
+//        }
+    }
+
+    private void propagateToolbarState(boolean isShown, View view, int toolbarHeight) {
+        Scrollable scrollView = (Scrollable) view.findViewById(R.id.recycleView);
+        if (scrollView == null) {
+            return;
+        }
+        if (isShown) {
+            // Scroll up
+            if (0 < scrollView.getCurrentScrollY()) {
+                scrollView.scrollVerticallyTo(0);
+            }
+        } else {
+            // Scroll down (to hide padding)
+            if (scrollView.getCurrentScrollY() < toolbarHeight) {
+                scrollView.scrollVerticallyTo(toolbarHeight);
+            }
+        }
+    }
+
+    private boolean toolbarIsShown() {
+        return ViewHelper.getTranslationY(mHeaderView) == 0;
+    }
+
+    private boolean toolbarIsHidden() {
+        return ViewHelper.getTranslationY(mHeaderView) == -mToolbarView.getHeight();
+    }
+
+    private void showToolbar() {
+        float headerTranslationY = ViewHelper.getTranslationY(mHeaderView);
+        if (headerTranslationY != 0) {
+            ViewPropertyAnimator.animate(mHeaderView).cancel();
+            ViewPropertyAnimator.animate(mHeaderView).translationY(0).setDuration(200).start();
+        }
+        propagateToolbarState(true);
+    }
+
+    private void hideToolbar() {
+        float headerTranslationY = ViewHelper.getTranslationY(mHeaderView);
+        int toolbarHeight = mToolbarView.getHeight();
+        if (headerTranslationY != -toolbarHeight) {
+            ViewPropertyAnimator.animate(mHeaderView).cancel();
+            ViewPropertyAnimator.animate(mHeaderView).translationY(-toolbarHeight).setDuration(200).start();
+        }
+        propagateToolbarState(false);
+    }
+
+
+
 }

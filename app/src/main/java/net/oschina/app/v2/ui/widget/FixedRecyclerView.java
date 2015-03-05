@@ -6,10 +6,12 @@ import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
+
 /**
  * Created by Sim on 2014/12/15.
  */
-public class FixedRecyclerView extends RecyclerView {
+public class FixedRecyclerView extends ObservableRecyclerView {
     public FixedRecyclerView(Context context) {
         super(context);
     }
