@@ -1,13 +1,16 @@
 package net.oschina.app.v2.activity.news.fragment;
 
+import net.oschina.app.v2.activity.IPagerFragment;
 import net.oschina.app.v2.activity.MainActivity;
 import net.oschina.app.v2.activity.news.adapter.NewsTabPagerAdapter;
 import net.oschina.app.v2.ui.tab.SlidingTabLayout;
+import net.oschina.app.v2.ui.tab.SlidingTabPagerAdapter;
 
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
@@ -17,7 +20,7 @@ import android.view.ViewGroup;
 import com.tonlin.osc.happy.R;
 
 public class NewsViewPagerFragment extends Fragment implements
-		OnPageChangeListener {
+		OnPageChangeListener , IPagerFragment {
 
 	//private PagerSlidingTabStrip mTabStrip;
 	private ViewPager mViewPager;
@@ -30,7 +33,8 @@ public class NewsViewPagerFragment extends Fragment implements
 		View view = inflater.inflate(R.layout.v2_fragment_viewpager2, container,
 				false);
 		//mTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
-        mSlidingTabLayout = ((MainActivity)getActivity()).getSlidingTabLayout();//(SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout = ((MainActivity)getActivity()).getSlidingTabLayout();
+        //(SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setCustomTabView(R.layout.v2_tab_indicator2, R.id.tv_name);
 
 		mViewPager = (ViewPager) view.findViewById(R.id.main_tab_pager);
@@ -83,4 +87,14 @@ public class NewsViewPagerFragment extends Fragment implements
 		//mTabStrip.onPageSelected(arg0);
 		mTabAdapter.onPageSelected(arg0);
 	}
+
+    @Override
+    public SlidingTabPagerAdapter getPagerAdapter() {
+        return mTabAdapter;
+    }
+
+    @Override
+    public ViewPager getViewPager() {
+        return mViewPager;
+    }
 }

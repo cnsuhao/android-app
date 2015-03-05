@@ -7,6 +7,7 @@ import net.oschina.app.v2.model.User;
 import net.oschina.app.v2.service.NoticeUtils;
 import net.oschina.app.v2.ui.BadgeView;
 import net.oschina.app.v2.ui.tab.SlidingTabLayout;
+import net.oschina.app.v2.ui.tab.SlidingTabPagerAdapter;
 import net.oschina.app.v2.utils.TLog;
 import net.oschina.app.v2.utils.UIHelper;
 import android.annotation.SuppressLint;
@@ -19,8 +20,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.ListPopupWindow;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -436,28 +439,35 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
     private void propagateToolbarState(boolean isShown) {
         int toolbarHeight = mToolbarView.getHeight();
 
-        // Set scrollY for the fragments that are not created yet
-//        mPagerAdapter.setScrollY(isShown ? 0 : toolbarHeight);
-//
-//        // Set scrollY for the active fragments
-//        for (int i = 0; i < mPagerAdapter.getCount(); i++) {
-//            // Skip current item
-//            if (i == mPager.getCurrentItem()) {
-//                continue;
-//            }
-//
-//            // Skip destroyed or not created item
-//            Fragment f = mPagerAdapter.getItemAt(i);
-//            if (f == null) {
-//                continue;
-//            }
-//
-//            View view = f.getView();
-//            if (view == null) {
-//                continue;
-//            }
-//            propagateToolbarState(isShown, view, toolbarHeight);
-//        }
+        Fragment fragment = getCurrentFragment();
+        if(fragment != null && fragment instanceof IPagerFragment) {
+            IPagerFragment fc = (IPagerFragment)fragment;
+            SlidingTabPagerAdapter mPagerAdapter = fc.getPagerAdapter();
+            ViewPager mPager = fc.getViewPager();
+
+            // Set scrollY for the fragments that are not created yet
+            mPagerAdapter.setScrollY(isShown ? 0 : toolbarHeight);
+
+            // Set scrollY for the active fragments
+            for (int i = 0; i < mPagerAdapter.getCount(); i++) {
+                // Skip current item
+                if (i == mPager.getCurrentItem()) {
+                    continue;
+                }
+
+                // Skip destroyed or not created item
+                Fragment f = mPagerAdapter.getItemAt(i);
+                if (f == null) {
+                    continue;
+                }
+
+                View view = f.getView();
+                if (view == null) {
+                    continue;
+                }
+                propagateToolbarState(isShown, view, toolbarHeight);
+            }
+        }
     }
 
     private void propagateToolbarState(boolean isShown, View view, int toolbarHeight) {

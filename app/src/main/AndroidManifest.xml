@@ -157,7 +157,7 @@
         </meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="channel_xiaomi" >
+            android:value="channel_yingyongbao" >
         </meta-data>
     </application>
 

@@ -4,6 +4,7 @@ import net.oschina.app.v2.base.BaseTabFragment;
 import net.oschina.app.v2.base.BaseTabFragment.TabChangedListener;
 //import net.oschina.app.v2.ui.pagertab.PagerSlidingTabStrip.OnTabClickListener;
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -15,8 +16,9 @@ public abstract class SlidingTabPagerAdapter extends FragmentPagerAdapter
 	protected final BaseTabFragment[] fragments;
 	private final ViewPager pager;
 	private int lastPostion;
+    protected int mScrollY;
 
-	public SlidingTabPagerAdapter(FragmentManager mgr, int i, Context context,
+    public SlidingTabPagerAdapter(FragmentManager mgr, int i, Context context,
 			ViewPager vp) {
 		super(mgr);
 		lastPostion = 0;
@@ -85,6 +87,14 @@ public abstract class SlidingTabPagerAdapter extends FragmentPagerAdapter
 			onLeave(i);
 		}
 	}
+
+    public void setScrollY(int scrollY) {
+        mScrollY = scrollY;
+    }
+
+    public Fragment getItemAt(int index){
+        return fragments[index];
+    }
 
 //	@Override
 //	public void onTabClicked(int i) {
