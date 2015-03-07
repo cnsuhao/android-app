@@ -17,4 +17,12 @@
         <attr name="pstsTextAllCaps" format="boolean" />
     </declare-styleable>-->
 
+    <declare-styleable name="BaseTheme">
+        <attr name="actionBarIconColor" format="color" />
+        <attr name="actionBarInsetStart" format="dimension" />
+        <attr name="spinnerBarInsetStart" format="dimension" />
+        <attr name="popupItemBackground" format="reference" />
+        <attr name="photoItemForeground" format="reference" />
+        <attr name="photoItemForegroundBorderless" format="reference" />
+    </declare-styleable>
 </resources>

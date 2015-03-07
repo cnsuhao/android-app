@@ -1,10 +1,5 @@
 package net.oschina.app.v2.activity.active.fragment;
 
-import net.oschina.app.v2.activity.MainActivity;
-import net.oschina.app.v2.activity.active.adapter.ActiveTabPagerAdapter;
-import net.oschina.app.v2.base.Constants;
-import net.oschina.app.v2.ui.tab.SlidingTabLayout;
-import net.oschina.app.v2.utils.TLog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,15 +9,23 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.tonlin.osc.happy.R;
 
-public class ActiveViewPagerFragment extends Fragment implements
-		OnPageChangeListener {
+import net.oschina.app.v2.activity.IPagerFragment;
+import net.oschina.app.v2.activity.MainActivity;
+import net.oschina.app.v2.activity.active.adapter.ActiveTabPagerAdapter;
+import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.base.BaseViewPagerAdapter;
+import net.oschina.app.v2.base.Constants;
+import net.oschina.app.v2.ui.tab.SlidingTabLayout;
+import net.oschina.app.v2.utils.TLog;
+
+public class ActiveViewPagerFragment extends BaseFragment implements
+		 IPagerFragment{
 
 	//private PagerSlidingTabStrip mTabStrip;
     private SlidingTabLayout mSlidingTabLayout;
@@ -96,12 +99,11 @@ public class ActiveViewPagerFragment extends Fragment implements
 		mViewPager = (ViewPager) view.findViewById(R.id.main_tab_pager);
 
 		if (mTabAdapter == null) {
-			mTabAdapter = new ActiveTabPagerAdapter(getChildFragmentManager(),
-					getActivity(), mViewPager);
+			mTabAdapter = new ActiveTabPagerAdapter(getChildFragmentManager());
 		}
-		mViewPager.setOffscreenPageLimit(mTabAdapter.getCacheCount());
+		mViewPager.setOffscreenPageLimit(mTabAdapter.getCount());
 		mViewPager.setAdapter(mTabAdapter);
-		mViewPager.setOnPageChangeListener(this);
+		//mViewPager.setOnPageChangeListener(this);
 		//mTabStrip.setViewPager(mViewPager);
 
         Resources res = getResources();
@@ -129,20 +131,18 @@ public class ActiveViewPagerFragment extends Fragment implements
 		return view;
 	}
 
-	@Override
-	public void onPageScrollStateChanged(int arg0) {
-		//mTabStrip.onPageScrollStateChanged(arg0);
-	}
+    @Override
+    public BaseViewPagerAdapter getPagerAdapter() {
+        return mTabAdapter;
+    }
 
-	@Override
-	public void onPageScrolled(int arg0, float arg1, int arg2) {
-		//mTabStrip.onPageScrolled(arg0, arg1, arg2);
-		mTabAdapter.onPageScrolled(arg0);
-	}
+    @Override
+    public ViewPager getViewPager() {
+        return mViewPager;
+    }
 
-	@Override
-	public void onPageSelected(int arg0) {
-		//mTabStrip.onPageSelected(arg0);
-		mTabAdapter.onPageSelected(arg0);
-	}
+    @Override
+    public Fragment getCurrentFragment() {
+        return mTabAdapter.getItemAt(mViewPager.getCurrentItem());
+    }
 }

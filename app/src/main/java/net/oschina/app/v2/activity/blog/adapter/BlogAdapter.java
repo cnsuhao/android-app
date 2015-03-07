@@ -1,10 +1,5 @@
 package net.oschina.app.v2.activity.blog.adapter;
 
-import net.oschina.app.v2.base.ListBaseAdapter;
-import net.oschina.app.v2.base.RecycleBaseAdapter;
-import net.oschina.app.v2.model.Blog;
-import net.oschina.app.v2.utils.DateUtil;
-import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +8,17 @@ import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
 
+import net.oschina.app.v2.base.RecycleBaseAdapter;
+import net.oschina.app.v2.model.Blog;
+import net.oschina.app.v2.utils.DateUtil;
+
 public class BlogAdapter extends RecycleBaseAdapter {
+
+    public BlogAdapter(){}
+
+    public BlogAdapter(View headerView){
+        mHeaderView = headerView;
+    }
 
     @Override
     public View onCreateItemView(ViewGroup parent, int viewType) {

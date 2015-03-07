@@ -43,7 +43,7 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
 
     private WeakReference<OnItemClickListener> mListener;
     private WeakReference<OnItemLongClickListener> mLongListener;
-    private View mHeaderView;
+    protected View mHeaderView;
 
 
     public interface OnItemClickListener {

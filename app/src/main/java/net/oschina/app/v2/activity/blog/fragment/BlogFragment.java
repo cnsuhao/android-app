@@ -1,25 +1,28 @@
 package net.oschina.app.v2.activity.blog.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.blog.adapter.BlogAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
-import net.oschina.app.v2.base.BaseListFragment;
 import net.oschina.app.v2.base.BaseRecycleViewFragment;
-import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.Blog;
 import net.oschina.app.v2.model.BlogList;
 import net.oschina.app.v2.model.ListEntity;
+import net.oschina.app.v2.utils.TLog;
 import net.oschina.app.v2.utils.UIHelper;
 
-import android.app.Activity;
-import android.view.View;
-import android.widget.AdapterView;
-
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * 博客列表
@@ -28,7 +31,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
  */
 public class BlogFragment extends BaseRecycleViewFragment {
 
-	protected static final String TAG = BlogFragment.class.getSimpleName();
+	protected static final String TAG = "MainActivity";//BlogFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "blog_list";
 	private static final long MAX_CACAHE_TIME = 12 * 3600 * 1000;// 博客的缓存最长时间为12小时
 
@@ -37,20 +40,27 @@ public class BlogFragment extends BaseRecycleViewFragment {
         super.initViews(view);
         Activity parentActivity = getActivity();
 
+        mRecycleView.setTouchInterceptionViewGroup((ViewGroup) parentActivity.findViewById(R.id.container));
+
         if (parentActivity instanceof ObservableScrollViewCallbacks) {
-            // Scroll to the specified offset after layout
-            //Bundle args = getArguments();
-            //if (args != null && args.containsKey(ARG_INITIAL_POSITION)) {
-            //    final int initialPosition = args.getInt(ARG_INITIAL_POSITION, 0);
-            //    ScrollUtils.addOnGlobalLayoutListener(recyclerView, new Runnable() {
-            //        @Override
-            //        public void run() {
-            //            recyclerView.scrollVerticallyToPosition(initialPosition);
-            //        }
-            //    });
-            //}
             mRecycleView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
         }
+
+//        if (parentActivity instanceof ObservableScrollViewCallbacks) {
+//            // Scroll to the specified offset after layout
+//            Bundle args = getArguments();
+//            if (args != null && args.containsKey(ARG_INITIAL_POSITION)) {
+//                final int initialPosition = args.getInt(ARG_INITIAL_POSITION, 0);
+//                TLog.log(TAG,"BlogFragment "+"index;"+args.getInt(ARG_INDEX,0)+" initViews init pos:"+initialPosition);
+//                ScrollUtils.addOnGlobalLayoutListener(mRecycleView, new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mRecycleView.scrollVerticallyToPosition(initialPosition);
+//                    }
+//                });
+//            }
+//            mRecycleView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
+//        }
     }
 
     @Override
@@ -61,7 +71,8 @@ public class BlogFragment extends BaseRecycleViewFragment {
 
 	@Override
 	protected RecycleBaseAdapter getListAdapter() {
-		return new BlogAdapter();
+        //View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.v2_padding, null);
+		return new BlogAdapter();//headerView
 	}
 
 	@Override

@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/iv_tab_icon"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/tab_height"
         android:layout_centerInParent="true"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
@@ -16,7 +16,7 @@
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/tab_height"
         android:layout_centerInParent="true"
         android:gravity="center"
         android:paddingLeft="16dp"

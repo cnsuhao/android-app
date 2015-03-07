@@ -1,16 +1,18 @@
 package net.oschina.app.v2.ui.tab;
 
-import net.oschina.app.v2.base.BaseTabFragment;
-import net.oschina.app.v2.base.BaseTabFragment.TabChangedListener;
-//import net.oschina.app.v2.ui.pagertab.PagerSlidingTabStrip.OnTabClickListener;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
+import net.oschina.app.v2.base.BaseTabFragment;
+import net.oschina.app.v2.utils.TLog;
+
+//import net.oschina.app.v2.ui.pagertab.PagerSlidingTabStrip.OnTabClickListener;
+
 public abstract class SlidingTabPagerAdapter extends FragmentPagerAdapter
-		implements TabChangedListener {//}, OnTabClickListener {
+    {//implements TabChangedListener {//}, OnTabClickListener {
 
 	protected final Context context;
 	protected final BaseTabFragment[] fragments;
@@ -38,8 +40,8 @@ public abstract class SlidingTabPagerAdapter extends FragmentPagerAdapter
 	private void onLeave(int i) {
 		BaseTabFragment fragment = getFragmentByPosition(lastPostion);
 		lastPostion = i;
-		if (fragment != null)
-			fragment.g();
+		//if (fragment != null)
+		//	fragment.g();
 	}
 
 	public abstract int getCacheCount();
@@ -75,7 +77,7 @@ public abstract class SlidingTabPagerAdapter extends FragmentPagerAdapter
 	public void onPageScrolled(int i) {
 		BaseTabFragment fragment = getFragmentByPosition(i);
 		if (fragment != null) {
-			fragment.h();
+			//fragment.h();
 			onLeave(i);
 		}
 	}
@@ -83,12 +85,13 @@ public abstract class SlidingTabPagerAdapter extends FragmentPagerAdapter
 	public void onPageSelected(int i) {
 		BaseTabFragment fragment = getFragmentByPosition(i);
 		if (fragment != null) {
-			fragment.f();
+			//fragment.f();
 			onLeave(i);
 		}
 	}
 
     public void setScrollY(int scrollY) {
+        TLog.log("MainActivity","setScrollY:"+scrollY);
         mScrollY = scrollY;
     }
 

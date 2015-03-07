@@ -22,16 +22,20 @@ import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.HTMLSpirit;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
+
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 //import android.widget.AdapterView.OnItemClickListener;
 //import android.widget.AdapterView.OnItemLongClickListener;
 
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.tonlin.osc.happy.R;
 
 /**
@@ -107,6 +111,15 @@ public class ActiveFragment extends BaseRecycleViewFragment {
 	@Override
 	protected void initViews(View view) {
 		super.initViews(view);
+
+        Activity parentActivity = getActivity();
+
+        mRecycleView.setTouchInterceptionViewGroup((ViewGroup) parentActivity.findViewById(R.id.container));
+
+        if (parentActivity instanceof ObservableScrollViewCallbacks) {
+            mRecycleView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
+        }
+
 		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
 			@Override

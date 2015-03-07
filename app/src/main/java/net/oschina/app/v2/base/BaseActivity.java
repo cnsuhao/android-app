@@ -11,12 +11,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 //import android.support.annotation.LayoutRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.LayoutParams;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +45,16 @@ public abstract class BaseActivity extends ActionBarActivity implements
 			finish();
 		}
 	};
+
+    protected int getActionBarSize() {
+        TypedValue typedValue = new TypedValue();
+        int[] textSizeAttr = new int[]{R.attr.actionBarSize};
+        int indexOfAttrTextSize = 0;
+        TypedArray a = obtainStyledAttributes(typedValue.data, textSizeAttr);
+        int actionBarSize = a.getDimensionPixelSize(indexOfAttrTextSize, -1);
+        a.recycle();
+        return actionBarSize;
+    }
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

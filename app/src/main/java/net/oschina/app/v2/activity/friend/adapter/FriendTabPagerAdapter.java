@@ -42,7 +42,7 @@ public final class FriendTabPagerAdapter extends SlidingTabPagerAdapter {
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				}
-			tabFragment.a(this);
+			//tabFragment.a(this);
 
 			Bundle args = new Bundle();
 			args.putInt(FriendFragment.BUNDLE_KEY_CATALOG,

@@ -13,8 +13,14 @@ import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.Post;
 import net.oschina.app.v2.model.PostList;
 import net.oschina.app.v2.utils.UIHelper;
+
+import android.app.Activity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.tonlin.osc.happy.R;
 
 /**
  * 问答
@@ -26,7 +32,19 @@ public class QuestionFragment extends BaseRecycleViewFragment {
 	protected static final String TAG = QuestionFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "post_list";
 
-	@Override
+    @Override
+    protected void initViews(View view) {
+        super.initViews(view);
+        Activity parentActivity = getActivity();
+
+        mRecycleView.setTouchInterceptionViewGroup((ViewGroup) parentActivity.findViewById(R.id.container));
+
+        if (parentActivity instanceof ObservableScrollViewCallbacks) {
+            mRecycleView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
+        }
+    }
+
+    @Override
 	protected RecycleBaseAdapter getListAdapter() {
 		return new QuestionAdapter();
 	}

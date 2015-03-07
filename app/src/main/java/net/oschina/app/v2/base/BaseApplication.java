@@ -167,7 +167,7 @@ public class BaseApplication extends Application {
 				}
 				Toast toast = new Toast(context());
 				toast.setView(view);
-				toast.setGravity(gravity, 0 , TDevice.getActionBarHeight(context()));
+				//toast.setGravity(gravity, 0 , TDevice.getActionBarHeight(context()));
 				// getToastMarignBottom()
 				// toast.setGravity(Gravity.TOP|Gravity.LEFT,0 ,0);
 				toast.setDuration(duration);

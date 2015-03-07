@@ -43,7 +43,7 @@ public final class SearchTabPagerAdapter extends SlidingTabPagerAdapter {
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				}
-			tabFragment.a(this);
+			//tabFragment.a(this);
 			if (!tabFragment.isAdded()) {
 				Bundle args = new Bundle();
 				args.putString(BaseListFragment.BUNDLE_KEY_CATALOG,

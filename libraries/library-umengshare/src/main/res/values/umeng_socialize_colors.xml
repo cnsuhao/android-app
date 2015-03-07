@@ -14,5 +14,5 @@
 	<color name="umeng_socialize_grid_divider_line">#F8F8F8</color>
 	
 	<color name="umeng_socialize_titlebar_item_background_normal">@android:color/transparent</color>
-    <color name="umeng_socialize_titlebar_item_background_pressed">#0b751e</color>
+    <color name="umeng_socialize_titlebar_item_background_pressed">#90ffffff</color>
 </resources>

@@ -350,6 +350,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
     }
 
     public void setMessageCount(int i,int count) {
+        if(mTabStrip.getChildAt(i) == null)return;
         TextView mTvMessageCount = (TextView)mTabStrip.getChildAt(i).findViewById(R.id.tv_unread_count);
         if (mTvMessageCount == null) return;
         if (count == 0) {

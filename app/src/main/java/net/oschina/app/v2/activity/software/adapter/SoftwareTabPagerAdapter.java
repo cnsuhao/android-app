@@ -42,7 +42,7 @@ public final class SoftwareTabPagerAdapter extends SlidingTabPagerAdapter {
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				}
-			tabFragment.a(this);
+			//tabFragment.a(this);
 			if (!tabFragment.isAdded()) {
 				Bundle args = new Bundle();
 				args.putString(TweetFragment.BUNDLE_KEY_CATALOG,

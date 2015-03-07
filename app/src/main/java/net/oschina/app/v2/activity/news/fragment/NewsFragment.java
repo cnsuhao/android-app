@@ -11,15 +11,19 @@ import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.News;
 import net.oschina.app.v2.model.NewsList;
+import net.oschina.app.v2.utils.TLog;
 import net.oschina.app.v2.utils.UIHelper;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.tonlin.osc.happy.R;
 
 /**
  * 新闻资讯
@@ -37,18 +41,9 @@ public class NewsFragment extends BaseRecycleViewFragment {
         super.initViews(view);
         Activity parentActivity = getActivity();
 
+        mRecycleView.setTouchInterceptionViewGroup((ViewGroup) parentActivity.findViewById(R.id.container));
+
         if (parentActivity instanceof ObservableScrollViewCallbacks) {
-            // Scroll to the specified offset after layout
-            //Bundle args = getArguments();
-            //if (args != null && args.containsKey(ARG_INITIAL_POSITION)) {
-            //    final int initialPosition = args.getInt(ARG_INITIAL_POSITION, 0);
-            //    ScrollUtils.addOnGlobalLayoutListener(recyclerView, new Runnable() {
-            //        @Override
-            //        public void run() {
-            //            recyclerView.scrollVerticallyToPosition(initialPosition);
-            //        }
-            //    });
-            //}
             mRecycleView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
         }
     }
@@ -61,7 +56,8 @@ public class NewsFragment extends BaseRecycleViewFragment {
 
 	@Override
 	protected RecycleBaseAdapter getListAdapter() {
-		return new NewsRecycleAdapter();
+       // View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.v2_padding, null);
+		return new NewsRecycleAdapter();//
 	}
 
 	@Override

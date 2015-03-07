@@ -47,7 +47,7 @@
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
-        android:theme="@style/ActionBarBaseTheme" >
+        android:theme="@style/Theme.IMA" >
         <activity
             android:name="net.oschina.app.v2.activity.SplashActivity"
             android:screenOrientation="portrait"
@@ -61,22 +61,20 @@
         <activity
             android:name="net.oschina.app.v2.activity.oauth.AuthorizeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ActionBarBaseTheme" />
+            android:theme="@style/Theme.IMA" />
         <activity
             android:name="net.oschina.app.v2.activity.user.LoginActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:theme="@style/ActionBarBaseTheme"
+            android:theme="@style/Theme.IMA"
             android:screenOrientation="portrait" />
         <activity
             android:name="net.oschina.app.v2.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/ActionBarBaseTheme"/>
+            android:screenOrientation="portrait"/>
         <activity
             android:name="net.oschina.app.v2.activity.news.DetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ActionBarBaseTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="net.oschina.app.v2.activity.common.SimpleBackActivity"

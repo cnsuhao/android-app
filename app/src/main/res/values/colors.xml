@@ -15,7 +15,7 @@
     <color name="list_item_background_pressed">#F1F1F1</color>
     
     <color name="actionbar_item_background_normal">@color/transparent</color>
-    <color name="actionbar_item_background_pressed">#0b751e</color>
+    <color name="actionbar_item_background_pressed">#30ffffff</color>
 
     <color name="tab_selected_strip">#ffffff</color>
     <color name="tab_strip_text_selected">@color/main_green</color>

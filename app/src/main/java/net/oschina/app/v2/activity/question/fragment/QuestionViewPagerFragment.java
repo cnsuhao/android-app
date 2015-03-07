@@ -1,7 +1,10 @@
 package net.oschina.app.v2.activity.question.fragment;
 
+import net.oschina.app.v2.activity.IPagerFragment;
 import net.oschina.app.v2.activity.MainActivity;
+import net.oschina.app.v2.activity.news.adapter.NewsTabPagerAdapter;
 import net.oschina.app.v2.activity.question.adapter.QuestionTabPagerAdapter;
+import net.oschina.app.v2.base.BaseViewPagerAdapter;
 import net.oschina.app.v2.ui.tab.SlidingTabLayout;
 
 import android.content.res.Resources;
@@ -17,7 +20,7 @@ import android.view.ViewGroup;
 import com.tonlin.osc.happy.R;
 
 public class QuestionViewPagerFragment extends Fragment implements
-		OnPageChangeListener {
+		IPagerFragment {
 
 	//private PagerSlidingTabStrip mTabStrip;
 	private ViewPager mViewPager;
@@ -36,12 +39,11 @@ public class QuestionViewPagerFragment extends Fragment implements
 		mViewPager = (ViewPager) view.findViewById(R.id.main_tab_pager);
 
 		if (mTabAdapter == null) {
-			mTabAdapter = new QuestionTabPagerAdapter(getChildFragmentManager(),
-					getActivity(), mViewPager);
+			mTabAdapter = new QuestionTabPagerAdapter(getChildFragmentManager());
 		}
-		mViewPager.setOffscreenPageLimit(mTabAdapter.getCacheCount());
+		mViewPager.setOffscreenPageLimit(mTabAdapter.getCount());
 		mViewPager.setAdapter(mTabAdapter);
-		mViewPager.setOnPageChangeListener(this);
+		//mViewPager.setOnPageChangeListener(this);
 		//mTabStrip.setViewPager(mViewPager);
 
         Resources res = getResources();
@@ -52,20 +54,18 @@ public class QuestionViewPagerFragment extends Fragment implements
 		return view;
 	}
 
-	@Override
-	public void onPageScrollStateChanged(int arg0) {
-		//mTabStrip.onPageScrollStateChanged(arg0);
-	}
+    @Override
+    public BaseViewPagerAdapter getPagerAdapter() {
+        return mTabAdapter;
+    }
 
-	@Override
-	public void onPageScrolled(int arg0, float arg1, int arg2) {
-		//mTabStrip.onPageScrolled(arg0, arg1, arg2);
-		mTabAdapter.onPageScrolled(arg0);
-	}
+    @Override
+    public ViewPager getViewPager() {
+        return mViewPager;
+    }
 
-	@Override
-	public void onPageSelected(int arg0) {
-		//mTabStrip.onPageSelected(arg0);
-		mTabAdapter.onPageSelected(arg0);
-	}
+    @Override
+    public Fragment getCurrentFragment() {
+        return mTabAdapter.getItemAt(mViewPager.getCurrentItem());
+    }
 }
