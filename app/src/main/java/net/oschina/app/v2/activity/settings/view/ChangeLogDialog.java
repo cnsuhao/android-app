@@ -59,7 +59,7 @@ public class ChangeLogDialog extends CommonDialog {
 		
 		setCancelable(true);
 		setCanceledOnTouchOutside(true);
-		setNegativeButton(R.string.cancle, null);
+		setNegativeButton(R.string.cancel, null);
 	}
 
 	// Parse a the release tag and return html code

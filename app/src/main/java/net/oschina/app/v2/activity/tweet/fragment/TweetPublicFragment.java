@@ -21,8 +21,8 @@ import net.oschina.app.v2.emoji.SoftKeyboardStateHelper;
 import net.oschina.app.v2.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
 import net.oschina.app.v2.model.Tweet;
 import net.oschina.app.v2.service.ServerTaskUtils;
-import net.oschina.app.v2.ui.dialog.CommonDialog;
-import net.oschina.app.v2.ui.dialog.DialogHelper;
+//import net.oschina.app.v2.ui.dialog.CommonDialog;
+//import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.utils.FileUtils;
 import net.oschina.app.v2.utils.ImageUtils;
 import net.oschina.app.v2.utils.SimpleTextWatcher;
@@ -59,6 +59,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -253,27 +254,48 @@ public class TweetPublicFragment extends BaseFragment implements
 		}
 		final String tweet = mEtInput.getText().toString();
 		if (!TextUtils.isEmpty(tweet)) {
-			CommonDialog dialog = DialogHelper
-					.getPinterestDialogCancelable(getActivity());
-			dialog.setMessage(R.string.draft_tweet_message);
-			dialog.setNegativeButton(R.string.cancle, new OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					AppContext.setTweetDraft("");
-					getActivity().finish();
-				}
-			});
-			dialog.setPositiveButton(R.string.ok, new OnClickListener() {
+//			CommonDialog dialog = DialogHelper
+//					.getPinterestDialogCancelable(getActivity());
+//			dialog.setMessage(R.string.draft_tweet_message);
+//			dialog.setNegativeButton(R.string.cancle, new OnClickListener() {
+//
+//				@Override
+//				public void onClick(DialogInterface dialog, int which) {
+//					AppContext.setTweetDraft("");
+//					getActivity().finish();
+//				}
+//			});
+//			dialog.setPositiveButton(R.string.ok, new OnClickListener() {
+//
+//				@Override
+//				public void onClick(DialogInterface dialog, int which) {
+//					dialog.dismiss();
+//					AppContext.setTweetDraft(tweet);
+//					getActivity().finish();
+//				}
+//			});
+//			dialog.show();
+            new MaterialDialog.Builder(getActivity())
+                    .content(R.string.draft_tweet_message)
+                    .positiveText(R.string.ok)
+                    .negativeText(R.string.cancel)
+                    .callback(new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            super.onPositive(dialog);
+                            dialog.dismiss();
+                            AppContext.setTweetDraft(tweet);
+                            getActivity().finish();
+                        }
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-					AppContext.setTweetDraft(tweet);
-					getActivity().finish();
-				}
-			});
-			dialog.show();
+                        @Override
+                        public void onNegative(MaterialDialog dialog) {
+                            super.onNegative(dialog);
+                            AppContext.setTweetDraft("");
+                            getActivity().finish();
+                        }
+                    })
+                    .show();
 			return true;
 		}
 		return super.onBackPressed();
@@ -398,42 +420,69 @@ public class TweetPublicFragment extends BaseFragment implements
 	private void handleClearWords() {
 		if (TextUtils.isEmpty(mEtInput.getText().toString()))
 			return;
-		final CommonDialog dialog = DialogHelper
-				.getPinterestDialogCancelable(getActivity());
-		dialog.setMessage(R.string.clearwords);
-		dialog.setPositiveButton(R.string.ok,
-				new OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
+//		final CommonDialog dialog = DialogHelper
+//				.getPinterestDialogCancelable(getActivity());
+//		dialog.setMessage(R.string.clearwords);
+//		dialog.setPositiveButton(R.string.ok,
+//				new OnClickListener() {
+//
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						dialog.dismiss();
+//						mEtInput.getText().clear();
+//						if (mIsKeyboardVisible) {
+//							TDevice.showSoftKeyboard(mEtInput);
+//						}
+//					}
+//				});
+//		dialog.setNegativeButton(R.string.cancle, null);
+//		dialog.show();
+        new MaterialDialog.Builder(getActivity())
+                .content(R.string.clearwords)
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        dialog.dismiss();
 						mEtInput.getText().clear();
 						if (mIsKeyboardVisible) {
 							TDevice.showSoftKeyboard(mEtInput);
 						}
-					}
-				});
-		dialog.setNegativeButton(R.string.cancle, null);
-		dialog.show();
+                    }
+                })
+                .show();
 	}
 
 	private void handleSelectPicture() {
-		final CommonDialog dialog = DialogHelper
-				.getPinterestDialogCancelable(getActivity());
-		dialog.setTitle(R.string.choose_picture);
-		dialog.setNegativeButton(R.string.cancle, null);
-		dialog.setItemsWithoutChk(
-				getResources().getStringArray(R.array.choose_picture),
-				new OnItemClickListener() {
-
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,
-							int position, long id) {
-						dialog.dismiss();
-						goToSelectPicture(position);
-					}
-				});
-		dialog.show();
+//		final CommonDialog dialog = DialogHelper
+//				.getPinterestDialogCancelable(getActivity());
+//		dialog.setTitle(R.string.choose_picture);
+//		dialog.setNegativeButton(R.string.cancle, null);
+//		dialog.setItemsWithoutChk(
+//				getResources().getStringArray(R.array.choose_picture),
+//				new OnItemClickListener() {
+//
+//					@Override
+//					public void onItemClick(AdapterView<?> parent, View view,
+//							int position, long id) {
+//						dialog.dismiss();
+//						goToSelectPicture(position);
+//					}
+//				});
+//		dialog.show();
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.choose_picture)
+                .items(R.array.choose_picture)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        dialog.dismiss();
+                        goToSelectPicture(which);
+                    }
+                })
+                .show();
 	}
 
 	private void goToSelectPicture(int position) {

@@ -76,7 +76,7 @@ public final class TweetTabPagerAdapter extends BaseViewPagerAdapter {
     @Override
     protected Fragment createItem(int position) {
         final int pattern = position % 3;
-        ActiveTab[] values = ActiveTab.values();
+        TweetTab[] values = TweetTab.values();
         Fragment f = null;
         try {
             f = (Fragment) values[pattern].getClz().newInstance();

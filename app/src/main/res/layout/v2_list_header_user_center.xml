@@ -35,6 +35,8 @@
                 android:drawablePadding="@dimen/space_4"
                 android:drawableRight="@drawable/userinfo_icon_male"
                 android:ellipsize="end"
+                android:shadowDy="1"
+                android:shadowDx="1"
                 android:gravity="center_vertical"
                 android:singleLine="true"
                 android:textColor="@color/white"

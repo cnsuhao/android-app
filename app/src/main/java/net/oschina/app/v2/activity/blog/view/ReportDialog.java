@@ -14,6 +14,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.tonlin.osc.happy.R;
 
 public class ReportDialog extends CommonDialog implements
@@ -80,20 +81,31 @@ public class ReportDialog extends CommonDialog implements
 				break;
 			}
 		}
-		final CommonDialog dialog = DialogHelper
-				.getPinterestDialogCancelable(getContext());
-		dialog.setTitle(R.string.report_reson);
-		dialog.setItems(reasons, idx, new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				dialog.dismiss();
-				mTvReason.setText(reasons[position]);
-			}
-		});
-		dialog.setNegativeButton(R.string.cancle, null);
-		dialog.show();
+//		final CommonDialog dialog = DialogHelper
+//				.getPinterestDialogCancelable(getContext());
+//		dialog.setTitle(R.string.report_reson);
+//		dialog.setItems(reasons, idx, new OnItemClickListener() {
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view,
+//					int position, long id) {
+//				dialog.dismiss();
+//				mTvReason.setText(reasons[position]);
+//			}
+//		});
+//		dialog.setNegativeButton(R.string.cancle, null);
+//		dialog.show();
+        new MaterialDialog.Builder(getContext())
+                .title(R.string.report_reson)
+                .items(reasons)
+                .itemsCallbackSingleChoice(idx,new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        dialog.dismiss();
+                        mTvReason.setText(reasons[which]);
+                    }
+                })
+                .show();
 	}
 
 	public Report getReport() {

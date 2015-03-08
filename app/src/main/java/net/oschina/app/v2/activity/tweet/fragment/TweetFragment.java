@@ -3,15 +3,13 @@ package net.oschina.app.v2.activity.tweet.fragment;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.tonlin.osc.happy.R;
 
@@ -26,8 +24,6 @@ import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.Result;
 import net.oschina.app.v2.model.Tweet;
 import net.oschina.app.v2.model.TweetList;
-import net.oschina.app.v2.ui.dialog.CommonDialog;
-import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.HTMLSpirit;
 import net.oschina.app.v2.utils.TDevice;
@@ -212,44 +208,77 @@ public class TweetFragment extends BaseRecycleViewFragment {
             items = new String[]{getResources().getString(R.string.view),
                     getResources().getString(R.string.copy)};
         }
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setTitle(R.string.operation);
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                dialog.dismiss();
-                if (position == 0) {
-                    UIHelper.showTweetDetail(view.getContext(), tweet.getId());
-                } else if (position == 1) {
-                    TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(tweet
-                            .getBody()));
-                } else if (position == 2) {
-                    handleDeleteTweet(tweet);
-                }
-            }
-        });
-        dialog.show();
+//        final CommonDialog dialog = DialogHelper
+//                .getPinterestDialogCancelable(getActivity());
+//        dialog.setTitle(R.string.operation);
+//        dialog.setNegativeButton(R.string.cancel, null);
+//        dialog.setItemsWithoutChk(items, new OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view,
+//                                    int position, long id) {
+//                dialog.dismiss();
+//                if (position == 0) {
+//                    UIHelper.showTweetDetail(view.getContext(), tweet.getId());
+//                } else if (position == 1) {
+//                    TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(tweet
+//                            .getBody()));
+//                } else if (position == 2) {
+//                    handleDeleteTweet(tweet);
+//                }
+//            }
+//        });
+//        dialog.show();
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.operation)
+                .items(items)
+                .contentColor(R.color.main_gray)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        dialog.dismiss();
+                        if (which == 0) {
+                            UIHelper.showTweetDetail(view.getContext(), tweet.getId());
+                        } else if (which == 1) {
+                            TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(tweet
+                                    .getBody()));
+                        } else if (which == 2) {
+                            handleDeleteTweet(tweet);
+                        }
+                    }
+                })
+                .show();
     }
 
     private void handleDeleteTweet(final Tweet tweet) {
-        CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setMessage(R.string.message_delete_tweet);
-        dialog.setPositiveButton(R.string.ok,
-                new DialogInterface.OnClickListener() {
-
+//        CommonDialog dialog = DialogHelper
+//                .getPinterestDialogCancelable(getActivity());
+//        dialog.setMessage(R.string.message_delete_tweet);
+//        dialog.setPositiveButton(R.string.ok,
+//                new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                        NewsApi.deleteTweet(tweet.getAuthorId(), tweet.getId(),
+//                                new DeleteTweetResponseHandler(tweet));
+//                    }
+//                });
+//        dialog.setNegativeButton(R.string.cancel, null);
+//        dialog.show();
+        new MaterialDialog.Builder(getActivity())
+                .content(R.string.message_delete_tweet)
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
+                .callback(new MaterialDialog.ButtonCallback() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
                         dialog.dismiss();
                         NewsApi.deleteTweet(tweet.getAuthorId(), tweet.getId(),
                                 new DeleteTweetResponseHandler(tweet));
                     }
-                });
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.show();
+                })
+                .show();
     }
 }

@@ -1,7 +1,24 @@
 package net.oschina.app.v2.activity.user.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.util.List;
+import android.annotation.SuppressLint;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.user.adapter.UserCenterAdapter;
@@ -16,8 +33,6 @@ import net.oschina.app.v2.model.BlogList;
 import net.oschina.app.v2.model.Result;
 import net.oschina.app.v2.model.User;
 import net.oschina.app.v2.model.UserInformation;
-import net.oschina.app.v2.ui.dialog.CommonDialog;
-import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.AvatarUtils;
 import net.oschina.app.v2.utils.StringUtils;
@@ -26,26 +41,10 @@ import net.oschina.app.v2.utils.UIHelper;
 
 import org.apache.http.Header;
 
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
-import android.annotation.SuppressLint;
-import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import android.widget.TextView;
+import java.io.ByteArrayInputStream;
+import java.util.List;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.tonlin.osc.happy.R;
-import com.umeng.analytics.MobclickAgent;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class UserCenterFragment extends BaseFragment implements
 		DislayModeChangeListener, OnItemClickListener {
@@ -374,24 +373,37 @@ public class UserCenterFragment extends BaseFragment implements
 			break;
 		}
 		final int ra = relationAction;
-		CommonDialog dialog = DialogHelper
-				.getPinterestDialogCancelable(getActivity());
-		// dialog.setTitle(R.string.app_name);
-		dialog.setMessage(dialogTitle);
-		dialog.setPositiveButton(R.string.ok,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						sendUpdateRelcationRequest(ra);
-						dialog.dismiss();
-					}
-				});
-		dialog.setNegativeButton(R.string.cancle,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-		dialog.show();
+//		CommonDialog dialog = DialogHelper
+//				.getPinterestDialogCancelable(getActivity());
+//		// dialog.setTitle(R.string.app_name);
+//		dialog.setMessage(dialogTitle);
+//		dialog.setPositiveButton(R.string.ok,
+//				new DialogInterface.OnClickListener() {
+//					public void onClick(DialogInterface dialog, int which) {
+//						sendUpdateRelcationRequest(ra);
+//						dialog.dismiss();
+//					}
+//				});
+//		dialog.setNegativeButton(R.string.cancel,
+//				new DialogInterface.OnClickListener() {
+//					public void onClick(DialogInterface dialog, int which) {
+//						dialog.dismiss();
+//					}
+//				});
+//		dialog.show();
+        new MaterialDialog.Builder(getActivity())
+                .content(dialogTitle)
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        dialog.dismiss();
+                        sendUpdateRelcationRequest(ra);
+                    }
+                })
+                .show();
 	}
 
 	private void sendUpdateRelcationRequest(int ra) {

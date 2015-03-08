@@ -20,12 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ZoomButtonsController;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -52,8 +51,6 @@ import net.oschina.app.v2.model.Result;
 import net.oschina.app.v2.model.Tweet;
 import net.oschina.app.v2.service.PublicCommentTask;
 import net.oschina.app.v2.service.ServerTaskUtils;
-import net.oschina.app.v2.ui.dialog.CommonDialog;
-import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.ui.widget.FixedRecyclerView;
 import net.oschina.app.v2.utils.HTMLSpirit;
@@ -381,27 +378,45 @@ public class TweetDetailFragment extends BaseFragment implements
 			items = new String[] { getResources().getString(R.string.reply),
 					getResources().getString(R.string.copy) };
 		}
-		final CommonDialog dialog = DialogHelper
-				.getPinterestDialogCancelable(getActivity());
-		dialog.setTitle(R.string.operation);
-		dialog.setNegativeButton(R.string.cancle, null);
-		dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				dialog.dismiss();
-				if (position == 0) {
-					handleReplyComment(item);
-				} else if (position == 1) {
-					TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
-							.getContent()));
-				} else if (position == 2) {
-					handleDeleteComment(item);
-				}
-			}
-		});
-		dialog.show();
+//		final CommonDialog dialog = DialogHelper
+//				.getPinterestDialogCancelable(getActivity());
+//		dialog.setTitle(R.string.operation);
+//		dialog.setNegativeButton(R.string.cancel, null);
+//		dialog.setItemsWithoutChk(items, new OnItemClickListener() {
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view,
+//					int position, long id) {
+//				dialog.dismiss();
+//				if (position == 0) {
+//					handleReplyComment(item);
+//				} else if (position == 1) {
+//					TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
+//							.getContent()));
+//				} else if (position == 2) {
+//					handleDeleteComment(item);
+//				}
+//			}
+//		});
+//		dialog.show();
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.operation)
+                .items(items)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                            dialog.dismiss();
+                            if (which == 0) {
+                                handleReplyComment(item);
+                            } else if (which == 1) {
+                                TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
+                                        .getContent()));
+                            } else if (which == 2) {
+                                handleDeleteComment(item);
+                            }
+                    }
+                })
+                .show();
 		return true;
 	}
 

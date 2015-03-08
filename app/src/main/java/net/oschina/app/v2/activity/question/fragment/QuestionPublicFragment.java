@@ -1,15 +1,5 @@
 package net.oschina.app.v2.activity.question.fragment;
 
-import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.base.BaseFragment;
-import net.oschina.app.v2.model.Post;
-import net.oschina.app.v2.service.ServerTaskUtils;
-import net.oschina.app.v2.ui.dialog.CommonDialog;
-import net.oschina.app.v2.ui.dialog.DialogHelper;
-import net.oschina.app.v2.utils.TDevice;
-import net.oschina.app.v2.utils.UIHelper;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -20,14 +10,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
+
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.model.Post;
+import net.oschina.app.v2.service.ServerTaskUtils;
+import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
 
 public class QuestionPublicFragment extends BaseFragment {
 
@@ -112,23 +108,37 @@ public class QuestionPublicFragment extends BaseFragment {
 	}
 
 	private void handleShowCategory() {
-		final CommonDialog dialog = DialogHelper
-				.getPinterestDialogCancelable(getActivity());
-		dialog.setTitle(R.string.category);
-		dialog.setItems(mCategoryOptions, mCategory, new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				dialog.dismiss();
-				mCategory = position;
-				mTvCategory.setText(getString(
-						R.string.question_public_category,
-						mCategoryOptions[mCategory]));
-			}
-		});
-		dialog.setNegativeButton(R.string.cancle, null);
-		dialog.show();
+//		final CommonDialog dialog = DialogHelper
+//				.getPinterestDialogCancelable(getActivity());
+//		dialog.setTitle(R.string.category);
+//		dialog.setItems(mCategoryOptions, mCategory, new OnItemClickListener() {
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view,
+//					int position, long id) {
+//				dialog.dismiss();
+//				mCategory = position;
+//				mTvCategory.setText(getString(
+//						R.string.question_public_category,
+//						mCategoryOptions[mCategory]));
+//			}
+//		});
+//		dialog.setNegativeButton(R.string.cancle, null);
+//		dialog.show();
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.category)
+                .items(mCategoryOptions)
+                .itemsCallbackSingleChoice(mCategory,new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        	dialog.dismiss();
+                            mCategory = which;
+                            mTvCategory.setText(getString(
+                                    R.string.question_public_category,
+                                    mCategoryOptions[mCategory]));
+                    }
+                })
+                .show();
 	}
 
 	private boolean prepareForSubmit() {
@@ -178,33 +188,60 @@ public class QuestionPublicFragment extends BaseFragment {
 		final String content = mEtContent.getText().toString();
 		if(!TextUtils.isEmpty(title)
 				|| !TextUtils.isEmpty(content)){
-			CommonDialog dialog = DialogHelper
-					.getPinterestDialogCancelable(getActivity());
-			dialog.setMessage(R.string.draft_tweet_message);
-			dialog.setNegativeButton(R.string.cancle, new OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					AppContext.setQuestionTitleDraft("");
-					AppContext.setQuestionTypeDraft(0);
-					AppContext.setQuestionContentDraft("");
-					AppContext.setQuestionLetMeKnowDraft(false);
-					getActivity().finish();
-				}
-			});
-			dialog.setPositiveButton(R.string.ok, new OnClickListener() {
+//			CommonDialog dialog = DialogHelper
+//					.getPinterestDialogCancelable(getActivity());
+//			dialog.setMessage(R.string.draft_tweet_message);
+//			dialog.setNegativeButton(R.string.cancle, new OnClickListener() {
+//
+//				@Override
+//				public void onClick(DialogInterface dialog, int which) {
+//					AppContext.setQuestionTitleDraft("");
+//					AppContext.setQuestionTypeDraft(0);
+//					AppContext.setQuestionContentDraft("");
+//					AppContext.setQuestionLetMeKnowDraft(false);
+//					getActivity().finish();
+//				}
+//			});
+//			dialog.setPositiveButton(R.string.ok, new OnClickListener() {
+//
+//				@Override
+//				public void onClick(DialogInterface dialog, int which) {
+//					dialog.dismiss();
+//					AppContext.setQuestionTitleDraft(title);
+//					AppContext.setQuestionTypeDraft(mCategory);
+//					AppContext.setQuestionContentDraft(content);
+//					AppContext.setQuestionLetMeKnowDraft(mCbLetMeKnow.isChecked());
+//					getActivity().finish();
+//				}
+//			});
+//			dialog.show();
+            new MaterialDialog.Builder(getActivity())
+                    .content(R.string.draft_tweet_message)
+                    .positiveText(R.string.ok)
+                    .negativeText(R.string.cancel)
+                    .callback(new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            super.onPositive(dialog);
+                            dialog.dismiss();
+                            AppContext.setQuestionTitleDraft(title);
+                            AppContext.setQuestionTypeDraft(mCategory);
+                            AppContext.setQuestionContentDraft(content);
+                            AppContext.setQuestionLetMeKnowDraft(mCbLetMeKnow.isChecked());
+                            getActivity().finish();
+                        }
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-					AppContext.setQuestionTitleDraft(title);
-					AppContext.setQuestionTypeDraft(mCategory);
-					AppContext.setQuestionContentDraft(content);
-					AppContext.setQuestionLetMeKnowDraft(mCbLetMeKnow.isChecked());
-					getActivity().finish();
-				}
-			});
-			dialog.show();
+                        @Override
+                        public void onNegative(MaterialDialog dialog) {
+                            super.onNegative(dialog);
+                            AppContext.setQuestionTitleDraft("");
+                            AppContext.setQuestionTypeDraft(0);
+                            AppContext.setQuestionContentDraft("");
+                            AppContext.setQuestionLetMeKnowDraft(false);
+                            getActivity().finish();
+                        }
+                    })
+                    .show();
 			return true;
 		}
 		return super.onBackPressed();

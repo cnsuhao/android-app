@@ -6,9 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -28,8 +27,6 @@ import net.oschina.app.v2.model.Comment;
 import net.oschina.app.v2.model.CommentList;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.Result;
-import net.oschina.app.v2.ui.dialog.CommonDialog;
-import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.utils.HTMLSpirit;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
@@ -177,27 +174,45 @@ public class CommentFrament extends BaseRecycleViewFragment implements
 					getResources().getString(R.string.copy) };
 		}
 		
-		final CommonDialog dialog = DialogHelper
-				.getPinterestDialogCancelable(getActivity());
-		dialog.setTitle(R.string.operation);
-		dialog.setNegativeButton(R.string.cancle, null);
-		dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				dialog.dismiss();
-				if (position == 0) {
-					handleReplyComment(item);
-				} else if (position == 1) {
-					TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
-							.getContent()));
-				} else if(position==2){
-					handleDeleteComment(item);
-				}
-			}
-		});
-		dialog.show();
+		//final CommonDialog dialog = DialogHelper
+		//		.getPinterestDialogCancelable(getActivity());
+		//dialog.setTitle(R.string.operation);
+		//dialog.setNegativeButton(R.string.cancle, null);
+		//dialog.setItemsWithoutChk(items, new OnItemClickListener() {
+        //
+		//	@Override
+		//	public void onItemClick(AdapterView<?> parent, View view,
+		//			int position, long id) {
+		//		dialog.dismiss();
+		//		if (position == 0) {
+		//			handleReplyComment(item);
+		//		} else if (position == 1) {
+		//			TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
+		//					.getContent()));
+		//		} else if(position==2){
+		//			handleDeleteComment(item);
+		//		}
+		//	}
+		//});
+		//dialog.show();
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.operation)
+                .items(items)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int position, CharSequence text) {
+                        dialog.dismiss();
+                        if (position == 0) {
+                            handleReplyComment(item);
+                        } else if (position == 1) {
+                            TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
+                                    .getContent()));
+                        } else if (position == 2) {
+                            handleDeleteComment(item);
+                        }
+                    }
+                })
+                .show();
 		return true;
 	}
 

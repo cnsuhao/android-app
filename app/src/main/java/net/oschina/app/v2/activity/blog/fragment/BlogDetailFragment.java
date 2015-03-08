@@ -350,7 +350,7 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 		dialog.setCancelable(true);
 		dialog.setTitle(R.string.report);
 		dialog.setCanceledOnTouchOutside(true);
-		dialog.setNegativeButton(R.string.cancle, null);
+		dialog.setNegativeButton(R.string.cancel, null);
 		dialog.setPositiveButton(R.string.ok,
 				new DialogInterface.OnClickListener() {
 

@@ -76,7 +76,7 @@ public final class QuestionTabPagerAdapter extends BaseViewPagerAdapter {
 
     @Override
     protected Fragment createItem(int position) {
-        final int pattern = position % 3;
+        final int pattern = position % 5;
         QuestionTab[] values = QuestionTab.values();
         Fragment f = null;
         try {

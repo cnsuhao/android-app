@@ -1,20 +1,5 @@
 package net.oschina.app.v2.activity.message.fragment;
 
-import java.io.ByteArrayInputStream;
-
-import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.api.remote.NewsApi;
-import net.oschina.app.v2.base.BaseFragment;
-import net.oschina.app.v2.model.Result;
-import net.oschina.app.v2.ui.dialog.CommonDialog;
-import net.oschina.app.v2.ui.dialog.DialogHelper;
-import net.oschina.app.v2.utils.SimpleTextWatcher;
-import net.oschina.app.v2.utils.TDevice;
-import net.oschina.app.v2.utils.UIHelper;
-
-import org.apache.http.Header;
-
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -28,9 +13,22 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
+
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.api.remote.NewsApi;
+import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.model.Result;
+import net.oschina.app.v2.utils.SimpleTextWatcher;
+import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
+
+import org.apache.http.Header;
+
+import java.io.ByteArrayInputStream;
 
 public class MessagePublicFragment extends BaseFragment {
 
@@ -123,21 +121,35 @@ public class MessagePublicFragment extends BaseFragment {
 		if (id == R.id.tv_clear) {
 			if (TextUtils.isEmpty(mEtContent.getText().toString()))
 				return;
-			final CommonDialog dialog = DialogHelper
-					.getPinterestDialogCancelable(getActivity());
-			dialog.setMessage(R.string.clearwords);
-			dialog.setPositiveButton(R.string.ok,
-					new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
+//			final CommonDialog dialog = DialogHelper
+//					.getPinterestDialogCancelable(getActivity());
+//			dialog.setMessage(R.string.clearwords);
+//			dialog.setPositiveButton(R.string.ok,
+//					new DialogInterface.OnClickListener() {
+//
+//						@Override
+//						public void onClick(DialogInterface dialog, int which) {
+//							dialog.dismiss();
+//							mEtContent.getText().clear();
+//							TDevice.showSoftKeyboard(mEtContent);
+//						}
+//					});
+//			dialog.setNegativeButton(R.string.cancel, null);
+//			dialog.show();
+            new MaterialDialog.Builder(getActivity())
+                    .content(R.string.clearwords)
+                    .positiveText(R.string.ok)
+                    .negativeText(R.string.cancel)
+                    .callback(new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            super.onPositive(dialog);
+                            dialog.dismiss();
 							mEtContent.getText().clear();
 							TDevice.showSoftKeyboard(mEtContent);
-						}
-					});
-			dialog.setNegativeButton(R.string.cancle, null);
-			dialog.show();
+                        }
+                    })
+                    .show();
 		}
 	}
 

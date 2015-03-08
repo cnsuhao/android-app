@@ -75,7 +75,7 @@ public final class ActiveTabPagerAdapter extends BaseViewPagerAdapter {
 
     @Override
     protected Fragment createItem(int position) {
-        final int pattern = position % 3;
+        final int pattern = position % 5;
         ActiveTab[] values = ActiveTab.values();
         Fragment f = null;
         try {

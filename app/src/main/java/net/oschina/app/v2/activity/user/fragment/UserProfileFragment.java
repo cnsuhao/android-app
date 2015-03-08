@@ -1,25 +1,6 @@
 package net.oschina.app.v2.activity.user.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.Serializable;
-import java.lang.ref.WeakReference;
-
-import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.api.remote.NewsApi;
-import net.oschina.app.v2.base.BaseFragment;
-import net.oschina.app.v2.cache.CacheManager;
-import net.oschina.app.v2.model.MyInformation;
-import net.oschina.app.v2.ui.dialog.CommonDialog;
-import net.oschina.app.v2.ui.dialog.DialogHelper;
-import net.oschina.app.v2.ui.empty.EmptyLayout;
-import net.oschina.app.v2.utils.AvatarUtils;
-import net.oschina.app.v2.utils.TDevice;
-import net.oschina.app.v2.utils.UIHelper;
-
-import org.apache.http.Header;
-
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,10 +10,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
+
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.api.remote.NewsApi;
+import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.cache.CacheManager;
+import net.oschina.app.v2.model.MyInformation;
+import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.utils.AvatarUtils;
+import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
+
+import org.apache.http.Header;
+
+import java.io.ByteArrayInputStream;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
 
 public class UserProfileFragment extends BaseFragment {
 	private static final String USER_PROFILE_SCREEN = "user_profile_screen";
@@ -144,21 +142,35 @@ public class UserProfileFragment extends BaseFragment {
 	}
 
 	private void handleLogout() {
-		CommonDialog dialog = DialogHelper
-				.getPinterestDialogCancelable(getActivity());
-		dialog.setMessage(R.string.message_logout);
-		dialog.setPositiveButton(R.string.ok,
-				new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
+//		CommonDialog dialog = DialogHelper
+//				.getPinterestDialogCancelable(getActivity());
+//		dialog.setMessage(R.string.message_logout);
+//		dialog.setPositiveButton(R.string.ok,
+//				new DialogInterface.OnClickListener() {
+//
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						AppContext.instance().Logout();
+//						AppContext.showToastShort(R.string.tip_logout_success);
+//						getActivity().finish();
+//					}
+//				});
+//		dialog.setNegativeButton(R.string.cancel, null);
+//		dialog.show();
+        new MaterialDialog.Builder(getActivity())
+                .content(R.string.message_logout)
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
 						AppContext.instance().Logout();
 						AppContext.showToastShort(R.string.tip_logout_success);
 						getActivity().finish();
-					}
-				});
-		dialog.setNegativeButton(R.string.cancle, null);
-		dialog.show();
+                    }
+                })
+                .show();
 	}
 
 	private void requestData(boolean refresh) {

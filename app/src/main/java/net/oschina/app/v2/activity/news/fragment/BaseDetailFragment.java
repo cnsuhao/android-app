@@ -538,7 +538,7 @@ public class BaseDetailFragment extends BaseFragment implements
                 dialog.dismiss();
             }
         });
-        dialog.setNegativeButton(R.string.cancle, null);
+        dialog.setNegativeButton(R.string.cancel, null);
         dialog.show();
     }
 
