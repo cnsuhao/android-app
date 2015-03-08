@@ -60,20 +60,15 @@ import com.umeng.update.UpdateStatus;
  * @since 2014/08
  */
 public class MainActivity extends BaseActivity implements OnTabChangeListener,
-        OnItemClickListener, ObservableScrollViewCallbacks {
+         ObservableScrollViewCallbacks {
 
     private static final String MAIN_SCREEN = "MainScreen";
     private static final java.lang.String TAG = "MainActivity";
     private FragmentTabHost mTabHost;
-    private MenuAdapter mMenuAdapter;
-    private ListPopupWindow mMenuWindow;
-
-    // private Version mVersion;
     private BadgeView mBvTweet;
+    private SlidingTabLayout mSlidingTabLayout;
 
-    private View mHeaderView;
     private View mToolbarView;
-    //private int mBaseTranslationY;
 
     private int mSlop;
     private boolean mScrolled;
@@ -104,7 +99,6 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
             }
         }
     };
-    private SlidingTabLayout mSlidingTabLayout;
 
     @Override
     protected int getLayoutId() {
@@ -114,36 +108,8 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
     @Override
     protected void onResume() {
         super.onResume();
-        if (mMenuAdapter != null) {
-            mMenuAdapter.notifyDataSetChanged();
-        }
         MobclickAgent.onPageStart(MAIN_SCREEN);
         MobclickAgent.onResume(this);
-    }
-
-    private void checkUpdate() {
-        UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
-
-            @Override
-            public void onUpdateReturned(int updateStatus,
-                                         UpdateResponse updateInfo) {
-                switch (updateStatus) {
-                    case UpdateStatus.Yes: // has update
-                        // mVersion = new Version(updateInfo);
-                        UmengUpdateAgent.showUpdateDialog(getApplicationContext(),
-                                updateInfo);
-                        break;
-                    case UpdateStatus.No: // has no update
-                        break;
-                    case UpdateStatus.NoneWifi: // none wifi
-                        break;
-                    case UpdateStatus.Timeout: // time out
-                        break;
-                }
-            }
-        });
-        UmengUpdateAgent.setUpdateAutoPopup(false);
-        UmengUpdateAgent.update(getApplicationContext());
     }
 
     @Override
@@ -161,8 +127,6 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
 
         AppContext.instance().initLoginInfo();
 
-        mHeaderView = findViewById(R.id.header);
-        //ViewCompat.setElevation(mHeaderView, getResources().getDimension(R.dimen.toolbar_elevation));
         mToolbarView = findViewById(R.id.actionBar);
 
         final int tabHeight = getResources().getDimensionPixelSize(R.dimen.tab_height);
@@ -199,6 +163,31 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
         unregisterReceiver(mNoticeReceiver);
         NoticeUtils.tryToShutDown(this);
         super.onDestroy();
+    }
+
+    private void checkUpdate() {
+        UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+
+            @Override
+            public void onUpdateReturned(int updateStatus,
+                                         UpdateResponse updateInfo) {
+                switch (updateStatus) {
+                    case UpdateStatus.Yes: // has update
+                        // mVersion = new Version(updateInfo);
+                        UmengUpdateAgent.showUpdateDialog(getApplicationContext(),
+                                updateInfo);
+                        break;
+                    case UpdateStatus.No: // has no update
+                        break;
+                    case UpdateStatus.NoneWifi: // none wifi
+                        break;
+                    case UpdateStatus.Timeout: // time out
+                        break;
+                }
+            }
+        });
+        UmengUpdateAgent.setUpdateAutoPopup(false);
+        UmengUpdateAgent.update(getApplicationContext());
     }
 
     private void initTabs() {
@@ -278,23 +267,24 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
             case R.id.main_menu_today:
                 UIHelper.showDailyEnglish(this);
                 break;
-            //case R.id.main_menu_more:
-            //    showMoreOptionMenu(findViewById(R.id.main_menu_more));
-            //    break;
+            case R.id.main_menu_profile:
+                if (AppContext.instance().isLogin()) {
+                    UIHelper.showUserInfo(this);
+                } else {
+                    UIHelper.showLogin(this);
+                }
+                break;
+            case R.id.main_menu_open_software:
+                UIHelper.showSoftware(this);
+                break;
+            case R.id.main_menu_settings:
+                UIHelper.showSetting(this);
+                break;
+            case R.id.main_menu_quit:
+                UIHelper.exitApp(this);
+                break;
         }
         return true;
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            if (mMenuWindow != null && mMenuWindow.isShowing()) {
-                mMenuWindow.dismiss();
-            } else {
-               // showMoreOptionMenu(findViewById(R.id.main_menu_more));
-            }
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     private long mLastExitTime;
@@ -309,58 +299,9 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
         }
     }
 
-    private void showMoreOptionMenu(View view) {
-        if (mMenuWindow != null) {
-            mMenuWindow.dismiss();
-            mMenuWindow = null;
-        }
-        mMenuWindow = new ListPopupWindow(this);
-        if (mMenuAdapter == null) {
-            mMenuAdapter = new MenuAdapter();
-        }
-        mMenuWindow.setModal(true);
-        mMenuWindow.setContentWidth(getResources().getDimensionPixelSize(
-                R.dimen.popo_menu_dialog_width));
-        mMenuWindow.setAdapter(mMenuAdapter);
-        mMenuWindow.setOnItemClickListener(this);
-        mMenuWindow.setAnchorView(view);
-        mMenuWindow.show();
-        mMenuWindow.getListView().setDividerHeight(1);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-                            long id) {
-        switch (position) {
-            case 0:
-                if (AppContext.instance().isLogin()) {
-                    UIHelper.showUserInfo(this);
-                } else {
-                    UIHelper.showLogin(this);
-                }
-                break;
-            case 1:
-                UIHelper.showSoftware(this);
-                break;
-            case 2:
-                UIHelper.showSetting(this);
-                break;
-            case 3:
-                UIHelper.exitApp(this);
-                break;
-            default:
-                break;
-        }
-        if (mMenuWindow != null) {
-            mMenuWindow.dismiss();
-            mMenuWindow = null;
-        }
-    }
-
     public SlidingTabLayout getSlidingTabLayout() {
         return mSlidingTabLayout;
     }
-
 
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
@@ -473,7 +414,6 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
         @Override
         public boolean shouldInterceptTouchEvent(MotionEvent ev, boolean moving, float diffX, float diffY) {
             return false;
-
 //            if (!mScrolled && mSlop < Math.abs(diffX) && Math.abs(diffY) < Math.abs(diffX)) {
 //                // Horizontal scroll is maybe handled by ViewPager
 //                return false;

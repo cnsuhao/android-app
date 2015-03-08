@@ -52,7 +52,7 @@
                     android:layout_height="1px"
                     android:background="@color/list_divider_color" />
 
-                <WebView
+                <net.oschina.app.v2.ui.widget.WebView
                     android:id="@+id/webview"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

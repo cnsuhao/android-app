@@ -23,6 +23,7 @@ import net.oschina.app.v2.model.Report;
 import net.oschina.app.v2.service.PublicCommentTask;
 import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.ui.widget.WebView;
 import net.oschina.app.v2.utils.StringUtils;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
@@ -39,7 +40,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView;
+//import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -56,7 +57,6 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	private static final String BLOG_DETAIL_SCREEN = "blog_detail_screen";
 	private TextView mTvTitle, mTvSource, mTvTime;
 	private TextView mTvCommentCount;
-	private WebView mWebView;
 	private int mBlogId;
 	private Blog mBlog;
 	private EmojiFragment mEmojiFragment;

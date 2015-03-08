@@ -2,6 +2,7 @@ package net.oschina.app.v2.activity.news;
 
 import java.lang.ref.WeakReference;
 
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.blog.fragment.BlogDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
 import net.oschina.app.v2.activity.news.fragment.NewsDetailFragment;
@@ -16,6 +17,7 @@ import net.oschina.app.v2.emoji.EmojiFragment;
 import net.oschina.app.v2.utils.TDevice;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;

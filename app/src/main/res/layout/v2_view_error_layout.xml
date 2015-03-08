@@ -22,18 +22,17 @@
 
                 <ImageView
                     android:id="@+id/img_error_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/pagefailed_bg"
-                    android:visibility="gone" />
+                    android:layout_width="@dimen/error_icon_size"
+                    android:layout_height="@dimen/error_icon_size"
+                    android:background="@drawable/page_icon_error"
+                    android:visibility="gone"
+                    android:scaleType="fitXY"/>
 
                 <ProgressBar
                     android:id="@+id/animProgress"
-                    android:layout_width="79.0dip"
-                    android:layout_height="79.0dip"
-                    android:background="@drawable/loadingpage_bg"
-                    android:indeterminateDrawable="@drawable/animdraw"
-                    android:indeterminateDuration="1500" />
+                    style="@style/ListSpinner"
+                    android:layout_centerInParent="true"
+                    android:visibility="visible"/>
             </RelativeLayout>
 
             <TextView

@@ -85,4 +85,6 @@
     <dimen name="timeline_small_card_padding_right">5.0dip</dimen>
 
     <dimen name="tab_height">40dp</dimen>
+
+    <dimen name="error_icon_size">100dp</dimen>
 </resources>

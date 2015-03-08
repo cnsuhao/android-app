@@ -19,6 +19,7 @@ import net.oschina.app.v2.model.News.Relative;
 import net.oschina.app.v2.service.PublicCommentTask;
 import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.ui.widget.WebView;
 import net.oschina.app.v2.utils.StringUtils;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
@@ -31,7 +32,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView;
+//import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;

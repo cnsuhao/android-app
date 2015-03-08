@@ -13,6 +13,7 @@ import net.oschina.app.v2.model.Entity;
 import net.oschina.app.v2.model.FavoriteList;
 import net.oschina.app.v2.model.Software;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.ui.widget.WebView;
 import net.oschina.app.v2.utils.UIHelper;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
+//import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 

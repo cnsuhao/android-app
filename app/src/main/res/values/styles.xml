@@ -336,4 +336,15 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <style name="Spinner">
+        <item name="android:indeterminate">true</item>
+        <item name="android:indeterminateDrawable">@drawable/spinner</item>
+        <item name="android:indeterminateDuration">1500</item>
+        <item name="android:indeterminateOnly">true</item>
+    </style>
+
+    <style name="ListSpinner" parent="Spinner">
+        <item name="android:layout_width">@dimen/error_icon_size</item>
+        <item name="android:layout_height">@dimen/error_icon_size</item>
+    </style>
 </resources>

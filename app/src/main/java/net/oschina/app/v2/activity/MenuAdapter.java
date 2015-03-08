@@ -18,6 +18,7 @@ import net.oschina.app.v2.model.User;
 /**
  * Created by Tonlin on 2015/3/5.
  */
+@Deprecated
 public class MenuAdapter extends BaseAdapter {
 
     @Override

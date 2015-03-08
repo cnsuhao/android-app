@@ -104,23 +104,15 @@ public class EmptyLayout extends LinearLayout implements
 	@Override
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
-		// MyApplication.getInstance().getAtSkinObserable().registered(this);
 		onSkinChanged();
 	}
 
 	@Override
 	protected void onDetachedFromWindow() {
 		super.onDetachedFromWindow();
-		// MyApplication.getInstance().getAtSkinObserable().unregistered(this);
 	}
 
 	public void onSkinChanged() {
-		// mLayout.setBackgroundColor(SkinsUtil
-		// .getColor(getContext(), "bgcolor01"));
-		// tv.setTextColor(SkinsUtil.getColor(getContext(), "textcolor05"));
-	}
-
-	public void setDayNight(boolean flag) {
 	}
 
 	public void setErrorMessage(String msg) {
@@ -132,10 +124,9 @@ public class EmptyLayout extends LinearLayout implements
 		switch (i) {
 		case NETWORK_ERROR:
 			mErrorState = NETWORK_ERROR;
-			// img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"pagefailed_bg"));
 			if(TDevice.hasInternet()) {
 				tv.setText(R.string.error_view_load_error_click_to_refresh);
-				img.setBackgroundResource(R.drawable.pagefailed_bg);
+				img.setBackgroundResource(R.drawable.page_icon_error);
 			} else {
 				tv.setText(R.string.error_view_network_error_click_to_refresh);
 				img.setBackgroundResource(R.drawable.page_icon_network);
@@ -147,17 +138,15 @@ public class EmptyLayout extends LinearLayout implements
 			break;
 		case NETWORK_LOADING:
 			mErrorState = NETWORK_LOADING;
-			// animProgress.setBackgroundDrawable(SkinsUtil.getDrawable(context,"loadingpage_bg"));
 			animProgress.setVisibility(View.VISIBLE);
-            animProgress.clearAnimation();
-            animProgress.startAnimation(mAnim);
+            //animProgress.clearAnimation();
+            //animProgress.startAnimation(mAnim);
 			img.setVisibility(View.GONE);
 			tv.setText(R.string.error_view_loading);
 			clickEnable = false;
 			break;
 		case NODATA:
 			mErrorState = NODATA;
-			// img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
 			img.setBackgroundResource(R.drawable.page_icon_empty);
 			img.setVisibility(View.VISIBLE);
 			animProgress.setVisibility(View.GONE);
