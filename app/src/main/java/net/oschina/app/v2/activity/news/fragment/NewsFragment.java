@@ -84,7 +84,10 @@ public class NewsFragment extends BaseRecycleViewFragment {
     @Override
     public void onItemClick(View v,int position) {
         News news = (News) mAdapter.getItem(position);
-        if (news != null)
+        if (news != null) {
             UIHelper.showNewsRedirect(v.getContext(), news);
+            AppContext.addReadedNews(news.getId());
+            notifyDataSetChanged();
+        }
     }
 }

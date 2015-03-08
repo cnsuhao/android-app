@@ -1,17 +1,5 @@
 package net.oschina.app.v2.activity.active.adapter;
 
-import net.oschina.app.v2.base.ListBaseAdapter;
-import net.oschina.app.v2.base.RecycleBaseAdapter;
-import net.oschina.app.v2.model.Active;
-import net.oschina.app.v2.model.Active.ObjectReply;
-import net.oschina.app.v2.model.Tweet;
-import net.oschina.app.v2.ui.AvatarView;
-import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
-import net.oschina.app.v2.ui.text.MyURLSpan;
-import net.oschina.app.v2.ui.text.TweetTextView;
-import net.oschina.app.v2.utils.DateUtil;
-import net.oschina.app.v2.utils.UIHelper;
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.text.Html;
 import android.text.Spanned;
@@ -23,8 +11,18 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.tonlin.osc.happy.R;
+
+import net.oschina.app.v2.base.RecycleBaseAdapter;
+import net.oschina.app.v2.model.Active;
+import net.oschina.app.v2.model.Active.ObjectReply;
+import net.oschina.app.v2.model.Tweet;
+import net.oschina.app.v2.ui.AvatarView;
+import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
+import net.oschina.app.v2.ui.text.MyURLSpan;
+import net.oschina.app.v2.ui.text.TweetTextView;
+import net.oschina.app.v2.utils.DateUtil;
+import net.oschina.app.v2.utils.UIHelper;
 
 public class ActiveAdapter extends RecycleBaseAdapter {
 	private final static String AT_HOST_PRE = "http://my.oschina.net";

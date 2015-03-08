@@ -1,17 +1,17 @@
 package net.oschina.app.v2.activity.question.adapter;
 
-import net.oschina.app.v2.base.ListBaseAdapter;
-import net.oschina.app.v2.base.RecycleBaseAdapter;
-import net.oschina.app.v2.model.Post;
-import net.oschina.app.v2.ui.AvatarView;
-import net.oschina.app.v2.utils.DateUtil;
-import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
+
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.base.RecycleBaseAdapter;
+import net.oschina.app.v2.model.Post;
+import net.oschina.app.v2.ui.AvatarView;
+import net.oschina.app.v2.utils.DateUtil;
 
 public class QuestionAdapter extends RecycleBaseAdapter {
 
@@ -32,6 +32,10 @@ public class QuestionAdapter extends RecycleBaseAdapter {
         final Post item = (Post) _data.get(position);
 
         vh.title.setText(item.getTitle());
+
+        vh.title.setTextColor(vh.title.getResources()
+                .getColor(AppContext.isReadedQuestion(item.getId()) ? R.color.main_gray : R.color.main_black));
+
         vh.source.setText(item.getAuthor());
         vh.avCount.setText(item.getAnswerCount()+"/"+item.getViewCount());
         vh.time.setText(DateUtil.getFormatTime(item.getPubDate()));

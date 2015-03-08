@@ -3,6 +3,7 @@ package net.oschina.app.v2.activity.question.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.question.adapter.QuestionAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseListFragment;
@@ -73,7 +74,10 @@ public class QuestionFragment extends BaseRecycleViewFragment {
 	@Override
 	public void onItemClick(View view, int position) {
 		Post post = (Post) mAdapter.getItem(position);
-		if (post != null)
-			UIHelper.showQuestionDetail(view.getContext(), post.getId());
+		if (post != null) {
+            UIHelper.showQuestionDetail(view.getContext(), post.getId());
+            AppContext.addReadedQuestion(post.getId());
+            notifyDataSetChanged();
+        }
 	}
 }

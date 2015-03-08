@@ -45,22 +45,6 @@ public class BlogFragment extends BaseRecycleViewFragment {
         if (parentActivity instanceof ObservableScrollViewCallbacks) {
             mRecycleView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
         }
-
-//        if (parentActivity instanceof ObservableScrollViewCallbacks) {
-//            // Scroll to the specified offset after layout
-//            Bundle args = getArguments();
-//            if (args != null && args.containsKey(ARG_INITIAL_POSITION)) {
-//                final int initialPosition = args.getInt(ARG_INITIAL_POSITION, 0);
-//                TLog.log(TAG,"BlogFragment "+"index;"+args.getInt(ARG_INDEX,0)+" initViews init pos:"+initialPosition);
-//                ScrollUtils.addOnGlobalLayoutListener(mRecycleView, new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mRecycleView.scrollVerticallyToPosition(initialPosition);
-//                    }
-//                });
-//            }
-//            mRecycleView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
-//        }
     }
 
     @Override
@@ -101,7 +85,10 @@ public class BlogFragment extends BaseRecycleViewFragment {
 	@Override
 	public void onItemClick(View view,  int position) {
 		Blog blog = (Blog) mAdapter.getItem(position);
-		if (blog != null)
-			UIHelper.showUrlRedirect(view.getContext(), blog.getUrl());
+		if (blog != null) {
+            UIHelper.showUrlRedirect(view.getContext(), blog.getUrl());
+            AppContext.addReadedBlog(blog.getId());
+            notifyDataSetChanged();
+        }
 	}
 }

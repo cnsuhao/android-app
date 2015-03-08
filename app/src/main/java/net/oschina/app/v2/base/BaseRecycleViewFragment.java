@@ -212,6 +212,11 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         return new ResponseHandler(this);
     }
 
+    protected void notifyDataSetChanged(){
+        if(mAdapter!=null)
+            mAdapter.notifyDataSetChanged();
+    }
+
     public void refresh() {
         mCurrentPage = 0;
         mState = STATE_REFRESH;

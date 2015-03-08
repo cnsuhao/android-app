@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
 
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.Blog;
 import net.oschina.app.v2.utils.DateUtil;
@@ -35,6 +36,10 @@ public class BlogAdapter extends RecycleBaseAdapter {
         ViewHolder vh = (ViewHolder)holder;
         Blog item = (Blog) _data.get(position);
         vh.title.setText(item.getTitle());
+
+        vh.title.setTextColor(vh.title.getResources()
+                .getColor(AppContext.isReadedBlog(item.getId()) ? R.color.main_gray : R.color.main_black));
+
         vh.source.setText(item.getAuthor());
         vh.time.setText(DateUtil.getFormatTime(item.getPubDate()));
 
