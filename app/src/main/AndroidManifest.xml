@@ -51,7 +51,7 @@
         <activity
             android:name="net.oschina.app.v2.activity.SplashActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ActionBarBaseTheme.Transparent.NoTitleBar" >
+            android:theme="@style/Theme.IMA.Transparent.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -88,7 +88,7 @@
             android:name="net.oschina.app.v2.activity.image.ImagePreviewActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ActionBarBaseTheme.Preview" />
+            android:theme="@style/Theme.IMA.Preview" />
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
