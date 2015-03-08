@@ -1,13 +1,16 @@
 package net.oschina.app.v2.activity.message.fragment;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
@@ -96,6 +99,13 @@ public class MessageFragment extends BaseRecycleViewFragment {
 	@Override
 	protected void initViews(View view) {
 		super.initViews(view);
+        Activity parentActivity = getActivity();
+
+        mRecycleView.setTouchInterceptionViewGroup((ViewGroup) parentActivity.findViewById(R.id.container));
+
+        if (parentActivity instanceof ObservableScrollViewCallbacks) {
+            mRecycleView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
+        }
 		//mListView.setOnItemLongClickListener(this);
 		//mListView.setDivider(null);
 		//mListView.setDividerHeight(0);
