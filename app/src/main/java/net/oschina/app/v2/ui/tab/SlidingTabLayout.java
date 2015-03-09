@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.util.TypedValue;
@@ -349,21 +350,43 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     }
 
-    public void setMessageCount(int i,int count) {
-        if(mTabStrip.getChildAt(i) == null)return;
-        TextView mTvMessageCount = (TextView)mTabStrip.getChildAt(i).findViewById(R.id.tv_unread_count);
+    public void setMessageCount(int i, int count) {
+        if (mTabStrip.getChildAt(i) == null) return;
+        TextView mTvMessageCount = (TextView) mTabStrip.getChildAt(i).findViewById(R.id.tv_unread_count);
         if (mTvMessageCount == null) return;
         if (count == 0) {
             mTvMessageCount.setVisibility(View.GONE);
         } else {
             mTvMessageCount.setVisibility(View.VISIBLE);
             String countStr;
-            if(count < 100)
+            if (count < 100)
                 countStr = String.valueOf(count);
             else {
                 countStr = "99+";
             }
             mTvMessageCount.setText(countStr);
+        }
+    }
+
+    public void setMessageTipVisible(int visible) {
+        int size = mTabStrip.getChildCount();
+        for (int i = 0; i < size; i++) {
+            TextView mTvMessageCount = (TextView)
+                    mTabStrip.getChildAt(i).findViewById(R.id.tv_unread_count);
+            if (mTvMessageCount == null) continue;
+            if (visible == View.VISIBLE) {// try to show num
+                String count = mTvMessageCount.getText().toString();
+                if (!TextUtils.isEmpty(count)) {
+                    int num = Integer.parseInt(count);
+                    if (num > 0) {
+                        mTvMessageCount.setVisibility(View.VISIBLE);
+                        continue;
+                    }
+                }
+                mTvMessageCount.setVisibility(View.INVISIBLE);
+            } else {
+                mTvMessageCount.setVisibility(visible);
+            }
         }
     }
 

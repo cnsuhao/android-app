@@ -299,4 +299,8 @@ public abstract class BaseActivity extends ActionBarActivity implements
 	public boolean isVisible() {
 		return _isVisible;
 	}
+
+    protected int getScreenHeight() {
+        return findViewById(android.R.id.content).getHeight();
+    }
 }

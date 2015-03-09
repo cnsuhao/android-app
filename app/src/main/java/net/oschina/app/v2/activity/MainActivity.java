@@ -58,9 +58,10 @@ import com.umeng.update.UpdateStatus;
  *
  * @author tonlin
  * @since 2014/08
+ * @update 2015/03/08
  */
-public class MainActivity extends BaseActivity implements OnTabChangeListener,
-         ObservableScrollViewCallbacks {
+public class MainActivity extends BaseActivity implements OnTabChangeListener,IMainTab,
+        ObservableScrollViewCallbacks {
 
     private static final String MAIN_SCREEN = "MainScreen";
     private static final java.lang.String TAG = "MainActivity";
@@ -235,6 +236,11 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
                 v.findViewById(R.id.tab_icon).setSelected(false);
                 v.findViewById(R.id.tab_titile).setSelected(false);
             }
+            if (i == 3) {
+                mSlidingTabLayout.setMessageTipVisible(View.VISIBLE);
+            } else {
+                mSlidingTabLayout.setMessageTipVisible(View.INVISIBLE);
+            }
         }
         supportInvalidateOptionsMenu();
     }
@@ -299,8 +305,14 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
         }
     }
 
+    @Override
     public SlidingTabLayout getSlidingTabLayout() {
         return mSlidingTabLayout;
+    }
+
+    @Override
+    public int getCurrentTab() {
+        return mTabHost.getCurrentTab();
     }
 
     @Override
@@ -360,13 +372,13 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
             IPagerFragment fc = (IPagerFragment) fragment;
 
             fragment = fc.getCurrentFragment();
-            TLog.log(TAG, "pager fragment:"+fc+" view:"+fragment.getView()+" getCurrentFragment=" + fragment);
+            TLog.log(TAG, "pager fragment:" + fc + " view:" + fragment.getView() + " getCurrentFragment=" + fragment);
             return fragment;
         }
         return null;
     }
 
-    private Fragment getPagerFragment(){
+    private Fragment getPagerFragment() {
         MainTab[] tabs = MainTab.values();
 
         MainTab tab = tabs[mTabHost.getCurrentTab()];
@@ -409,6 +421,7 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
             animator.start();
         }
     }
+
 
     private TouchInterceptionFrameLayout.TouchInterceptionListener mInterceptionListener = new TouchInterceptionFrameLayout.TouchInterceptionListener() {
         @Override
@@ -470,7 +483,4 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,
         }
     };
 
-    protected int getScreenHeight() {
-        return findViewById(android.R.id.content).getHeight();
-    }
 }

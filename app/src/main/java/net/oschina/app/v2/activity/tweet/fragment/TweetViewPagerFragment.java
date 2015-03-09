@@ -1,23 +1,23 @@
 package net.oschina.app.v2.activity.tweet.fragment;
 
-import net.oschina.app.v2.activity.IPagerFragment;
-import net.oschina.app.v2.activity.MainActivity;
-import net.oschina.app.v2.activity.tweet.adapter.TweetTabPagerAdapter;
-import net.oschina.app.v2.base.BaseFragment;
-import net.oschina.app.v2.base.BaseViewPagerAdapter;
-import net.oschina.app.v2.ui.tab.SlidingTabLayout;
-
+import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.tonlin.osc.happy.R;
+
+import net.oschina.app.v2.activity.IMainTab;
+import net.oschina.app.v2.activity.IPagerFragment;
+import net.oschina.app.v2.activity.tweet.adapter.TweetTabPagerAdapter;
+import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.base.BaseViewPagerAdapter;
+import net.oschina.app.v2.ui.tab.SlidingTabLayout;
 
 public class TweetViewPagerFragment extends BaseFragment implements
         IPagerFragment {
@@ -33,7 +33,12 @@ public class TweetViewPagerFragment extends BaseFragment implements
 		View view = inflater.inflate(R.layout.v2_fragment_viewpager2, container,
 				false);
 		//mTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
-        mSlidingTabLayout = ((MainActivity)getActivity()).getSlidingTabLayout();
+        Activity parentActivity = getActivity();
+        if (parentActivity instanceof IMainTab) {
+            mSlidingTabLayout = ((IMainTab) parentActivity).getSlidingTabLayout();
+        } else {
+            throw new RuntimeException(TweetViewPagerFragment.class.getSimpleName() + "'s parent activity must be a IMainTab");
+        }
         //(SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setCustomTabView(R.layout.v2_tab_indicator2, R.id.tv_name);
 		mViewPager = (ViewPager) view.findViewById(R.id.main_tab_pager);

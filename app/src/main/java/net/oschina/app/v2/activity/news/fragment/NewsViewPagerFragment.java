@@ -1,5 +1,6 @@
 package net.oschina.app.v2.activity.news.fragment;
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,8 +12,8 @@ import android.view.ViewGroup;
 
 import com.tonlin.osc.happy.R;
 
+import net.oschina.app.v2.activity.IMainTab;
 import net.oschina.app.v2.activity.IPagerFragment;
-import net.oschina.app.v2.activity.MainActivity;
 import net.oschina.app.v2.activity.news.adapter.NewsTabPagerAdapter;
 import net.oschina.app.v2.base.BaseViewPagerAdapter;
 import net.oschina.app.v2.ui.tab.SlidingTabLayout;
@@ -31,7 +32,12 @@ public class NewsViewPagerFragment extends Fragment implements
         View view = inflater.inflate(R.layout.v2_fragment_viewpager2, container,
                 false);
         //mTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
-        mSlidingTabLayout = ((MainActivity) getActivity()).getSlidingTabLayout();
+        Activity parentActivity = getActivity();
+        if (parentActivity instanceof IMainTab) {
+            mSlidingTabLayout = ((IMainTab) parentActivity).getSlidingTabLayout();
+        } else {
+            throw new RuntimeException(NewsViewPagerFragment.class.getSimpleName() + "'s parent activity must be a IMainTab");
+        }
         //(SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setCustomTabView(R.layout.v2_tab_indicator2, R.id.tv_name);
 
