@@ -85,7 +85,6 @@ public class CommonDialog extends Dialog {
 		negativeBt = (Button) content.findViewById(R.id.negative_bt);
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 			// TODO Check content view height and change height
-
 		} else {
 			content.addOnLayoutChangeListener(new OnLayoutChangeListener() {
 
