@@ -52,10 +52,24 @@
         android:layout_height="1px"
         android:background="@color/list_divider_color" />
 
+    <net.oschina.app.v2.ui.text.TweetTextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_name"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:focusable="false"
+        android:padding="@dimen/space_16"
+        android:focusableInTouchMode="false"
+        android:textColor="@color/main_black"
+        android:background="@color/list_item_background_normal"
+        android:textSize="@dimen/text_size_16" />
+
     <WebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
+        android:visibility="gone"
         android:background="@color/list_item_background_normal" />
 
     <LinearLayout

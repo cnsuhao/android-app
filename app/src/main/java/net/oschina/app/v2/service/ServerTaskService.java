@@ -18,6 +18,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
@@ -38,6 +39,17 @@ public class ServerTaskService extends IntentService {
 	private static final String KEY_TWEET = "tweet_";
 	private static final String KEY_POST = "post_";
 
+    private Handler mExitHandler = new Handler();
+
+    private Handler mResultHandler = new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            AppContext.showToastShort("操作成功");
+        }
+    };
+
 	public static List<String> penddingTasks = new ArrayList<String>();
 
 	class PublicCommentResponseHandler extends OperationResponseHandler {
@@ -54,6 +66,7 @@ public class ServerTaskService extends IntentService {
 			final int id = task.getId() * task.getUid();
 			Result res = Result.parse(is);
 			if (res.OK()) {
+                mResultHandler.sendEmptyMessage(0);
 				Comment comment = res.getComment();
 				UIHelper.sendBroadCastCommentChanged(ServerTaskService.this,
 						isBlog, task.getId(), task.getCatalog(),
@@ -197,11 +210,18 @@ public class ServerTaskService extends IntentService {
 
 	private synchronized void tryToStopServie() {
 		if (penddingTasks == null || penddingTasks.size() == 0) {
-			stopSelf();
+            mExitHandler.removeCallbacksAndMessages(null);
+            mExitHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    stopSelf();
+                }
+            }, 6000);
 		}
 	}
 
 	private synchronized void addPenddingTask(String key) {
+        mExitHandler.removeCallbacksAndMessages(null);
 		penddingTasks.add(key);
 	}
 
@@ -270,7 +290,7 @@ public class ServerTaskService extends IntentService {
 
 		NewsApi.publicComment(task.getCatalog(), task.getId(), task.getUid(),
 				task.getContent(), task.getIsPostToMyZone(),
-				new PublicCommentResponseHandler(task, false));
+				new PublicCommentResponseHandler(getMainLooper(),task, false));
 	}
 
 	private void publicPost(Post post) {

@@ -223,7 +223,7 @@ public class UserProfileFragment extends BaseFragment {
 		private WeakReference<Context> mContext;
 
 		private CacheTask(Context context) {
-			mContext = new WeakReference<Context>(context);
+			mContext = new WeakReference<>(context);
 		}
 
 		@Override
@@ -256,7 +256,7 @@ public class UserProfileFragment extends BaseFragment {
 		private String key;
 
 		private SaveCacheTask(Context context, Serializable seri, String key) {
-			mContext = new WeakReference<Context>(context);
+			mContext = new WeakReference<>(context);
 			this.seri = seri;
 			this.key = key;
 		}

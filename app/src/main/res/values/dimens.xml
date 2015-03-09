@@ -86,5 +86,5 @@
 
     <dimen name="tab_height">40dp</dimen>
 
-    <dimen name="error_icon_size">80dp</dimen>
+    <dimen name="error_icon_size">59dp</dimen>
 </resources>

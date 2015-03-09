@@ -140,9 +140,10 @@ import com.tonlin.osc.happy.R;
 	 * @param context
 	 * @param tweetId
 	 */
-	public static void showTweetDetail(Context context, int tweetId) {
+	public static void showTweetDetail(Context context, int tweetId,String content) {
 		Intent intent = new Intent(context, DetailActivity.class);
 		intent.putExtra("tweet_id", tweetId);
+        intent.putExtra("tweet_content",content);
 		intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
 				DetailActivity.DISPLAY_TWEET);
 		context.startActivity(intent);
@@ -246,7 +247,7 @@ import com.tonlin.osc.happy.R;
 				showQuestionDetail(context, id);
 				break;
 			case Active.CATALOG_TWEET:
-				showTweetDetail(context, id);
+				showTweetDetail(context, id, active.getMessage());
 				break;
 			case Active.CATALOG_BLOG:
 				showBlogDetail(context, id);
@@ -572,7 +573,7 @@ import com.tonlin.osc.happy.R;
 			showUserCenter(context, objId, objKey);
 			break;
 		case URLs.URL_OBJ_TYPE_TWEET:
-			showTweetDetail(context, objId);
+			showTweetDetail(context, objId,"");
 			break;
 		case URLs.URL_OBJ_TYPE_BLOG:
 			showBlogDetail(context, objId);

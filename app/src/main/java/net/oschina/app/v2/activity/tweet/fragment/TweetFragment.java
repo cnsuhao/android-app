@@ -159,7 +159,7 @@ public class TweetFragment extends BaseRecycleViewFragment {
 
     @Override
     protected void requestData(boolean refresh) {
-        mErrorLayout.setErrorMessage("");
+        //mErrorLayout.setErrorMessage("");
         if (mCatalog > 0) {
             if (AppContext.instance().isLogin()) {
                 mCatalog = AppContext.instance().getLoginUid();
@@ -185,7 +185,7 @@ public class TweetFragment extends BaseRecycleViewFragment {
     public void onItemClick(View view, int position) {
         Tweet tweet = (Tweet) mAdapter.getItem(position);
         if (tweet != null)
-            UIHelper.showTweetDetail(view.getContext(), tweet.getId());
+            UIHelper.showTweetDetail(view.getContext(), tweet.getId(),tweet.getBody());
     }
 
     @Override
@@ -238,7 +238,7 @@ public class TweetFragment extends BaseRecycleViewFragment {
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         dialog.dismiss();
                         if (which == 0) {
-                            UIHelper.showTweetDetail(view.getContext(), tweet.getId());
+                            UIHelper.showTweetDetail(view.getContext(), tweet.getId(),tweet.getBody());
                         } else if (which == 1) {
                             TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(tweet
                                     .getBody()));

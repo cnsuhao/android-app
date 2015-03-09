@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +54,9 @@ import net.oschina.app.v2.model.Tweet;
 import net.oschina.app.v2.service.PublicCommentTask;
 import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
+import net.oschina.app.v2.ui.text.MyURLSpan;
+import net.oschina.app.v2.ui.text.TweetTextView;
 import net.oschina.app.v2.ui.widget.FixedRecyclerView;
 import net.oschina.app.v2.utils.HTMLSpirit;
 import net.oschina.app.v2.utils.StringUtils;
@@ -78,7 +83,7 @@ public class TweetDetailFragment extends BaseFragment implements
 	private EmptyLayout mEmptyView;
 	private ImageView mIvAvatar, mIvPic;
 	private TextView mTvName, mTvFrom, mTvTime, mTvCommentCount;
-	private WebView mContent;
+	private WebView mWVContent;
 	private int mTweetId;
 	private Tweet mTweet;
 	private int mCurrentPage = 0;
@@ -86,7 +91,8 @@ public class TweetDetailFragment extends BaseFragment implements
 	private EmojiFragment mEmojiFragment;
 	private BroadcastReceiver mCommentReceiver;
     private LinearLayoutManager mLayoutManager;
-
+    private String mTweetContent;
+    private TweetTextView mTvContent;
 
 
     class CommentChangeReceiver extends BroadcastReceiver {
@@ -109,7 +115,7 @@ public class TweetDetailFragment extends BaseFragment implements
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+            int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
             int totalItemCount = mLayoutManager.getItemCount();
             if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
                 if (mState== STATE_NONE && mAdapter != null
@@ -174,6 +180,7 @@ public class TweetDetailFragment extends BaseFragment implements
 		View view = inflater.inflate(R.layout.v2_fragment_tweet_detail,
 				container, false);
 		mTweetId = getActivity().getIntent().getIntExtra("tweet_id", 0);
+        mTweetContent = getActivity().getIntent().getStringExtra("tweet_content");
 
 		initViews(view);
 
@@ -205,7 +212,7 @@ public class TweetDetailFragment extends BaseFragment implements
 		mTvFrom = (TextView) header.findViewById(R.id.tv_from);
 		mTvTime = (TextView) header.findViewById(R.id.tv_time);
 		mTvCommentCount = (TextView) header.findViewById(R.id.tv_comment_count);
-		mContent = (WebView) header.findViewById(R.id.webview);
+		mWVContent = (WebView) header.findViewById(R.id.webview);
 		mIvPic = (ImageView) header.findViewById(R.id.iv_pic);
 		mIvPic.setOnClickListener(new View.OnClickListener() {
 
@@ -217,7 +224,9 @@ public class TweetDetailFragment extends BaseFragment implements
 				}
 			}
 		});
-		initWebView(mContent);
+        mTvContent = (TweetTextView)header.findViewById(R.id.tv_content);
+
+		initWebView(mWVContent);
 
 		//mListView.addHeaderView(header);
 
@@ -287,8 +296,17 @@ public class TweetDetailFragment extends BaseFragment implements
 		body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
 		body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
 
-		mContent.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
-		mContent.setWebViewClient(UIHelper.getWebViewClient());
+
+		mWVContent.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
+		mWVContent.setWebViewClient(UIHelper.getWebViewClient());
+
+        mTvContent.setMovementMethod(MyLinkMovementMethod.a());
+        mTvContent.setFocusable(false);
+        mTvContent.setDispatchToParent(true);
+        mTvContent.setLongClickable(false);
+        Spanned span = Html.fromHtml(mTweetContent);
+        mTvContent.setText(span);
+        MyURLSpan.parseLinkText(mTvContent, span);
 
 		if (TextUtils.isEmpty(mTweet.getImgSmall())) {
 			return;
