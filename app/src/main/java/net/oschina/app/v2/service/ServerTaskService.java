@@ -11,12 +11,15 @@ import net.oschina.app.v2.model.Comment;
 import net.oschina.app.v2.model.Post;
 import net.oschina.app.v2.model.Result;
 import net.oschina.app.v2.model.Tweet;
+import net.oschina.app.v2.utils.TLog;
 import net.oschina.app.v2.utils.UIHelper;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
@@ -38,6 +41,7 @@ public class ServerTaskService extends IntentService {
 	private static final String KEY_COMMENT = "comment_";
 	private static final String KEY_TWEET = "tweet_";
 	private static final String KEY_POST = "post_";
+    private static final java.lang.String TAG = "TaskService";
 
     private Handler mExitHandler = new Handler();
 
@@ -54,19 +58,19 @@ public class ServerTaskService extends IntentService {
 
 	class PublicCommentResponseHandler extends OperationResponseHandler {
 
-		public PublicCommentResponseHandler( Object... args) {
-			super(args);
+		public PublicCommentResponseHandler( Looper looper,Object... args) {
+			super(looper,args);
 		}
 
 		@Override
 		public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
 				throws Exception {
-			PublicCommentTask task = (PublicCommentTask) args[0];
+            TLog.log(TAG,"成功发布评论....");
+            PublicCommentTask task = (PublicCommentTask) args[0];
 			final boolean isBlog = (Boolean) args[1];
 			final int id = task.getId() * task.getUid();
 			Result res = Result.parse(is);
 			if (res.OK()) {
-                mResultHandler.sendEmptyMessage(0);
 				Comment comment = res.getComment();
 				UIHelper.sendBroadCastCommentChanged(ServerTaskService.this,
 						isBlog, task.getId(), task.getCatalog(),
@@ -239,7 +243,41 @@ public class ServerTaskService extends IntentService {
 
 	}
 
-	@Override
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+//    @Override
+//    public int onStartCommand(Intent intent, int flags, int startId) {
+//        String action = intent.getAction();
+//        if (ACTION_PUBLIC_BLOG_COMMENT.equals(action)) {
+//            PublicCommentTask task = intent
+//                    .getParcelableExtra(BUNDLE_PUBLIC_COMMENT_TASK);
+//            if (task != null) {
+//                publicBlogComment(task);
+//            }
+//        } else if (ACTION_PUBLIC_COMMENT.equals(action)) {
+//            PublicCommentTask task = intent
+//                    .getParcelableExtra(BUNDLE_PUBLIC_COMMENT_TASK);
+//            if (task != null) {
+//                publicComment(task);
+//            }
+//        } else if (ACTION_PUBLIC_POST.equals(action)) {
+//            Post post = intent.getParcelableExtra(BUNDLE_PUBLIC_POST_TASK);
+//            if (post != null) {
+//                publicPost(post);
+//            }
+//        } else if (ACTION_PUBLIC_TWEET.equals(action)) {
+//            Tweet tweet = intent.getParcelableExtra(BUNDLE_PUBLIC_TWEET_TASK);
+//            if (tweet != null) {
+//                publicTweet(tweet);
+//            }
+//        }
+//        return super.onStartCommand(intent, flags, startId);
+//    }
+
+    @Override
 	protected void onHandleIntent(Intent intent) {
 		String action = intent.getAction();
 		if (ACTION_PUBLIC_BLOG_COMMENT.equals(action)) {
@@ -290,7 +328,7 @@ public class ServerTaskService extends IntentService {
 
 		NewsApi.publicComment(task.getCatalog(), task.getId(), task.getUid(),
 				task.getContent(), task.getIsPostToMyZone(),
-				new PublicCommentResponseHandler(getMainLooper(),task, false));
+				new PublicCommentResponseHandler(ServerTaskService.this.getMainLooper(),task, false));
 	}
 
 	private void publicPost(Post post) {
