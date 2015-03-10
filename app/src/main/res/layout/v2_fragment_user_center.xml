@@ -9,8 +9,8 @@
         android:layout_height="match_parent"
         android:cacheColorHint="#ffffffff"
         android:descendantFocusability="blocksDescendants"
-        android:divider="@color/list_divider_color"
-        android:dividerHeight="1px"
+        android:divider="@null"
+        android:dividerHeight="0px"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
         android:listSelector="@android:color/transparent" />
