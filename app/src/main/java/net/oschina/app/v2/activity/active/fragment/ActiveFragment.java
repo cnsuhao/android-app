@@ -89,6 +89,11 @@ public class ActiveFragment extends BaseRecycleViewFragment {
     }
 
     @Override
+    protected boolean isNeedListDivider() {
+        return false;
+    }
+
+    @Override
     protected String getCacheKeyPrefix() {
         return new StringBuffer(CACHE_KEY_PREFIX).append(
                 AppContext.instance().getLoginUid()).toString();

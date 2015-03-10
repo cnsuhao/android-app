@@ -58,7 +58,7 @@ public class TweetFragment extends BaseRecycleViewFragment {
                 Result res = Result.parse(is);
                 if (res != null && res.OK()) {
                     AppContext.showToastShort(R.string.tip_del_tweet_success);
-                    UIHelper.sendNoticeBroadcast(getActivity(),res);
+                    UIHelper.sendNoticeBroadcast(getActivity(), res);
                     Tweet tweet = (Tweet) args[0];
                     mAdapter.removeItem(tweet);
                 } else {
@@ -126,10 +126,14 @@ public class TweetFragment extends BaseRecycleViewFragment {
 
             @Override
             public void onClick(View v) {
-                if (AppContext.instance().isLogin()) {
-                    requestData(false);
+                if (mCatalog > 0) {
+                    if (AppContext.instance().isLogin()) {
+                        requestData(false);
+                    } else {
+                        UIHelper.showLogin(getActivity());
+                    }
                 } else {
-                    UIHelper.showLogin(getActivity());
+                    requestData(false);
                 }
             }
         });
@@ -140,6 +144,11 @@ public class TweetFragment extends BaseRecycleViewFragment {
         RecycleBaseAdapter adapter = new TweetAdapter();
         adapter.setOnItemLongClickListener(this);
         return adapter;
+    }
+
+    @Override
+    protected boolean isNeedListDivider() {
+        return false;
     }
 
     @Override
@@ -186,7 +195,7 @@ public class TweetFragment extends BaseRecycleViewFragment {
     public void onItemClick(View view, int position) {
         Tweet tweet = (Tweet) mAdapter.getItem(position);
         if (tweet != null)
-            UIHelper.showTweetDetail(view.getContext(), tweet.getId(),tweet.getBody());
+            UIHelper.showTweetDetail(view.getContext(), tweet.getId(), tweet.getBody());
     }
 
     @Override
@@ -239,7 +248,7 @@ public class TweetFragment extends BaseRecycleViewFragment {
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         dialog.dismiss();
                         if (which == 0) {
-                            UIHelper.showTweetDetail(view.getContext(), tweet.getId(),tweet.getBody());
+                            UIHelper.showTweetDetail(view.getContext(), tweet.getId(), tweet.getBody());
                         } else if (which == 1) {
                             TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(tweet
                                     .getBody()));

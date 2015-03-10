@@ -97,7 +97,8 @@
         android:id="@+id/split"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/list_divider_color"
-        android:visibility="gone" />
+        android:layout_marginLeft="72dp"
+        android:background="@drawable/list_divider"
+        android:visibility="visible" />
 
 </LinearLayout>

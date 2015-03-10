@@ -374,7 +374,6 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
             IPagerFragment fc = (IPagerFragment) fragment;
 
             fragment = fc.getCurrentFragment();
-            TLog.log(TAG, "pager fragment:" + fc + " view:" + fragment.getView() + " getCurrentFragment=" + fragment);
             return fragment;
         }
         return null;

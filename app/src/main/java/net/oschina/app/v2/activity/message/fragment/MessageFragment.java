@@ -80,7 +80,12 @@ public class MessageFragment extends BaseRecycleViewFragment {
         return adapter;
 	}
 
-	@Override
+    @Override
+    protected boolean isNeedListDivider() {
+        return false;
+    }
+
+    @Override
 	protected String getCacheKeyPrefix() {
 		return CACHE_KEY_PREFIX;
 	}

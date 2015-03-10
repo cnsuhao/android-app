@@ -107,12 +107,12 @@ public class ActiveAdapter extends RecycleBaseAdapter {
             //    break;
         }
 
-        if (item.getCommentCount() > 0) {
-            vh.commentCount.setText(String.valueOf(item.getCommentCount()));
-            vh.commentCount.setVisibility(View.VISIBLE);
-        } else {
-            vh.commentCount.setVisibility(View.GONE);
-        }
+        vh.commentCount.setText(String.valueOf(item.getCommentCount()));
+        //if (item.getCommentCount() > 0) {
+        //    vh.commentCount.setVisibility(View.VISIBLE);
+        //} else {
+        //    vh.commentCount.setVisibility(View.VISIBLE);
+        //}
         if (item.getActiveType() == Active.CATALOG_OTHER) {
             vh.retweetCount.setVisibility(View.VISIBLE);
         } else {

@@ -50,7 +50,12 @@ public class QuestionFragment extends BaseRecycleViewFragment {
 		return new QuestionAdapter();
 	}
 
-	@Override
+    @Override
+    protected boolean isNeedListDivider() {
+        return false;
+    }
+
+    @Override
 	protected String getCacheKeyPrefix() {
 		return CACHE_KEY_PREFIX;
 	}

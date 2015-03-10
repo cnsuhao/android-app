@@ -1,11 +1,21 @@
 package net.oschina.app.v2.utils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +33,14 @@ import android.util.Log;
  * @created 2012-3-21
  */
 public class FileUtils {
+    private static final String TAG = "FileUtils";
+    private static final int BUFFER = 8192;
+    private static final long ONE_DAY_MILLIS = 0x5265c00L;
+
     /**
 	 * 写文本文件 在Android系统中，文件保存在 /data/data/PACKAGE_NAME/files 目录下
 	 * 
 	 * @param context
-	 * @param msg
 	 */
 	public static void write(Context context, String fileName, String content) {
 		if (content == null)
@@ -260,7 +273,7 @@ public class FileUtils {
 	/**
 	 * 获取目录文件个数
 	 * 
-	 * @param f
+	 * @param dir
 	 * @return
 	 */
 	public long getFileList(File dir) {
@@ -409,7 +422,6 @@ public class FileUtils {
 						deletedFile.delete();
 					}
 					newPath.delete();
-					Log.i("DirectoryManager deleteDirectory", fileName);
 					status = true;
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -440,7 +452,6 @@ public class FileUtils {
 			checker.checkDelete(newPath.toString());
 			if (newPath.isFile()) {
 				try {
-					Log.i("DirectoryManager deleteFile", fileName);
 					newPath.delete();
 					status = true;
 				} catch (SecurityException se) {
@@ -497,7 +508,6 @@ public class FileUtils {
 		File f = new File(filePath);
 		checker.checkDelete(filePath);
 		if (f.isFile()) {
-			Log.i("DirectoryManager deleteFile", filePath);
 			f.delete();
 			return true;
 		}
@@ -506,7 +516,7 @@ public class FileUtils {
 	
 	/**
 	 * 清空一个文件夹
-	 * @param files
+	 * @param filePath
 	 */
 	public static void clearFileWithPath(String filePath) {
 		List<File> files = FileUtils.listPathFiles(filePath);
@@ -547,7 +557,7 @@ public class FileUtils {
 	/**
 	 * 列出root目录下所有子目录
 	 * 
-	 * @param path
+	 * @param root
 	 * @return 绝对路径
 	 */
 	public static List<String> listPath(String root) {
@@ -593,7 +603,7 @@ public class FileUtils {
 	/**
 	 * 创建目录
 	 * 
-	 * @param path
+	 * @param newPath
 	 */
 	public static PathStatus createPath(String newPath) {
 		File path = new File(newPath);
@@ -633,4 +643,311 @@ public class FileUtils {
 		savedir = null;
 		return savePath;
 	}
+
+
+
+    public static InputStream byteToInputSteram(byte abyte0[]) {
+        ByteArrayInputStream bytearrayinputstream = null;
+        if (abyte0 != null && abyte0.length > 0)
+            bytearrayinputstream = new ByteArrayInputStream(abyte0);
+        return bytearrayinputstream;
+    }
+
+    public static void combineTextFile(File[] files, File file)
+            throws IOException {
+        if (file != null && files != null) {
+            BufferedReader brSource = null;
+            BufferedWriter brTarget = new BufferedWriter(
+                    new OutputStreamWriter(new FileOutputStream(file)));
+            for (int i = 0; i < files.length; i++) {
+                brSource = new BufferedReader(new InputStreamReader(
+                        new FileInputStream(files[i])));
+                String s = brSource.readLine();
+                String s1;
+                while ((s1 = brSource.readLine()) != null) {
+                    brTarget.write(s);
+                    brTarget.newLine();
+                    s = s1;
+                }
+                brTarget.write(s);
+                if (i != -1 + files.length)
+                    brTarget.newLine();
+                brTarget.flush();
+            }
+            if (brSource != null)
+                brSource.close();
+            if (brTarget != null)
+                brTarget.close();
+        }
+    }
+
+    public static void copy(File source, File target) throws IOException {
+        if (source != null && !source.exists())
+            Log.i(TAG, "the source file is not exists: "
+                            + source.getAbsolutePath());
+        else if (source.isFile())
+            copyFile(source, target);
+        else
+            copyDirectory(source, target);
+    }
+
+    public static void copyDirectory(File sourceDir, File targetDir)
+            throws IOException {
+        targetDir.mkdirs();
+        if (sourceDir != null) {
+            File[] f = sourceDir.listFiles();
+            for (int i = 0; i < f.length; i++) {
+                if (f[i].isFile()) {
+                    copyFile(
+                            f[i],
+                            new File((new StringBuilder(String
+                                    .valueOf(targetDir.getAbsolutePath())))
+                                    .append(File.separator)
+                                    .append(f[i].getName()).toString()));
+                } else if (f[i].isDirectory()) {
+                    copyDirectory(new File(sourceDir, f[i].getName()),
+                            new File(targetDir, f[i].getName()));
+                }
+            }
+        }
+    }
+
+    public static void copyFile(File source, File target) throws IOException {
+        if (source != null && target != null) {
+            BufferedInputStream bis = new BufferedInputStream(
+                    new FileInputStream(source));
+            BufferedOutputStream bos = new BufferedOutputStream(
+                    new FileOutputStream(target));
+            try {
+                byte[] buffer = new byte[BUFFER];
+                int i = -1;
+                while ((i = bis.read(buffer)) != -1) {
+                    bos.write(buffer, 0, i);
+                }
+                bos.flush();
+            } finally {
+                if (bis != null)
+                    bis.close();
+                if (bos != null)
+                    bos.close();
+            }
+        }
+    }
+
+    public static boolean delete(File file) {
+        boolean flag;
+        if (file != null && !file.exists()) {
+            Log.i(TAG, "the file is not exists: " + file.getAbsolutePath());
+            return false;
+        } else if (file != null && file.isFile())
+            flag = deleteFile(file);
+        else
+            flag = deleteDirectory(file, true);
+        return flag;
+    }
+
+    public static boolean deleteDirectory(File file, boolean flag) {
+        return deleteDirectory(file, null, flag, false);
+    }
+
+    public static boolean deleteDirectory(File file, String s, boolean flag,
+                                          boolean flag1) {
+        if (file == null) {
+            return false;
+        }
+        if (!file.exists() || !file.isDirectory()) {
+            Log.i(TAG, "the directory is not exists: " + file.getAbsolutePath());
+            return false;
+        }
+        boolean flag3 = true;
+        File[] f = file.listFiles();
+        for (int i = 0; i < f.length; i++) {
+            if (f[i].isFile()) {
+                if (s == null
+                        || f[i].getName().toLowerCase()
+                        .endsWith("." + s.toLowerCase())) {
+                    flag3 = deleteFile(f[i]);
+                    if (!flag3) {
+                        break;
+                    }
+                }
+            } else {
+                if (!flag1) {
+                    flag3 = deleteDirectory(f[i], true);
+                    if (!flag3) {
+                        break;
+                    }
+                }// goto _L7; else goto _L9
+            }// goto _L6; else goto _L5
+        }
+        if (!flag3) {
+            Log.i(TAG, "delete directory fail: " + file.getAbsolutePath());
+        } else if (flag) {
+            if (file.delete())
+                return true;
+            else
+                Log.i(TAG, "delete directory fail: " + file.getAbsolutePath());
+        } else {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean deleteDirectoryByTime(File file, int time) {
+        boolean flag = true;
+        if ((file == null || file.exists()) && file.isDirectory()) {
+            if (file != null) {
+                File[] files = file.listFiles();
+                if (files != null && files.length > 0) {
+                    for (int i = 0; i < files.length; i++) {
+                        File f = files[i];
+                        if (System.currentTimeMillis() - f.lastModified()
+                                - ONE_DAY_MILLIS * (long) time > 0L)
+                            if (f.isDirectory())
+                                flag = deleteDirectory(f, true);
+                            else
+                                flag = delete(f);
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "the directory is not exists: " + file.getAbsolutePath());
+            return false;
+        }
+        return flag;
+    }
+
+    public static boolean deleteFile(File file) {
+        if (file != null && file.isFile() && file.exists()) {
+            file.delete();
+            return true;
+        } else {
+            Log.i(TAG, "the file is not exists: " + file.getAbsolutePath());
+            return false;
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static long getAvailableStorageSize(File file) {
+        if (file != null && file.exists() && file.isDirectory()) {
+            StatFs statfs = new StatFs(file.getPath());
+            return statfs.getBlockSize() * (long) statfs.getAvailableBlocks();
+        }
+        return -1;
+    }
+
+    public static void move(File file, File file1) throws IOException {
+        copy(file, file1);
+        delete(file);
+    }
+
+    public static byte[] readFileToByte(File file) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream(
+                (int) file.length());
+        InputStream fis = new FileInputStream(file);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+        try {
+            int i = -1;
+            byte[] buffer = new byte[1024];
+            while ((i = bis.read(buffer, 0, 1024)) != -1) {
+                bos.write(buffer, 0, i);
+            }
+            return bos.toByteArray();
+        } finally {
+            try {
+                if (bis != null)
+                    bis.close();
+                if (bos != null)
+                    bos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static String readTextFile(File file) throws IOException {
+        String text = null;
+        if (file != null) {
+            FileInputStream fis = new FileInputStream(file);
+            text = readTextInputStream(fis);
+            if (fis != null)
+                fis.close();
+        }
+        return text;
+    }
+
+    public static String readTextInputStream(InputStream is) throws IOException {
+        if (is != null) {
+            StringBuffer sb = new StringBuffer();
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append("\r\n");
+            }
+            if (br != null)
+                br.close();
+            return sb.toString();
+        }
+        return null;
+    }
+
+    public static int writeFile(File file, InputStream is) throws IOException {
+        long l = 0;
+        if (is != null && file != null) {
+            byte[] abyte0 = new byte[BUFFER];
+            OutputStream fos = new FileOutputStream(file);
+            DataOutputStream dos = new DataOutputStream(fos);
+            DataInputStream dis = new DataInputStream(is);
+            int i = -1;
+            while ((i = dis.read(abyte0)) != -1) {
+                dos.write(abyte0, 0, i);
+                l += i;
+            }
+            if (dis != null)
+                dis.close();
+            if (dos != null)
+                dos.close();
+        }
+        return (int) (l / 1024L);
+    }
+
+    public static void writeFile(File file, byte[] data) throws Exception {
+        if (file != null && data != null) {
+            OutputStream fos = new FileOutputStream(file);
+            DataOutputStream dos = new DataOutputStream(fos);
+            dos.write(data);
+            if (dos != null)
+                dos.close();
+        }
+    }
+
+    public static void writeTextFile(File file, String content)
+            throws IOException {
+        if (file != null) {
+            FileOutputStream fos = new FileOutputStream(file);
+            DataOutputStream dos = new DataOutputStream(fos);
+            dos.write(content.getBytes());
+            if (dos != null)
+                dos.close();
+        }
+    }
+
+    public static void writeTextFile(File file, String[] lines)
+            throws IOException {
+        String content = "";
+        if (file != null && lines != null) {
+            for (int i = 0; i < lines.length; i++) {
+                content = new StringBuilder(content).append(lines[i])
+                        .toString();
+                if (i != -1 + lines.length)
+                    content = new StringBuilder(content).append("\r\n")
+                            .toString();
+            }
+            FileOutputStream fos = new FileOutputStream(file);
+            DataOutputStream os = new DataOutputStream(fos);
+            os.write(content.getBytes());
+            if (os != null)
+                os.close();
+        }
+    }
 }

@@ -11,6 +11,8 @@ import net.oschina.app.v2.api.ApiHttpClient;
 import net.oschina.app.v2.api.remote.OtherApi;
 import net.oschina.app.v2.base.BaseApplication;
 import net.oschina.app.v2.base.Constants;
+import net.oschina.app.v2.cache.v2.CacheManager;
+import net.oschina.app.v2.content.DBHelper;
 import net.oschina.app.v2.emoji.EmojiHelper;
 import net.oschina.app.v2.model.DailyEnglish;
 import net.oschina.app.v2.model.User;
@@ -90,7 +92,7 @@ public class AppContext extends BaseApplication {
     private static final String KEY_TWEET_READED = "key_readed_tweet";
     private static final String KEY_ACTIVE_READED = "key_readed_active";
     private static final String KEY_BLOG_READED = "key_readed_blog";
-    private static Set<String> mReadedNewsIds, mReadedQuestionIds, mReadedTweetIds, mReadedActiveIds,mReadedBlogIds; //已读IDS
+    private static Set<String> mReadedNewsIds, mReadedQuestionIds, mReadedTweetIds, mReadedActiveIds, mReadedBlogIds; //已读IDS
 
     private boolean login = false; // 登录状态
     private int loginUid = 0; // 登录用户的id
@@ -104,6 +106,8 @@ public class AppContext extends BaseApplication {
         super.onCreate();
         // 注册App异常崩溃处理器
         // Thread.setDefaultUncaughtExceptionHandler(AppException.getAppExceptionHandler());
+
+        CacheManager.initCacheDir(Constants.CACHE_DIR, getApplicationContext(), new DBHelper(getApplicationContext(), 1, "app_cache", null, null));
 
         instance = this;
 

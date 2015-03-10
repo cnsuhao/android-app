@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
 
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.TLog;
 
@@ -191,6 +192,7 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
             case STATE_EMPTY_ITEM:
             case STATE_LOAD_MORE:
             case STATE_NO_MORE:
+            case STATE_NETWORK_ERROR:
                 return true;
             default:
                 break;
@@ -299,9 +301,9 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
                 vh.progress.setVisibility(View.GONE);
                 vh.text.setVisibility(View.VISIBLE);
                 if (TDevice.hasInternet()) {
-                    vh.text.setText("对不起,出错了");
+                    vh.text.setText(AppContext.string(R.string.tip_load_data_error));
                 } else {
-                    vh.text.setText("没有可用的网络");
+                    vh.text.setText(AppContext.string(R.string.tip_network_error));
                 }
                 break;
             default:

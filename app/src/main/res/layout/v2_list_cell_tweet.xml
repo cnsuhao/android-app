@@ -3,13 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/list_item_background"
-    android:padding="@dimen/space_8" >
+    android:paddingLeft="@dimen/space_16"
+    android:paddingTop="@dimen/space_16">
 
     <net.oschina.app.v2.ui.AvatarView
         android:id="@+id/iv_avatar"
         android:layout_width="@dimen/list_item_avatar_size"
         android:layout_height="@dimen/list_item_avatar_size"
-        android:layout_marginRight="@dimen/space_8"
+        android:layout_marginRight="@dimen/space_16"
         android:contentDescription="@null" />
 
     <TextView
@@ -26,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:textColor="@color/main_gray"
+        android:layout_marginRight="@dimen/space_16"
         android:textSize="@dimen/text_size_12" />
     <!-- net.oschina.app.widget.LinkView -->
 
@@ -68,10 +70,12 @@
         android:visibility="gone" />
 
     <LinearLayout
+        android:id="@+id/ly_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/long_pic_tip"
         android:layout_marginTop="4dp"
+        android:paddingBottom="@dimen/space_12"
         android:layout_toRightOf="@id/iv_avatar"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
@@ -90,6 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/space_16"
             android:drawableRight="@drawable/ic_comment_count"
             android:drawablePadding="@dimen/space_2"
             android:gravity="center_vertical"
@@ -97,4 +102,10 @@
             android:textSize="@dimen/text_size_12" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ly_bottom"
+        android:layout_marginLeft="56dp"
+        android:background="@drawable/list_divider"/>
 </RelativeLayout>

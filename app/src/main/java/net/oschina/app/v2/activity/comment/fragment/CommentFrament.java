@@ -105,10 +105,15 @@ public class CommentFrament extends BaseRecycleViewFragment implements
 
 	@Override
 	protected RecycleBaseAdapter getListAdapter() {
-        return new CommentAdapter(this);
+        return new CommentAdapter(this,true);
 	}
 
-	@Override
+    @Override
+    protected boolean isNeedListDivider() {
+        return false;
+    }
+
+    @Override
 	protected String getCacheKeyPrefix() {
 		String str = mIsBlogComment ? BLOG_CACHE_KEY_PREFIX : CACHE_KEY_PREFIX;
 		return new StringBuilder(str).append("_").append(mId).append("_Owner")

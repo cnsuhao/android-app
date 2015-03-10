@@ -4,32 +4,27 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.MySwipeRefreshLayout;
-//import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-//import android.widget.AdapterView.OnItemClickListener;
 
-//import com.handmark.pulltorefresh.library.PullToRefreshBase;
-//import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
-//import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.cache.CacheManager;
-import net.oschina.app.v2.model.Base;
+import net.oschina.app.v2.cache.v2.CacheManager;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.NewsList;
-import net.oschina.app.v2.model.Notice;
 import net.oschina.app.v2.ui.decorator.DividerItemDecoration;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.ui.widget.FixedRecyclerView;
 import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.TLog;
 import net.oschina.app.v2.utils.UIHelper;
+import net.oschina.app.v2.utils.WeakAsyncTask;
 
 import org.apache.http.Header;
 
@@ -43,7 +38,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         RecycleBaseAdapter.OnItemClickListener, RecycleBaseAdapter.OnItemLongClickListener {
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
-
+    private static final String TAG = "BaseRecycleViewFragment";
     protected MySwipeRefreshLayout mSwipeRefresh;
     protected FixedRecyclerView mRecycleView;
     protected LinearLayoutManager mLayoutManager;
@@ -55,7 +50,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
     protected int mCurrentPage = 0;
     protected int mCatalog = NewsList.CATALOG_ALL;
 
-    private AsyncTask<String, Void, ListEntity> mCacheTask;
+    //private AsyncTask<String, Void, ListEntity> mCacheTask;
     private ParserTask mParserTask;
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
@@ -73,7 +68,6 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             }
         }
     };
-
 
     protected int getLayoutRes() {
         return R.layout.v2_fragment_swipe_refresh_recyclerview;
@@ -109,7 +103,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         });
 
         mSwipeRefresh = (MySwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
-        mSwipeRefresh.setColorSchemeResources(R.color.main_green,R.color.main_gray,R.color.main_black,R.color.main_purple);
+        mSwipeRefresh.setColorSchemeResources(R.color.main_green, R.color.main_gray, R.color.main_black, R.color.main_purple);
         mSwipeRefresh.setOnRefreshListener(new MySwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -119,9 +113,12 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 
         mRecycleView = (FixedRecyclerView) view.findViewById(R.id.recycleView);
         mRecycleView.setOnScrollListener(mScrollListener);
-        // use a linear layout manager
-        mRecycleView.addItemDecoration(new DividerItemDecoration(getActivity(),
-                DividerItemDecoration.VERTICAL_LIST));
+
+        if(isNeedListDivider()) {
+            // use a linear layout manager
+            mRecycleView.addItemDecoration(new DividerItemDecoration(getActivity(),
+                    DividerItemDecoration.VERTICAL_LIST));
+        }
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -141,7 +138,8 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
                 mCurrentPage = 0;
                 mState = STATE_REFRESH;
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                requestData(requestDataFromNetWork());
+                //requestData(requestDataFromNetWork());
+                new ReadCacheTask(this).execute();
             } else {
                 mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             }
@@ -150,7 +148,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         if (mStoreEmptyState != -1) {
             mErrorLayout.setErrorType(mStoreEmptyState);
         }
-        if(!TextUtils.isEmpty(mStoreEmptyMessage)){
+        if (!TextUtils.isEmpty(mStoreEmptyMessage)) {
             mErrorLayout.setErrorMessage(mStoreEmptyMessage);
         }
     }
@@ -164,8 +162,8 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 
     @Override
     public void onDestroy() {
-        cancelReadCacheTask();
-        cancelParserTask();
+        //cancelReadCacheTask();
+        //cancelParserTask();
         super.onDestroy();
     }
 
@@ -188,6 +186,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 
     protected abstract RecycleBaseAdapter getListAdapter();
 
+    @Deprecated
     protected boolean requestDataFromNetWork() {
         return false;
     }
@@ -212,8 +211,8 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         return new ResponseHandler(this);
     }
 
-    protected void notifyDataSetChanged(){
-        if(mAdapter!=null)
+    protected void notifyDataSetChanged() {
+        if (mAdapter != null)
             mAdapter.notifyDataSetChanged();
     }
 
@@ -226,6 +225,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
     public void loadMore() {
         if (mState == STATE_NONE) {
             if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+                TLog.log(TAG,"begin to load more data.");
                 mCurrentPage++;
                 mState = STATE_LOADMORE;
                 requestData(false);
@@ -240,87 +240,147 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
     }
 
     protected void requestData(boolean refresh) {
-        String key = getCacheKey();
-        if (TDevice.hasInternet()
-                && (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
-            sendRequestData();
-        } else {
-            readCacheData(key);
-        }
+        //String key = getCacheKey();
+        //if (TDevice.hasInternet() &&
+        // (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
+        //    sendRequestData();
+        //} else {
+        //   readCacheData(key);
+        //}
+        sendRequestData();
     }
 
     protected void sendRequestData() {
+
     }
 
-    private void readCacheData(String cacheKey) {
-        cancelReadCacheTask();
-        mCacheTask = new CacheTask(this).execute(cacheKey);
+    //private void readCacheData(String cacheKey) {
+    //cancelReadCacheTask();
+    //mCacheTask = new CacheTask(this).execute(cacheKey);
+    //}
+
+    //private void cancelReadCacheTask() {
+    //if (mCacheTask != null) {
+    //    mCacheTask.cancel(true);
+    //    mCacheTask = null;
+    //}
+    //}
+
+    public long getCacheExpire() {
+        return Constants.CACHE_EXPIRE_OND_DAY;
     }
 
-    private void cancelReadCacheTask() {
-        if (mCacheTask != null) {
-            mCacheTask.cancel(true);
-            mCacheTask = null;
-        }
+    protected boolean isNeedListDivider() {
+        return true;
     }
 
-    private static class CacheTask extends AsyncTask<String, Void, ListEntity> {
-        private WeakReference<BaseRecycleViewFragment> mInstance;
+    static class ReadCacheTask extends
+            WeakAsyncTask<Void, Void, byte[], BaseRecycleViewFragment> {
 
-        private CacheTask(BaseRecycleViewFragment instance) {
-            mInstance = new WeakReference<>(instance);
+        public ReadCacheTask(BaseRecycleViewFragment target) {
+            super(target);
         }
 
         @Override
-        protected ListEntity doInBackground(String... params) {
-            BaseRecycleViewFragment instance = mInstance.get();
-            if (instance != null) {
-                Serializable seri = CacheManager.readObject(instance.getActivity(),
-                        params[0]);
-                if (seri == null) {
-                    return null;
-                } else {
-                    return instance.readList(seri);
+        protected byte[] doInBackground(BaseRecycleViewFragment target,
+                                        Void... params) {
+            if (target == null) {
+                TLog.log(TAG, "weak task target is null.");
+                return null;
+            }
+            if (TextUtils.isEmpty(target.getCacheKey())) {
+                TLog.log(TAG, "unset cache key.no cache.");
+                return null;
+            }
+
+            byte[] data = CacheManager.getCache(target.getCacheKey());
+            if (data == null) {
+                TLog.log(TAG, "cache data is empty.:" + target.getCacheKey());
+                return null;
+            }
+
+            TLog.log(TAG, "exist cache:" + target.getCacheKey() + " data:"
+                    + data);
+
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(BaseRecycleViewFragment target,
+                                     byte[] result) {
+            super.onPostExecute(target, result);
+            if (target == null)
+                return;
+            if (result != null) {
+                try {
+                    target.executeParserTask(result, true);
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    TLog.log(TAG, "parser cache error :" + e.getMessage());
                 }
             }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(ListEntity list) {
-            super.onPostExecute(list);
-            BaseRecycleViewFragment instance = mInstance.get();
-            if (instance != null) {
-                if (list != null) {
-                    instance.executeOnLoadDataSuccess(list.getList());
-                } else {
-                    instance.executeOnLoadDataError(null);
-                }
-                instance.executeOnLoadFinish();
-            }
+            target.requestData(true);
         }
     }
 
-    private static class SaveCacheTask extends AsyncTask<Void, Void, Void> {
-        private WeakReference<BaseRecycleViewFragment> mInstance;
-        private Serializable seri;
-        private String key;
+//    private static class CacheTask extends AsyncTask<String, Void, ListEntity> {
+//        private WeakReference<BaseRecycleViewFragment> mInstance;
+//
+//        private CacheTask(BaseRecycleViewFragment instance) {
+//            mInstance = new WeakReference<>(instance);
+//        }
+//
+//        @Override
+//        protected ListEntity doInBackground(String... params) {
+//            BaseRecycleViewFragment instance = mInstance.get();
+//            if (instance != null) {
+//                Serializable seri = CacheManager.readObject(instance.getActivity(),
+//                        params[0]);
+//                if (seri == null) {
+//                    return null;
+//                } else {
+//                    return instance.readList(seri);
+//                }
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(ListEntity list) {
+//            super.onPostExecute(list);
+//            BaseRecycleViewFragment instance = mInstance.get();
+//            if (instance != null) {
+//                if (list != null) {
+//                    instance.executeOnLoadDataSuccess(list.getList());
+//                } else {
+//                    instance.executeOnLoadDataError(null);
+//                }
+//                instance.executeOnLoadFinish();
+//            }
+//        }
+//    }
 
-        private SaveCacheTask(BaseRecycleViewFragment instance, Serializable seri, String key) {
-            mInstance = new WeakReference<>(instance);
-            this.seri = seri;
-            this.key = key;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            BaseRecycleViewFragment instance = mInstance.get();
-            if (instance != null) {
-                CacheManager.saveObject(instance.getActivity(), seri, key);
-            }
-            return null;
-        }
-    }
+//    private static class SaveCacheTask extends AsyncTask<Void, Void, Void> {
+//        private WeakReference<BaseRecycleViewFragment> mInstance;
+//        private Serializable seri;
+//        private String key;
+//
+//        private SaveCacheTask(BaseRecycleViewFragment instance, Serializable seri, String key) {
+//            mInstance = new WeakReference<>(instance);
+//            this.seri = seri;
+//            this.key = key;
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            BaseRecycleViewFragment instance = mInstance.get();
+//            if (instance != null) {
+//                CacheManager.saveObject(instance.getActivity(), seri, key);
+//            }
+//            return null;
+//        }
+//    }
 
     private static class ResponseHandler extends AsyncHttpResponseHandler {
         private WeakReference<BaseRecycleViewFragment> mInstance;
@@ -336,10 +396,9 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
                 if (instance.isAdded()) {
                     if (instance.mState == STATE_REFRESH) {
                         instance.onRefreshNetworkSuccess();
-                        AppContext.setRefreshTime(instance.getCacheKey(),
-                                System.currentTimeMillis());
+                        //AppContext.setRefreshTime(instance.getCacheKey(),System.currentTimeMillis());
                     }
-                    instance.executeParserTask(responseBytes);
+                    instance.executeParserTask(responseBytes, false);
                 }
             }
         }
@@ -349,7 +408,9 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             if (mInstance != null) {
                 BaseRecycleViewFragment instance = mInstance.get();
                 if (instance.isAdded()) {
-                    instance.readCacheData(instance.getCacheKey());
+                    //.readCacheData(instance.getCacheKey());
+                    instance.executeOnLoadDataError(null);
+                    instance.executeOnLoadFinish();
                 }
             }
         }
@@ -358,13 +419,15 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
     // Parse model when request data success.
     private static class ParserTask extends AsyncTask<Void, Void, String> {
         private WeakReference<BaseRecycleViewFragment> mInstance;
-        private byte[] reponseData;
+        private byte[] responseData;
         private boolean parserError;
+        private boolean fromCache;
         private List<?> list;
 
-        public ParserTask(BaseRecycleViewFragment instance, byte[] data) {
+        public ParserTask(BaseRecycleViewFragment instance, byte[] data, boolean fromCache) {
             this.mInstance = new WeakReference<>(instance);
-            this.reponseData = data;
+            this.responseData = data;
+            this.fromCache = fromCache;
         }
 
         @Override
@@ -372,10 +435,14 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             BaseRecycleViewFragment instance = mInstance.get();
             if (instance == null) return null;
             try {
-                ListEntity data = instance.parseList(new ByteArrayInputStream(
-                        reponseData));
-                UIHelper.sendNoticeBroadcast(instance.getActivity(),data);
-                new SaveCacheTask(instance, data, instance.getCacheKey()).execute();
+                ListEntity data = instance.parseList(new ByteArrayInputStream(responseData));
+                UIHelper.sendNoticeBroadcast(instance.getActivity(), data);
+                //new SaveCacheTask(instance, data, instance.getCacheKey()).execute();
+                // save the cache
+                if (!fromCache && instance.mCurrentPage == 0 && !TextUtils.isEmpty(instance.getCacheKey())) {
+                    CacheManager.setCache(instance.getCacheKey(), responseData,
+                            instance.getCacheExpire(), CacheManager.TYPE_INTERNAL);
+                }
                 list = data.getList();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -390,10 +457,16 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             BaseRecycleViewFragment instance = mInstance.get();
             if (instance != null) {
                 if (parserError) {
-                    instance.readCacheData(instance.getCacheKey());
+                    //instance.readCacheData(instance.getCacheKey());
+                    instance.executeOnLoadDataError(null);
                 } else {
                     instance.executeOnLoadDataSuccess(list);
                     instance.executeOnLoadFinish();
+                }
+                if (fromCache) {
+                    TLog.log(TAG, "key:" + instance.getCacheKey()
+                            + ",set cache data finish ,begin to load network data.");
+                    instance.requestData(true);
                 }
             }
         }
@@ -422,12 +495,25 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 
     protected void executeOnLoadDataError(String error) {
         if (mCurrentPage == 0) {
-            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+            if (mAdapter.getDataSize() == 0) {
+                mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+            } else {
+                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                String message = error;
+                if (TextUtils.isEmpty(error)) {
+                    if (TDevice.hasInternet()) {
+                        message = getString(R.string.tip_load_data_error);
+                    } else {
+                        message = getString(R.string.tip_network_error);
+                    }
+                }
+                AppContext.showToastShort(message);
+            }
         } else {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            mAdapter.setState(ListBaseAdapter.STATE_NETWORK_ERROR);
-            mAdapter.notifyDataSetChanged();
+            mAdapter.setState(RecycleBaseAdapter.STATE_NETWORK_ERROR);
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     protected void executeOnLoadFinish() {
@@ -435,9 +521,9 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         mState = STATE_NONE;
     }
 
-    private void executeParserTask(byte[] data) {
+    private void executeParserTask(byte[] data, boolean fromCache) {
         cancelParserTask();
-        mParserTask = new ParserTask(this,data);
+        mParserTask = new ParserTask(this, data, fromCache);
         mParserTask.execute();
     }
 

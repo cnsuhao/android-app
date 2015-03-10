@@ -231,7 +231,7 @@ public class TweetDetailFragment extends BaseFragment implements
 		//mListView.addHeaderView(header);
 
         mLayoutManager = new LinearLayoutManager(getActivity());
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        //mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mListView.setLayoutManager(mLayoutManager);
         mListView.setHasFixedSize(true);
         mListView.setOnScrollListener(mScrollListener);
