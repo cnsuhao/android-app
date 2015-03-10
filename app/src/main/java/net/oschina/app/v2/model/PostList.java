@@ -27,8 +27,9 @@ public class PostList extends Entity implements ListEntity {
 	public final static int CATALOG_OTHER = 3;
 	public final static int CATALOG_JOB = 4;
 	public final static int CATALOG_SITE = 5;
+    private static final String NODE_POST_COUNT = "postCount";
 
-	private int pageSize;
+    private int pageSize;
 	private int postCount;
 	private List<Post> postlist = new ArrayList<Post>();
 
@@ -59,10 +60,10 @@ public class PostList extends Entity implements ListEntity {
 				String tag = xmlParser.getName();
 				switch (evtType) {
 				case XmlPullParser.START_TAG:
-					if (tag.equalsIgnoreCase("postCount")) {
+					if (tag.equalsIgnoreCase(NODE_POST_COUNT)) {
 						postlist.postCount = StringUtils.toInt(
 								xmlParser.nextText(), 0);
-					} else if (tag.equalsIgnoreCase("pageSize")) {
+					} else if (tag.equalsIgnoreCase(NODE_PAGE_SIZE)) {
 						postlist.pageSize = StringUtils.toInt(
 								xmlParser.nextText(), 0);
 					} else if (tag.equalsIgnoreCase(Post.NODE_START)) {
@@ -93,29 +94,27 @@ public class PostList extends Entity implements ListEntity {
 						} else if (tag.equalsIgnoreCase(Post.NODE_PUBDATE)) {
 							post.setPubDate(xmlParser.nextText());
 						}
-					}
-					// 通知信息
-					else if (tag.equalsIgnoreCase("notice")) {
-						postlist.setNotice(new Notice());
-					} else if (postlist.getNotice() != null) {
-						if (tag.equalsIgnoreCase("atmeCount")) {
-							postlist.getNotice().setAtmeCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("msgCount")) {
-							postlist.getNotice().setMsgCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("reviewCount")) {
-							postlist.getNotice().setReviewCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("newFansCount")) {
-							postlist.getNotice().setNewFansCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						}
-					}
+					} else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {// 通知信息
+                        postlist.setNotice(new Notice());
+                    } else if (postlist.getNotice() != null) {
+                        if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
+                            postlist.getNotice().setAtmeCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_MESSAGE_COUNT)) {
+                            postlist.getNotice().setMsgCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_REVIEW_COUNT)) {
+                            postlist.getNotice().setReviewCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_NEWFANS_COUNT)) {
+                            postlist.getNotice().setNewFansCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        }
+                    }
 					break;
 				case XmlPullParser.END_TAG:
 					// 如果遇到标签结束，则把对象添加进集合中
-					if (tag.equalsIgnoreCase("post") && post != null) {
+					if (tag.equalsIgnoreCase(Post.NODE_START) && post != null) {
 						postlist.getPostlist().add(post);
 						post = null;
 					}

@@ -71,6 +71,8 @@ public class CommentReplyFragment extends BaseFragment implements
 					getActivity().setResult(Activity.RESULT_OK,intent);
 					getActivity().finish();
 
+                    UIHelper.sendNoticeBroadcast(getActivity(),res);
+
 					UIHelper.sendBroadCastCommentChanged(getActivity(),
 							mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
 							res.getComment());

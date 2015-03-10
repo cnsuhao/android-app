@@ -29,7 +29,9 @@ public class BlogList extends Entity implements ListEntity {
 	public static final String TYPE_LATEST = "latest";
 	public static final String TYPE_RECOMMEND = "recommend";
 
-	private int blogsCount;
+    private static final String NODE_BLOG_COUNT = "blogsCount";
+
+    private int blogsCount;
 	private int pageSize;
 	private List<Blog> bloglist = new ArrayList<Blog>();
 
@@ -60,61 +62,59 @@ public class BlogList extends Entity implements ListEntity {
 				String tag = xmlParser.getName();
 				switch (evtType) {
 				case XmlPullParser.START_TAG:
-					if (tag.equalsIgnoreCase("blogsCount")) {
+					if (tag.equalsIgnoreCase(NODE_BLOG_COUNT)) {
 						bloglist.blogsCount = StringUtils.toInt(
 								xmlParser.nextText(), 0);
-					} else if (tag.equalsIgnoreCase("pageSize")) {
+					} else if (tag.equalsIgnoreCase(NODE_PAGE_SIZE)) {
 						bloglist.pageSize = StringUtils.toInt(
 								xmlParser.nextText(), 0);
-					} else if (tag.equalsIgnoreCase("blog")) {
+					} else if (tag.equalsIgnoreCase(Blog.NODE_BLOG)) {
 						blog = new Blog();
 					} else if (blog != null) {
-						if (tag.equalsIgnoreCase("id")) {
-							blog.id = StringUtils
-									.toInt(xmlParser.nextText(), 0);
-						} else if (tag.equalsIgnoreCase("title")) {
-							blog.setTitle(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("body")) {
+                        if (tag.equalsIgnoreCase(Blog.NODE_ID)) {
+                            blog.id = StringUtils.toInt(xmlParser.nextText(), 0);
+                        } else if (tag.equalsIgnoreCase(Blog.NODE_TITLE)) {
+                            blog.setTitle(xmlParser.nextText());
+                        } else if (tag.equalsIgnoreCase(Blog.NODE_WHERE)) {
+                            blog.setWhere(xmlParser.nextText());
+                        } else if (tag.equalsIgnoreCase(Blog.NODE_BODY)) {
                             blog.setBody(xmlParser.nextText());
-                        }  else if (tag.equalsIgnoreCase("url")) {
-							blog.setUrl(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("pubDate")) {
-							blog.setPubDate(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("authoruid")) {
-							blog.setAuthorId(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("authorname")) {
-							blog.setAuthor(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("documentType")) {
-							blog.setDocumentType(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("commentCount")) {
-							blog.setCommentCount(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						}
-					}
-					// 通知信息
-					else if (tag.equalsIgnoreCase("notice")) {
-						bloglist.setNotice(new Notice());
-					} else if (bloglist.getNotice() != null) {
-						if (tag.equalsIgnoreCase("atmeCount")) {
-							bloglist.getNotice().setAtmeCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("msgCount")) {
-							bloglist.getNotice().setMsgCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("reviewCount")) {
-							bloglist.getNotice().setReviewCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("newFansCount")) {
-							bloglist.getNotice().setNewFansCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						}
-					}
+                        } else if (tag.equalsIgnoreCase(Blog.NODE_AUTHOR)) {
+                            blog.setAuthor(xmlParser.nextText());
+                        } else if (tag.equalsIgnoreCase(Blog.NODE_AUTHOR_ID)) {
+                            blog.setAuthorId(StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Blog.NODE_DOCUMENT_TYPE)) {
+                            blog.setDocumentType(StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Blog.NODE_PUB_DATE)) {
+                            blog.setPubDate(xmlParser.nextText());
+                        } else if (tag.equalsIgnoreCase(Blog.NODE_FAVORITE)) {
+                            blog.setFavorite(StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Blog.NODE_COMMENT_COUNT)) {
+                            blog.setCommentCount(StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Blog.NODE_URL)) {
+                            blog.setUrl(xmlParser.nextText());
+                        }
+					} else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {// 通知信息
+                        bloglist.setNotice(new Notice());
+                    }  else if (bloglist.getNotice() != null) {
+                        if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
+                            bloglist.getNotice().setAtmeCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_MESSAGE_COUNT)) {
+                            bloglist.getNotice().setMsgCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_REVIEW_COUNT)) {
+                            bloglist.getNotice().setReviewCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_NEWFANS_COUNT)) {
+                            bloglist.getNotice().setNewFansCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        }
+                    }
 					break;
 				case XmlPullParser.END_TAG:
 					// 如果遇到标签结束，则把对象添加进集合中
-					if (tag.equalsIgnoreCase("blog") && blog != null) {
+					if (tag.equalsIgnoreCase(Blog.NODE_BLOG) && blog != null) {
 						bloglist.getBloglist().add(blog);
 						blog = null;
 					}

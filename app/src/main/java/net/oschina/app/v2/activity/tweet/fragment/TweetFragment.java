@@ -58,6 +58,7 @@ public class TweetFragment extends BaseRecycleViewFragment {
                 Result res = Result.parse(is);
                 if (res != null && res.OK()) {
                     AppContext.showToastShort(R.string.tip_del_tweet_success);
+                    UIHelper.sendNoticeBroadcast(getActivity(),res);
                     Tweet tweet = (Tweet) args[0];
                     mAdapter.removeItem(tweet);
                 } else {

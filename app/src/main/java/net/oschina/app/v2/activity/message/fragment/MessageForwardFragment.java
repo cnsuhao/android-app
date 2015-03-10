@@ -50,8 +50,8 @@ public class MessageForwardFragment extends BaseFragment {
 			try {
 				Result res = Result.parse(new ByteArrayInputStream(arg2));
 				if (res.OK()) {
-					AppContext
-							.showToastShort(R.string.tip_message_forward_success);
+					AppContext.showToastShort(R.string.tip_message_forward_success);
+                    UIHelper.sendNoticeBroadcast(getActivity(),res);
 					getActivity().finish();
 				} else {
 					AppContext.showToastShort(res.getErrorMessage());

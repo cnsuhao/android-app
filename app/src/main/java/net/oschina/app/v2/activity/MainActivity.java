@@ -111,6 +111,8 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
         super.onResume();
         MobclickAgent.onPageStart(MAIN_SCREEN);
         MobclickAgent.onResume(this);
+
+        //supportInvalidateOptionsMenu();
     }
 
     @Override

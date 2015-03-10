@@ -262,6 +262,7 @@ public class CommentFrament extends BaseRecycleViewFragment implements
 				Result res = Result.parse(is);
 				if (res.OK()) {
 					AppContext.showToastShort(R.string.delete_success);
+                    UIHelper.sendNoticeBroadcast(getActivity(),res);
 					mAdapter.removeItem(args[0]);
 				} else {
 					AppContext.showToastShort(res.getErrorMessage());

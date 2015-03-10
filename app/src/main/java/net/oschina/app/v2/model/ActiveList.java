@@ -28,7 +28,9 @@ public class ActiveList extends Entity implements ListEntity {
 	public final static int CATALOG_COMMENT = 3;// 评论
 	public final static int CATALOG_MYSELF = 4;// 我自己
 
-	private int pageSize;
+    private static final String NODE_ACTIVE_COUNT = "activeCount";
+
+    private int pageSize;
 	private int activeCount;
 	private List<Active> activelist = new ArrayList<Active>();
 
@@ -59,87 +61,73 @@ public class ActiveList extends Entity implements ListEntity {
 				String tag = xmlParser.getName();
 				switch (evtType) {
 				case XmlPullParser.START_TAG:
-					if (tag.equalsIgnoreCase("activeCount")) {
+					if (tag.equalsIgnoreCase(NODE_ACTIVE_COUNT)) {
 						activelist.activeCount = StringUtils.toInt(
 								xmlParser.nextText(), 0);
-					} else if (tag.equalsIgnoreCase("pageSize")) {
+					} else if (tag.equalsIgnoreCase(NODE_PAGE_SIZE)) {
 						activelist.pageSize = StringUtils.toInt(
 								xmlParser.nextText(), 0);
-					} else if (tag.equalsIgnoreCase("active")) {
+					} else if (tag.equalsIgnoreCase(Active.NODE_ACTIVE)) {
 						active = new Active();
 					} else if (active != null) {
-						if (tag.equalsIgnoreCase("id")) {
-							active.id = StringUtils.toInt(xmlParser.nextText(),
-									0);
-						} else if (tag.equalsIgnoreCase("portrait")) {
-							active.setFace(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("message")) {
-							active.setMessage(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("author")) {
-							active.setAuthor(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("authorid")) {
-							active.setAuthorId(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("catalog")) {
-							active.setActiveType(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("objectID")) {
-							active.setObjectId(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("objecttype")) {
-							active.setObjectType(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("objectcatalog")) {
-							active.setObjectCatalog(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("objecttitle")) {
-							active.setObjectTitle(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("objectreply")) {
-							active.setObjectReply(new ObjectReply());
-						} else if (active.getObjectReply() != null
-								&& tag.equalsIgnoreCase("objectname")) {
-							active.getObjectReply().objectName = xmlParser
-									.nextText();
-						} else if (active.getObjectReply() != null
-								&& tag.equalsIgnoreCase("objectbody")) {
-							active.getObjectReply().objectBody = xmlParser
-									.nextText();
-						} else if (tag.equalsIgnoreCase("commentCount")) {
-							active.setCommentCount(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("pubDate")) {
-							active.setPubDate(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("tweetimage")) {
-							active.setTweetimage(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("appclient")) {
-							active.setAppClient(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("url")) {
-							active.setUrl(xmlParser.nextText());
-						}
-					}
-					// 通知信息
-					else if (tag.equalsIgnoreCase("notice")) {
-						activelist.setNotice(new Notice());
-					} else if (activelist.getNotice() != null) {
-						if (tag.equalsIgnoreCase("atmeCount")) {
-							activelist.getNotice().setAtmeCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("msgCount")) {
-							activelist.getNotice().setMsgCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("reviewCount")) {
-							activelist.getNotice().setReviewCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("newFansCount")) {
-							activelist.getNotice().setNewFansCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						}
-					}
+                        if (tag.equalsIgnoreCase(Active.NODE_ID)) {
+                            active.id = StringUtils.toInt(xmlParser.nextText(), 0);
+                        } else if (tag.equalsIgnoreCase(Active.NODE_PORTRAIT)) {
+                            active.setFace(xmlParser.nextText());
+                        } else if (tag.equalsIgnoreCase(Active.NODE_MESSAGE)) {
+                            active.setMessage(xmlParser.nextText());
+                        } else if (tag.equalsIgnoreCase(Active.NODE_AUTHOR)) {
+                            active.setAuthor(xmlParser.nextText());
+                        } else if (tag.equalsIgnoreCase(Active.NODE_AUTHOR_ID)) {
+                            active.setAuthorId(StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(NODE_CATALOG)) {
+                            active.setActiveType(StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Active.NODE_OBJECT_ID)) {
+                            active.setObjectId(StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Active.NODE_OBJECT_TYPE)) {
+                            active.setObjectType(StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Active.NODE_OBJECT_CATALOG)){
+                            active.setObjectCatalog(StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Active.NODE_OBJECT_TITLE)) {
+                            active.setObjectTitle(xmlParser.nextText());
+                        } else if (tag.equalsIgnoreCase(Active.NODE_OBJECT_REPLY)) {
+                            active.setObjectReply(new ObjectReply());
+                        } else if (active.getObjectReply() != null && tag.equalsIgnoreCase(Active.NODE_OBJECT_NAME)) {
+                            active.getObjectReply().objectName = xmlParser.nextText();
+                        } else if (active.getObjectReply() != null && tag.equalsIgnoreCase(Active.NODE_OBJECT_BODY)) {
+                            active.getObjectReply().objectBody = xmlParser.nextText();
+                        } else if (tag.equalsIgnoreCase(Active.NODE_COMMENT_COUNT)) {
+                            active.setCommentCount(StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Active.NODE_PUB_DATE)) {
+                            active.setPubDate(xmlParser.nextText());
+                        } else if (tag.equalsIgnoreCase(Active.NODE_TWEET_IMAGE)) {
+                            active.setTweetimage(xmlParser.nextText());
+                        } else if (tag.equalsIgnoreCase(Active.NODE_APP_CLIENT)) {
+                            active.setAppClient(StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Active.NODE_URL)) {
+                            active.setUrl(xmlParser.nextText());
+                        }
+					} else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {// 通知信息
+                        activelist.setNotice(new Notice());
+                    } else if (activelist.getNotice() != null) {
+                        if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
+                            activelist.getNotice().setAtmeCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_MESSAGE_COUNT)) {
+                            activelist.getNotice().setMsgCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_REVIEW_COUNT)) {
+                            activelist.getNotice().setReviewCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_NEWFANS_COUNT)) {
+                            activelist.getNotice().setNewFansCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        }
+                    }
 					break;
 				case XmlPullParser.END_TAG:
 					// 如果遇到标签结束，则把对象添加进集合中
-					if (tag.equalsIgnoreCase("active") && active != null) {
+					if (tag.equalsIgnoreCase(Active.NODE_ACTIVE) && active != null) {
 						activelist.getActivelist().add(active);
 						active = null;
 					}

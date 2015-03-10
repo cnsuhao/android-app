@@ -29,8 +29,15 @@ public class SearchList extends Entity implements ListEntity {
 	public final static String CATALOG_SOFTWARE = "software";
 	public final static String CATALOG_BLOG = "blog";
 	public final static String CATALOG_CODE = "code";
+    private static final String NODE_RESULT = "result";
+    private static final String NODE_OBJ_ID = "objid";
+    private static final String NODE_TYPE = "type";
+    private static final String NODE_TITLE = "title";
+    private static final String NODE_URL = "url";
+    private static final String NODE_PUB_DATE = "pubDate";
+    private static final String NODE_AUTHOR = "author";
 
-	private int pageSize;
+    private int pageSize;
 	private List<Result> resultlist = new ArrayList<Result>();
 
 	/**
@@ -120,50 +127,48 @@ public class SearchList extends Entity implements ListEntity {
 				String tag = xmlParser.getName();
 				switch (evtType) {
 				case XmlPullParser.START_TAG:
-					if (tag.equalsIgnoreCase("pageSize")) {
+					if (tag.equalsIgnoreCase(NODE_PAGE_SIZE)) {
 						searchList.pageSize = StringUtils.toInt(
 								xmlParser.nextText(), 0);
-					} else if (tag.equalsIgnoreCase("result")) {
+					} else if (tag.equalsIgnoreCase(NODE_RESULT)) {
 						res = new Result();
 					} else if (res != null) {
-						if (tag.equalsIgnoreCase("objid")) {
+						if (tag.equalsIgnoreCase(NODE_OBJ_ID)) {
 							res.objid = StringUtils.toInt(xmlParser.nextText(),
-									0);
-						} else if (tag.equalsIgnoreCase("type")) {
+                                    0);
+						} else if (tag.equalsIgnoreCase(NODE_TYPE)) {
 							res.type = StringUtils.toInt(xmlParser.nextText(),
-									0);
-						} else if (tag.equalsIgnoreCase("title")) {
+                                    0);
+						} else if (tag.equalsIgnoreCase(NODE_TITLE)) {
 							res.title = xmlParser.nextText();
-						} else if (tag.equalsIgnoreCase("url")) {
+						} else if (tag.equalsIgnoreCase(NODE_URL)){
 							res.url = xmlParser.nextText();
-						} else if (tag.equalsIgnoreCase("pubDate")) {
+						} else if (tag.equalsIgnoreCase(NODE_PUB_DATE)) {
 							res.pubDate = xmlParser.nextText();
-						} else if (tag.equalsIgnoreCase("author")) {
+						} else if (tag.equalsIgnoreCase(NODE_AUTHOR)) {
 							res.author = xmlParser.nextText();
 						}
-					}
-					// 通知信息
-					else if (tag.equalsIgnoreCase("notice")) {
-						searchList.setNotice(new Notice());
-					} else if (searchList.getNotice() != null) {
-						if (tag.equalsIgnoreCase("atmeCount")) {
-							searchList.getNotice().setAtmeCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("msgCount")) {
-							searchList.getNotice().setMsgCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("reviewCount")) {
-							searchList.getNotice().setReviewCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("newFansCount")) {
-							searchList.getNotice().setNewFansCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						}
-					}
+					} else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {
+                        searchList.setNotice(new Notice());
+                    }  else if (searchList.getNotice() != null) {
+                        if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
+                            searchList.getNotice().setAtmeCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_MESSAGE_COUNT)) {
+                            searchList.getNotice().setMsgCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_REVIEW_COUNT)) {
+                            searchList.getNotice().setReviewCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_NEWFANS_COUNT)) {
+                            searchList.getNotice().setNewFansCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        }
+                    }
 					break;
 				case XmlPullParser.END_TAG:
 					// 如果遇到标签结束，则把对象添加进集合中
-					if (tag.equalsIgnoreCase("result") && res != null) {
+					if (tag.equalsIgnoreCase(NODE_RESULT) && res != null) {
 						searchList.getResultlist().add(res);
 						res = null;
 					}

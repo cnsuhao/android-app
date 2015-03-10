@@ -14,6 +14,7 @@ import org.json.JSONObject;
  * @created 2014-3-17
  */
 @SuppressWarnings("serial")
+@Deprecated
 public class Barcode extends Entity implements Serializable{
 	
 	public final static String NODE_REQURE_LOGIN = "require_login";

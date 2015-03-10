@@ -67,6 +67,7 @@ public class SoftwareCataglogFragment extends BaseTabFragment implements
             try {
                 SoftwareCatalogList list = SoftwareCatalogList
                         .parse(new ByteArrayInputStream(arg2));
+                UIHelper.sendNoticeBroadcast(getActivity(),list);
                 if (mState == STATE_REFRESH)
                     mCatalogAdapter.clear();
                 List<SoftwareType> data = list.getSoftwareTypelist();

@@ -60,13 +60,18 @@
         <item name="background">@color/transparent</item>
     </style>
 
-    <style name="ActionBarThemeOverlay" parent="">
+    <style name="ActionBarThemeOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:textColorPrimary">#fff</item>
         <item name="colorControlNormal">?actionBarIconColor</item>
         <item name="colorControlHighlight">#3fff</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
-    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
@@ -93,9 +98,9 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
 
-        <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/window_background</item>
 
+        <item name="windowActionBarOverlay">true</item>
         <item name="android:windowAnimationStyle">@style/ActivityTransitions</item>
     </style>
 
@@ -103,8 +108,8 @@
 
     <style name="Theme.IMA.Preview" parent="@style/Theme.IMA">
         <item name="android:windowBackground">@android:color/black</item>
-        <item name="actionBarStyle">@style/ActionBarBaseStyle.Transparent</item>
-        <item name="windowActionBarOverlay">true</item>
+        <!--<item name="actionBarStyle">@style/ActionBarBaseStyle.Transparent</item>-->
+        <!--<item name="windowActionBarOverlay">true</item>-->
     </style>
 
     <style name="Theme.IMA.Transparent.NoTitleBar" parent="@style/ActionBarBaseStyle.Transparent">

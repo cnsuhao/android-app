@@ -474,7 +474,7 @@ public class TweetDetailFragment extends BaseFragment implements
 				Result res = Result.parse(is);
 				if (res.OK()) {
 					AppContext.showToastShort(R.string.delete_success);
-
+                    UIHelper.sendNoticeBroadcast(getActivity(),res);
 					mAdapter.removeItem(args[0]);
 
 					mTweet.setCommentCount(mTweet.getCommentCount() - 1);
@@ -571,6 +571,7 @@ public class TweetDetailFragment extends BaseFragment implements
 			try {
 				mTweet = Tweet.parse(new ByteArrayInputStream(arg2));
 				if (mTweet != null && mTweet.getId() > 0) {
+                    UIHelper.sendNoticeBroadcast(getActivity(),mTweet);
 					executeOnLoadDataSuccess(mTweet);
 					new SaveCacheTask(getActivity(), mTweet, getCacheKey())
 							.execute();
@@ -671,6 +672,7 @@ public class TweetDetailFragment extends BaseFragment implements
 			try {
 				CommentList list = CommentList.parse(new ByteArrayInputStream(
 						arg2));
+                UIHelper.sendNoticeBroadcast(getActivity(),list);
 				executeOnLoadCommentDataSuccess(list);
 				new SaveCacheTask(getActivity(), list, getCacheCommentKey())
 						.execute();

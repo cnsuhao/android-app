@@ -106,7 +106,7 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		ActionBarActivity act = (ActionBarActivity) activity;
+		//ActionBarActivity act = (ActionBarActivity) activity;
 		///mTvCommentCount = (TextView) act.getSupportActionBar().getCustomView()
 		//		.findViewById(R.id.tv_comment_count);
 		//mTvCommentCount.setOnClickListener(new OnClickListener() {

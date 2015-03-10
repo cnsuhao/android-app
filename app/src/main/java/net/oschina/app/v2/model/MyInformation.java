@@ -20,6 +20,18 @@ import android.util.Xml;
  */
 public class MyInformation extends Entity {
 
+    private static final String NODE_USER = "user";
+    private static final String NODE_NAME = "name";
+    private static final String NODE_PORTRAIT = "portrait";
+    private static final String NODE_JOIN_TIME = "jointime";
+    private static final String NODE_GENDER = "gender";
+    private static final String NODE_FROM = "from";
+    private static final String NODE_DEV_PLATFORM = "devplatform";
+    private static final String NODE_EXPERTISE = "expertise";
+    private static final String NODE_FAVORITE_COUNT = "favoritecount";
+    private static final String NODE_FANS = "fans";
+    private static final String NODE_FOLLOWERS = "followers";
+
     private String name;
     private String face;
     private String jointime;
@@ -126,42 +138,44 @@ public class MyInformation extends Entity {
 
                     case XmlPullParser.START_TAG:
                         // 如果是标签开始，则说明需要实例化对象了
-                        if (tag.equalsIgnoreCase("user")) {
+                        if (tag.equalsIgnoreCase(NODE_USER)) {
                             user = new MyInformation();
                         } else if (user != null) {
-                            if (tag.equalsIgnoreCase("name")) {
+                            if (tag.equalsIgnoreCase(NODE_NAME)) {
                                 user.setName(xmlParser.nextText());
-                            } else if (tag.equalsIgnoreCase("portrait")) {
+                            } else if (tag.equalsIgnoreCase(NODE_PORTRAIT)) {
                                 user.setFace(xmlParser.nextText());
-                            } else if (tag.equalsIgnoreCase("jointime")) {
+                            } else if (tag.equalsIgnoreCase(NODE_JOIN_TIME)) {
                                 user.setJointime(xmlParser.nextText());
-                            } else if (tag.equalsIgnoreCase("gender")) {
+                            } else if (tag.equalsIgnoreCase(NODE_GENDER)) {
                                 user.setGender(StringUtils.toInt(xmlParser.nextText(), 0));
-                            } else if (tag.equalsIgnoreCase("from")) {
+                            } else if (tag.equalsIgnoreCase(NODE_FROM)) {
                                 user.setFrom(xmlParser.nextText());
-                            } else if (tag.equalsIgnoreCase("devplatform")) {
+                            } else if (tag.equalsIgnoreCase(NODE_DEV_PLATFORM)) {
                                 user.setDevplatform(xmlParser.nextText());
-                            } else if (tag.equalsIgnoreCase("expertise")) {
+                            } else if (tag.equalsIgnoreCase(NODE_EXPERTISE)) {
                                 user.setExpertise(xmlParser.nextText());
-                            } else if (tag.equalsIgnoreCase("favoritecount")) {
+                            } else if (tag.equalsIgnoreCase(NODE_FAVORITE_COUNT)) {
                                 user.setFavoritecount(StringUtils.toInt(xmlParser.nextText(), 0));
-                            } else if (tag.equalsIgnoreCase("fans")) {
+                            } else if (tag.equalsIgnoreCase(NODE_FANS)) {
                                 user.setFanscount(StringUtils.toInt(xmlParser.nextText(), 0));
-                            } else if (tag.equalsIgnoreCase("followers")) {
+                            } else if (tag.equalsIgnoreCase(NODE_FOLLOWERS)) {
                                 user.setFollowerscount(StringUtils.toInt(xmlParser.nextText(), 0));
-                            }
-                            //通知信息
-                            else if (tag.equalsIgnoreCase("notice")) {
+                            } else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {
                                 user.setNotice(new Notice());
                             } else if (user.getNotice() != null) {
-                                if (tag.equalsIgnoreCase("atmeCount")) {
-                                    user.getNotice().setAtmeCount(StringUtils.toInt(xmlParser.nextText(), 0));
-                                } else if (tag.equalsIgnoreCase("msgCount")) {
-                                    user.getNotice().setMsgCount(StringUtils.toInt(xmlParser.nextText(), 0));
-                                } else if (tag.equalsIgnoreCase("reviewCount")) {
-                                    user.getNotice().setReviewCount(StringUtils.toInt(xmlParser.nextText(), 0));
-                                } else if (tag.equalsIgnoreCase("newFansCount")) {
-                                    user.getNotice().setNewFansCount(StringUtils.toInt(xmlParser.nextText(), 0));
+                                if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
+                                    user.getNotice().setAtmeCount(
+                                            StringUtils.toInt(xmlParser.nextText(), 0));
+                                } else if (tag.equalsIgnoreCase(Notice.NODE_MESSAGE_COUNT)) {
+                                    user.getNotice().setMsgCount(
+                                            StringUtils.toInt(xmlParser.nextText(), 0));
+                                } else if (tag.equalsIgnoreCase(Notice.NODE_REVIEW_COUNT)) {
+                                    user.getNotice().setReviewCount(
+                                            StringUtils.toInt(xmlParser.nextText(), 0));
+                                } else if (tag.equalsIgnoreCase(Notice.NODE_NEWFANS_COUNT)) {
+                                    user.getNotice().setNewFansCount(
+                                            StringUtils.toInt(xmlParser.nextText(), 0));
                                 }
                             }
                         }

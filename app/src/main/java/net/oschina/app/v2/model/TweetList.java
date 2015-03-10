@@ -24,8 +24,9 @@ public class TweetList extends Entity implements ListEntity {
 
 	public final static int CATALOG_LASTEST = 0;
 	public final static int CATALOG_HOT = -1;
+    private static final String NODE_TWEET_COUNT = "tweetCount";
 
-	private int pageSize;
+    private int pageSize;
 	private int tweetCount;
 	private List<Tweet> tweetlist = new ArrayList<Tweet>();
 
@@ -56,10 +57,10 @@ public class TweetList extends Entity implements ListEntity {
 				String tag = xmlParser.getName();
 				switch (evtType) {
 				case XmlPullParser.START_TAG:
-					if (tag.equalsIgnoreCase("tweetCount")) {
+					if (tag.equalsIgnoreCase(NODE_TWEET_COUNT)) {
 						tweetlist.tweetCount = StringUtils.toInt(
 								xmlParser.nextText(), 0);
-					} else if (tag.equalsIgnoreCase("pageSize")) {
+					} else if (tag.equalsIgnoreCase(NODE_PAGE_SIZE)) {
 						tweetlist.pageSize = StringUtils.toInt(
 								xmlParser.nextText(), 0);
 					} else if (tag.equalsIgnoreCase(Tweet.NODE_START)) {
@@ -91,29 +92,27 @@ public class TweetList extends Entity implements ListEntity {
 							tweet.setAppClient(StringUtils.toInt(
 									xmlParser.nextText(), 0));
 						}
-					}
-					// 通知信息
-					else if (tag.equalsIgnoreCase("notice")) {
-						tweetlist.setNotice(new Notice());
-					} else if (tweetlist.getNotice() != null) {
-						if (tag.equalsIgnoreCase("atmeCount")) {
-							tweetlist.getNotice().setAtmeCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("msgCount")) {
-							tweetlist.getNotice().setMsgCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("reviewCount")) {
-							tweetlist.getNotice().setReviewCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("newFansCount")) {
-							tweetlist.getNotice().setNewFansCount(
-									StringUtils.toInt(xmlParser.nextText(), 0));
-						}
-					}
+					} else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {
+                        tweetlist.setNotice(new Notice());
+                    }  else if (tweetlist.getNotice() != null) {
+                        if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
+                            tweetlist.getNotice().setAtmeCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_MESSAGE_COUNT)) {
+                            tweetlist.getNotice().setMsgCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_REVIEW_COUNT)) {
+                            tweetlist.getNotice().setReviewCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        } else if (tag.equalsIgnoreCase(Notice.NODE_NEWFANS_COUNT)) {
+                            tweetlist.getNotice().setNewFansCount(
+                                    StringUtils.toInt(xmlParser.nextText(), 0));
+                        }
+                    }
 					break;
 				case XmlPullParser.END_TAG:
 					// 如果遇到标签结束，则把对象添加进集合中
-					if (tag.equalsIgnoreCase("tweet") && tweet != null) {
+					if (tag.equalsIgnoreCase(Tweet.NODE_START) && tweet != null) {
 						tweetlist.getTweetlist().add(tweet);
 						tweet = null;
 					}

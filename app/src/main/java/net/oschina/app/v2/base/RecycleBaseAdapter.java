@@ -259,14 +259,14 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
         //TLog.log("onBindViewHolder:"+holder.viewType +" pos:"+position+" "+ holder);
         if ((getItemViewType(position) == TYPE_HEADER && position == 0)
                 || holder instanceof HeaderViewHolder) {
-            TLog.log("bind Header view:" + position + " " + holder.viewType);
+            //TLog.log("bind Header view:" + position + " " + holder.viewType);
             onBindHeaderViewHolder(holder, position);
         } else if ((getItemViewType(position) == TYPE_FOOTER
                 && position == getItemCount() - 1) || holder instanceof FooterViewHolder) {
-            TLog.log("bind Footer view:" + position + " " + holder.viewType);
+            //TLog.log("bind Footer view:" + position + " " + holder.viewType);
             onBindFooterViewHolder(holder, position);
         } else {
-            TLog.log("bind item view:" + position + " " + holder.viewType);
+            //TLog.log("bind item view:" + position + " " + holder.viewType);
             onBindItemViewHolder(holder, hasHeader() ? position -1:position);
         }
     }

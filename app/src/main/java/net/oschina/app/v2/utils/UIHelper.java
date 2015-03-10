@@ -15,6 +15,7 @@ import net.oschina.app.v2.activity.search.SearchActivity;
 import net.oschina.app.v2.activity.user.LoginActivity;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.model.Active;
+import net.oschina.app.v2.model.Base;
 import net.oschina.app.v2.model.Comment;
 import net.oschina.app.v2.model.News;
 import net.oschina.app.v2.model.Notice;
@@ -653,6 +654,8 @@ import com.tonlin.osc.happy.R;
 		// if (!((AppContext) context.getApplicationContext()).isLogin()
 		// || notice == null)
 		// return;
+        if(notice== null || context == null)
+            return;
 		TLog.log("发送通知广播");
 		Intent intent = new Intent(Constants.INTENT_ACTION_NOTICE);
 		intent.putExtra("atmeCount", notice.getAtmeCount());
@@ -661,6 +664,18 @@ import com.tonlin.osc.happy.R;
 		intent.putExtra("newFansCount", notice.getNewFansCount());
 		context.sendBroadcast(intent);
 	}
+
+    /**
+     * 发送通知广播
+     * @param context
+     * @param object
+     */
+    public static void sendNoticeBroadcast(Context context,Object object){
+        if(object != null && object instanceof Base){
+            Base base = (Base)object;
+            sendBroadCast(context,base.getNotice());
+        }
+    }
 
 	/**
 	 * 发送广播-发布动弹

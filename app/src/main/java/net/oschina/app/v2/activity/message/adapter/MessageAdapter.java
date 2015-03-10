@@ -1,9 +1,8 @@
 package net.oschina.app.v2.activity.message.adapter;
 
 import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
-import net.oschina.app.v2.model.Messages;
+import net.oschina.app.v2.model.Message;
 import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
 import net.oschina.app.v2.ui.text.MyURLSpan;
 import net.oschina.app.v2.ui.text.TweetTextView;
@@ -43,7 +42,7 @@ public class MessageAdapter extends RecycleBaseAdapter {
     protected void onBindItemViewHolder(RecycleBaseAdapter.ViewHolder holder, int position) {
         super.onBindItemViewHolder(holder, position);
         ViewHolder vh = (ViewHolder)holder;
-        final Messages item = (Messages) _data.get(position);
+        final Message item = (Message) _data.get(position);
 
         if (AppContext.instance().getLoginUid() == item.getSenderId()) {
             vh.sender.setVisibility(View.VISIBLE);

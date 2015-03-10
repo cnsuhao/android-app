@@ -268,7 +268,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         private WeakReference<BaseRecycleViewFragment> mInstance;
 
         private CacheTask(BaseRecycleViewFragment instance) {
-            mInstance = new WeakReference<BaseRecycleViewFragment>(instance);
+            mInstance = new WeakReference<>(instance);
         }
 
         @Override
@@ -307,7 +307,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         private String key;
 
         private SaveCacheTask(BaseRecycleViewFragment instance, Serializable seri, String key) {
-            mInstance = new WeakReference<BaseRecycleViewFragment>(instance);
+            mInstance = new WeakReference<>(instance);
             this.seri = seri;
             this.key = key;
         }
@@ -326,7 +326,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         private WeakReference<BaseRecycleViewFragment> mInstance;
 
         ResponseHandler(BaseRecycleViewFragment instance) {
-            mInstance = new WeakReference<BaseRecycleViewFragment>(instance);
+            mInstance = new WeakReference<>(instance);
         }
 
         @Override
@@ -363,7 +363,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         private List<?> list;
 
         public ParserTask(BaseRecycleViewFragment instance, byte[] data) {
-            this.mInstance = new WeakReference<BaseRecycleViewFragment>(instance);
+            this.mInstance = new WeakReference<>(instance);
             this.reponseData = data;
         }
 
@@ -374,12 +374,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             try {
                 ListEntity data = instance.parseList(new ByteArrayInputStream(
                         reponseData));
-                if (data instanceof Base) {
-                    Notice notice = ((Base) data).getNotice();
-                    if (notice != null) {
-                        UIHelper.sendBroadCast(instance.getActivity(), notice);
-                    }
-                }
+                UIHelper.sendNoticeBroadcast(instance.getActivity(),data);
                 new SaveCacheTask(instance, data, instance.getCacheKey()).execute();
                 list = data.getList();
             } catch (Exception e) {

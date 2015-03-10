@@ -23,7 +23,7 @@ import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.MessageList;
-import net.oschina.app.v2.model.Messages;
+import net.oschina.app.v2.model.Message;
 import net.oschina.app.v2.model.Notice;
 import net.oschina.app.v2.model.Result;
 import net.oschina.app.v2.service.NoticeUtils;
@@ -151,7 +151,7 @@ public class MessageFragment extends BaseRecycleViewFragment {
 
 	@Override
 	public void onItemClick(View view, int position) {
-		Messages message = (Messages) mAdapter.getItem(position);
+		Message message = (Message) mAdapter.getItem(position);
 		if (message != null)
 			UIHelper.showMessageDetail(getActivity(), message.getFriendId(),
 					message.getFriendName());
@@ -159,7 +159,7 @@ public class MessageFragment extends BaseRecycleViewFragment {
 
 	@Override
 	public boolean onItemLongClick(View view, int position) {
-		final Messages message = (Messages) mAdapter.getItem(position);
+		final Message message = (Message) mAdapter.getItem(position);
 //		final CommonDialog dialog = DialogHelper
 //				.getPinterestDialogCancelable(getActivity());
 //		dialog.setItemsWithoutChk(
@@ -221,7 +221,7 @@ public class MessageFragment extends BaseRecycleViewFragment {
 		return true;
 	}
 
-	private void handleDeleteMessage(final Messages message) {
+	private void handleDeleteMessage(final Message message) {
 //		CommonDialog dialog = DialogHelper
 //				.getPinterestDialogCancelable(getActivity());
 //        dialog.setTitle(R.string.operation);
@@ -273,10 +273,11 @@ public class MessageFragment extends BaseRecycleViewFragment {
 				throws Exception {
 			Result res = Result.parse(is);
 			if (res.OK()) {
-				Messages msg = (Messages) args[0];
+				Message msg = (Message) args[0];
 				mAdapter.removeItem(msg);
 				hideWaitDialog();
 				AppContext.showToastShort(R.string.tip_delete_success);
+                UIHelper.sendNoticeBroadcast(getActivity(),res);
 			} else {
 				AppContext.showToastShort(res.getErrorMessage());
 				hideWaitDialog();

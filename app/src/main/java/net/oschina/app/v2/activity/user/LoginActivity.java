@@ -11,6 +11,7 @@ import net.oschina.app.v2.model.User;
 import net.oschina.app.v2.utils.SimpleTextWatcher;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.TLog;
+import net.oschina.app.v2.utils.UIHelper;
 
 import org.apache.http.Header;
 import org.apache.http.client.CookieStore;
@@ -82,6 +83,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 							.instance()));
 				}
 				User user = User.parse(new ByteArrayInputStream(arg2));
+                UIHelper.sendNoticeBroadcast(LoginActivity.this, user);
 				user.setAccount(mUserName);
 				user.setPwd(mPassword);
 				user.setRememberMe(false);

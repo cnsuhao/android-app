@@ -40,7 +40,23 @@ public class Comment extends Entity implements Parcelable {
 	public final static int CLIENT_IPHONE = 4;
 	public final static int CLIENT_WINDOWS_PHONE = 5;
 
-	private String face;
+    public static final String NODE_COMMENT = "comment";
+    public static final String NODE_ID = "id";
+    public static final String NODE_PORTRAIT = "portrait";
+    public static final String NODE_AUTHOR = "author";
+    public static final String NODE_AUTHOR_ID = "authorid";
+    public static final String NODE_CONTENT = "content";
+    public static final String NODE_PUB_DATE = "pubDate";
+    public static final String NODE_APP_CLIENT = "appclient";
+    public static final String NODE_REPLY = "reply";
+    public static final String NODE_RAUTHOR = "rauthor";
+    public static final String NODE_RPUB_DATE = "rpubDate";
+    public static final String NODE_RCONTENT = "rcontent";
+    public static final String NODE_REFER = "refer";
+    public static final String NODE_REFER_TITLE = "refertitle";
+    public static final String NODE_REFER_BODY = "referbody";
+
+    private String face;
 	private String content;
 	private String author;
 	private int authorId;
@@ -239,77 +255,71 @@ public class Comment extends Entity implements Parcelable {
 				String tag = xmlParser.getName();
 				switch (evtType) {
 				case XmlPullParser.START_TAG:
-					if (tag.equalsIgnoreCase("comment")) {
+					if (tag.equalsIgnoreCase(NODE_COMMENT)) {
 						comm = new Comment();
 					} else if (comm != null) {
-						if (tag.equalsIgnoreCase("id")) {
+						if (tag.equalsIgnoreCase(NODE_ID)) {
 							comm.id = StringUtils
 									.toInt(xmlParser.nextText(), 0);
-						} else if (tag.equalsIgnoreCase("portrait")) {
+						} else if (tag.equalsIgnoreCase(NODE_PORTRAIT)) {
 							comm.setFace(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("author")) {
+						} else if (tag.equalsIgnoreCase(NODE_AUTHOR)) {
 							comm.setAuthor(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("authorid")) {
+						} else if (tag.equalsIgnoreCase(NODE_AUTHOR_ID)) {
 							comm.setAuthorId(StringUtils.toInt(
 									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("content")) {
+						} else if (tag.equalsIgnoreCase(NODE_CONTENT)) {
 							comm.setContent(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("pubDate")) {
+						} else if (tag.equalsIgnoreCase(NODE_PUB_DATE)) {
 							comm.setPubDate(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase("appclient")) {
+						} else if (tag.equalsIgnoreCase(NODE_APP_CLIENT)) {
 							comm.setAppClient(StringUtils.toInt(
 									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase("reply")) {
+						} else if (tag.equalsIgnoreCase(NODE_REPLY)) {
 							reply = new Reply();
 						} else if (reply != null
-								&& tag.equalsIgnoreCase("rauthor")) {
+								&& tag.equalsIgnoreCase(NODE_RAUTHOR)) {
 							reply.rauthor = xmlParser.nextText();
 						} else if (reply != null
-								&& tag.equalsIgnoreCase("rpubDate")) {
+								&& tag.equalsIgnoreCase(NODE_RPUB_DATE)) {
 							reply.rpubDate = xmlParser.nextText();
 						} else if (reply != null
-								&& tag.equalsIgnoreCase("rcontent")) {
+								&& tag.equalsIgnoreCase(NODE_RCONTENT)) {
 							reply.rcontent = xmlParser.nextText();
-						} else if (tag.equalsIgnoreCase("refer")) {
+						} else if (tag.equalsIgnoreCase(NODE_REFER)) {
 							refer = new Refer();
 						} else if (refer != null
-								&& tag.equalsIgnoreCase("refertitle")) {
+								&& tag.equalsIgnoreCase(NODE_REFER_TITLE)) {
 							refer.refertitle = xmlParser.nextText();
 						} else if (refer != null
-								&& tag.equalsIgnoreCase("referbody")) {
+								&& tag.equalsIgnoreCase(NODE_REFER_BODY)){
 							refer.referbody = xmlParser.nextText();
-						}
-						// 通知信息
-						else if (tag.equalsIgnoreCase("notice")) {
-							comm.setNotice(new Notice());
-						} else if (comm.getNotice() != null) {
-							if (tag.equalsIgnoreCase("atmeCount")) {
-								comm.getNotice().setAtmeCount(
-										StringUtils.toInt(xmlParser.nextText(),
-												0));
-							} else if (tag.equalsIgnoreCase("msgCount")) {
-								comm.getNotice().setMsgCount(
-										StringUtils.toInt(xmlParser.nextText(),
-												0));
-							} else if (tag.equalsIgnoreCase("reviewCount")) {
-								comm.getNotice().setReviewCount(
-										StringUtils.toInt(xmlParser.nextText(),
-												0));
-							} else if (tag.equalsIgnoreCase("newFansCount")) {
-								comm.getNotice().setNewFansCount(
-										StringUtils.toInt(xmlParser.nextText(),
-												0));
-							}
-						}
+						} else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {// 通知信息
+                            comm.setNotice(new Notice());
+                        } else if (comm.getNotice() != null) {
+                            if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
+                                comm.getNotice().setAtmeCount(
+                                        StringUtils.toInt(xmlParser.nextText(), 0));
+                            } else if (tag.equalsIgnoreCase(Notice.NODE_MESSAGE_COUNT)) {
+                                comm.getNotice().setMsgCount(
+                                        StringUtils.toInt(xmlParser.nextText(), 0));
+                            } else if (tag.equalsIgnoreCase(Notice.NODE_REVIEW_COUNT)) {
+                                comm.getNotice().setReviewCount(
+                                        StringUtils.toInt(xmlParser.nextText(), 0));
+                            } else if (tag.equalsIgnoreCase(Notice.NODE_NEWFANS_COUNT)) {
+                                comm.getNotice().setNewFansCount(
+                                        StringUtils.toInt(xmlParser.nextText(), 0));
+                            }
+                        }
 					}
 					break;
 				case XmlPullParser.END_TAG:
 					// 如果遇到标签结束，则把对象添加进集合中
-					if (tag.equalsIgnoreCase("reply") && comm != null
+					if (tag.equalsIgnoreCase(NODE_REPLY) && comm != null
 							&& reply != null) {
 						comm.getReplies().add(reply);
 						reply = null;
-					} else if (tag.equalsIgnoreCase("refer") && comm != null
+					} else if (tag.equalsIgnoreCase(NODE_REFER) && comm != null
 							&& refer != null) {
 						comm.getRefers().add(refer);
 						refer = null;

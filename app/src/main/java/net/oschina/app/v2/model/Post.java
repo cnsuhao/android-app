@@ -37,13 +37,18 @@ public class Post extends Entity implements Parcelable {
 	public final static String NODE_FAVORITE = "favorite";
 	public final static String NODE_START = "post";
 
-	public final static int CATALOG_ASK = 1;
-	public final static int CATALOG_SHARE = 2;
-	public final static int CATALOG_OTHER = 3;
-	public final static int CATALOG_JOB = 4;
-	public final static int CATALOG_SITE = 5;
+    public static final String NODE_TAGS = "tags";
+    public static final String NODE_TAG = "tag";
 
-	private String title;
+
+    public final static int CATALOG_ASK = 1;
+    public final static int CATALOG_SHARE = 2;
+    public final static int CATALOG_OTHER = 3;
+    public final static int CATALOG_JOB = 4;
+    public final static int CATALOG_SITE = 5;
+
+
+    private String title;
 	private String url;
 	private String face;
 	private String body;
@@ -224,36 +229,28 @@ public class Post extends Entity implements Parcelable {
 						} else if (tag.equalsIgnoreCase(NODE_FAVORITE)) {
 							post.setFavorite(StringUtils.toInt(
 									xmlParser.nextText(), 0));
-						}
-						// 标签
-						else if (tag.equalsIgnoreCase("tags")) {
-							post.tags = new ArrayList<String>();
+						} else if (tag.equalsIgnoreCase(NODE_TAGS)) {// 标签
+							post.tags = new ArrayList<>();
 						} else if (post.getTags() != null
-								&& tag.equalsIgnoreCase("tag")) {
+								&& tag.equalsIgnoreCase(NODE_TAG)) {
 							post.getTags().add(xmlParser.nextText());
-						}
-						// 通知信息
-						else if (tag.equalsIgnoreCase("notice")) {
-							post.setNotice(new Notice());
-						} else if (post.getNotice() != null) {
-							if (tag.equalsIgnoreCase("atmeCount")) {
-								post.getNotice().setAtmeCount(
-										StringUtils.toInt(xmlParser.nextText(),
-												0));
-							} else if (tag.equalsIgnoreCase("msgCount")) {
-								post.getNotice().setMsgCount(
-										StringUtils.toInt(xmlParser.nextText(),
-												0));
-							} else if (tag.equalsIgnoreCase("reviewCount")) {
-								post.getNotice().setReviewCount(
-										StringUtils.toInt(xmlParser.nextText(),
-												0));
-							} else if (tag.equalsIgnoreCase("newFansCount")) {
-								post.getNotice().setNewFansCount(
-										StringUtils.toInt(xmlParser.nextText(),
-												0));
-							}
-						}
+						} else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {// 通知信息
+                            post.setNotice(new Notice());
+                        } else if (post.getNotice() != null) {
+                            if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
+                                post.getNotice().setAtmeCount(
+                                        StringUtils.toInt(xmlParser.nextText(), 0));
+                            } else if (tag.equalsIgnoreCase(Notice.NODE_MESSAGE_COUNT)) {
+                                post.getNotice().setMsgCount(
+                                        StringUtils.toInt(xmlParser.nextText(), 0));
+                            } else if (tag.equalsIgnoreCase(Notice.NODE_REVIEW_COUNT)) {
+                                post.getNotice().setReviewCount(
+                                        StringUtils.toInt(xmlParser.nextText(), 0));
+                            } else if (tag.equalsIgnoreCase(Notice.NODE_NEWFANS_COUNT)) {
+                                post.getNotice().setNewFansCount(
+                                        StringUtils.toInt(xmlParser.nextText(), 0));
+                            }
+                        }
 					}
 					break;
 				case XmlPullParser.END_TAG:

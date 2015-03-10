@@ -90,21 +90,21 @@ public class ActiveAdapter extends RecycleBaseAdapter {
             default:
                 vh.from.setText("");
                 break;
-            case Tweet.CLIENT_MOBILE:
+            case Active.CLIENT_MOBILE:
                 vh.from.setText(R.string.from_mobile);
                 break;
-            case Tweet.CLIENT_ANDROID:
+            case Active.CLIENT_ANDROID:
                 vh.from.setText(R.string.from_android);
                 break;
-            case Tweet.CLIENT_IPHONE:
+            case Active.CLIENT_IPHONE:
                 vh.from.setText(R.string.from_iphone);
                 break;
-            case Tweet.CLIENT_WINDOWS_PHONE:
+            case Active.CLIENT_WINDOWS_PHONE:
                 vh.from.setText(R.string.from_windows_phone);
                 break;
-            case Tweet.CLIENT_WECHAT:
-                vh.from.setText(R.string.from_wechat);
-                break;
+            //case Active.CLIENT_WECHAT:
+            //    vh.from.setText(R.string.from_wechat);
+            //    break;
         }
 
         if (item.getCommentCount() > 0) {

@@ -58,8 +58,8 @@ public class MessageDetailFragment extends BaseListFragment implements
 			try {
 				Result res = Result.parse(new ByteArrayInputStream(arg2));
 				if (res.OK()) {
-					AppContext
-							.showToastShort(R.string.tip_message_public_success);
+					AppContext.showToastShort(R.string.tip_message_public_success);
+                    UIHelper.sendNoticeBroadcast(getActivity(),res);
 					mAdapter.addItem(res.getComment());
 					mEmojiFragment.reset();
 				} else {
