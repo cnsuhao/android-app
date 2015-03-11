@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.tonlin.osc.happy.R;
 
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.IMainTab;
 import net.oschina.app.v2.activity.IPagerFragment;
 import net.oschina.app.v2.activity.active.adapter.ActiveTabPagerAdapter;
@@ -36,6 +37,8 @@ public class ActiveViewPagerFragment extends BaseFragment implements
 
     private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
 
+        public static final java.lang.String TAG = "NoticeReceiver";
+
         @Override
         public void onReceive(Context context, Intent intent) {
             int atmeCount = intent.getIntExtra("atmeCount", 0);// @我
@@ -51,9 +54,9 @@ public class ActiveViewPagerFragment extends BaseFragment implements
                     return;
             }
 
-            TLog.log("@me:" + atmeCount + " msg:" + msgCount + " review:"
+            TLog.log(TAG,"Me 收到广播 @me:" + atmeCount + " msg:" + msgCount + " review:"
                     + reviewCount + " newFans:" + newFansCount + " active:"
-                    + activeCount);
+                    + activeCount+" from:"+ intent.getStringExtra("from"));
 
             mSlidingTabLayout.setMessageCount(1, atmeCount);
             if (atmeCount > 0) {

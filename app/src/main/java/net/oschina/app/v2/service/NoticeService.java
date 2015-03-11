@@ -45,7 +45,8 @@ public class NoticeService extends Service {
 	public static final String BUNDLE_KEY_TPYE = "bundle_key_type";
 
 	private static final long INTERVAL = 1000 * 120;
-	private AlarmManager mAlarmMgr;
+    private static final java.lang.String TAG = "NoticeReceiver";
+    private AlarmManager mAlarmMgr;
 
 	private Notice mNotice;
 
@@ -67,7 +68,7 @@ public class NoticeService extends Service {
 				}
 			} else if (INTENT_ACTION_BROADCAST.equals(action)) {
 				if (mNotice != null) {
-					UIHelper.sendBroadCast(NoticeService.this, mNotice);
+					UIHelper.sendBroadCast(NoticeService.this, mNotice,"notice service broadcast");
 				}
 			} else if (INTENT_ACTION_SHUTDOWN.equals(action)) {
 				stopSelf();
@@ -105,7 +106,7 @@ public class NoticeService extends Service {
 	public void onDestroy() {
 		cancelRequestAlarm();
 		unregisterReceiver(mReceiver);
-		TLog.log("消息通知服务关闭了");
+		TLog.log(TAG,"消息通知服务关闭了");
 		super.onDestroy();
 	}
 
@@ -128,6 +129,7 @@ public class NoticeService extends Service {
 	}
 
 	private void clearNotice(int uid, int type) {
+        TLog.log(TAG,"准备清除消息");
 		NewsApi.clearNotice(uid, type, mClearNoticeHandler);
 	}
 
@@ -213,7 +215,7 @@ public class NoticeService extends Service {
 			try {
 				Notice notice = Notice.parse(new ByteArrayInputStream(arg2));
 				if (notice != null) {
-					UIHelper.sendBroadCast(NoticeService.this, notice);
+					UIHelper.sendBroadCast(NoticeService.this, notice,"notice service get");
 					notification(notice);
 					mNotice = notice;
 				}
@@ -238,7 +240,8 @@ public class NoticeService extends Service {
 				Result res = Result.parse(new ByteArrayInputStream(arg2));
 				if (res.OK() && res.getNotice() != null) {
 					mNotice = res.getNotice();
-					UIHelper.sendBroadCast(NoticeService.this, res.getNotice());
+                    TLog.log(TAG,"清除消息成功:atme:"+mNotice.getAtmeCount()+" msg:"+mNotice.getMsgCount()+" review:"+ mNotice.getReviewCount()+" fans:"+mNotice.getNewFansCount());
+					UIHelper.sendBroadCast(NoticeService.this, mNotice ,"notice service clear");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

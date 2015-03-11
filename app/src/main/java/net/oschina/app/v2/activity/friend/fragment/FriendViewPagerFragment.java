@@ -1,5 +1,6 @@
 package net.oschina.app.v2.activity.friend.fragment;
 
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.common.SimpleBackActivity;
 import net.oschina.app.v2.activity.friend.adapter.FriendTabPagerAdapter;
 import net.oschina.app.v2.base.Constants;
@@ -39,7 +40,7 @@ public class FriendViewPagerFragment extends Fragment implements
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			int newFansCount = intent.getIntExtra("newFansCount", 0);// 新粉丝
-            mSlidingTabLayout.setMessageCount(1,newFansCount);
+            mSlidingTabLayout.setMessageCount(1, newFansCount);
 			if (newFansCount > 0) {
 				//mBvNewFans.setText(newFansCount + "");
 				//mBvNewFans.show();

@@ -1,6 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <changelog>
     <release
+        version="1.2.0.0-2015.03.11"
+        versioncode="10">
+        <change>新增:资讯/问答列表新增描述</change>
+        <change>新增:资讯问答列表已读提示</change>
+        <change>新增:详情页面添加向右滑动关闭功能</change>
+        <change>新增:向上滚动自动隐藏标题栏</change>
+        <change>修改:缓存策略,只缓存第一页及时更新数据</change>
+        <change>修改:大部分UI界面进行重构</change>
+        <change>修复:无法评论动弹BUG</change>
+        <change>修复:个人中心的关注/粉丝数始终为零BUG</change>
+        <change>修复:刷新后无法清除通知数提示BUG</change>
+        <change>其他已知BUG修复</change>
+    </release>
+    <release
         version="1.0.1.1-2014.09.28"
         versioncode="6">
         <change>新增:两次回退退出功能</change>

@@ -394,10 +394,10 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             if (mInstance != null) {
                 BaseRecycleViewFragment instance = mInstance.get();
                 if (instance.isAdded()) {
-                    if (instance.mState == STATE_REFRESH) {
-                        instance.onRefreshNetworkSuccess();
+                    //if (instance.mState == STATE_REFRESH) {
+                    //    instance.onRefreshNetworkSuccess();
                         //AppContext.setRefreshTime(instance.getCacheKey(),System.currentTimeMillis());
-                    }
+                    //}
                     instance.executeParserTask(responseBytes, false);
                 }
             }
@@ -461,6 +461,11 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
                     instance.executeOnLoadDataError(null);
                 } else {
                     instance.executeOnLoadDataSuccess(list);
+                    if(!fromCache) {
+                        if (instance.mState == STATE_REFRESH) {
+                            instance.onRefreshNetworkSuccess();
+                        }
+                    }
                     instance.executeOnLoadFinish();
                 }
                 if (fromCache) {

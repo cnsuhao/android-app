@@ -351,7 +351,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 				if (data instanceof Base) {
 					Notice notice = ((Base) data).getNotice();
 					if (notice != null) {
-						UIHelper.sendBroadCast(getActivity(), notice);
+						UIHelper.sendBroadCast(getActivity(), notice ,"list");
 					}
 				}
 				new SaveCacheTask(getActivity(), data, getCacheKey()).execute();

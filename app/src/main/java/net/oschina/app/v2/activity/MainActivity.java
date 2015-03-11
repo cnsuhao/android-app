@@ -78,6 +78,8 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
 
     private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
 
+        private static final String TAG = "NoticeReceiver";
+
         @Override
         public void onReceive(Context context, Intent intent) {
             int atmeCount = intent.getIntExtra("atmeCount", 0);// @我
@@ -88,9 +90,9 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
             // newFansCount;//
             // 信息总数
 
-            TLog.log("@me:" + atmeCount + " msg:" + msgCount + " review:"
+            TLog.log(TAG,"Main收到广播 @me:" + atmeCount + " msg:" + msgCount + " review:"
                     + reviewCount + " newFans:" + newFansCount + " active:"
-                    + activeCount);
+                    + activeCount+" from:"+ intent.getStringExtra("from"));
 
             if (activeCount > 0) {
                 mBvTweet.setText(activeCount + "");

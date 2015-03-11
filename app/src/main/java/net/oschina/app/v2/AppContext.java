@@ -92,6 +92,11 @@ public class AppContext extends BaseApplication {
     private static final String KEY_TWEET_READED = "key_readed_tweet";
     private static final String KEY_ACTIVE_READED = "key_readed_active";
     private static final String KEY_BLOG_READED = "key_readed_blog";
+    private static final String KEY_NOTICE_ATME_COUNT = "key_notice_atme_count";
+    private static final String KEY_NOTICE_MESSAGE_COUNT = "key_notice_message_count";
+    private static final String KEY_NOTICE_REVIEW_COUNT = "key_notice_review_count";
+    private static final String KEY_NOTICE_NEWFANS_COUNT = "key_notice_newfans_count";
+
     private static Set<String> mReadedNewsIds, mReadedQuestionIds, mReadedTweetIds, mReadedActiveIds, mReadedBlogIds; //已读IDS
 
     private boolean login = false; // 登录状态
@@ -100,6 +105,7 @@ public class AppContext extends BaseApplication {
     private String saveImagePath;// 保存图片路径
 
     private static AppContext instance;
+
 
     @Override
     public void onCreate() {
@@ -933,4 +939,49 @@ public class AppContext extends BaseApplication {
             return true;
         return false;
     }
+
+    public static void setNoticeAtMeCount(int noticeAtMeCount) {
+        Editor editor = getPreferences().edit();
+        editor.putInt(KEY_NOTICE_ATME_COUNT + instance().getLoginUid(),
+                noticeAtMeCount);
+        apply(editor);
+    }
+
+    public static int getNoticeAtMeCount(){
+        return getPreferences().getInt(KEY_NOTICE_ATME_COUNT + instance().getLoginUid(),0);
+    }
+
+    public static void setNoticeMessageCount(int noticeMessageCount) {
+        Editor editor = getPreferences().edit();
+        editor.putInt(KEY_NOTICE_MESSAGE_COUNT + instance().getLoginUid(),
+                noticeMessageCount);
+        apply(editor);
+    }
+
+    public static int getNoticeMessageCount(){
+        return getPreferences().getInt(KEY_NOTICE_MESSAGE_COUNT + instance().getLoginUid(),0);
+    }
+
+    public static void setNoticeReviewCount(int reviewCount) {
+        Editor editor = getPreferences().edit();
+        editor.putInt(KEY_NOTICE_REVIEW_COUNT + instance().getLoginUid(),
+                reviewCount);
+        apply(editor);
+    }
+
+    public static int getNoticeReviewCount(){
+        return getPreferences().getInt(KEY_NOTICE_REVIEW_COUNT + instance().getLoginUid(),0);
+    }
+
+    public static void setNoticeNewFansCount(int newFansCount) {
+        Editor editor = getPreferences().edit();
+        editor.putInt(KEY_NOTICE_NEWFANS_COUNT + instance().getLoginUid(),
+                newFansCount);
+        apply(editor);
+    }
+
+    public static int getNoticeNewFansCount(){
+        return getPreferences().getInt(KEY_NOTICE_NEWFANS_COUNT + instance().getLoginUid(),0);
+    }
+
 }

@@ -193,9 +193,6 @@ import com.tonlin.osc.happy.R;
 	 * 新闻超链接点击跳转
 	 * 
 	 * @param context
-	 * @param newsId
-	 * @param newsType
-	 * @param objId
 	 */
 	public static void showNewsRedirect(Context context, News news) {
 		String url = news.getUrl();
@@ -227,8 +224,6 @@ import com.tonlin.osc.happy.R;
 	 * 动态点击跳转到相关新闻、帖子等
 	 * 
 	 * @param context
-	 * @param id
-	 * @param catalog
 	 *            0其他 1新闻 2帖子 3动弹 4博客
 	 */
 	public static void showActiveRedirect(Context context, Active active) {
@@ -323,7 +318,6 @@ import com.tonlin.osc.happy.R;
 	 * 显示留言对话页面
 	 * 
 	 * @param context
-	 * @param catalog
 	 * @param friendid
 	 */
 	public static void showMessageDetail(Context context, int friendid,
@@ -500,7 +494,6 @@ import com.tonlin.osc.happy.R;
 	 * 显示用户动态
 	 * 
 	 * @param context
-	 * @param uid
 	 * @param hisuid
 	 * @param hisname
 	 */
@@ -622,7 +615,6 @@ import com.tonlin.osc.happy.R;
 	 * 获取TextWatcher对象
 	 * 
 	 * @param context
-	 * @param tmlKey
 	 * @return
 	 */
 	public static TextWatcher getTextWatcher(final Activity context,
@@ -650,19 +642,27 @@ import com.tonlin.osc.happy.R;
 	 * @param context
 	 * @param notice
 	 */
-	public static void sendBroadCast(Context context, Notice notice) {
+	public static void sendBroadCast(Context context, Notice notice,String from) {
 		// if (!((AppContext) context.getApplicationContext()).isLogin()
 		// || notice == null)
 		// return;
         if(notice== null || context == null)
             return;
-		TLog.log("发送通知广播");
+		//AppContext.setNoticeAtMeCount(notice.getAtmeCount());
+        //AppContext.setNoticeMessageCount(notice.getMsgCount());
+        //AppContext.setNoticeReviewCount(notice.getReviewCount());
+        //AppContext.setNoticeNewFansCount(notice.getNewFansCount());
+
+        TLog.log("NoticeReceiver","发送通知广播 from:"+from +" atme:"+notice.getAtmeCount()
+                +" review:"+notice.getReviewCount()+" msg:"+notice.getMsgCount()+" fans:"+notice.getNewFansCount());
 		Intent intent = new Intent(Constants.INTENT_ACTION_NOTICE);
 		intent.putExtra("atmeCount", notice.getAtmeCount());
 		intent.putExtra("msgCount", notice.getMsgCount());
 		intent.putExtra("reviewCount", notice.getReviewCount());
 		intent.putExtra("newFansCount", notice.getNewFansCount());
+        intent.putExtra("from",from);
 		context.sendBroadcast(intent);
+
 	}
 
     /**
@@ -673,7 +673,7 @@ import com.tonlin.osc.happy.R;
     public static void sendNoticeBroadcast(Context context,Object object){
         if(object != null && object instanceof Base){
             Base base = (Base)object;
-            sendBroadCast(context,base.getNotice());
+            sendBroadCast(context,base.getNotice(),"list");
         }
     }
 
@@ -681,7 +681,6 @@ import com.tonlin.osc.happy.R;
 	 * 发送广播-发布动弹
 	 * 
 	 * @param context
-	 * @param notice
 	 */
 	public static void sendBroadCastTweet(Context context, int what,
 			Result res, Tweet tweet) {
