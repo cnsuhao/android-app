@@ -320,7 +320,8 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
                     TLog.log(TAG, "parser cache error :" + e.getMessage());
                 }
             }
-            target.requestData(true);
+//            target.requestData(true);
+            target.refresh();
         }
     }
 
@@ -471,7 +472,8 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
                 if (fromCache) {
                     TLog.log(TAG, "key:" + instance.getCacheKey()
                             + ",set cache data finish ,begin to load network data.");
-                    instance.requestData(true);
+//                    instance.requestData(true);
+                    instance.refresh();
                 }
             }
         }
