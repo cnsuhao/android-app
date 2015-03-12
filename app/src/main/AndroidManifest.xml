@@ -51,7 +51,7 @@
         <activity
             android:name="net.oschina.app.v2.activity.SplashActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.IMA.Transparent.NoTitleBar" >
+            android:theme="@style/Theme.IMA.Splash" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

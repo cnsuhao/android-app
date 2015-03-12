@@ -28,6 +28,5 @@
 
         <item name="android:navigationBarColor">#000</item>
         <item name="android:statusBarColor">?colorPrimaryDark</item>
-
     </style>
 </resources>
