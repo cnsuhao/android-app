@@ -382,11 +382,11 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
     }
 
     private Fragment getPagerFragment() {
-        MainTab[] tabs = MainTab.values();
+        //MainTab[] tabs = MainTab.values();
 
-        MainTab tab = tabs[mTabHost.getCurrentTab()];
-
-        return getSupportFragmentManager().findFragmentByTag(getString(tab.getResName()));
+        //MainTab tab = tabs[mTabHost.getCurrentTab()];
+        //getString(tab.getResName())
+        return getSupportFragmentManager().findFragmentByTag(mTabHost.getCurrentTabTag());
     }
 
     private boolean toolbarIsShown() {

@@ -173,10 +173,10 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
 		return Post.parse(is);
 	}
 
-	@Override
-	protected Entity readData(Serializable seri) {
-		return (Post) seri;
-	}
+	//@Override
+	//protected Entity readData(Serializable seri) {
+	//	return (Post) seri;
+	//}
 
 	@Override
 	protected void onCommentChanged(int opt, int id, int catalog,

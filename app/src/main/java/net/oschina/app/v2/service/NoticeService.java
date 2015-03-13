@@ -242,7 +242,9 @@ public class NoticeService extends Service {
 					mNotice = res.getNotice();
                     TLog.log(TAG,"清除消息成功:atme:"+mNotice.getAtmeCount()+" msg:"+mNotice.getMsgCount()+" review:"+ mNotice.getReviewCount()+" fans:"+mNotice.getNewFansCount());
 					UIHelper.sendBroadCast(NoticeService.this, mNotice ,"notice service clear");
-				}
+				} else {
+                    TLog.log(TAG,"消息清除失败:"+res);
+                }
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -251,6 +253,7 @@ public class NoticeService extends Service {
 		@Override
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 				Throwable arg3) {
+            arg3.printStackTrace();
 		}
 	};
 

@@ -123,10 +123,10 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 		return Software.parse(is);
 	}
 
-	@Override
-	protected Entity readData(Serializable seri) {
-		return (Software) seri;
-	}
+	//@Override
+	//protected Entity readData(Serializable seri) {
+	//	return (Software) seri;
+	//}
 
 	@Override
 	protected boolean shouldRegisterCommentChangedReceiver() {

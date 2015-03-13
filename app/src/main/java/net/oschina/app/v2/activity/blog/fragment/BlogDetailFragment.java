@@ -209,10 +209,10 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 		return Blog.parse(is);
 	}
 
-	@Override
-	protected Entity readData(Serializable seri) {
-		return (Blog) seri;
-	}
+	//@Override
+	//protected Entity readData(Serializable seri) {
+	//	return (Blog) seri;
+	//}
 
 	@Override
 	protected void onCommentChanged(int opt, int id, int catalog,

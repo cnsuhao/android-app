@@ -167,10 +167,10 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 		return News.parse(is);
 	}
 
-	@Override
-	protected Entity readData(Serializable seri) {
-		return (News) seri;
-	}
+	//@Override
+	//protected Entity readData(Serializable seri) {
+	//	return (News) seri;
+	//}
 
 	@Override
 	protected void onCommentChanged(int opt, int id, int catalog,
@@ -256,7 +256,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 		if (mToolBarFragment != null) {
 			mToolBarFragment.setFavorite(flag);
 		}
-		saveCache(mNews);
+		//saveCache(mNews);
 	}
 
 	@Override
