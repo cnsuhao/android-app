@@ -72,10 +72,10 @@ import com.tonlin.osc.happy.R;
 			+ "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
 			+ "<script type=\"text/javascript\">function showImagePreview(var url){window.location.url= url;}</script>";
 	public final static String WEB_STYLE = linkCss
-			+ "<style>* {font-size:18px;line-height:20px;} p {color:#333;} a {color:#3E62A6;} img {max-width:310px;} "
+			+ "<style>* {font-size:16px;line-height:20px;} h1 {font-size:20px;} h2 {font-size:18px;} h3 {font-size:16px;} p {color:#333;} a {color:#3E62A6;} img {max-width:310px;} "
 			+ "img.alignleft {float:left;max-width:120px;margin:0 10px 5px 0;border:1px solid #ccc;background:#fff;padding:2px;} "
 			+ "pre {font-size:11pt;line-height:12pt;font-family:Courier New,Arial;border:1px solid #ddd;border-left:5px solid #6CE26C;background:#f6f6f6;padding:5px;overflow: auto;} "
-			+ "a.tag {font-size:16px;text-decoration:none;background-color:#bbd6f3;border-bottom:2px solid #3E6D8E;border-right:2px solid #7F9FB6;color:#284a7b;margin:2px 2px 2px 0;padding:2px 4px;white-space:nowrap;}</style>";
+			+ "a.tag {font-size:18px;text-decoration:none;background-color:#bbd6f3;border-bottom:2px solid #3E6D8E;border-right:2px solid #7F9FB6;color:#284a7b;margin:2px 2px 2px 0;padding:2px 4px;white-space:nowrap;}</style>";
 
 	public static final String WEB_LOAD_IMAGES = "<script type=\"text/javascript\"> var allImgUrls = getAllImgSrc(document.body.innerHTML);</script>";
 
@@ -982,6 +982,13 @@ import com.tonlin.osc.happy.R;
 		return body;
 	}
 
+    public static String clearFontSize(String body) {
+        body = body.replaceAll("font-size:\\s*[0-9]+px;", "");
+        body = body.replaceAll("FONT-SIZE:\\s*[0-9]+px;", "");
+        body = body.replaceAll("FONT:\\s*[0-9]+px", "");
+        return body;
+    }
+
 	public static void showLogin(Context context) {
 		Intent intent = new Intent(context, LoginActivity.class);
 		context.startActivity(intent);
@@ -1063,4 +1070,5 @@ import com.tonlin.osc.happy.R;
 	public static void showDailyEnglish(Context context) {
 		showSimpleBack(context, SimpleBackPage.DAILY_ENGLISH);
 	}
+
 }

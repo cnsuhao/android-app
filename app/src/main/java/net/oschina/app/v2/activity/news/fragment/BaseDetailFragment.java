@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.MySwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -64,12 +65,13 @@ import java.lang.ref.WeakReference;
 
 
 public class BaseDetailFragment extends BaseFragment implements
-        View.OnTouchListener {// OnItemClickListener
+        View.OnTouchListener, MySwipeRefreshLayout.OnRefreshListener {// OnItemClickListener
     private static final String TAG = "BaseDetailFragment";
 
     final UMSocialService mController = UMServiceFactory
             .getUMSocialService("com.umeng.share");
 
+    protected MySwipeRefreshLayout mRefreshView;
     protected EmptyLayout mEmptyLayout;
     protected WebView mWebView;
 
@@ -174,7 +176,7 @@ public class BaseDetailFragment extends BaseFragment implements
                 if (entity != null && entity.getId() > 0) {
                     UIHelper.sendNoticeBroadcast(getActivity(), entity);
                     executeOnLoadDataSuccess(entity);
-
+                    executeOnLoadFinish();
                     CacheManager.setCache(getCacheKey(), arg2, getCacheExpore(), CacheManager.TYPE_INTERNAL);
                 } else {
                     throw new RuntimeException("load detail error");
@@ -190,6 +192,7 @@ public class BaseDetailFragment extends BaseFragment implements
                               Throwable arg3) {
             executeOnLoadDataError(arg3.getMessage());
             // readCacheData(getCacheKey());
+            executeOnLoadFinish();
         }
     };
 
@@ -310,10 +313,20 @@ public class BaseDetailFragment extends BaseFragment implements
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mRefreshView = (MySwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
+        if (mRefreshView != null) {
+            mRefreshView.setOnRefreshListener(this);
+        }
+
         requestData();
 
-        mWebView = (WebView) getView().findViewById(R.id.webview);
+        mWebView = (WebView) view.findViewById(R.id.webview);
         mWebView.setOnTouchListener(this);
+    }
+
+    @Override
+    public void onRefresh() {
+        sendRequestData();
     }
 
     @Override
@@ -376,6 +389,7 @@ public class BaseDetailFragment extends BaseFragment implements
         //    readCacheData(key);
         //}
         // sendRequestData();
+        mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         new ReadCacheTask(this).execute();
     }
 
@@ -437,6 +451,8 @@ public class BaseDetailFragment extends BaseFragment implements
     }
 
     protected void executeOnLoadFinish() {
+        if (mRefreshView != null)
+            mRefreshView.setRefreshing(false);
     }
 
     protected void onFavoriteChanged(boolean flag) {

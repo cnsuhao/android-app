@@ -26,6 +26,7 @@ import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.ui.widget.WebView;
 import net.oschina.app.v2.utils.StringUtils;
 import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.TLog;
 import net.oschina.app.v2.utils.UIHelper;
 
 import org.apache.http.Header;
@@ -200,7 +201,6 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected void sendRequestData() {
-		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 		NewsApi.getBlogDetail(mBlogId, mHandler);
 	}
 
@@ -255,11 +255,15 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	}
 
 	private void fillWebViewBody() {
-		String body = UIHelper.WEB_STYLE + mBlog.getBody();
+        String body = mBlog.getBody();
+        body = UIHelper.clearFontSize(body);
+
+		body = UIHelper.WEB_STYLE + body;
 		body = UIHelper.setHtmlCotentSupportImagePreview(body);
 		body += UIHelper.WEB_LOAD_IMAGES;
-		body = body.replaceAll("font-size:\\s*[0-9]+px;", "");
-		mWebView.setWebViewClient(mWebClient);
+
+        //TLog.log(TAG,"HTML:"+body);
+        mWebView.setWebViewClient(mWebClient);
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
 	}
 

@@ -114,7 +114,6 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected void sendRequestData() {
-		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 		NewsApi.getSoftwareDetail(mIdent, mHandler);
 	}
 
@@ -163,9 +162,10 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 	}
 
 	private void fillWebViewBody() {
-		String body = UIHelper.WEB_STYLE + mSoftware.getBody();
+        String body = UIHelper.clearFontSize(mSoftware.getBody());
+
+		body = UIHelper.WEB_STYLE + body;
 		body = UIHelper.setHtmlCotentSupportImagePreview(body);
-		body = body.replaceAll("font-size:\\s*[0-9]+px;", "");
 		body += UIHelper.WEB_LOAD_IMAGES;
 		mWebView.setWebViewClient(mWebClient);// UIHelper.getWebViewClient()
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);

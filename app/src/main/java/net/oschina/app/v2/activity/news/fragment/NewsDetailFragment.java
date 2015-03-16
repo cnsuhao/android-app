@@ -22,6 +22,7 @@ import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.ui.widget.WebView;
 import net.oschina.app.v2.utils.StringUtils;
 import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.TLog;
 import net.oschina.app.v2.utils.UIHelper;
 import android.app.Activity;
 import android.os.Bundle;
@@ -158,7 +159,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected void sendRequestData() {
-		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 		NewsApi.getNewsDetail(mNewsId, mHandler);
 	}
 
@@ -213,11 +213,12 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	}
 
 	private void fillWebViewBody() {
-		String body = UIHelper.WEB_STYLE + mNews.getBody();
+        String body = mNews.getBody();
+        body = UIHelper.clearFontSize(body);
+
+		body = UIHelper.WEB_STYLE + body;
 
 		body = UIHelper.setHtmlCotentSupportImagePreview(body);
-
-		body = body.replaceAll("font-size:\\s*[0-9]+px;", "");
 
 		// 更多关于***软件的信息
 		String softwareName = mNews.getSoftwareName();
@@ -247,6 +248,9 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
 		mWebView.setWebViewClient(mWebClient);
 		UIHelper.addWebImageShow(getActivity(), mWebView);
+
+        TLog.log(TAG, "HTML:" + body);
+
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
 	}
 

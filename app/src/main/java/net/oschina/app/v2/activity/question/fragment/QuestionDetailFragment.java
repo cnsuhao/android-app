@@ -164,7 +164,6 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected void sendRequestData() {
-		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 		NewsApi.getPostDetail(mPostId, mHandler);
 	}
 
@@ -209,9 +208,11 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
 	private void fillWebViewBody() {
 		// 显示标签
 		String tags = getPostTags(mPost.getTags());
-		String body = UIHelper.WEB_STYLE + mPost.getBody() + tags
+
+        String body = UIHelper.clearFontSize(mPost.getBody());
+
+		body = UIHelper.WEB_STYLE + body + tags
 				+ "<div style=\"margin-bottom: 80px\" />";
-		body = body.replaceAll("font-size:\\s*[0-9]+px;", "");
 		body = UIHelper.setHtmlCotentSupportImagePreview(body);
 		body += UIHelper.WEB_LOAD_IMAGES;
 		mWebView.setWebViewClient(mWebClient);
