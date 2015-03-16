@@ -63,7 +63,6 @@ import java.lang.ref.WeakReference;
 
 //import android.webkit.WebView;
 
-
 public class BaseDetailFragment extends BaseFragment implements
         View.OnTouchListener, MySwipeRefreshLayout.OnRefreshListener {// OnItemClickListener
     private static final String TAG = "BaseDetailFragment";
@@ -114,6 +113,7 @@ public class BaseDetailFragment extends BaseFragment implements
                 if (res.OK()) {
                     AppContext.showToastShort(R.string.add_favorite_success);
                     instance.mIsFavorited = true;
+                    instance.sendRequestData();
                     instance.onFavoriteChanged(true);
                 } else {
                     AppContext.showToastShort(res.getErrorMessage());
@@ -151,6 +151,7 @@ public class BaseDetailFragment extends BaseFragment implements
                 if (res.OK()) {
                     AppContext.showToastShort(R.string.del_favorite_success);
                     instance.mIsFavorited = false;
+                    instance.sendRequestData();
                     instance.onFavoriteChanged(false);
                 } else {
                     AppContext.showToastShort(res.getErrorMessage());
@@ -191,7 +192,6 @@ public class BaseDetailFragment extends BaseFragment implements
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                               Throwable arg3) {
             executeOnLoadDataError(arg3.getMessage());
-            // readCacheData(getCacheKey());
             executeOnLoadFinish();
         }
     };
@@ -381,14 +381,6 @@ public class BaseDetailFragment extends BaseFragment implements
     }
 
     protected void requestData() {
-        //String key = getCacheKey();
-        //if (TDevice.hasInternet()
-        //        && (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
-        //    sendRequestData();
-        //} else {
-        //    readCacheData(key);
-        //}
-        // sendRequestData();
         mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         new ReadCacheTask(this).execute();
     }
@@ -409,20 +401,12 @@ public class BaseDetailFragment extends BaseFragment implements
         return null;
     }
 
-    //protected Entity readData(Serializable seri) {
-    //    return null;
-    //}
-
     protected void onCommentChanged(int opt, int id, int catalog,
                                     boolean isBlog, Comment comment) {
     }
 
     protected void sendRequestData() {
     }
-
-    //protected void saveCache(Entity entity) {
-    //new SaveCacheTask(getActivity(), entity, getCacheKey()).execute();
-    //}
 
     protected void executeOnLoadDataSuccess(Entity entity) {
 
@@ -433,7 +417,6 @@ public class BaseDetailFragment extends BaseFragment implements
     }
 
     protected void onReportMenuClick() {
-
     }
 
     protected void executeOnLoadDataError(String object) {
@@ -457,57 +440,6 @@ public class BaseDetailFragment extends BaseFragment implements
 
     protected void onFavoriteChanged(boolean flag) {
     }
-
-//    private class CacheTask extends AsyncTask<String, Void, Entity> {
-//        private WeakReference<Context> mContext;
-//
-//        private CacheTask(Context context) {
-//            mContext = new WeakReference<>(context);
-//        }
-//
-//        @Override
-//        protected Entity doInBackground(String... params) {
-//            if (mContext.get() != null) {
-//                Serializable seri = CacheManager.readObject(mContext.get(),
-//                        params[0]);
-//                if (seri == null) {
-//                    return null;
-//                } else {
-//                    return readData(seri);
-//                }
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Entity entity) {
-//            super.onPostExecute(entity);
-//            if (entity != null) {
-//                executeOnLoadDataSuccess(entity);
-//            } else {
-//                executeOnLoadDataError(null);
-//            }
-//            executeOnLoadFinish();
-//        }
-//    }
-//    private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
-//        private WeakReference<Context> mContext;
-//        private Serializable seri;
-//        private String key;
-//
-//        private SaveCacheTask(Context context, Serializable seri, String key) {
-//            mContext = new WeakReference<>(context);
-//            this.seri = seri;
-//            this.key = key;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            CacheManager.saveObject(mContext.get(), seri, key);
-//            return null;
-//        }
-//    }
-
 
     protected void handleFavoriteOrNot() {
         if (!TDevice.hasInternet()) {
@@ -788,5 +720,4 @@ public class BaseDetailFragment extends BaseFragment implements
             }
         });
     }
-
 }

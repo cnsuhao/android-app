@@ -151,7 +151,7 @@ public class ApiHttpClient {
 
 	public static String getCookie(AppContext appContext) {
 		if (appCookie == null || appCookie == "") {
-			appCookie = appContext.getProperty("cookie");
+			appCookie = AppContext.getCookie();
 		}
 		return appCookie;
 	}

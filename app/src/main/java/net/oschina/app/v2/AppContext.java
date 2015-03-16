@@ -3,6 +3,7 @@ package net.oschina.app.v2;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
@@ -68,13 +69,6 @@ import com.umeng.update.UpdateConfig;
  */
 public class AppContext extends BaseApplication {
 
-    public static final int NETTYPE_WIFI = 0x01;
-    public static final int NETTYPE_CMWAP = 0x02;
-    public static final int NETTYPE_CMNET = 0x03;
-
-    public static final int PAGE_SIZE = 20;// 默认分页大小
-    private static final int CACHE_TIME = 60 * 60000;// 缓存失效时间
-    private static final String KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN";
     private static final String KEY_SOFTKEYBOARD_HEIGHT = "KEY_SOFTKEYBOARD_HEIGHT";
     private static final String KEY_LOAD_IMAGE = "KEY_LOAD_IMAGE";
     private static final String KEY_NOTIFICATION_SOUND = "KEY_NOTIFICATION_SOUND";
@@ -89,20 +83,17 @@ public class AppContext extends BaseApplication {
     private static final String KEY_QUESTION_LMK_DRAFT = "key_question_lmk_draft";
     private static final String KEY_NEWS_READED = "key_readed_news";
     private static final String KEY_QUESTION_READED = "key_readed_question";
-    private static final String KEY_TWEET_READED = "key_readed_tweet";
-    private static final String KEY_ACTIVE_READED = "key_readed_active";
     private static final String KEY_BLOG_READED = "key_readed_blog";
     private static final String KEY_NOTICE_ATME_COUNT = "key_notice_atme_count";
     private static final String KEY_NOTICE_MESSAGE_COUNT = "key_notice_message_count";
     private static final String KEY_NOTICE_REVIEW_COUNT = "key_notice_review_count";
     private static final String KEY_NOTICE_NEWFANS_COUNT = "key_notice_newfans_count";
+    private static final String KEY_LOGIN_ID = "key_login_id";
+    private static final String KEY_COOKIE = "key_cookie";
+    private static final String KEY_APP_ID = "key_app_id";
+    private static final String KEY_DETAIL_FONT_SIZE = "key_font_size";
 
-    private static Set<String> mReadedNewsIds, mReadedQuestionIds, mReadedTweetIds, mReadedActiveIds, mReadedBlogIds; //已读IDS
-
-    private boolean login = false; // 登录状态
-    private int loginUid = 0; // 登录用户的id
-
-    private String saveImagePath;// 保存图片路径
+    private static Set<String> mReadedNewsIds, mReadedQuestionIds, mReadedBlogIds; //已读IDS
 
     private static AppContext instance;
 
@@ -113,11 +104,11 @@ public class AppContext extends BaseApplication {
         // 注册App异常崩溃处理器
         // Thread.setDefaultUncaughtExceptionHandler(AppException.getAppExceptionHandler());
 
-        CacheManager.initCacheDir(Constants.CACHE_DIR, getApplicationContext(), new DBHelper(getApplicationContext(), 1, "app_cache", null, null));
+        CacheManager.initCacheDir(Constants.CACHE_DIR, getApplicationContext(),
+                new DBHelper(getApplicationContext(), 1, "app_cache", null, null));
 
         instance = this;
 
-        init2();
         AsyncHttpClient client = new AsyncHttpClient();
         PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
         client.setCookieStore(myCookieStore);
@@ -188,17 +179,6 @@ public class AppContext extends BaseApplication {
 
     public static void initImageLoader(Context context) {
         DisplayImageOptions displayOptions = new DisplayImageOptions.Builder()
-                //.preProcessor(new BitmapProcessor() {
-
-                //	@Override
-                //	public Bitmap process(Bitmap source) {
-                //		Bitmap target = getRoundedCornerBitmapBig(source);
-                //		if (source != target) {
-                //			source.recycle();
-                //		}
-                //		return target;
-                //	}
-                //})
                 .displayer(new CircleBitmapDisplayer())
                 .cacheInMemory(true).cacheOnDisk(true)
                 .bitmapConfig(Config.RGB_565).build();
@@ -220,24 +200,6 @@ public class AppContext extends BaseApplication {
         ImageLoader.getInstance().init(config);
     }
 
-    public static Bitmap getRoundedCornerBitmapBig(Bitmap bitmap) {
-        Bitmap outBitmap = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Config.ARGB_8888);
-        Canvas canvas = new Canvas(outBitmap);
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
-        final float roundPX = bitmap.getWidth() / 2;
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawRoundRect(rectF, roundPX, roundPX, paint);
-        paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        return outBitmap;
-    }
-
     public static void setSoftKeyboardHeight(int height) {
         Editor editor = getPreferences().edit();
         editor.putInt(KEY_SOFTKEYBOARD_HEIGHT, height);
@@ -246,16 +208,6 @@ public class AppContext extends BaseApplication {
 
     public static int getSoftKeyboardHeight() {
         return getPreferences().getInt(KEY_SOFTKEYBOARD_HEIGHT, 0);
-    }
-
-    public static void setAccessToken(String token) {
-        Editor editor = getPreferences().edit();
-        editor.putString(KEY_ACCESS_TOKEN, token);
-        apply(editor);
-    }
-
-    public static String getAccessToken() {
-        return getPreferences().getString(KEY_ACCESS_TOKEN, null);
     }
 
     public static boolean shouldLoadImage() {
@@ -268,75 +220,14 @@ public class AppContext extends BaseApplication {
         apply(editor);
     }
 
-    /**
-     * 初始化
-     */
-    private void init2() {
-        // 设置保存图片的路径
-        saveImagePath = getProperty(AppConfig.SAVE_IMAGE_PATH);
-        if (StringUtils.isEmpty(saveImagePath)) {
-            setProperty(AppConfig.SAVE_IMAGE_PATH,
-                    AppConfig.DEFAULT_SAVE_IMAGE_PATH);
-            saveImagePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH;
-        }
+    public static void setDetailFontSize(int size) {
+        Editor editor = getPreferences().edit();
+        editor.putInt(KEY_DETAIL_FONT_SIZE, size);
+        apply(editor);
     }
 
-    /**
-     * 检测当前系统声音是否为正常模式
-     *
-     * @return
-     */
-    public boolean isAudioNormal() {
-        AudioManager mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        return mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL;
-    }
-
-    /**
-     * 应用程序是否发出提示音
-     *
-     * @return
-     */
-    public boolean isAppSound() {
-        return isAudioNormal() && isVoice();
-    }
-
-    /**
-     * 检测网络是否可用
-     *
-     * @return
-     */
-    public boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        return ni != null && ni.isConnectedOrConnecting();
-    }
-
-    /**
-     * 获取当前网络类型
-     *
-     * @return 0：没有网络 1：WIFI网络 2：WAP网络 3：NET网络
-     */
-    public int getNetworkType() {
-        int netType = 0;
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo == null) {
-            return netType;
-        }
-        int nType = networkInfo.getType();
-        if (nType == ConnectivityManager.TYPE_MOBILE) {
-            String extraInfo = networkInfo.getExtraInfo();
-            if (!StringUtils.isEmpty(extraInfo)) {
-                if (extraInfo.toLowerCase().equals("cmnet")) {
-                    netType = NETTYPE_CMNET;
-                } else {
-                    netType = NETTYPE_CMWAP;
-                }
-            }
-        } else if (nType == ConnectivityManager.TYPE_WIFI) {
-            netType = NETTYPE_WIFI;
-        }
-        return netType;
+    public static int getDetailFontSize() {
+        return getPreferences().getInt(KEY_DETAIL_FONT_SIZE, 2);
     }
 
     /**
@@ -373,10 +264,10 @@ public class AppContext extends BaseApplication {
      * @return
      */
     public String getAppId() {
-        String uniqueID = getProperty(AppConfig.CONF_APP_UNIQUEID);
+        String uniqueID = getProperty(KEY_APP_ID);
         if (StringUtils.isEmpty(uniqueID)) {
             uniqueID = UUID.randomUUID().toString();
-            setProperty(AppConfig.CONF_APP_UNIQUEID, uniqueID);
+            setProperty(KEY_APP_ID, uniqueID);
         }
         return uniqueID;
     }
@@ -387,7 +278,7 @@ public class AppContext extends BaseApplication {
      * @return
      */
     public boolean isLogin() {
-        return login;
+        return getLoginUid() != 0;
     }
 
     /**
@@ -395,8 +286,14 @@ public class AppContext extends BaseApplication {
      *
      * @return
      */
-    public int getLoginUid() {
-        return this.loginUid;
+    public static int getLoginUid() {
+        return getPreferences().getInt(KEY_LOGIN_ID, 0);
+    }
+
+    public static void setLoginUid(int uid) {
+        Editor editor = getPreferences().edit();
+        editor.putInt(KEY_LOGIN_ID, uid);
+        apply(editor);
     }
 
     /**
@@ -405,8 +302,8 @@ public class AppContext extends BaseApplication {
     public void Logout() {
         ApiHttpClient.cleanCookie();
         this.cleanCookie();
-        this.login = false;
-        this.loginUid = 0;
+        //this.login = false;
+        //this.loginUid = 0;
 
         Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
         sendBroadcast(intent);
@@ -420,8 +317,6 @@ public class AppContext extends BaseApplication {
         if (loginUser != null && loginUser.getUid() > 0
                 && !TextUtils.isEmpty(ApiHttpClient.getCookie(this))) {// &&
             // loginUser.isRememberMe()
-            this.loginUid = loginUser.getUid();
-            this.login = true;
         } else {
             this.Logout();
         }
@@ -432,37 +327,31 @@ public class AppContext extends BaseApplication {
      *
      * @param user
      */
-    public void saveLoginInfo(final User user) {
-        this.loginUid = user.getUid();
-        this.login = true;
-        setProperties(new Properties() {
-            {
-                setProperty("user.uid", String.valueOf(user.getUid()));
-                setProperty("user.name", user.getName());
-                setProperty("user.face", FileUtils.getFileName(user.getFace()));// 用户头像-文件名
-                setProperty("user.account", user.getAccount());
-                setProperty("user.pwd",
-                        CyptoUtils.encode("oschinaApp", user.getPwd()));
-                setProperty("user.location", user.getLocation());
-                setProperty("user.followers",
-                        String.valueOf(user.getFollowers()));
-                setProperty("user.fans", String.valueOf(user.getFans()));
-                setProperty("user.score", String.valueOf(user.getScore()));
-                setProperty("user.isRememberMe",
-                        String.valueOf(user.isRememberMe()));// 是否记住我的信息
-            }
-        });
+    public static void saveLoginInfo(final User user) {
+        setLoginUid(user.getUid());
+
+        setProperty("user.uid", String.valueOf(user.getUid()));
+        setProperty("user.name", user.getName());
+        setProperty("user.face", FileUtils.getFileName(user.getFace()));// 用户头像-文件名
+        setProperty("user.account", user.getAccount());
+        setProperty("user.pwd",
+                CyptoUtils.encode("oschinaApp", user.getPwd()));
+        setProperty("user.location", user.getLocation());
+        setProperty("user.followers",
+                String.valueOf(user.getFollowers()));
+        setProperty("user.fans", String.valueOf(user.getFans()));
+        setProperty("user.score", String.valueOf(user.getScore()));
+        setProperty("user.isRememberMe",String.valueOf(user.isRememberMe()));// 是否记住我的信息
     }
 
     /**
      * 清除登录信息
      */
-    public void cleanLoginInfo() {
-        this.loginUid = 0;
-        this.login = false;
+    public static void cleanLoginInfo() {
         removeProperty("user.uid", "user.name", "user.face", "user.account",
                 "user.pwd", "user.location", "user.followers", "user.fans",
                 "user.score", "user.isRememberMe");
+        setLoginUid(0);
     }
 
     /**
@@ -470,7 +359,7 @@ public class AppContext extends BaseApplication {
      *
      * @return
      */
-    public User getLoginInfo() {
+    public static User getLoginInfo() {
         User lu = new User();
         lu.setUid(StringUtils.toInt(getProperty("user.uid"), 0));
         lu.setName(getProperty("user.name"));
@@ -485,195 +374,22 @@ public class AppContext extends BaseApplication {
         return lu;
     }
 
-    /**
-     * 保存用户头像
-     *
-     * @param fileName
-     * @param bitmap
-     */
-    public void saveUserFace(String fileName, Bitmap bitmap) {
-        try {
-            ImageUtils.saveImage(this, fileName, bitmap);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 获取用户头像
-     *
-     * @param key
-     * @return
-     * @throws AppException
-     */
-    public Bitmap getUserFace(String key) throws AppException {
-        FileInputStream fis = null;
-        try {
-            fis = openFileInput(key);
-            return BitmapFactory.decodeStream(fis);
-        } catch (Exception e) {
-            throw AppException.run(e);
-        } finally {
-            try {
-                fis.close();
-            } catch (Exception e) {
-            }
-        }
-    }
-
-    /**
-     * 是否加载显示文章图片
-     *
-     * @return
-     */
-    @Deprecated
-    public boolean isLoadImage() {
-        String perf_loadimage = getProperty(AppConfig.CONF_LOAD_IMAGE);
-        // 默认是加载的
-        if (StringUtils.isEmpty(perf_loadimage))
-            return true;
-        else
-            return StringUtils.toBool(perf_loadimage);
-    }
-
-    /**
-     * 设置是否加载文章图片
-     *
-     * @param b
-     */
-    @Deprecated
-    public void setConfigLoadimage(boolean b) {
-        setProperty(AppConfig.CONF_LOAD_IMAGE, String.valueOf(b));
-    }
-
-    /**
-     * 是否发出提示音
-     *
-     * @return
-     */
-    public boolean isVoice() {
-        String perf_voice = getProperty(AppConfig.CONF_VOICE);
-        // 默认是开启提示声音
-        if (StringUtils.isEmpty(perf_voice))
-            return true;
-        else
-            return StringUtils.toBool(perf_voice);
-    }
-
-    /**
-     * 设置是否发出提示音
-     *
-     * @param b
-     */
-    public void setConfigVoice(boolean b) {
-        setProperty(AppConfig.CONF_VOICE, String.valueOf(b));
-    }
-
-    /**
-     * 是否启动检查更新
-     *
-     * @return
-     */
-    public boolean isCheckUp() {
-        String perf_checkup = getProperty(AppConfig.CONF_CHECKUP);
-        // 默认是开启
-        if (StringUtils.isEmpty(perf_checkup))
-            return true;
-        else
-            return StringUtils.toBool(perf_checkup);
-    }
-
-    /**
-     * 设置启动检查更新
-     *
-     * @param b
-     */
-    public void setConfigCheckUp(boolean b) {
-        setProperty(AppConfig.CONF_CHECKUP, String.valueOf(b));
-    }
-
-    /**
-     * 是否左右滑动
-     *
-     * @return
-     */
-    public boolean isScroll() {
-        String perf_scroll = getProperty(AppConfig.CONF_SCROLL);
-        // 默认是关闭左右滑动
-        if (StringUtils.isEmpty(perf_scroll))
-            return false;
-        else
-            return StringUtils.toBool(perf_scroll);
-    }
-
-    /**
-     * 设置是否左右滑动
-     *
-     * @param b
-     */
-    public void setConfigScroll(boolean b) {
-        setProperty(AppConfig.CONF_SCROLL, String.valueOf(b));
-    }
-
-    /**
-     * 是否Https登录
-     *
-     * @return
-     */
-    public boolean isHttpsLogin() {
-        String perf_httpslogin = getProperty(AppConfig.CONF_HTTPS_LOGIN);
-        // 默认是http
-        if (StringUtils.isEmpty(perf_httpslogin))
-            return false;
-        else
-            return StringUtils.toBool(perf_httpslogin);
-    }
-
-    /**
-     * 设置是是否Https登录
-     *
-     * @param b
-     */
-    public void setConfigHttpsLogin(boolean b) {
-        setProperty(AppConfig.CONF_HTTPS_LOGIN, String.valueOf(b));
-    }
-
-    /**
-     * 清除保存的缓存
-     */
     public void cleanCookie() {
-        removeProperty(AppConfig.CONF_COOKIE);
+        removeProperty(KEY_COOKIE);
     }
 
-    /**
-     * 判断缓存是否失效
-     *
-     * @param cachefile
-     * @return
-     */
-    public boolean isCacheDataFailure(String cachefile) {
-        boolean failure = false;
-        File data = getFileStreamPath(cachefile);
-        if (data.exists()
-                && (System.currentTimeMillis() - data.lastModified()) > CACHE_TIME)
-            failure = true;
-        else if (!data.exists())
-            failure = true;
-        return failure;
+    public static String getCookie(){
+        return getProperty(KEY_COOKIE);
+    }
+
+    public static void setCookie(String cookie){
+        setProperty(KEY_COOKIE,cookie);
     }
 
     /**
      * 清除app缓存
      */
     public void clearAppCache() {
-        // 清除webview缓存
-        // File file = CacheManager.getCacheFileBaseDir();
-        // if (file != null && file.exists() && file.isDirectory()) {
-        // for (File item : file.listFiles()) {
-        // item.delete();
-        // }
-        // file.delete();
-        // }
         deleteDatabase("webview.db");
         deleteDatabase("webview.db-shm");
         deleteDatabase("webview.db-wal");
@@ -687,13 +403,6 @@ public class AppContext extends BaseApplication {
         if (isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
             clearCacheFolder(MethodsCompat.getExternalCacheDir(this),
                     System.currentTimeMillis());
-        }
-        // 清除编辑器保存的临时内容
-        Properties props = getProperties();
-        for (Object key : props.keySet()) {
-            String _key = key.toString();
-            if (_key.startsWith("temp"))
-                removeProperty(_key);
         }
     }
 
@@ -725,47 +434,22 @@ public class AppContext extends BaseApplication {
         return deletedFiles;
     }
 
-    public boolean containsProperty(String key) {
-        Properties props = getProperties();
-        return props.containsKey(key);
+    public static void setProperty(String key, String value) {
+        Editor editor = getPreferences().edit();
+        editor.putString(key, value);
+        apply(editor);
     }
 
-    public void setProperties(Properties ps) {
-        AppConfig.getAppConfig(this).set(ps);
+    public static String getProperty(String key) {
+        return getPreferences().getString(key, null);
     }
 
-    public Properties getProperties() {
-        return AppConfig.getAppConfig(this).get();
-    }
-
-    public void setProperty(String key, String value) {
-        AppConfig.getAppConfig(this).set(key, value);
-    }
-
-    public String getProperty(String key) {
-        return AppConfig.getAppConfig(this).get(key);
-    }
-
-    public void removeProperty(String... key) {
-        AppConfig.getAppConfig(this).remove(key);
-    }
-
-    /**
-     * 获取内存中保存图片的路径
-     *
-     * @return
-     */
-    public String getSaveImagePath() {
-        return saveImagePath;
-    }
-
-    /**
-     * 设置内存中保存图片的路径
-     *
-     * @return
-     */
-    public void setSaveImagePath(String saveImagePath) {
-        this.saveImagePath = saveImagePath;
+    public static void removeProperty(String... keys) {
+        for (String key : keys) {
+            Editor editor = getPreferences().edit();
+            editor.putString(key, null);
+            apply(editor);
+        }
     }
 
     public static AppContext instance() {
@@ -898,34 +582,6 @@ public class AppContext extends BaseApplication {
         return false;
     }
 
-    public static void addReadedTweet(int id) {
-        setPersistentObjectSet(KEY_TWEET_READED, id + "");
-    }
-
-    public static boolean isReadedTweet(int id) {
-        if (mReadedTweetIds == null) {
-            Set<String> ids = getPersistentObjectSet(KEY_TWEET_READED);
-            mReadedTweetIds = ids;
-        }
-        if (mReadedTweetIds != null && mReadedTweetIds.contains(id + ""))
-            return true;
-        return false;
-    }
-
-    public static void addReadedActive(int id) {
-        setPersistentObjectSet(KEY_ACTIVE_READED, id + "");
-    }
-
-    public static boolean isReadedActive(int id) {
-        if (mReadedActiveIds == null) {
-            Set<String> ids = getPersistentObjectSet(KEY_ACTIVE_READED);
-            mReadedActiveIds = ids;
-        }
-        if (mReadedActiveIds != null && mReadedActiveIds.contains(id + ""))
-            return true;
-        return false;
-    }
-
     public static void addReadedBlog(int id) {
         setPersistentObjectSet(KEY_BLOG_READED, id + "");
     }
@@ -940,6 +596,9 @@ public class AppContext extends BaseApplication {
         return false;
     }
 
+
+
+
     public static void setNoticeAtMeCount(int noticeAtMeCount) {
         Editor editor = getPreferences().edit();
         editor.putInt(KEY_NOTICE_ATME_COUNT + instance().getLoginUid(),
@@ -947,8 +606,8 @@ public class AppContext extends BaseApplication {
         apply(editor);
     }
 
-    public static int getNoticeAtMeCount(){
-        return getPreferences().getInt(KEY_NOTICE_ATME_COUNT + instance().getLoginUid(),0);
+    public static int getNoticeAtMeCount() {
+        return getPreferences().getInt(KEY_NOTICE_ATME_COUNT + instance().getLoginUid(), 0);
     }
 
     public static void setNoticeMessageCount(int noticeMessageCount) {
@@ -958,8 +617,8 @@ public class AppContext extends BaseApplication {
         apply(editor);
     }
 
-    public static int getNoticeMessageCount(){
-        return getPreferences().getInt(KEY_NOTICE_MESSAGE_COUNT + instance().getLoginUid(),0);
+    public static int getNoticeMessageCount() {
+        return getPreferences().getInt(KEY_NOTICE_MESSAGE_COUNT + instance().getLoginUid(), 0);
     }
 
     public static void setNoticeReviewCount(int reviewCount) {
@@ -969,8 +628,8 @@ public class AppContext extends BaseApplication {
         apply(editor);
     }
 
-    public static int getNoticeReviewCount(){
-        return getPreferences().getInt(KEY_NOTICE_REVIEW_COUNT + instance().getLoginUid(),0);
+    public static int getNoticeReviewCount() {
+        return getPreferences().getInt(KEY_NOTICE_REVIEW_COUNT + instance().getLoginUid(), 0);
     }
 
     public static void setNoticeNewFansCount(int newFansCount) {
@@ -980,8 +639,8 @@ public class AppContext extends BaseApplication {
         apply(editor);
     }
 
-    public static int getNoticeNewFansCount(){
-        return getPreferences().getInt(KEY_NOTICE_NEWFANS_COUNT + instance().getLoginUid(),0);
+    public static int getNoticeNewFansCount() {
+        return getPreferences().getInt(KEY_NOTICE_NEWFANS_COUNT + instance().getLoginUid(), 0);
     }
 
 }

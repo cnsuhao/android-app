@@ -116,6 +116,8 @@
     <string name="current_picture_save_path">目前路径：%s</string>
     <string name="load_picture">加载图片</string>
     <string name="clear_cache">清除缓存</string>
+    <string name="font_size">字体大小</string>
+    <string name="font_size_desc">设置资讯、博客、问答、软件详情界面字体大小</string>
     <string name="check_udpdate">检查更新</string>
     <string name="oss_license">开源协议</string>
     <string name="feedback">意见反馈</string>

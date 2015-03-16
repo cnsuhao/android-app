@@ -73,14 +73,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 				if (cookies != null) {
 					String tmpcookies = "";
 					for (Cookie c : cookies.getCookies()) {
-						TLog.log(TAG,
-								"cookie:" + c.getName() + " " + c.getValue());
+						TLog.log(TAG, "cookie:" + c.getName() + " " + c.getValue());
 						tmpcookies += (c.getName() + "=" + c.getValue()) + ";";
 					}
 					TLog.log(TAG, "cookies:" + tmpcookies);
-					AppContext.instance().setProperty("cookie", tmpcookies);
-					ApiHttpClient.setCookie(ApiHttpClient.getCookie(AppContext
-							.instance()));
+					AppContext.setCookie(tmpcookies);
+					ApiHttpClient.setCookie(ApiHttpClient.getCookie(AppContext.instance()));
 				}
 				User user = User.parse(new ByteArrayInputStream(arg2));
                 UIHelper.sendNoticeBroadcast(LoginActivity.this, user);

@@ -911,10 +911,6 @@ import com.tonlin.osc.happy.R;
 		}
 	}
 
-	public static void changeSettingIsLoadImage(Activity activity, boolean b) {
-		AppContext ac = (AppContext) activity.getApplication();
-		ac.setConfigLoadimage(b);
-	}
 
 	/**
 	 * 清除app缓存
