@@ -1,9 +1,13 @@
 package net.oschina.app.v2.activity.comment.fragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -19,6 +23,7 @@ import net.oschina.app.v2.api.OperationResponseHandler;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseActivity;
 import net.oschina.app.v2.base.BaseRecycleViewFragment;
+import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.emoji.EmojiFragment;
 import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
@@ -27,6 +32,8 @@ import net.oschina.app.v2.model.Comment;
 import net.oschina.app.v2.model.CommentList;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.Result;
+import net.oschina.app.v2.service.PublicCommentTask;
+import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.utils.HTMLSpirit;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
@@ -35,7 +42,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 
-public class CommentFrament extends BaseRecycleViewFragment implements
+public class CommentFragment extends BaseRecycleViewFragment implements
 		OnOperationListener, EmojiTextListener {
 
 	public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
@@ -52,6 +59,26 @@ public class CommentFrament extends BaseRecycleViewFragment implements
 	private boolean mIsBlogComment;
 
 	private EmojiFragment mEmojiFragment;
+    private CommentChangeReceiver mReceiver;
+
+    class CommentChangeReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int opt = intent.getIntExtra(Comment.BUNDLE_KEY_OPERATION, 0);
+            int id = intent.getIntExtra(Comment.BUNDLE_KEY_ID, 0);
+            int catalog = intent.getIntExtra(Comment.BUNDLE_KEY_CATALOG, 0);
+            boolean isBlog = intent.getBooleanExtra(Comment.BUNDLE_KEY_BLOG,
+                    false);
+            Comment comment = intent.getParcelableExtra(Comment.BUNDLE_KEY_COMMENT);
+
+            if (id == mId && catalog == mCatalog && !isBlog) {
+                if (Comment.OPT_ADD == opt) {
+                    refresh();
+                }
+            }
+        }
+    }
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -63,10 +90,18 @@ public class CommentFrament extends BaseRecycleViewFragment implements
 		mEmojiFragment.setEmojiTextListener(this);
 		trans.replace(R.id.emoji_container, mEmojiFragment);
 		trans.commit();
-		activity.findViewById(R.id.emoji_container).setVisibility(View.GONE);
+		activity.findViewById(R.id.emoji_container).setVisibility(View.VISIBLE);
 	}
 
-	public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onDestroy() {
+        if (mReceiver != null) {
+            getActivity().unregisterReceiver(mReceiver);
+        }
+        super.onDestroy();
+    }
+
+    public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle args = getArguments();
 		if (args != null) {
@@ -84,6 +119,11 @@ public class CommentFrament extends BaseRecycleViewFragment implements
 		int mode = WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
 				| WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
 		getActivity().getWindow().setSoftInputMode(mode);
+
+        mReceiver = new CommentChangeReceiver();
+        IntentFilter filter = new IntentFilter(
+                Constants.INTENT_ACTION_COMMENT_CHANGED);
+        getActivity().registerReceiver(mReceiver, filter);
 	}
 
 	@Override
@@ -253,6 +293,27 @@ public class CommentFrament extends BaseRecycleViewFragment implements
 
 	@Override
 	public void onSendClick(String text) {
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(R.string.tip_network_error);
+            return;
+        }
+        if (!AppContext.instance().isLogin()) {
+            UIHelper.showLogin(getActivity());
+            return;
+        }
+        if (TextUtils.isEmpty(text)) {
+            AppContext.showToastShort(R.string.tip_comment_content_empty);
+            mEmojiFragment.requestFocusInput();
+            return;
+        }
+        PublicCommentTask task = new PublicCommentTask();
+        task.setId(mId);
+        task.setCatalog(CommentList.CATALOG_NEWS);
+        task.setIsPostToMyZone(0);
+        task.setContent(text);
+        task.setUid(AppContext.instance().getLoginUid());
+        ServerTaskUtils.publicComment(getActivity(), task);
+        mEmojiFragment.reset();
 	}
 
 	class DeleteOperationResponseHandler extends OperationResponseHandler {

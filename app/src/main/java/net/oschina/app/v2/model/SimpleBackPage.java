@@ -1,6 +1,6 @@
 package net.oschina.app.v2.model;
 
-import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
+import net.oschina.app.v2.activity.comment.fragment.CommentFragment;
 import net.oschina.app.v2.activity.comment.fragment.CommentReplyFragment;
 import net.oschina.app.v2.activity.daily.DailyEnglishFragment;
 import net.oschina.app.v2.activity.favorite.fragment.FavoriteViewPagerFragment;
@@ -30,7 +30,7 @@ public enum SimpleBackPage {
 	FRIENDS(3, R.string.actionbar_title_friends, FriendViewPagerFragment.class),
 	FAVORITES(4, R.string.actionbar_title_favorites, FavoriteViewPagerFragment.class),
 	SOFTEARE(5, R.string.actionbar_title_ossoftware, SoftwareViewPagerFragment.class),
-	COMMENT(6, R.string.actionbar_title_comment, CommentFrament.class),
+	COMMENT(6, R.string.actionbar_title_comment, CommentFragment.class),
 	QUESTION_TAG(7, R.string.actionbar_title_question, QuestionTagFragment.class),
 	USER_CENTER(8, R.string.actionbar_title_user_center, UserCenterFragment.class),
 	QUESTION_PUBLIC(9, R.string.actionbar_title_question_public, QuestionPublicFragment.class),

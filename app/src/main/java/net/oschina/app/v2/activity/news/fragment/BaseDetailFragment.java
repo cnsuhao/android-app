@@ -76,6 +76,7 @@ public class BaseDetailFragment extends BaseFragment implements
 
     private float mDownX, mDownY;
     private boolean mIsFavorited;
+    private boolean mLoadCacheSuccess;
 
     private CommentChangeReceiver mReceiver;
 
@@ -237,7 +238,8 @@ public class BaseDetailFragment extends BaseFragment implements
                     Entity entity = target.parseData(new ByteArrayInputStream(result));
                     if (entity != null && entity.getId() > 0) {
                         target.executeOnLoadDataSuccess(entity);
-                        return;
+                        target.mLoadCacheSuccess = true;
+                        //return;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -315,6 +317,7 @@ public class BaseDetailFragment extends BaseFragment implements
         super.onViewCreated(view, savedInstanceState);
         mRefreshView = (MySwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
         if (mRefreshView != null) {
+            mRefreshView.setColorSchemeResources(R.color.main_green, R.color.main_gray, R.color.main_black, R.color.main_purple);
             mRefreshView.setOnRefreshListener(this);
         }
 
@@ -420,17 +423,24 @@ public class BaseDetailFragment extends BaseFragment implements
     }
 
     protected void executeOnLoadDataError(String object) {
-        mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-        mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
+        if (mLoadCacheSuccess) {
+            if (TDevice.hasInternet())
+                AppContext.showToastShort(R.string.tip_load_data_error);
+            else
+                AppContext.showToastShort(R.string.tip_network_error);
+        } else {
+            mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+            mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                mState = STATE_REFRESH;
-                mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                //requestData(true);
-                sendRequestData();
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    mState = STATE_REFRESH;
+                    mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                    //requestData(true);
+                    sendRequestData();
+                }
+            });
+        }
     }
 
     protected void executeOnLoadFinish() {

@@ -7,6 +7,7 @@ import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.service.NoticeUtils;
 import net.oschina.app.v2.ui.BadgeView;
 import net.oschina.app.v2.ui.tab.SlidingTabLayout;
+import net.oschina.app.v2.utils.SmartBarUtils;
 import net.oschina.app.v2.utils.TLog;
 import net.oschina.app.v2.utils.UIHelper;
 
@@ -19,7 +20,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.ListPopupWindow;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -61,7 +64,7 @@ import com.umeng.update.UpdateStatus;
  * @update 2015/03/08
  */
 public class MainActivity extends BaseActivity implements OnTabChangeListener,IMainTab,
-        ObservableScrollViewCallbacks {
+        ObservableScrollViewCallbacks, ActionBar.TabListener {
 
     private static final String MAIN_SCREEN = "MainScreen";
     private static final java.lang.String TAG = "MainActivity";
@@ -124,7 +127,7 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
         MobclickAgent.onPause(this);
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
@@ -486,4 +489,18 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
         }
     };
 
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+    }
 }

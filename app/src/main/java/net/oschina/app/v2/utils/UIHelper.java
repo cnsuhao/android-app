@@ -1,7 +1,7 @@
 package net.oschina.app.v2.utils;
 
 import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.activity.comment.fragment.CommentFrament;
+import net.oschina.app.v2.activity.comment.fragment.CommentFragment;
 import net.oschina.app.v2.activity.comment.fragment.CommentReplyFragment;
 import net.oschina.app.v2.activity.common.SimpleBackActivity;
 import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
@@ -71,11 +71,13 @@ import com.tonlin.osc.happy.R;
 			+ "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore.css\">"
 			+ "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
 			+ "<script type=\"text/javascript\">function showImagePreview(var url){window.location.url= url;}</script>";
+    public final static String WEB_FONT_SIZE =  "<style>  * {font-size:%spx;line-height:20px;} h1 {font-size:%spx;} h2 {font-size:%spx;} h3 {font-size:%spx;}</style>";
+
 	public final static String WEB_STYLE = linkCss
-			+ "<style>* {font-size:16px;line-height:20px;} h1 {font-size:20px;} h2 {font-size:18px;} h3 {font-size:16px;} p {color:#333;} a {color:#3E62A6;} img {max-width:310px;} "
+			+ "<style> p {color:#333;} a {color:#3E62A6;} img {max-width:310px;} "
 			+ "img.alignleft {float:left;max-width:120px;margin:0 10px 5px 0;border:1px solid #ccc;background:#fff;padding:2px;} "
 			+ "pre {font-size:11pt;line-height:12pt;font-family:Courier New,Arial;border:1px solid #ddd;border-left:5px solid #6CE26C;background:#f6f6f6;padding:5px;overflow: auto;} "
-			+ "a.tag {font-size:18px;text-decoration:none;background-color:#bbd6f3;border-bottom:2px solid #3E6D8E;border-right:2px solid #7F9FB6;color:#284a7b;margin:2px 2px 2px 0;padding:2px 4px;white-space:nowrap;}</style>";
+			+ "a.tag {font-size:16px;text-decoration:none;background-color:#bbd6f3;border-bottom:2px solid #3E6D8E;border-right:2px solid #7F9FB6;color:#284a7b;margin:2px 2px 2px 0;padding:2px 4px;white-space:nowrap;}</style>";
 
 	public static final String WEB_LOAD_IMAGES = "<script type=\"text/javascript\"> var allImgUrls = getAllImgSrc(document.body.innerHTML);</script>";
 
@@ -1004,16 +1006,16 @@ import com.tonlin.osc.happy.R;
 
 	public static void showBlogComment(Context context, int id, int ownerId) {
 		Bundle args = new Bundle();
-		args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
-		args.putInt(CommentFrament.BUNDLE_KEY_OWNER_ID, ownerId);
-		args.putBoolean(CommentFrament.BUNDLE_KEY_BLOG, true);
+		args.putInt(CommentFragment.BUNDLE_KEY_ID, id);
+		args.putInt(CommentFragment.BUNDLE_KEY_OWNER_ID, ownerId);
+		args.putBoolean(CommentFragment.BUNDLE_KEY_BLOG, true);
 		showSimpleBack(context, SimpleBackPage.COMMENT, args);
 	}
 
 	public static void showComment(Context context, int id, int catalog) {
 		Bundle args = new Bundle();
-		args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
-		args.putInt(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
+		args.putInt(CommentFragment.BUNDLE_KEY_ID, id);
+		args.putInt(CommentFragment.BUNDLE_KEY_CATALOG, catalog);
 		showSimpleBack(context, SimpleBackPage.COMMENT, args);
 	}
 
@@ -1067,4 +1069,9 @@ import com.tonlin.osc.happy.R;
 		showSimpleBack(context, SimpleBackPage.DAILY_ENGLISH);
 	}
 
+    public static String appendStyle(String body) {
+        int fontSize = AppContext.getDetailFontSizePx();
+        StringBuffer sb = new StringBuffer(UIHelper.WEB_STYLE).append(String.format(WEB_FONT_SIZE,fontSize,fontSize+4,fontSize+2,fontSize)).append(body);
+        return sb.toString();
+    }
 }

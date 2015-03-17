@@ -164,7 +164,8 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 	private void fillWebViewBody() {
         String body = UIHelper.clearFontSize(mSoftware.getBody());
 
-		body = UIHelper.WEB_STYLE + body;
+        body = UIHelper.appendStyle(body);
+
 		body = UIHelper.setHtmlCotentSupportImagePreview(body);
 		body += UIHelper.WEB_LOAD_IMAGES;
 		mWebView.setWebViewClient(mWebClient);// UIHelper.getWebViewClient()

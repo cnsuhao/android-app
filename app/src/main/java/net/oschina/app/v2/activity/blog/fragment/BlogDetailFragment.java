@@ -258,7 +258,8 @@ public class BlogDetailFragment extends BaseDetailFragment implements
         String body = mBlog.getBody();
         body = UIHelper.clearFontSize(body);
 
-		body = UIHelper.WEB_STYLE + body;
+        body = UIHelper.appendStyle(body);
+
 		body = UIHelper.setHtmlCotentSupportImagePreview(body);
 		body += UIHelper.WEB_LOAD_IMAGES;
 

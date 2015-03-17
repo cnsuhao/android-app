@@ -12,7 +12,7 @@
         android:id="@+id/main_menu_today"
         android:icon="@drawable/actionbar_today_icon"
         android:title="@string/main_menu_today"
-        android:visible="true"
+        android:visible="false"
         osc:showAsAction="always"/>
     <item
         android:id="@+id/main_menu_search"

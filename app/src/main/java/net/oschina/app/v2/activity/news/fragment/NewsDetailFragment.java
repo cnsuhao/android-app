@@ -49,7 +49,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	private TextView mTvTitle, mTvSource, mTvTime;
 	private int mNewsId;
 	private News mNews;
-	private TextView mTvCommentCount;
 	private EmojiFragment mEmojiFragment;
 	private ToolbarFragment mToolBarFragment;
 
@@ -98,22 +97,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 			}
 		}
 	};
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		ActionBarActivity act = (ActionBarActivity) activity;
-		//mTvCommentCount = (TextView) act.getSupportActionBar().getCustomView()
-		//		.findViewById(R.id.tv_comment_count);
-		//mTvCommentCount.setOnClickListener(new OnClickListener() {
-
-		//	@Override
-		//	public void onClick(View v) {
-		//		UIHelper.showComment(getActivity(), mNews.getId(),
-		//				CommentList.CATALOG_NEWS);
-		//	}
-		//});
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,
@@ -167,22 +150,13 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 		return News.parse(is);
 	}
 
-	//@Override
-	//protected Entity readData(Serializable seri) {
-	//	return (News) seri;
-	//}
-
 	@Override
 	protected void onCommentChanged(int opt, int id, int catalog,
 			boolean isBlog, Comment comment) {
 		if (id == mNewsId && catalog == CommentList.CATALOG_NEWS && !isBlog) {
 			if (Comment.OPT_ADD == opt && mNews != null) {
 				mNews.setCommentCount(mNews.getCommentCount() + 1);
-				// if (mTvCommentCount != null) {
-				// mTvCommentCount.setVisibility(View.VISIBLE);
-				// mTvCommentCount.setText(getString(R.string.comment_count,
-				// mNews.getCommentCount()));
-				// }
+
 				if (mToolBarFragment != null) {
 					mToolBarFragment.setCommentCount(mNews.getCommentCount());
 				}
@@ -201,11 +175,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 		mTvTitle.setText(mNews.getTitle());
 		mTvSource.setText(mNews.getAuthor());
 		mTvTime.setText(StringUtils.friendly_time(mNews.getPubDate()));
-		// if (mTvCommentCount != null) {
-		// mTvCommentCount.setVisibility(View.VISIBLE);
-		// mTvCommentCount.setText(getString(R.string.comment_count,
-		// mNews.getCommentCount()));
-		// }
+
 		if (mToolBarFragment != null) {
 			mToolBarFragment.setCommentCount(mNews.getCommentCount());
 		}
@@ -214,9 +184,10 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
 	private void fillWebViewBody() {
         String body = mNews.getBody();
+
         body = UIHelper.clearFontSize(body);
 
-		body = UIHelper.WEB_STYLE + body;
+		body = UIHelper.appendStyle(body);
 
 		body = UIHelper.setHtmlCotentSupportImagePreview(body);
 

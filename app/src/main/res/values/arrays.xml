@@ -58,4 +58,16 @@
         <item>相册</item>
         <item>拍照</item>
     </string-array>
+
+    <string-array name="font_size">
+        <item>小</item>
+        <item>正常</item>
+        <item>大</item>
+    </string-array>
+
+    <integer-array name="font_size_value">
+        <item>14</item>
+        <item>16</item>
+        <item>18</item>
+    </integer-array>
 </resources>

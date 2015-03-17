@@ -240,31 +240,12 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
     }
 
     protected void requestData(boolean refresh) {
-        //String key = getCacheKey();
-        //if (TDevice.hasInternet() &&
-        // (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
-        //    sendRequestData();
-        //} else {
-        //   readCacheData(key);
-        //}
         sendRequestData();
     }
 
     protected void sendRequestData() {
 
     }
-
-    //private void readCacheData(String cacheKey) {
-    //cancelReadCacheTask();
-    //mCacheTask = new CacheTask(this).execute(cacheKey);
-    //}
-
-    //private void cancelReadCacheTask() {
-    //if (mCacheTask != null) {
-    //    mCacheTask.cancel(true);
-    //    mCacheTask = null;
-    //}
-    //}
 
     public long getCacheExpire() {
         return Constants.CACHE_EXPIRE_OND_DAY;
@@ -324,64 +305,6 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             target.refresh();
         }
     }
-
-//    private static class CacheTask extends AsyncTask<String, Void, ListEntity> {
-//        private WeakReference<BaseRecycleViewFragment> mInstance;
-//
-//        private CacheTask(BaseRecycleViewFragment instance) {
-//            mInstance = new WeakReference<>(instance);
-//        }
-//
-//        @Override
-//        protected ListEntity doInBackground(String... params) {
-//            BaseRecycleViewFragment instance = mInstance.get();
-//            if (instance != null) {
-//                Serializable seri = CacheManager.readObject(instance.getActivity(),
-//                        params[0]);
-//                if (seri == null) {
-//                    return null;
-//                } else {
-//                    return instance.readList(seri);
-//                }
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(ListEntity list) {
-//            super.onPostExecute(list);
-//            BaseRecycleViewFragment instance = mInstance.get();
-//            if (instance != null) {
-//                if (list != null) {
-//                    instance.executeOnLoadDataSuccess(list.getList());
-//                } else {
-//                    instance.executeOnLoadDataError(null);
-//                }
-//                instance.executeOnLoadFinish();
-//            }
-//        }
-//    }
-
-//    private static class SaveCacheTask extends AsyncTask<Void, Void, Void> {
-//        private WeakReference<BaseRecycleViewFragment> mInstance;
-//        private Serializable seri;
-//        private String key;
-//
-//        private SaveCacheTask(BaseRecycleViewFragment instance, Serializable seri, String key) {
-//            mInstance = new WeakReference<>(instance);
-//            this.seri = seri;
-//            this.key = key;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            BaseRecycleViewFragment instance = mInstance.get();
-//            if (instance != null) {
-//                CacheManager.saveObject(instance.getActivity(), seri, key);
-//            }
-//            return null;
-//        }
-//    }
 
     private static class ResponseHandler extends AsyncHttpResponseHandler {
         private WeakReference<BaseRecycleViewFragment> mInstance;
@@ -488,7 +411,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             mErrorLayout.setErrorType(EmptyLayout.NODATA);
         } else if (data.size() < TDevice.getPageSize()) {
             if (mState == STATE_REFRESH)
-                mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+                mAdapter.setState(ListBaseAdapter.STATE_LESS_ONE_PAGE);
             else
                 mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
         } else {

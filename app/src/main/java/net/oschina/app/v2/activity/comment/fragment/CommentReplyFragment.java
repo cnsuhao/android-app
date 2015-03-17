@@ -129,6 +129,10 @@ public class CommentReplyFragment extends BaseFragment implements
 				container, false);
 		initViews(view);
 		initData();
+
+        if (mEmojiFragment != null) {
+            mEmojiFragment.setInputHint(getString(R.string.reply_to, mComment.getAuthor()));
+        }
 		return view;
 	}
 

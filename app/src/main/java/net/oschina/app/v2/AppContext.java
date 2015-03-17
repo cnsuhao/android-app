@@ -220,14 +220,30 @@ public class AppContext extends BaseApplication {
         apply(editor);
     }
 
+    /**
+     * 设置字体大小可选值[0,1,2]
+     * @param size
+     */
     public static void setDetailFontSize(int size) {
         Editor editor = getPreferences().edit();
         editor.putInt(KEY_DETAIL_FONT_SIZE, size);
         apply(editor);
     }
 
+    /**
+     * 获取字体大小[0,1,2]
+     * @return
+     */
     public static int getDetailFontSize() {
-        return getPreferences().getInt(KEY_DETAIL_FONT_SIZE, 2);
+        return getPreferences().getInt(KEY_DETAIL_FONT_SIZE, 1);
+    }
+
+    public static String getDetailFontSizeStr() {
+        return resources().getStringArray(R.array.font_size)[getDetailFontSize()];
+    }
+
+    public static int getDetailFontSizePx() {
+        return resources().getIntArray(R.array.font_size_value)[getDetailFontSize()];
     }
 
     /**
@@ -642,5 +658,4 @@ public class AppContext extends BaseApplication {
     public static int getNoticeNewFansCount() {
         return getPreferences().getInt(KEY_NOTICE_NEWFANS_COUNT + instance().getLoginUid(), 0);
     }
-
 }

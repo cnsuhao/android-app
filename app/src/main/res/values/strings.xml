@@ -73,10 +73,10 @@
     <string name="error_view_network_error_click_to_refresh">没有可用的网络</string>
     <string name="tip_network_error">没有可用的网络</string>
 
-    <string name="tip_load_data_error">对不起,出错了</string>
+    <string name="tip_load_data_error">对不起,无法加载数据.</string>
 
     <string name="loading">加载中…</string>
-    <string name="loading_no_more">没有更多数据.</string>
+    <string name="loading_no_more">没有更多.</string>
     
     <string name="publish_comment">写点什么吧</string>
     <!-- software detail -->
@@ -198,7 +198,9 @@
 	<string name="deleting">正在删除…</string>
 	<string name="delete_success">删除成功</string>
 	<string name="delete_faile">删除失败</string>
-	
+
+    <string name="reply_to">回复:%s</string>
+
 	<string name="reply_comment_to">回复“%s”的评论</string>
 	<string name="comment_success">评论成功</string>
 	<string name="comment_faile">评论失败</string>

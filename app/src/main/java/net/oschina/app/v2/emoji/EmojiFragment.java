@@ -14,6 +14,7 @@ import net.oschina.app.v2.utils.TDevice;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,8 +44,9 @@ public class EmojiFragment extends BaseFragment implements
 	private int mMoreVisisable = View.GONE;
 
 	private OnClickListener mMoreClickListener;
+    private String mHint;
 
-	public interface EmojiTextListener {
+    public interface EmojiTextListener {
 		public void onSendClick(String text);
 	}
 
@@ -84,6 +86,10 @@ public class EmojiFragment extends BaseFragment implements
 		mBtnSend = (ImageButton) view.findViewById(R.id.btn_send);
 		mBtnSend.setOnClickListener(this);
 		mEtInput = (EmojiEditText) view.findViewById(R.id.et_input);
+
+        if(!TextUtils.isEmpty(mHint)){
+            mEtInput.setHint(mHint);
+        }
 
 		mBtnEmoji.setOnClickListener(this);
 
@@ -252,6 +258,7 @@ public class EmojiFragment extends BaseFragment implements
 	}
 
 	public void setInputHint(String hint) {
+        mHint = hint;
 		if (mEtInput != null) {
 			mEtInput.setHint(hint);
 		}
