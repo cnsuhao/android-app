@@ -360,7 +360,9 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             if (instance == null) return null;
             try {
                 ListEntity data = instance.parseList(new ByteArrayInputStream(responseData));
-                UIHelper.sendNoticeBroadcast(instance.getActivity(), data);
+                if (!fromCache){
+                    UIHelper.sendNoticeBroadcast(instance.getActivity(), data);
+                }
                 //new SaveCacheTask(instance, data, instance.getCacheKey()).execute();
                 // save the cache
                 if (!fromCache && instance.mCurrentPage == 0 && !TextUtils.isEmpty(instance.getCacheKey())) {
