@@ -1,6 +1,7 @@
 #哎嘛-OSCHINA第三方客户端
 ===========
-[![屏幕截图](http://git.oschina.net/tonlin/android-app/raw/master/screenshots/screen_shots.jpg)
+[![屏幕截图](http://git.oschina.net/tonlin/android-app/raw/master/screenshots/screen_shots.jpg)](http://zhushou.360.cn/detail/index/soft_id/1987733)
+
 
 ## 开源协议
 本项目采用 GPL 授权协议，欢迎大家在这个基础上进行改进，并与大家分享。
