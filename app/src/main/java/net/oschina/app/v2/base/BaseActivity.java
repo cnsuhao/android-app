@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.LayoutParams;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -30,7 +31,7 @@ import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
 
-public abstract class BaseActivity extends ActionBarActivity implements
+public abstract class BaseActivity extends AppCompatActivity implements
         DialogControl, VisibilityControl, OnClickListener {
     public static final String INTENT_ACTION_EXIT_APP = "INTENT_ACTION_EXIT_APP";
     private boolean _isVisible;
