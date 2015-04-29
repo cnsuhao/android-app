@@ -3,13 +3,15 @@ package net.oschina.app.v2.activity.active.fragment;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+//import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.tonlin.osc.happy.R;
 
@@ -216,22 +218,42 @@ public class ActiveFragment extends BaseRecycleViewFragment {
         //	}
         //});
         //dialog.show();
-        new MaterialDialog.Builder(getActivity())
-                .items(items)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-                        materialDialog.dismiss();
-                        if (i == 0) {
-                            UIHelper.showActiveRedirect(view.getContext(), active);
-                        } else if (i == 1) {
+
+//        new MaterialDialog.Builder(getActivity())
+//                .items(items)
+//                .itemsCallback(new MaterialDialog.ListCallback() {
+//                    @Override
+//                    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
+//                        materialDialog.dismiss();
+//                        if (i == 0) {
+//                            UIHelper.showActiveRedirect(view.getContext(), active);
+//                        } else if (i == 1) {
+//                            TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(active
+//                                    .getMessage()));
+//                        }
+//                    }
+//                })
+//                .title(R.string.operation)
+//                .show();
+
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+        .setTitle(R.string.operation)
+        .setCancelable(true)
+        .setItems(items,new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        if (which == 0) {
+                            UIHelper.showActiveRedirect(getActivity(), active);
+                        } else if (which == 1) {
                             TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(active
                                     .getMessage()));
                         }
-                    }
-                })
-                .title(R.string.operation)
-                .show();
+            }
+        }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
         return true;
     }
 }

@@ -1,13 +1,15 @@
 package net.oschina.app.v2.activity.settings.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+//import com.afollestad.materialdialogs.MaterialDialog;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
@@ -22,6 +24,7 @@ import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.ui.tooglebutton.ToggleButton;
 import net.oschina.app.v2.ui.tooglebutton.ToggleButton.OnToggleChanged;
 import net.oschina.app.v2.utils.FileUtils;
+import net.oschina.app.v2.utils.HTMLSpirit;
 import net.oschina.app.v2.utils.MethodsCompat;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
@@ -193,19 +196,33 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void handleFontSize() {
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.font_size)
-                .items(R.array.font_size)
-                .itemsCallbackSingleChoice(AppContext.getDetailFontSize(),
-                        new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog materialDialog,
-                                                    View view, int i, CharSequence charSequence) {
-                                AppContext.setDetailFontSize(i);
-                                mTvFontSize.setText(AppContext.getDetailFontSizeStr());
-                            }
-                        })
-                .show();
+//        new MaterialDialog.Builder(getActivity())
+//                .title(R.string.font_size)
+//                .items(R.array.font_size)
+//                .itemsCallbackSingleChoice(AppContext.getDetailFontSize(),
+//                        new MaterialDialog.ListCallback() {
+//                            @Override
+//                            public void onSelection(MaterialDialog materialDialog,
+//                                                    View view, int i, CharSequence charSequence) {
+//                                AppContext.setDetailFontSize(i);
+//                                mTvFontSize.setText(AppContext.getDetailFontSizeStr());
+//                            }
+//                        })
+//                .show();
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle(R.string.font_size)
+                .setCancelable(true)
+                .setItems(R.array.font_size,new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        AppContext.setDetailFontSize(which);
+                        mTvFontSize.setText(AppContext.getDetailFontSizeStr());
+                    }
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 
     private void handleLogout() {
@@ -222,20 +239,35 @@ public class SettingsFragment extends BaseFragment {
         //				});
         //		dialog.setNegativeButton(R.string.cancle, null);
         //		dialog.show();
-        new MaterialDialog.Builder(getActivity())
-                .content(R.string.message_logout)
-                .negativeText(R.string.cancel)
-                .positiveText(R.string.ok)
-                .callback(new MaterialDialog.ButtonCallback() {
+//        new MaterialDialog.Builder(getActivity())
+//                .content(R.string.message_logout)
+//                .negativeText(R.string.cancel)
+//                .positiveText(R.string.ok)
+//                .callback(new MaterialDialog.ButtonCallback() {
+//                    @Override
+//                    public void onPositive(MaterialDialog dialog) {
+//                        super.onPositive(dialog);
+//                        AppContext.instance().Logout();
+//                        AppContext.showToastShort(R.string.tip_logout_success);
+//                        getActivity().finish();
+//                    }
+//                })
+//                .show();
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setCancelable(true)
+                .setMessage(R.string.message_logout)
+                .setNegativeButton(R.string.cancel,null)
+                .setPositiveButton(R.string.ok,new DialogInterface.OnClickListener() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
+                    public void onClick(DialogInterface dialog, int which) {
                         AppContext.instance().Logout();
                         AppContext.showToastShort(R.string.tip_logout_success);
                         getActivity().finish();
                     }
-                })
-                .show();
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 
     @Override

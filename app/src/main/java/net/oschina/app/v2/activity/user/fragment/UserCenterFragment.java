@@ -1,9 +1,11 @@
 package net.oschina.app.v2.activity.user.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
@@ -45,6 +46,8 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
+
+//import com.afollestad.materialdialogs.MaterialDialog;
 
 public class UserCenterFragment extends BaseFragment implements
         DislayModeChangeListener, OnItemClickListener {
@@ -393,19 +396,33 @@ public class UserCenterFragment extends BaseFragment implements
 //					}
 //				});
 //		dialog.show();
-        new MaterialDialog.Builder(getActivity())
-                .content(dialogTitle)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
+//        new MaterialDialog.Builder(getActivity())
+//                .content(dialogTitle)
+//                .positiveText(R.string.ok)
+//                .negativeText(R.string.cancel)
+//                .callback(new MaterialDialog.ButtonCallback() {
+//                    @Override
+//                    public void onPositive(MaterialDialog dialog) {
+//                        super.onPositive(dialog);
+//                        dialog.dismiss();
+//                        sendUpdateRelcationRequest(ra);
+//                    }
+//                })
+//                .show();
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle(dialogTitle)
+                .setCancelable(true)
+                .setNegativeButton(R.string.cancel,null)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
+                    public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         sendUpdateRelcationRequest(ra);
                     }
-                })
-                .show();
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 
     private void sendUpdateRelcationRequest(int ra) {

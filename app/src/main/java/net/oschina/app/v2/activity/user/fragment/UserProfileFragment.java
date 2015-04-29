@@ -1,16 +1,18 @@
 package net.oschina.app.v2.activity.user.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+//import com.afollestad.materialdialogs.MaterialDialog;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
@@ -23,6 +25,7 @@ import net.oschina.app.v2.cache.CacheManager;
 import net.oschina.app.v2.model.MyInformation;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.AvatarUtils;
+import net.oschina.app.v2.utils.HTMLSpirit;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
 
@@ -157,20 +160,37 @@ public class UserProfileFragment extends BaseFragment {
 //				});
 //		dialog.setNegativeButton(R.string.cancel, null);
 //		dialog.show();
-        new MaterialDialog.Builder(getActivity())
-                .content(R.string.message_logout)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
+
+//        new MaterialDialog.Builder(getActivity())
+//                .content(R.string.message_logout)
+//                .positiveText(R.string.ok)
+//                .negativeText(R.string.cancel)
+//                .callback(new MaterialDialog.ButtonCallback() {
+//                    @Override
+//                    public void onPositive(MaterialDialog dialog) {
+//                        super.onPositive(dialog);
+//						AppContext.instance().Logout();
+//						AppContext.showToastShort(R.string.tip_logout_success);
+//						getActivity().finish();
+//                    }
+//                })
+//                .show();
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setMessage(R.string.message_logout)
+                .setCancelable(true)
+                .setNegativeButton(R.string.cancel,null)
+                .setPositiveButton(R.string.ok,new DialogInterface.OnClickListener() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-						AppContext.instance().Logout();
-						AppContext.showToastShort(R.string.tip_logout_success);
-						getActivity().finish();
+                    public void onClick(DialogInterface dialog, int which) {
+                        AppContext.instance().Logout();
+                        AppContext.showToastShort(R.string.tip_logout_success);
+                        getActivity().finish();
                     }
                 })
-                .show();
+                .create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
 	}
 
 	private void requestData(boolean refresh) {

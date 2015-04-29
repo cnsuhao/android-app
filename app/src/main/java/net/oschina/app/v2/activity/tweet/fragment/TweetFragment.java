@@ -3,13 +3,15 @@ package net.oschina.app.v2.activity.tweet.fragment;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+//import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.tonlin.osc.happy.R;
 
@@ -239,16 +241,36 @@ public class TweetFragment extends BaseRecycleViewFragment {
 //            }
 //        });
 //        dialog.show();
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.operation)
-                .items(items)
-                .contentColor(R.color.main_gray)
-                .itemsCallback(new MaterialDialog.ListCallback() {
+
+//        new MaterialDialog.Builder(getActivity())
+//                .title(R.string.operation)
+//                .items(items)
+//                .contentColor(R.color.main_gray)
+//                .itemsCallback(new MaterialDialog.ListCallback() {
+//                    @Override
+//                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+//                        dialog.dismiss();
+//                        if (which == 0) {
+//                            UIHelper.showTweetDetail(view.getContext(), tweet.getId(), tweet.getBody());
+//                        } else if (which == 1) {
+//                            TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(tweet
+//                                    .getBody()));
+//                        } else if (which == 2) {
+//                            handleDeleteTweet(tweet);
+//                        }
+//                    }
+//                })
+//                .show();
+
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle(R.string.operation)
+                .setCancelable(true)
+                .setItems(items,new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        dialog.dismiss();
+                    public void onClick(DialogInterface dialog, int which) {
                         if (which == 0) {
-                            UIHelper.showTweetDetail(view.getContext(), tweet.getId(), tweet.getBody());
+                            UIHelper.showTweetDetail(getActivity(), tweet.getId(), tweet.getBody());
                         } else if (which == 1) {
                             TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(tweet
                                     .getBody()));
@@ -256,8 +278,9 @@ public class TweetFragment extends BaseRecycleViewFragment {
                             handleDeleteTweet(tweet);
                         }
                     }
-                })
-                .show();
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 
     private void handleDeleteTweet(final Tweet tweet) {
@@ -276,19 +299,37 @@ public class TweetFragment extends BaseRecycleViewFragment {
 //                });
 //        dialog.setNegativeButton(R.string.cancel, null);
 //        dialog.show();
-        new MaterialDialog.Builder(getActivity())
-                .content(R.string.message_delete_tweet)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
+
+//        new MaterialDialog.Builder(getActivity())
+//                .content(R.string.message_delete_tweet)
+//                .positiveText(R.string.ok)
+//                .negativeText(R.string.cancel)
+//                .callback(new MaterialDialog.ButtonCallback() {
+//                    @Override
+//                    public void onPositive(MaterialDialog dialog) {
+//                        super.onPositive(dialog);
+//                        dialog.dismiss();
+//                        NewsApi.deleteTweet(tweet.getAuthorId(), tweet.getId(),
+//                                new DeleteTweetResponseHandler(tweet));
+//                    }
+//                })
+//                .show();
+
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle(R.string.operation)
+                .setCancelable(true)
+                .setMessage(R.string.message_delete_tweet)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-                        dialog.dismiss();
-                        NewsApi.deleteTweet(tweet.getAuthorId(), tweet.getId(),
+                    public void onClick(DialogInterface dialog, int which) {
+                          dialog.dismiss();
+                          NewsApi.deleteTweet(tweet.getAuthorId(), tweet.getId(),
                                 new DeleteTweetResponseHandler(tweet));
                     }
-                })
-                .show();
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 }

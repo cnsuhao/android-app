@@ -3,15 +3,17 @@ package net.oschina.app.v2.activity.comment.fragment;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+//import com.afollestad.materialdialogs.MaterialDialog;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -240,12 +242,33 @@ public class CommentFragment extends BaseRecycleViewFragment implements
 		//	}
 		//});
 		//dialog.show();
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.operation)
-                .items(items)
-                .itemsCallback(new MaterialDialog.ListCallback() {
+
+//        new MaterialDialog.Builder(getActivity())
+//                .title(R.string.operation)
+//                .items(items)
+//                .itemsCallback(new MaterialDialog.ListCallback() {
+//                    @Override
+//                    public void onSelection(MaterialDialog dialog, View view, int position, CharSequence text) {
+//                        dialog.dismiss();
+//                        if (position == 0) {
+//                            handleReplyComment(item);
+//                        } else if (position == 1) {
+//                            TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
+//                                    .getContent()));
+//                        } else if (position == 2) {
+//                            handleDeleteComment(item);
+//                        }
+//                    }
+//                })
+//                .show();
+
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle(R.string.operation)
+                .setCancelable(true)
+                .setItems(items,new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int position, CharSequence text) {
+                    public void onClick(DialogInterface dialog, int position) {
                         dialog.dismiss();
                         if (position == 0) {
                             handleReplyComment(item);
@@ -256,8 +279,9 @@ public class CommentFragment extends BaseRecycleViewFragment implements
                             handleDeleteComment(item);
                         }
                     }
-                })
-                .show();
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
 		return true;
 	}
 

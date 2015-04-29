@@ -1,7 +1,9 @@
 package net.oschina.app.v2.activity.question.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,7 +16,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -24,6 +25,8 @@ import net.oschina.app.v2.model.Post;
 import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
+
+//import com.afollestad.materialdialogs.MaterialDialog;
 
 public class QuestionPublicFragment extends BaseFragment {
 
@@ -125,20 +128,38 @@ public class QuestionPublicFragment extends BaseFragment {
 //		});
 //		dialog.setNegativeButton(R.string.cancle, null);
 //		dialog.show();
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.category)
-                .items(mCategoryOptions)
-                .itemsCallbackSingleChoice(mCategory,new MaterialDialog.ListCallback() {
+
+//        new MaterialDialog.Builder(getActivity())
+//                .title(R.string.category)
+//                .items(mCategoryOptions)
+//                .itemsCallbackSingleChoice(mCategory,new MaterialDialog.ListCallback() {
+//                    @Override
+//                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+//                        	dialog.dismiss();
+//                            mCategory = which;
+//                            mTvCategory.setText(getString(
+//                                    R.string.question_public_category,
+//                                    mCategoryOptions[mCategory]));
+//                    }
+//                })
+//                .show();
+
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle(R.string.category)
+                .setCancelable(true)
+                .setItems(mCategoryOptions,new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        	dialog.dismiss();
-                            mCategory = which;
-                            mTvCategory.setText(getString(
-                                    R.string.question_public_category,
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                         mCategory = which;
+                         mTvCategory.setText(getString(
+                               R.string.question_public_category,
                                     mCategoryOptions[mCategory]));
                     }
-                })
-                .show();
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
 	}
 
 	private boolean prepareForSubmit() {
@@ -215,25 +236,41 @@ public class QuestionPublicFragment extends BaseFragment {
 //				}
 //			});
 //			dialog.show();
-            new MaterialDialog.Builder(getActivity())
-                    .content(R.string.draft_tweet_message)
-                    .positiveText(R.string.ok)
-                    .negativeText(R.string.cancel)
-                    .callback(new MaterialDialog.ButtonCallback() {
-                        @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            super.onPositive(dialog);
-                            dialog.dismiss();
-                            AppContext.setQuestionTitleDraft(title);
-                            AppContext.setQuestionTypeDraft(mCategory);
-                            AppContext.setQuestionContentDraft(content);
-                            AppContext.setQuestionLetMeKnowDraft(mCbLetMeKnow.isChecked());
-                            getActivity().finish();
-                        }
+//            new MaterialDialog.Builder(getActivity())
+//                    .content(R.string.draft_tweet_message)
+//                    .positiveText(R.string.ok)
+//                    .negativeText(R.string.cancel)
+//                    .callback(new MaterialDialog.ButtonCallback() {
+//                        @Override
+//                        public void onPositive(MaterialDialog dialog) {
+//                            super.onPositive(dialog);
+//                            dialog.dismiss();
+//                            AppContext.setQuestionTitleDraft(title);
+//                            AppContext.setQuestionTypeDraft(mCategory);
+//                            AppContext.setQuestionContentDraft(content);
+//                            AppContext.setQuestionLetMeKnowDraft(mCbLetMeKnow.isChecked());
+//                            getActivity().finish();
+//                        }
+//
+//                        @Override
+//                        public void onNegative(MaterialDialog dialog) {
+//                            super.onNegative(dialog);
+//                            AppContext.setQuestionTitleDraft("");
+//                            AppContext.setQuestionTypeDraft(0);
+//                            AppContext.setQuestionContentDraft("");
+//                            AppContext.setQuestionLetMeKnowDraft(false);
+//                            getActivity().finish();
+//                        }
+//                    })
+//                    .show();
 
+            AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                    R.style.Theme_AppCompat_Light_Dialog_Alert)
+                    .setCancelable(true)
+                    .setMessage(R.string.draft_tweet_message)
+                    .setNegativeButton(R.string.cancel,new DialogInterface.OnClickListener() {
                         @Override
-                        public void onNegative(MaterialDialog dialog) {
-                            super.onNegative(dialog);
+                        public void onClick(DialogInterface dialog, int which) {
                             AppContext.setQuestionTitleDraft("");
                             AppContext.setQuestionTypeDraft(0);
                             AppContext.setQuestionContentDraft("");
@@ -241,7 +278,19 @@ public class QuestionPublicFragment extends BaseFragment {
                             getActivity().finish();
                         }
                     })
-                    .show();
+                    .setPositiveButton(R.string.ok,new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            AppContext.setQuestionTitleDraft(title);
+                            AppContext.setQuestionTypeDraft(mCategory);
+                            AppContext.setQuestionContentDraft(content);
+                            AppContext.setQuestionLetMeKnowDraft(mCbLetMeKnow.isChecked());
+                            getActivity().finish();
+                        }
+                    }).create();
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
 			return true;
 		}
 		return super.onBackPressed();

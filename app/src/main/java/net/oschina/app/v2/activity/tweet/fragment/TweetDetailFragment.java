@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -26,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ZoomButtonsController;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -69,6 +70,8 @@ import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.List;
+
+//import com.afollestad.materialdialogs.MaterialDialog;
 
 public class TweetDetailFragment extends BaseFragment implements
 		EmojiTextListener, EmojiFragmentControl, OnOperationListener,
@@ -417,12 +420,31 @@ public class TweetDetailFragment extends BaseFragment implements
 //			}
 //		});
 //		dialog.show();
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.operation)
-                .items(items)
-                .itemsCallback(new MaterialDialog.ListCallback() {
+//        new MaterialDialog.Builder(getActivity())
+//                .title(R.string.operation)
+//                .items(items)
+//                .itemsCallback(new MaterialDialog.ListCallback() {
+//                    @Override
+//                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+//                            dialog.dismiss();
+//                            if (which == 0) {
+//                                handleReplyComment(item);
+//                            } else if (which == 1) {
+//                                TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
+//                                        .getContent()));
+//                            } else if (which == 2) {
+//                                handleDeleteComment(item);
+//                            }
+//                    }
+//                })
+//                .show();
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle(R.string.operation)
+                .setCancelable(true)
+                .setItems(items,new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             if (which == 0) {
                                 handleReplyComment(item);
@@ -433,8 +455,9 @@ public class TweetDetailFragment extends BaseFragment implements
                                 handleDeleteComment(item);
                             }
                     }
-                })
-                .show();
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
 		return true;
 	}
 

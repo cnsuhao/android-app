@@ -36,6 +36,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -138,7 +139,7 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		ActionBarActivity act = (ActionBarActivity) activity;
+        //AppCompatActivity act = (AppCompatActivity) activity;
 		//mTvCommentCount = (TextView) act.getSupportActionBar().getCustomView()
 		//		.findViewById(R.id.tv_comment_count);
 		//mTvCommentCount.setOnClickListener(new OnClickListener() {

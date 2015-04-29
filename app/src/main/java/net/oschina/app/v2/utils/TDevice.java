@@ -573,6 +573,8 @@ public class TDevice {
             clip.setText(string);
         }catch (Exception e){
             e.printStackTrace();;
+        }catch (NoClassDefFoundError e){
+            e.printStackTrace();
         }
 	}
 

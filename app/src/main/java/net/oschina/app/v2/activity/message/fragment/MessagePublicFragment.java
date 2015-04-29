@@ -1,7 +1,9 @@
 package net.oschina.app.v2.activity.message.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,7 +15,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
@@ -29,6 +30,8 @@ import net.oschina.app.v2.utils.UIHelper;
 import org.apache.http.Header;
 
 import java.io.ByteArrayInputStream;
+
+//import com.afollestad.materialdialogs.MaterialDialog;
 
 public class MessagePublicFragment extends BaseFragment {
 
@@ -136,20 +139,37 @@ public class MessagePublicFragment extends BaseFragment {
 //					});
 //			dialog.setNegativeButton(R.string.cancel, null);
 //			dialog.show();
-            new MaterialDialog.Builder(getActivity())
-                    .content(R.string.clearwords)
-                    .positiveText(R.string.ok)
-                    .negativeText(R.string.cancel)
-                    .callback(new MaterialDialog.ButtonCallback() {
+
+//            new MaterialDialog.Builder(getActivity())
+//                    .content(R.string.clearwords)
+//                    .positiveText(R.string.ok)
+//                    .negativeText(R.string.cancel)
+//                    .callback(new MaterialDialog.ButtonCallback() {
+//                        @Override
+//                        public void onPositive(MaterialDialog dialog) {
+//                            super.onPositive(dialog);
+//                            dialog.dismiss();
+//							mEtContent.getText().clear();
+//							TDevice.showSoftKeyboard(mEtContent);
+//                        }
+//                    })
+//                    .show();
+
+            AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                    R.style.Theme_AppCompat_Light_Dialog_Alert)
+                    .setCancelable(true)
+                    .setMessage(R.string.clearwords)
+                    .setNegativeButton(R.string.cancel,null)
+                    .setPositiveButton(R.string.ok,new DialogInterface.OnClickListener() {
                         @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            super.onPositive(dialog);
+                        public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
 							mEtContent.getText().clear();
-							TDevice.showSoftKeyboard(mEtContent);
+                            TDevice.showSoftKeyboard(mEtContent);
                         }
-                    })
-                    .show();
+                    }).create();
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
 		}
 	}
 

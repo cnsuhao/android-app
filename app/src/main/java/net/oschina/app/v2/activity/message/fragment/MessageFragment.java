@@ -3,13 +3,15 @@ package net.oschina.app.v2.activity.message.fragment;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+//import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.tonlin.osc.happy.R;
 
@@ -28,6 +30,8 @@ import net.oschina.app.v2.model.Notice;
 import net.oschina.app.v2.model.Result;
 import net.oschina.app.v2.service.NoticeUtils;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.utils.HTMLSpirit;
+import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
 
 import java.io.ByteArrayInputStream;
@@ -196,40 +200,69 @@ public class MessageFragment extends BaseRecycleViewFragment {
 //				});
 //		dialog.setNegativeButton(R.string.cancle, null);
 //		dialog.show();
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.operation)
-                .items(R.array.message_list_options)
-                .itemsCallback(new MaterialDialog.ListCallback() {
+
+//        new MaterialDialog.Builder(getActivity())
+//                .title(R.string.operation)
+//                .items(R.array.message_list_options)
+//                .itemsCallback(new MaterialDialog.ListCallback() {
+//                    @Override
+//                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+//                        dialog.dismiss();
+//						switch (which) {
+//						case 0:
+//							UIHelper.showMessagePub(getActivity(),
+//									message.getFriendId(),
+//									message.getFriendName());
+//							break;
+//						case 1:
+//							UIHelper.showMessageForward(getActivity(),
+//									message.getFriendName(),
+//									message.getContent());
+//							break;
+//						case 2:
+//							handleDeleteMessage(message);
+//							break;
+//						default:
+//							break;
+//						}
+//                    }
+//                })
+//                .show();
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle(R.string.operation)
+                .setCancelable(true)
+                .setItems(R.array.message_list_options, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-						switch (which) {
-						case 0:
-							UIHelper.showMessagePub(getActivity(),
-									message.getFriendId(),
-									message.getFriendName());
-							break;
-						case 1:
-							UIHelper.showMessageForward(getActivity(),
-									message.getFriendName(),
-									message.getContent());
-							break;
-						case 2:
-							handleDeleteMessage(message);
-							break;
-						default:
-							break;
-						}
+                        switch (which) {
+                            case 0:
+                                UIHelper.showMessagePub(getActivity(),
+                                        message.getFriendId(),
+                                        message.getFriendName());
+                                break;
+                            case 1:
+                                UIHelper.showMessageForward(getActivity(),
+                                        message.getFriendName(),
+                                        message.getContent());
+                                break;
+                            case 2:
+                                handleDeleteMessage(message);
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                })
-                .show();
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
 		return true;
 	}
 
 	private void handleDeleteMessage(final Message message) {
 //		CommonDialog dialog = DialogHelper
 //				.getPinterestDialogCancelable(getActivity());
-//        dialog.setTitle(R.string.operation);
 //		dialog.setMessage(getString(R.string.confirm_delete_message,
 //				message.getFriendName()));
 //		dialog.setNegativeButton(R.string.cancle, null);
@@ -247,24 +280,42 @@ public class MessageFragment extends BaseRecycleViewFragment {
 //					}
 //				});
 //		dialog.show();
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.operation)
-                .content(getString(R.string.confirm_delete_message,message.getFriendName()))
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
+
+//        new MaterialDialog.Builder(getActivity())
+//                .content(getString(R.string.confirm_delete_message,message.getFriendName()))
+//                .positiveText(R.string.ok)
+//                .negativeText(R.string.cancel)
+//                .callback(new MaterialDialog.ButtonCallback() {
+//                    @Override
+//                    public void onPositive(MaterialDialog dialog) {
+//                        super.onPositive(dialog);
+//                        dialog.dismiss();
+//						showWaitDialog(R.string.progress_submit);
+//
+//						NewsApi.deleteMessage(AppContext.instance()
+//								.getLoginUid(), message.getFriendId(),
+//								new DeleteMessageOperationHandler(message));
+//                    }
+//                })
+//                .show();
+
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setCancelable(true)
+                .setMessage(getString(R.string.confirm_delete_message,message.getFriendName()))
+                .setNegativeButton(R.string.cancel,null)
+                .setPositiveButton(R.string.ok,new DialogInterface.OnClickListener() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
+                    public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
 						showWaitDialog(R.string.progress_submit);
-
 						NewsApi.deleteMessage(AppContext.instance()
 								.getLoginUid(), message.getFriendId(),
 								new DeleteMessageOperationHandler(message));
                     }
-                })
-                .show();
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
 	}
 
 	class DeleteMessageOperationHandler extends OperationResponseHandler {

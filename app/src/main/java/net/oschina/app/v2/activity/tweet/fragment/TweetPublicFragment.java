@@ -1,34 +1,5 @@
 package net.oschina.app.v2.activity.tweet.fragment;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.base.BaseFragment;
-import net.oschina.app.v2.emoji.Emoji;
-import net.oschina.app.v2.emoji.EmojiEditText;
-import net.oschina.app.v2.emoji.EmojiHelper;
-import net.oschina.app.v2.emoji.EmojiViewPagerAdapter;
-import net.oschina.app.v2.emoji.EmojiViewPagerAdapter.OnClickEmojiListener;
-import net.oschina.app.v2.emoji.SoftKeyboardStateHelper;
-import net.oschina.app.v2.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
-import net.oschina.app.v2.model.Tweet;
-import net.oschina.app.v2.service.ServerTaskUtils;
-//import net.oschina.app.v2.ui.dialog.CommonDialog;
-//import net.oschina.app.v2.ui.dialog.DialogHelper;
-import net.oschina.app.v2.utils.FileUtils;
-import net.oschina.app.v2.utils.ImageUtils;
-import net.oschina.app.v2.utils.SimpleTextWatcher;
-import net.oschina.app.v2.utils.StringUtils;
-import net.oschina.app.v2.utils.TDevice;
-import net.oschina.app.v2.utils.UIHelper;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -44,6 +15,7 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,17 +24,46 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
 import com.viewpagerindicator.CirclePageIndicator;
+
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.emoji.Emoji;
+import net.oschina.app.v2.emoji.EmojiEditText;
+import net.oschina.app.v2.emoji.EmojiHelper;
+import net.oschina.app.v2.emoji.EmojiViewPagerAdapter;
+import net.oschina.app.v2.emoji.EmojiViewPagerAdapter.OnClickEmojiListener;
+import net.oschina.app.v2.emoji.SoftKeyboardStateHelper;
+import net.oschina.app.v2.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
+import net.oschina.app.v2.model.Tweet;
+import net.oschina.app.v2.service.ServerTaskUtils;
+import net.oschina.app.v2.utils.FileUtils;
+import net.oschina.app.v2.utils.ImageUtils;
+import net.oschina.app.v2.utils.SimpleTextWatcher;
+import net.oschina.app.v2.utils.StringUtils;
+import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+//import net.oschina.app.v2.ui.dialog.CommonDialog;
+//import net.oschina.app.v2.ui.dialog.DialogHelper;
+//import com.afollestad.materialdialogs.MaterialDialog;
 
 public class TweetPublicFragment extends BaseFragment implements
 		SoftKeyboardStateListener, OnClickEmojiListener {
@@ -275,27 +276,49 @@ public class TweetPublicFragment extends BaseFragment implements
 //				}
 //			});
 //			dialog.show();
-            new MaterialDialog.Builder(getActivity())
-                    .content(R.string.draft_tweet_message)
-                    .positiveText(R.string.ok)
-                    .negativeText(R.string.cancel)
-                    .callback(new MaterialDialog.ButtonCallback() {
-                        @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            super.onPositive(dialog);
-                            dialog.dismiss();
-                            AppContext.setTweetDraft(tweet);
-                            getActivity().finish();
-                        }
 
+//            new MaterialDialog.Builder(getActivity())
+//                    .content(R.string.draft_tweet_message)
+//                    .positiveText(R.string.ok)
+//                    .negativeText(R.string.cancel)
+//                    .callback(new MaterialDialog.ButtonCallback() {
+//                        @Override
+//                        public void onPositive(MaterialDialog dialog) {
+//                            super.onPositive(dialog);
+//                            dialog.dismiss();
+//                            AppContext.setTweetDraft(tweet);
+//                            getActivity().finish();
+//                        }
+//
+//                        @Override
+//                        public void onNegative(MaterialDialog dialog) {
+//                            super.onNegative(dialog);
+//                            AppContext.setTweetDraft("");
+//                            getActivity().finish();
+//                        }
+//                    })
+//                    .show();
+            AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                    R.style.Theme_AppCompat_Light_Dialog_Alert)
+                    .setCancelable(true)
+                    .setMessage(R.string.draft_tweet_message)
+                    .setNegativeButton(R.string.cancel,new OnClickListener() {
                         @Override
-                        public void onNegative(MaterialDialog dialog) {
-                            super.onNegative(dialog);
+                        public void onClick(DialogInterface dialog, int which) {
                             AppContext.setTweetDraft("");
                             getActivity().finish();
                         }
                     })
-                    .show();
+                    .setPositiveButton(R.string.ok,new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            AppContext.setTweetDraft(tweet);
+                            getActivity().finish();
+                        }
+                    }).create();
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
 			return true;
 		}
 		return super.onBackPressed();
@@ -437,22 +460,40 @@ public class TweetPublicFragment extends BaseFragment implements
 //				});
 //		dialog.setNegativeButton(R.string.cancle, null);
 //		dialog.show();
-        new MaterialDialog.Builder(getActivity())
-                .content(R.string.clearwords)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
+//        new MaterialDialog.Builder(getActivity())
+//                .content(R.string.clearwords)
+//                .positiveText(R.string.ok)
+//                .negativeText(R.string.cancel)
+//                .callback(new MaterialDialog.ButtonCallback() {
+//                    @Override
+//                    public void onPositive(MaterialDialog dialog) {
+//                        super.onPositive(dialog);
+//                        dialog.dismiss();
+//						mEtInput.getText().clear();
+//						if (mIsKeyboardVisible) {
+//							TDevice.showSoftKeyboard(mEtInput);
+//						}
+//                    }
+//                })
+//                .show();
+
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setCancelable(true)
+                .setMessage(R.string.clearwords)
+                .setNegativeButton(R.string.cancel,null)
+                .setPositiveButton(R.string.ok,new OnClickListener() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
+                    public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
 						mEtInput.getText().clear();
 						if (mIsKeyboardVisible) {
 							TDevice.showSoftKeyboard(mEtInput);
 						}
                     }
-                })
-                .show();
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
 	}
 
 	private void handleSelectPicture() {
@@ -472,17 +513,30 @@ public class TweetPublicFragment extends BaseFragment implements
 //					}
 //				});
 //		dialog.show();
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.choose_picture)
-                .items(R.array.choose_picture)
-                .itemsCallback(new MaterialDialog.ListCallback() {
+//        new MaterialDialog.Builder(getActivity())
+//                .title(R.string.choose_picture)
+//                .items(R.array.choose_picture)
+//                .itemsCallback(new MaterialDialog.ListCallback() {
+//                    @Override
+//                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+//                        dialog.dismiss();
+//                        goToSelectPicture(which);
+//                    }
+//                })
+//                .show();
+        AlertDialog dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle(R.string.choose_picture)
+                .setCancelable(true)
+                .setItems(R.array.choose_picture,new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        dialog.dismiss();
-                        goToSelectPicture(which);
+                    public void onClick(DialogInterface dialog, int which) {
+                         dialog.dismiss();
+                         goToSelectPicture(which);
                     }
-                })
-                .show();
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
 	}
 
 	private void goToSelectPicture(int position) {

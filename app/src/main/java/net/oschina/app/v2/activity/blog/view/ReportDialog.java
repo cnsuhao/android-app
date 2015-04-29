@@ -1,21 +1,22 @@
 package net.oschina.app.v2.activity.blog.view;
 
-import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.model.Report;
-import net.oschina.app.v2.ui.dialog.CommonDialog;
-import net.oschina.app.v2.ui.dialog.DialogHelper;
-import net.oschina.app.v2.utils.TDevice;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.tonlin.osc.happy.R;
+
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.model.Report;
+import net.oschina.app.v2.ui.dialog.CommonDialog;
+import net.oschina.app.v2.utils.TDevice;
+
+//import com.afollestad.materialdialogs.MaterialDialog;
 
 public class ReportDialog extends CommonDialog implements
 		View.OnClickListener {
@@ -95,17 +96,31 @@ public class ReportDialog extends CommonDialog implements
 //		});
 //		dialog.setNegativeButton(R.string.cancle, null);
 //		dialog.show();
-        new MaterialDialog.Builder(getContext())
-                .title(R.string.report_reson)
-                .items(reasons)
-                .itemsCallbackSingleChoice(idx,new MaterialDialog.ListCallback() {
+
+//        new MaterialDialog.Builder(getContext())
+//                .title(R.string.report_reson)
+//                .items(reasons)
+//                .itemsCallbackSingleChoice(idx,new MaterialDialog.ListCallback() {
+//                    @Override
+//                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+//                        dialog.dismiss();
+//                        mTvReason.setText(reasons[which]);
+//                    }
+//                })
+//                .show();
+        AlertDialog dialog = new AlertDialog.Builder(getContext(),
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle(R.string.report_reson)
+                .setCancelable(true)
+                .setSingleChoiceItems(reasons,idx,new OnClickListener() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         mTvReason.setText(reasons[which]);
                     }
-                })
-                .show();
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
 	}
 
 	public Report getReport() {

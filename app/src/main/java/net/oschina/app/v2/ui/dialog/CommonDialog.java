@@ -53,6 +53,7 @@ public class CommonDialog extends Dialog {
 		// contentPadding = (int) getContext().getResources().getDimension(
 		// R.dimen.global_dialog_padding);
 		// init(context);
+        //setCanceledOnTouchOutside();
 	}
 
 	public CommonDialog(Context context, int defStyle) {
