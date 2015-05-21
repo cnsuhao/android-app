@@ -18,9 +18,10 @@
  4. 打开Android Studio导入工程
  剩下工作请交给Gradle它会帮你完成剩下的事情。
 
- ### 你可能会遇到的问题
- 使用gradle 或者 Android Studio会遇到一些网络障碍。这些障碍，使用 [红杏为开发者开放的免费的公益代理](http://honx.in/_VUh8JIkWGiHr2XaA) 可以解决。
- 
+### 你可能会遇到的问题
+使用gradle 或者 Android Studio会遇到一些网络障碍。这些障碍，使用 [红杏为开发者开放的免费的公益代理](http://honx.in/_VUh8JIkWGiHr2XaA) 可以解决。
+
+
 ## 感谢
  本项目也使用了其他第三方开源库例如：
  * [Android-maven-plugin](https://github.com/jayway/maven-android-plugin)
