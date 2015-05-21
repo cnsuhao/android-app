@@ -23,6 +23,7 @@ import com.tonlin.osc.happy.R;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class BaseApplication extends Application {
@@ -80,6 +81,7 @@ public class BaseApplication extends Application {
         return pre;
     }
 
+    @Deprecated
     public static void setPersistentObjectSet(String key, String o) {
         SharedPreferences store = getPreferences();
         synchronized (store) {
@@ -107,6 +109,7 @@ public class BaseApplication extends Application {
         }
     }
 
+    @Deprecated
     public static Set<String> getPersistentObjectSet(String key) {
         SharedPreferences store = getPreferences();
         synchronized (store) {
@@ -131,6 +134,34 @@ public class BaseApplication extends Application {
             loopDelim = delim;
         }
         return sb.toString();
+    }
+
+    public static Set<String> getStringSet(String key) {
+        String regularEx = "#";
+        SharedPreferences sp = getPreferences();
+        String values = sp.getString(key, "");
+        String[] strs = values.split(regularEx);
+        Set<String> vs = new HashSet<String>();
+        for (String str : strs) {
+            vs.add(str);
+        }
+        return vs;
+    }
+
+    public static void putStringSet(String key, Set<String> values) {
+        String regularEx = "#";
+        String str = "";
+        SharedPreferences sp = getPreferences();
+        if (values != null && values.size() > 0) {
+            Iterator<String> itr = values.iterator();
+            while (itr.hasNext()) {
+                str += itr.next();
+                str += regularEx;
+            }
+            Editor et = sp.edit();
+            et.putString(key, str);
+            apply(et);
+        }
     }
 
     public static int[] getDisplaySize() {

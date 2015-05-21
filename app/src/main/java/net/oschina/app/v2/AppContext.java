@@ -81,9 +81,9 @@ public class AppContext extends BaseApplication {
     private static final String KEY_QUESTION_CONTENT_DRAFT = "key_question_content_draft";
     private static final String KEY_QUESTION_TYPE_DRAFT = "key_question_type_draft";
     private static final String KEY_QUESTION_LMK_DRAFT = "key_question_lmk_draft";
-    private static final String KEY_NEWS_READED = "key_readed_news";
-    private static final String KEY_QUESTION_READED = "key_readed_question";
-    private static final String KEY_BLOG_READED = "key_readed_blog";
+    private static final String KEY_NEWS_READED = "key_readed_news_2";
+    private static final String KEY_QUESTION_READED = "key_readed_question_2";
+    private static final String KEY_BLOG_READED = "key_readed_blog_2";
     private static final String KEY_NOTICE_ATME_COUNT = "key_notice_atme_count";
     private static final String KEY_NOTICE_MESSAGE_COUNT = "key_notice_message_count";
     private static final String KEY_NOTICE_REVIEW_COUNT = "key_notice_review_count";
@@ -357,7 +357,7 @@ public class AppContext extends BaseApplication {
                 String.valueOf(user.getFollowers()));
         setProperty("user.fans", String.valueOf(user.getFans()));
         setProperty("user.score", String.valueOf(user.getScore()));
-        setProperty("user.isRememberMe",String.valueOf(user.isRememberMe()));// 是否记住我的信息
+        setProperty("user.isRememberMe", String.valueOf(user.isRememberMe()));// 是否记住我的信息
     }
 
     /**
@@ -399,7 +399,7 @@ public class AppContext extends BaseApplication {
     }
 
     public static void setCookie(String cookie){
-        setProperty(KEY_COOKIE,cookie);
+        setProperty(KEY_COOKIE, cookie);
     }
 
     /**
@@ -570,27 +570,44 @@ public class AppContext extends BaseApplication {
         return getPreferences().getLong(cacheKey, 0);
     }
 
+    public static Set<String> getNewsReadIdSet() {
+        if (mReadedNewsIds == null) {
+            mReadedNewsIds = getStringSet(KEY_NEWS_READED);
+        }
+        return mReadedNewsIds;
+    }
+
     public static void addReadedNews(int id) {
-        setPersistentObjectSet(KEY_NEWS_READED, id + "");
+        Set<String> set = getNewsReadIdSet();
+        set.add(id + "");
+        putStringSet(KEY_NEWS_READED, set);
     }
 
     public static boolean isReadedNews(int id) {
         if (mReadedNewsIds == null) {
-            Set<String> ids = getPersistentObjectSet(KEY_NEWS_READED);
-            mReadedNewsIds = ids;
+            mReadedNewsIds = getNewsReadIdSet();
         }
         if (mReadedNewsIds != null && mReadedNewsIds.contains(id + ""))
             return true;
         return false;
     }
 
+    public static Set<String> getQuestionReadIdSet() {
+        if (mReadedQuestionIds == null) {
+            mReadedQuestionIds = getStringSet(KEY_QUESTION_READED);
+        }
+        return mReadedQuestionIds;
+    }
+
     public static void addReadedQuestion(int id) {
-        setPersistentObjectSet(KEY_QUESTION_READED, id + "");
+        Set<String> set = getQuestionReadIdSet();
+        set.add(id + "");
+        putStringSet(KEY_QUESTION_READED, set);
     }
 
     public static boolean isReadedQuestion(int id) {
         if (mReadedQuestionIds == null) {
-            Set<String> ids = getPersistentObjectSet(KEY_QUESTION_READED);
+            Set<String> ids = getQuestionReadIdSet();
             mReadedQuestionIds = ids;
         }
         if (mReadedQuestionIds != null && mReadedQuestionIds.contains(id + ""))
@@ -598,22 +615,28 @@ public class AppContext extends BaseApplication {
         return false;
     }
 
+    public static Set<String> getBlogReadIdSet() {
+        if (mReadedBlogIds == null) {
+            mReadedBlogIds = getStringSet(KEY_BLOG_READED);
+        }
+        return mReadedBlogIds;
+    }
+
     public static void addReadedBlog(int id) {
-        setPersistentObjectSet(KEY_BLOG_READED, id + "");
+        Set<String> set = getBlogReadIdSet();
+        set.add(id + "");
+        putStringSet(KEY_BLOG_READED, set);
     }
 
     public static boolean isReadedBlog(int id) {
         if (mReadedBlogIds == null) {
-            Set<String> ids = getPersistentObjectSet(KEY_BLOG_READED);
+            Set<String> ids = getBlogReadIdSet();
             mReadedBlogIds = ids;
         }
         if (mReadedBlogIds != null && mReadedBlogIds.contains(id + ""))
             return true;
         return false;
     }
-
-
-
 
     public static void setNoticeAtMeCount(int noticeAtMeCount) {
         Editor editor = getPreferences().edit();
