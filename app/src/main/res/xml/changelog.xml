@@ -1,6 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <changelog>
     <release
+        version="1.2.1.0-2015.05.21"
+        versioncode="30">
+        <change>新增：详情页面支持下拉刷新</change>
+        <change>新增：详情页字体大小设置</change>
+        <change>优化：详情页向右滑动关闭页面功能</change>
+        <change>优化：4.4.4系统下状态栏背景色显示</change>
+        <change>修复：博客评论列表无法评论BUG</change>
+        <change>修复：已读提示在完全退出APP后失效BUG</change>
+        <change>修复：5.0以上系统无法评论发动弹等BUG</change>
+    </release>
+    <release
         version="1.2.0.0-2015.03.11"
         versioncode="10">
         <change>新增:资讯/问答列表新增描述</change>
