@@ -78,7 +78,11 @@ public class CommentFragment extends BaseRecycleViewFragment implements
                 if (Comment.OPT_ADD == opt) {
                     refresh();
                 }
-            }
+            } else {
+				if (Comment.OPT_ADD == opt) {
+					refresh();
+				}
+			}
         }
     }
 
@@ -332,11 +336,15 @@ public class CommentFragment extends BaseRecycleViewFragment implements
         }
         PublicCommentTask task = new PublicCommentTask();
         task.setId(mId);
-        task.setCatalog(CommentList.CATALOG_NEWS);
-        task.setIsPostToMyZone(0);
-        task.setContent(text);
-        task.setUid(AppContext.instance().getLoginUid());
-        ServerTaskUtils.publicComment(getActivity(), task);
+		task.setContent(text);
+		task.setUid(AppContext.instance().getLoginUid());
+		if(!mIsBlogComment) {
+			task.setCatalog(CommentList.CATALOG_NEWS);
+			task.setIsPostToMyZone(0);
+			ServerTaskUtils.publicComment(getActivity(), task);
+		} else{
+			ServerTaskUtils.publicBlogComment(getActivity(), task);
+		}
         mEmojiFragment.reset();
 	}
 

@@ -5,13 +5,16 @@ import net.oschina.app.v2.ui.dialog.CommonToast;
 import net.oschina.app.v2.ui.dialog.DialogControl;
 import net.oschina.app.v2.ui.dialog.DialogHelper;
 import net.oschina.app.v2.ui.dialog.WaitDialog;
+import net.oschina.app.v2.utils.SystemBarTintManager;
 import net.oschina.app.v2.utils.TDevice;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Bundle;
 //import android.support.annotation.LayoutRes;
 import android.support.v7.app.ActionBar;
@@ -27,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.tonlin.osc.happy.R;
@@ -57,6 +61,19 @@ public abstract class BaseActivity extends AppCompatActivity implements
         int actionBarSize = a.getDimensionPixelSize(indexOfAttrTextSize, -1);
         a.recycle();
         return actionBarSize;
+    }
+
+    @TargetApi(19)
+    protected void setTranslucentStatus(boolean on) {
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
     }
 
     @Override
@@ -117,6 +134,23 @@ public abstract class BaseActivity extends AppCompatActivity implements
     }
 
     protected void init(Bundle savedInstanceState) {
+        initStatusBar();
+    }
+
+    protected void initStatusBar() {
+        View root = findViewById(R.id.root);
+        root = root == null ? findViewById(R.id.activity_root) : root;
+        if (root != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(R.color.theme_primary_dark);
+
+            SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+            root.setPadding(0, config.getPixelInsetTop(false), 0, config.getPixelInsetBottom());
+        }
     }
 
     protected void initActionBar(Toolbar actionBar) {
@@ -313,7 +347,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
         @Override
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
             //if (mActionBar != null)
-             //   mActionBar.setVisibility(View.GONE);
+            //   mActionBar.setVisibility(View.GONE);
             return false;
         }
 

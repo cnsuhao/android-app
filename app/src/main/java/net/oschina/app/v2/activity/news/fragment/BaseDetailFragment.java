@@ -344,7 +344,7 @@ public class BaseDetailFragment extends BaseFragment implements
             case MotionEvent.ACTION_MOVE:
                 float currentX = event.getX();
                 float currentY = event.getY();
-                if (Math.abs(mDownY - currentY) < 50 && currentX - mDownX > 100) {
+                if (Math.abs(mDownY - currentY) < TDevice.dpToPixel(40) && currentX - mDownX > TDevice.dpToPixel(30)) {
                     if (!mWebView.canScrollHorizontally(-1)) {
                         getActivity().finish();
                     }

@@ -13,6 +13,7 @@ public class ServerTaskUtils {
 		Bundle bundle = new Bundle();
 		bundle.putParcelable(ServerTaskService.BUNDLE_PUBLIC_COMMENT_TASK, task);
 		intent.putExtras(bundle);
+		intent.setPackage(context.getPackageName());
 		context.startService(intent);
 	}
 
@@ -21,6 +22,7 @@ public class ServerTaskUtils {
 		Bundle bundle = new Bundle();
 		bundle.putParcelable(ServerTaskService.BUNDLE_PUBLIC_COMMENT_TASK, task);
 		intent.putExtras(bundle);
+		intent.setPackage(context.getPackageName());
 		context.startService(intent);
 	}
 
@@ -29,6 +31,7 @@ public class ServerTaskUtils {
 		Bundle bundle = new Bundle();
 		bundle.putParcelable(ServerTaskService.BUNDLE_PUBLIC_POST_TASK, post);
 		intent.putExtras(bundle);
+		intent.setPackage(context.getPackageName());
 		context.startService(intent);
 	}
 
@@ -37,6 +40,7 @@ public class ServerTaskUtils {
 		Bundle bundle = new Bundle();
 		bundle.putParcelable(ServerTaskService.BUNDLE_PUBLIC_TWEET_TASK, tweet);
 		intent.putExtras(bundle);
+		intent.setPackage(context.getPackageName());
 		context.startService(intent);
 	}
 }

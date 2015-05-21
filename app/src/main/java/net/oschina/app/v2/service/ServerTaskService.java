@@ -65,12 +65,12 @@ public class ServerTaskService extends IntentService {
 		@Override
 		public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
 				throws Exception {
-            TLog.log(TAG,"成功发布评论....");
             PublicCommentTask task = (PublicCommentTask) args[0];
 			final boolean isBlog = (Boolean) args[1];
 			final int id = task.getId() * task.getUid();
 			Result res = Result.parse(is);
 			if (res.OK()) {
+				TLog.log(TAG,"成功发布评论....");
 				Comment comment = res.getComment();
 				UIHelper.sendBroadCastCommentChanged(ServerTaskService.this,
 						isBlog, task.getId(), task.getCatalog(),

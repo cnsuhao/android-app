@@ -4,11 +4,17 @@ import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.model.DailyEnglish;
 import net.oschina.app.v2.model.Version;
 import net.oschina.app.v2.utils.StringUtils;
+import net.oschina.app.v2.utils.SystemBarTintManager;
 import net.oschina.app.v2.utils.TDevice;
+
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -109,6 +115,28 @@ public class SplashActivity extends Activity {
 						"cookie_value", "cookie_version", "cookie_path");
 			}
 		}
+
+		View root = findViewById(R.id.app_start_view);
+		if (root != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
+				&& Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			setTranslucentStatus(true);
+			SystemBarTintManager tintManager = new SystemBarTintManager(this);
+			tintManager.setStatusBarTintEnabled(true);
+			tintManager.setStatusBarTintResource(R.color.transparent);
+		}
+	}
+
+	@TargetApi(19)
+	protected void setTranslucentStatus(boolean on) {
+		Window win = getWindow();
+		WindowManager.LayoutParams winParams = win.getAttributes();
+		final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+		if (on) {
+			winParams.flags |= bits;
+		} else {
+			winParams.flags &= ~bits;
+		}
+		win.setAttributes(winParams);
 	}
 
 	private void checkUpdate() {
