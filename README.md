@@ -16,7 +16,10 @@
  2. 确保你已经下载了Android SDK,并且下载了Build-tools v21.1.2 和 Android 5.0.1 SDK。
  3. 确保你已经下载了Android Studio 和 Gradle。
  4. 打开Android Studio导入工程
- 剩下工作请交给Gradle它会帮你完成剩下的事情，你最好有个VPN，否则你会卡在Gradle的某个步骤无法自拔。
+ 剩下工作请交给Gradle它会帮你完成剩下的事情。
+
+ ### 你可能会遇到的问题
+ 使用gradle 或者 Android Studio会遇到一些网络障碍。这些障碍，使用 [红杏为开发者开放的免费的公益代理](http://honx.in/_VUh8JIkWGiHr2XaA) 可以解决。
  
 ## 感谢
  本项目也使用了其他第三方开源库例如：
@@ -27,3 +30,4 @@
  * [Android-ObservableScrollView](https://github.com/ksoichiro/Android-ObservableScrollView)
  * [Nineoldandroids](https://github.com/JakeWharton/NineOldAndroids)
  * [Material Dialogs](https://github.com/afollestad/material-dialogs)
+
