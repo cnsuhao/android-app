@@ -37,6 +37,8 @@
                 android:id="@+id/toolbar_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+
         </LinearLayout>
     </LinearLayout>
 
@@ -46,4 +48,5 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/actionBar"
         android:background="@drawable/header_shadow" />
+
 </RelativeLayout>

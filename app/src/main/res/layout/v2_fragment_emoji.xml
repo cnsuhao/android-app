@@ -52,7 +52,8 @@
                 android:paddingTop="@dimen/space_2"
                 android:textColor="@color/main_black"
                 android:textColorHint="@color/main_gray"
-                android:textSize="@dimen/text_size_16" />
+                android:textSize="@dimen/text_size_16"
+                android:textCursorDrawable="@null"/>
 
             <ImageButton
                 android:id="@+id/btn_emoji"

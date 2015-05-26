@@ -137,20 +137,20 @@ public abstract class BaseActivity extends AppCompatActivity implements
         initStatusBar();
     }
 
-    protected void initStatusBar() {
-        View root = findViewById(R.id.root);
-        root = root == null ? findViewById(R.id.activity_root) : root;
-        if (root != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
-                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            setTranslucentStatus(true);
-
-            SystemBarTintManager tintManager = new SystemBarTintManager(this);
-            tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(R.color.theme_primary_dark);
-
-            SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-            root.setPadding(0, config.getPixelInsetTop(false), 0, config.getPixelInsetBottom());
-        }
+    protected void initStatusBar() {// buG
+//        View root = findViewById(R.id.root);
+//        root = root == null ? findViewById(R.id.activity_root) : root;
+//        if (root != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
+//                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            setTranslucentStatus(true);
+//
+//            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+//            tintManager.setStatusBarTintEnabled(true);
+//            tintManager.setStatusBarTintResource(R.color.theme_primary_dark);
+//
+//            SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+//            root.setPadding(0, config.getPixelInsetTop(false), 0, config.getPixelInsetBottom());
+//        }
     }
 
     protected void initActionBar(Toolbar actionBar) {
