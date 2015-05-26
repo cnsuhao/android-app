@@ -33,6 +33,7 @@
                 android:layout_marginLeft="@dimen/space_8"
                 android:layout_marginRight="@dimen/space_8"
                 android:layout_weight="1"
+                android:textCursorDrawable="@null"
                 android:background="@null"
                 android:hint="@string/hint_search"
                 android:minHeight="35dp"
