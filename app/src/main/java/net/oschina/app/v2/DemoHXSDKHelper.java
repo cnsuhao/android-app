@@ -49,6 +49,7 @@ import com.easemob.util.EMLog;
 import com.easemob.util.EasyUtils;
 import com.tonlin.osc.happy.R;
 
+import net.oschina.app.v2.activity.chat.MessageActivity;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.easemob.controller.HXSDKHelper;
 import net.oschina.app.v2.easemob.model.HXNotifier;
@@ -258,44 +259,44 @@ public class DemoHXSDKHelper extends HXSDKHelper {
      * 自定义通知栏提示内容
      * @return
      */
-//    @Override
-//    protected HXNotifier.HXNotificationInfoProvider getNotificationListener() {
+    @Override
+    protected HXNotifier.HXNotificationInfoProvider getNotificationListener() {
         //可以覆盖默认的设置
-//        return new HXNotificatioInfoProvider() {
-//
-//            @Override
-//            public String getTitle(EMMessage message) {
-//                //修改标题,这里使用默认
-//                return null;
-//            }
-//
-//            @Override
-//            public int getSmallIcon(EMMessage message) {
-//                //设置小图标，这里为默认
-//                return 0;
-//            }
-//
-//            @Override
-//            public String getDisplayedText(EMMessage message) {
-//                // 设置状态栏的消息提示，可以根据message的类型做相应提示
-//                String ticker = CommonUtils.getMessageDigest(message, appContext);
-//                if (message.getType() == Type.TXT) {
-//                    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
-//                }
-//
-//                return message.getFrom() + ": " + ticker;
-//            }
-//
-//            @Override
-//            public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
-//                return null;
-//                // return fromUsersNum + "个基友，发来了" + messageNum + "条消息";
-//            }
-//
-//            @Override
-//            public Intent getLaunchIntent(EMMessage message) {
-//                //设置点击通知栏跳转事件
-//                Intent intent = new Intent(appContext, ChatActivity.class);
+        return new HXNotifier.HXNotificationInfoProvider() {
+
+            @Override
+            public String getTitle(EMMessage message) {
+                //修改标题,这里使用默认
+                return null;
+            }
+
+            @Override
+            public int getSmallIcon(EMMessage message) {
+                //设置小图标，这里为默认
+                return 0;
+            }
+
+            @Override
+            public String getDisplayedText(EMMessage message) {
+                // 设置状态栏的消息提示，可以根据message的类型做相应提示
+                String ticker = "thicker;";////CommonUtils.getMessageDigest(message, appContext);
+                if (message.getType() == Type.TXT) {
+                    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
+                }
+
+                return message.getFrom() + ": " + ticker;
+            }
+
+            @Override
+            public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
+                return null;
+                // return fromUsersNum + "个基友，发来了" + messageNum + "条消息";
+            }
+
+            @Override
+            public Intent getLaunchIntent(EMMessage message) {
+                //设置点击通知栏跳转事件
+                Intent intent = new Intent(appContext, MessageActivity.class);
 //                ChatType chatType = message.getChatType();
 //                if (chatType == ChatType.Chat) { // 单聊信息
 //                    intent.putExtra("userId", message.getFrom());
@@ -309,10 +310,10 @@ public class DemoHXSDKHelper extends HXSDKHelper {
 //                        intent.putExtra("chatType", ChatActivity.CHATTYPE_CHATROOM);
 //                    }
 //                }
-//                return intent;
-//            }
-//        };
-//    }
+                return intent;
+            }
+        };
+    }
 
     @Override
     protected void onConnectionConflict() {

@@ -102,4 +102,8 @@
     <color name="theme_primary_dark">#287b37</color>
     <color name="theme_primary_light">#7986cb</color>
     <color name="theme_accent_2">#e91e63</color>
+
+
+
+    <color name="compose_bg">#d6d6d6</color>
 </resources>

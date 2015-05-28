@@ -15,9 +15,12 @@ import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.EMError;
+import com.easemob.EMEventListener;
+import com.easemob.EMNotifierEvent;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroupManager;
+import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMVideoCallHelper;
 import com.easemob.exceptions.EaseMobException;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -27,6 +30,7 @@ import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.chat.adapter.ConversationAdapter;
 import net.oschina.app.v2.base.BaseTabFragment;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
+import net.oschina.app.v2.easemob.controller.HXSDKHelper;
 import net.oschina.app.v2.model.User;
 import net.oschina.app.v2.model.chat.IMUser;
 import net.oschina.app.v2.ui.decorator.DividerItemDecoration;
@@ -49,7 +53,7 @@ import cn.bmob.v3.listener.SaveListener;
 /**
  * Created by Tonlin on 2015/5/27.
  */
-public class ConversationFragment extends BaseTabFragment implements RecycleBaseAdapter.OnItemClickListener {
+public class ConversationFragment extends BaseTabFragment implements RecycleBaseAdapter.OnItemClickListener, EMEventListener {
 
     protected MySwipeRefreshLayout mSwipeRefresh;
     protected FixedRecyclerView mRecycleView;
@@ -63,6 +67,24 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
 
     public int getLayoutRes() {
         return R.layout.v2_fragment_swipe_refresh_recyclerview;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // register the event listener when enter the foreground
+        EMChatManager.getInstance().registerEventListener(this,
+                new EMNotifierEvent.Event[]{
+                        EMNotifierEvent.Event.EventNewMessage,
+                        EMNotifierEvent.Event.EventOfflineMessage,
+                        EMNotifierEvent.Event.EventConversationListChanged
+                });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EMChatManager.getInstance().unregisterEventListener(this);
     }
 
     @Nullable
@@ -278,9 +300,9 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
     }
 
 
-
     /**
      * 获取所有会话
+     *
      * @return +
      */
     private List<EMConversation> loadConversationsWithRecentChat() {
@@ -340,6 +362,35 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
         int position = mRecycleView.getChildPosition(view);
         EMConversation conversation = (EMConversation) mAdapter.getItem(position);
 
-        UIHelper.showChatMessage(getActivity(),conversation.getUserName());
+        UIHelper.showChatMessage(getActivity(), conversation.getUserName());
+    }
+
+    @Override
+    public void onEvent(EMNotifierEvent event) {
+        switch (event.getEvent()) {
+            case EventNewMessage: {// 普通消息
+                Log.d("IMA-LOG", "onEvent: new message");
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        refresh();
+                    }
+                });
+                EMMessage message = (EMMessage) event.getData();
+                // 提示新消息
+                HXSDKHelper.getInstance().getNotifier().onNewMsg(message);
+                break;
+            }
+            case EventOfflineMessage: {
+                refresh();
+                break;
+            }
+            case EventConversationListChanged: {
+                refresh();
+                break;
+            }
+            default:
+                break;
+        }
     }
 }

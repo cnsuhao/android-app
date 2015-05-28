@@ -24,6 +24,7 @@ import net.oschina.app.v2.activity.chat.adapter.MessageAdapter;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.easemob.controller.HXSDKHelper;
 import net.oschina.app.v2.utils.MD5Utils;
+import net.oschina.app.v2.utils.TLog;
 
 import java.util.List;
 
@@ -34,9 +35,10 @@ public class MessageFragment extends BaseFragment implements EMEventListener {
     public static final int CHATTYPE_SINGLE = 1;
     public static final int CHATTYPE_GROUP = 2;
     public static final int CHATTYPE_CHATROOM = 3;
+    private static final java.lang.String TAG = "IMA-LOG";
 
 
-    private String mToChatUsername;//MD5Utils.getMD5Code("448133553@qq.com");//;//"cun.only.yun@gmail.com"
+    private String mToChatUsername;
     private int mChatType = CHATTYPE_SINGLE;
     private EMConversation mConversation;
     private int mPageSize = 30;
@@ -47,7 +49,7 @@ public class MessageFragment extends BaseFragment implements EMEventListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mToChatUsername = getActivity().getIntent().getStringExtra(MessageActivity.KEY_TO_CHAT_NAME);
-        AppContext.showToastShort("to chat:"+mToChatUsername);
+        AppContext.showToastShort("to chat:" + mToChatUsername);
     }
 
     @Override
@@ -187,16 +189,16 @@ public class MessageFragment extends BaseFragment implements EMEventListener {
     }
 
     @Override
-    public void onEvent(EMNotifierEvent event) {
+    public void onEvent(final EMNotifierEvent event) {
         switch (event.getEvent()) {
             case EventNewMessage: {
-                AppContext.showToastShort("收到新消息");
                 //获取到message
                 EMMessage message = (EMMessage) event.getData();
 
                 String username = null;
                 //群组消息
-                if (message.getChatType() == EMMessage.ChatType.GroupChat || message.getChatType() == EMMessage.ChatType.ChatRoom) {
+                if (message.getChatType() == EMMessage.ChatType.GroupChat
+                        || message.getChatType() == EMMessage.ChatType.ChatRoom) {
                     username = message.getTo();
                 } else {
                     //单聊消息
@@ -242,6 +244,7 @@ public class MessageFragment extends BaseFragment implements EMEventListener {
         if (mAdapter == null) {
             return;
         }
+        TLog.log(TAG,"refreshUI");
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 mAdapter.refresh();
@@ -254,6 +257,7 @@ public class MessageFragment extends BaseFragment implements EMEventListener {
         if (mAdapter == null) {
             return;
         }
+        TLog.log(TAG,"refreshUIWithNewMessage");
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 mAdapter.refreshSelectLast();

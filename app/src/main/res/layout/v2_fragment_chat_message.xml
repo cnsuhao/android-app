@@ -34,8 +34,12 @@
         android:id="@+id/lv_message"
         android:layout_width="match_parent"
         android:layout_above="@id/bottom"
-        android:layout_height="match_parent" />
-
-
-
+        android:layout_height="match_parent"
+        android:dividerHeight="0dp"
+        android:divider="@null"
+        android:listSelector="@color/transparent"
+        android:background="@color/transparent"
+        android:cacheColorHint="@color/transparent"
+        android:fadingEdgeLength="0dp"
+        android:fadingEdge="none"/>
 </RelativeLayout>
