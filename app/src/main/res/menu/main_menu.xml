@@ -3,6 +3,20 @@
     xmlns:osc="http://schemas.android.com/apk/res-auto" >
 
     <item
+        android:id="@+id/main_menu_add"
+        android:icon="@drawable/actionbar_add_friend"
+        android:title="@string/main_menu_add_friend"
+        android:visible="true"
+        osc:showAsAction="always"/>
+
+    <item
+        android:id="@+id/main_menu_group"
+        android:icon="@drawable/actionbar_group_chat"
+        android:title="@string/main_menu_group_chat"
+        android:visible="true"
+        osc:showAsAction="always"/>
+
+    <item
         android:id="@+id/main_menu_post"
         android:icon="@drawable/actionbar_post_icon"
         android:title="@string/main_menu_post"

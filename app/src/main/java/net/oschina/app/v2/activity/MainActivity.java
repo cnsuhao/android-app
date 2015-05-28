@@ -41,6 +41,12 @@ import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
+import com.easemob.EMConnectionListener;
+import com.easemob.EMGroupChangeListener;
+import com.easemob.chat.EMChat;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMContactListener;
+import com.easemob.chat.EMContactManager;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
@@ -56,14 +62,16 @@ import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
 import com.umeng.update.UpdateStatus;
 
+import java.util.List;
+
 /**
  * 应用主界面
  *
  * @author tonlin
- * @since 2014/08
  * @update 2015/03/08
+ * @since 2014/08
  */
-public class MainActivity extends BaseActivity implements OnTabChangeListener,IMainTab,
+public class MainActivity extends BaseActivity implements OnTabChangeListener, IMainTab,
         ObservableScrollViewCallbacks, ActionBar.TabListener {
 
     private static final String MAIN_SCREEN = "MainScreen";
@@ -93,9 +101,9 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
             // newFansCount;//
             // 信息总数
 
-            TLog.log(TAG,"Main收到广播 @me:" + atmeCount + " msg:" + msgCount + " review:"
+            TLog.log(TAG, "Main收到广播 @me:" + atmeCount + " msg:" + msgCount + " review:"
                     + reviewCount + " newFans:" + newFansCount + " active:"
-                    + activeCount+" from:"+ intent.getStringExtra("from"));
+                    + activeCount + " from:" + intent.getStringExtra("from"));
 
             if (activeCount > 0) {
                 mBvTweet.setText(activeCount + "");
@@ -163,6 +171,16 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
         mSlop = vc.getScaledTouchSlop();
         mInterceptionLayout = (TouchInterceptionFrameLayout) findViewById(R.id.container);
         mInterceptionLayout.setScrollInterceptionListener(mInterceptionListener);
+
+
+        // setContactListener监听联系人的变化等
+        EMContactManager.getInstance().setContactListener(new MyContactListener());
+        // 注册一个监听连接状态的listener
+        EMChatManager.getInstance().addConnectionListener(new MyConnectionListener());
+        // 注册群聊相关的listener
+        EMChatManager.getInstance().addGroupChangeListener(new MyGroupChangeListener());
+        // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
+        EMChat.getInstance().setAppInited();
     }
 
     @Override
@@ -243,7 +261,7 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
                 v.findViewById(R.id.tab_icon).setSelected(false);
                 v.findViewById(R.id.tab_titile).setSelected(false);
             }
-            if (i == 3) {
+            if (i == MainTab.ME.getIdx()) {
                 mSlidingTabLayout.setMessageTipVisible(View.VISIBLE);
             } else {
                 mSlidingTabLayout.setMessageTipVisible(View.INVISIBLE);
@@ -257,7 +275,7 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
         getMenuInflater().inflate(R.menu.main_menu, menu);
         boolean visible = false;
         int tab = mTabHost.getCurrentTab();
-        if (tab == 1 || tab == 2) {
+        if (tab == MainTab.QUESTION.getIdx() || tab == MainTab.TWEET.getIdx()) {
             visible = true;
         }
         menu.findItem(R.id.main_menu_post).setVisible(visible);
@@ -268,9 +286,9 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.main_menu_post:
-                if (mTabHost.getCurrentTab() == 1) {
+                if (mTabHost.getCurrentTab() == MainTab.QUESTION.getIdx()) {
                     UIHelper.showQuestionPub(this);
-                } else if (mTabHost.getCurrentTab() == 2) {
+                } else if (mTabHost.getCurrentTab() == MainTab.TWEET.getIdx()) {
                     UIHelper.showTweetPub(this);
                 }
                 break;
@@ -295,6 +313,12 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
                 break;
             case R.id.main_menu_quit:
                 UIHelper.exitApp(this);
+                break;
+            case R.id.main_menu_add:
+                UIHelper.showChatMessage(this, "4cea3c1b8835723ae979994460743c87");
+                break;
+            case R.id.main_menu_group:
+                UIHelper.showChatMessage(this,"9236292c5195efb073e106ba97ed2909");
                 break;
         }
         return true;
@@ -502,5 +526,143 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 
+    }
+
+
+
+    /***
+     * 好友变化listener
+     *
+     */
+    private class MyContactListener implements EMContactListener {
+
+        @Override
+        public void onContactAdded(List<String> usernameList) {
+            // 保存增加的联系人
+        }
+
+        @Override
+        public void onContactDeleted(final List<String> usernameList) {
+            // 被删除
+        }
+
+        @Override
+        public void onContactInvited(String username, String reason) {
+            // 接到邀请的消息，如果不处理(同意或拒绝)，掉线后，服务器会自动再发过来，所以客户端不需要重复提醒
+        }
+
+        @Override
+        public void onContactAgreed(String username) {
+        }
+
+        @Override
+        public void onContactRefused(String username) {
+            // 参考同意，被邀请实现此功能,demo未实现
+        }
+
+    }
+
+    /**
+     * 连接监听listener
+     *
+     */
+    private class MyConnectionListener implements EMConnectionListener {
+
+        @Override
+        public void onConnected() {
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    //chatHistoryFragment.errorItem.setVisibility(View.GONE);
+                }
+            });
+        }
+
+        @Override
+        public void onDisconnected(final int error) {
+//            final String st1 = getResources().getString(R.string.Less_than_chat_server_connection);
+//            final String st2 = getResources().getString(R.string.the_current_network);
+//            runOnUiThread(new Runnable() {
+//
+//                @Override
+//                public void run() {
+//                    if (error == EMError.USER_REMOVED) {
+//                        // 显示帐号已经被移除
+//                        showAccountRemovedDialog();
+//                    } else if (error == EMError.CONNECTION_CONFLICT) {
+//                        // 显示帐号在其他设备登陆dialog
+//                        showConflictDialog();
+//                    } else {
+//                        chatHistoryFragment.errorItem.setVisibility(View.VISIBLE);
+//                        if (NetUtils.hasNetwork(MainActivity.this))
+//                            chatHistoryFragment.errorText.setText(st1);
+//                        else
+//                            chatHistoryFragment.errorText.setText(st2);
+//
+//                    }
+//                }
+//            });
+        }
+    }
+
+    /**
+     * MyGroupChangeListener
+     */
+    private class MyGroupChangeListener implements EMGroupChangeListener {
+
+        @Override
+        public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
+            boolean hasGroup = false;
+        }
+
+        @Override
+        public void onInvitationAccpted(String groupId, String inviter, String reason) {
+
+        }
+
+        @Override
+        public void onInvitationDeclined(String groupId, String invitee, String reason) {
+
+        }
+
+        @Override
+        public void onUserRemoved(String groupId, String groupName) {
+            // 提示用户被T了，demo省略此步骤
+            // 刷新ui
+            runOnUiThread(new Runnable() {
+                public void run() {
+
+                }
+            });
+        }
+
+        @Override
+        public void onGroupDestroy(String groupId, String groupName) {
+            // 群被解散
+            // 提示用户群被解散,demo省略
+            // 刷新ui
+            runOnUiThread(new Runnable() {
+                public void run() {
+
+                }
+            });
+
+        }
+
+        @Override
+        public void onApplicationReceived(String groupId, String groupName, String applyer, String reason) {
+            // 用户申请加入群聊
+        }
+
+        @Override
+        public void onApplicationAccept(String groupId, String groupName, String accepter) {
+
+        }
+
+        @Override
+        public void onApplicationDeclined(String groupId, String groupName, String decliner, String reason) {
+            // 加群申请被拒绝，demo未实现
+        }
     }
 }

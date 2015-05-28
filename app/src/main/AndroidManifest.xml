@@ -90,6 +90,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.IMA.Preview" />
         <activity
+            android:name="net.oschina.app.v2.activity.chat.MessageActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name="com.umeng.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
@@ -133,12 +138,21 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="net.oschina.app.v2.broadcast.AlarmReceiver" >
-        </receiver>
+        <receiver android:name="net.oschina.app.v2.broadcast.AlarmReceiver" />
         <receiver android:name="net.oschina.app.v2.broadcast.BootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" >
                 </action>
+            </intent-filter>
+        </receiver>
+
+        <!-- 开机自启动服务 -->
+        <receiver android:name="com.easemob.chat.StartServiceReceiver" >
+            <intent-filter android:priority="1000" >
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>
 
@@ -148,6 +162,9 @@
         <service
             android:name="com.umeng.update.net.DownloadingService"
             android:process=":DownloadingService" />
+        <!-- 声明sdk所需的service -->
+        <service android:name="com.easemob.chat.EMChatService" />
+
 
         <meta-data
             android:name="UMENG_APPKEY"
@@ -155,8 +172,13 @@
         </meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="channel_360" >
+            android:value="channel_beta" >
         </meta-data>
+
+        <!-- 设置环信应用的appkey -->
+        <meta-data android:name="EASEMOB_APPKEY"  android:value="" />
+        <!-- 声明sdk所需的service SDK核心功能-->
+        <service android:name="com.easemob.chat.EMChatService" />
     </application>
 
 </manifest>

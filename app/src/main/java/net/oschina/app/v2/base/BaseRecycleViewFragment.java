@@ -244,7 +244,6 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
     }
 
     protected void sendRequestData() {
-
     }
 
     public long getCacheExpire() {

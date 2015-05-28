@@ -1,6 +1,7 @@
 package net.oschina.app.v2.activity;
 
 import net.oschina.app.v2.activity.active.fragment.ActiveViewPagerFragment;
+import net.oschina.app.v2.activity.chat.fragment.ChatViewPagerFragment;
 import net.oschina.app.v2.activity.news.fragment.NewsViewPagerFragment;
 import net.oschina.app.v2.activity.question.fragment.QuestionViewPagerFragment;
 import net.oschina.app.v2.activity.tweet.fragment.TweetViewPagerFragment;
@@ -14,9 +15,11 @@ public enum MainTab {
 	QUESTION(1, R.string.tab_name_question, R.drawable.tab_icon_question,
 			QuestionViewPagerFragment.class),
 
-	TWEET(2, R.string.tab_name_tweet, R.drawable.tab_icon_tweet, TweetViewPagerFragment.class),
+	CHAT(2, R.string.tab_name_chat, R.drawable.tab_icon_tweet, ChatViewPagerFragment.class),
 
-	ME(3, R.string.tab_name_me, R.drawable.tab_icon_me, ActiveViewPagerFragment.class);
+	TWEET(3, R.string.tab_name_tweet, R.drawable.tab_icon_tweet, TweetViewPagerFragment.class),
+
+	ME(4, R.string.tab_name_me, R.drawable.tab_icon_me, ActiveViewPagerFragment.class);
 	
 	private int idx;
 	private int resName;

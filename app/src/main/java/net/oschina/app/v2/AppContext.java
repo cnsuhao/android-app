@@ -1,12 +1,27 @@
 package net.oschina.app.v2;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.Set;
-import java.util.UUID;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap.Config;
+import android.text.TextUtils;
+
+import com.easemob.EMCallBack;
+import com.easemob.chat.EMChat;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.PersistentCookieStore;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.tencent.weibo.sdk.android.component.sso.tools.MD5Tools;
+import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UpdateConfig;
 
 import net.oschina.app.v2.api.ApiHttpClient;
 import net.oschina.app.v2.api.remote.OtherApi;
@@ -21,7 +36,7 @@ import net.oschina.app.v2.utils.CircleBitmapDisplayer;
 import net.oschina.app.v2.utils.CyptoUtils;
 import net.oschina.app.v2.utils.DateUtil;
 import net.oschina.app.v2.utils.FileUtils;
-import net.oschina.app.v2.utils.ImageUtils;
+import net.oschina.app.v2.utils.MD5Utils;
 import net.oschina.app.v2.utils.MethodsCompat;
 import net.oschina.app.v2.utils.StringUtils;
 import net.oschina.app.v2.utils.TLog;
@@ -29,36 +44,11 @@ import net.oschina.app.v2.utils.TLog;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.media.AudioManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.text.TextUtils;
+import java.io.File;
+import java.util.Set;
+import java.util.UUID;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.PersistentCookieStore;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.tonlin.osc.happy.R;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.update.UpdateConfig;
+import cn.bmob.v3.Bmob;
 
 /**
  * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
@@ -92,11 +82,13 @@ public class AppContext extends BaseApplication {
     private static final String KEY_COOKIE = "key_cookie";
     private static final String KEY_APP_ID = "key_app_id";
     private static final String KEY_DETAIL_FONT_SIZE = "key_font_size";
+    private static final String KEY_USERNAEM = "KEY_USERNAME";
+    private static final String KEY_PWD = "KEY_PWD";
 
     private static Set<String> mReadedNewsIds, mReadedQuestionIds, mReadedBlogIds; //已读IDS
 
     private static AppContext instance;
-
+    public static DemoHXSDKHelper hxSDKHelper = new DemoHXSDKHelper();
 
     @Override
     public void onCreate() {
@@ -122,6 +114,10 @@ public class AppContext extends BaseApplication {
         UpdateConfig.setDebug(false);
 
         requestDailyEnglish();
+
+        Bmob.initialize(getApplicationContext(), net.oschina.app.v2.base.Config.BMOB_APPLICATION_ID);
+
+        hxSDKHelper.onInit(getApplicationContext());
     }
 
     public static void requestDailyEnglish() {
@@ -402,6 +398,26 @@ public class AppContext extends BaseApplication {
         setProperty(KEY_COOKIE, cookie);
     }
 
+    public static void setUserPwd(String pwd) {
+        Editor editor = getPreferences().edit();
+        editor.putString(KEY_PWD, MD5Utils.getMD5Code(pwd));
+        apply(editor);
+    }
+
+    public static String getUserPwd(){
+        return getPreferences().getString(KEY_PWD, null);
+    }
+
+    public static void setUserName(String name) {
+        Editor editor = getPreferences().edit();
+        editor.putString(KEY_USERNAEM, MD5Utils.getMD5Code(name));
+        apply(editor);
+    }
+
+    public static String getUserName(){
+        return getPreferences().getString(KEY_USERNAEM, null);
+    }
+
     /**
      * 清除app缓存
      */
@@ -680,5 +696,55 @@ public class AppContext extends BaseApplication {
 
     public static int getNoticeNewFansCount() {
         return getPreferences().getInt(KEY_NOTICE_NEWFANS_COUNT + instance().getLoginUid(), 0);
+    }
+
+    /**
+     * 获取当前登陆用户名
+     * @return
+     */
+    public String getHXUserName() {
+        return hxSDKHelper.getHXId();
+    }
+
+    /**
+     * 获取密码
+     *
+     * @return
+     */
+    public String getHXPassword() {
+        return hxSDKHelper.getPassword();
+    }
+
+    /**
+     * 设置用户名
+     */
+    public void setHXUserName(String username) {
+        hxSDKHelper.setHXId(username);
+    }
+
+    /**
+     * 设置密码 下面的实例代码 只是demo，实际的应用中需要加password 加密后存入 preference 环信sdk
+     * 内部的自动登录需要的密码，已经加密存储了
+     *
+     * @param pwd
+     */
+    public void setHXPassword(String pwd) {
+        hxSDKHelper.setPassword(pwd);
+    }
+
+    /**
+     * 是否已经登录环信
+     * @return
+     */
+    public static boolean hasHXLogin(){
+        return hxSDKHelper.isLogined();
+    }
+
+    /**
+     * 退出登录,清空数据
+     */
+    public void logoutHX(final EMCallBack emCallBack) {
+        // 先调用sdk logout，在清理app中自己的数据
+        hxSDKHelper.logout(emCallBack);
     }
 }

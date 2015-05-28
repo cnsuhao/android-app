@@ -19,7 +19,10 @@
     <string name="main_menu_about">关于我们</string>
     <string name="main_menu_setting">设置</string>
     <string name="main_menu_exit">退出应用</string>
-  
+
+    <string name="main_menu_add_friend">添加朋友</string>
+    <string name="main_menu_group_chat">发起群聊</string>
+
     <string name="detail_menu_unfavorite">取消收藏</string>
     <string name="detail_menu_favorite">收藏</string>
     <string name="detail_menu_for_share">分享</string>
@@ -57,12 +60,16 @@
     <string name="frame_title_software_lastest">最新</string>    
     <string name="frame_title_software_hot">热门</string>
     <string name="frame_title_software_china">国产</string>
-    
+
+
+    <string name="frame_title_chat_conversation">会话</string>
+    <string name="frame_title_chat_contact">通讯录</string>
     
     <!-- V2 -->
     <string name="tab_name_article">资讯</string>
     <string name="tab_name_question">问答</string>
     <string name="tab_name_tweet">动弹</string>
+    <string name="tab_name_chat">Chat</string>
     <string name="tab_name_me">我</string>
     
     <!-- Error View -->
