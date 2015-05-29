@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="location_recv">[%1$s\'s location]</string>
+    <string name="location_message">Location Message</string>
+    <string name="recording_video">Record Video</string>
+    <string name="location_prefix">[My location]</string>
+    <string name="voice">[Audio]</string>
+    <string name="picture">[Image]</string>
+    <string name="video">[Video]</string>
+    <string name="file">[File]</string>
+    <string name="voice_call">[Voice Call]</string>
+
     <string name="receive_the_passthrough">收到透传：action：</string>
 </resources>

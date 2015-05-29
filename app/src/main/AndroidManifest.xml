@@ -116,6 +116,7 @@
         <activity
             android:name="net.oschina.app.v2.activity.chat.MessageActivity"
             android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait" />
 
         <activity

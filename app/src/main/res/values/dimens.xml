@@ -88,5 +88,5 @@
 
     <dimen name="error_icon_size">59dp</dimen>
 
-    <dimen name="size_avatar">45dp</dimen>
+    <dimen name="size_avatar">40dp</dimen>
 </resources>

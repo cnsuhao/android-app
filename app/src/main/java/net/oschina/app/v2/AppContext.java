@@ -32,6 +32,7 @@ import net.oschina.app.v2.content.DBHelper;
 import net.oschina.app.v2.emoji.EmojiHelper;
 import net.oschina.app.v2.model.DailyEnglish;
 import net.oschina.app.v2.model.User;
+import net.oschina.app.v2.model.chat.IMUser;
 import net.oschina.app.v2.utils.CircleBitmapDisplayer;
 import net.oschina.app.v2.utils.CyptoUtils;
 import net.oschina.app.v2.utils.DateUtil;
@@ -316,6 +317,23 @@ public class AppContext extends BaseApplication {
         this.cleanCookie();
         //this.login = false;
         //this.loginUid = 0;
+        setLoginUid(0);
+
+        logoutHX(new EMCallBack() {
+            @Override
+            public void onSuccess() {
+            }
+
+            @Override
+            public void onError(int i, String s) {
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+            }
+        });
+
+        IMUser.logOut(this);
 
         Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
         sendBroadcast(intent);
@@ -344,7 +362,7 @@ public class AppContext extends BaseApplication {
 
         setProperty("user.uid", String.valueOf(user.getUid()));
         setProperty("user.name", user.getName());
-        setProperty("user.face", FileUtils.getFileName(user.getFace()));// 用户头像-文件名
+        setProperty("user.face", user.getFace());// 用户头像-文件名
         setProperty("user.account", user.getAccount());
         setProperty("user.pwd",
                 CyptoUtils.encode("oschinaApp", user.getPwd()));

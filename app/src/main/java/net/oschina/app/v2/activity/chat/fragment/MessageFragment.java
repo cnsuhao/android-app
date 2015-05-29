@@ -1,5 +1,6 @@
 package net.oschina.app.v2.activity.chat.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.DemoHXSDKHelper;
 import net.oschina.app.v2.activity.chat.MessageActivity;
 import net.oschina.app.v2.activity.chat.adapter.MessageAdapter;
+import net.oschina.app.v2.activity.chat.view.ComposeView;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.easemob.controller.HXSDKHelper;
 import net.oschina.app.v2.utils.MD5Utils;
@@ -31,7 +33,7 @@ import java.util.List;
 /**
  * Created by Tonlin on 2015/5/28.
  */
-public class MessageFragment extends BaseFragment implements EMEventListener {
+public class MessageFragment extends BaseFragment implements EMEventListener, ComposeView.OnComposeOperationDelegate {
     public static final int CHATTYPE_SINGLE = 1;
     public static final int CHATTYPE_GROUP = 2;
     public static final int CHATTYPE_CHATROOM = 3;
@@ -44,6 +46,7 @@ public class MessageFragment extends BaseFragment implements EMEventListener {
     private int mPageSize = 30;
     private ListView mLvMessage;
     private MessageAdapter mAdapter;
+    private ComposeView mComposeView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,10 +97,9 @@ public class MessageFragment extends BaseFragment implements EMEventListener {
     }
 
     private void initViews(View view) {
-        view.findViewById(R.id.btn_send).setOnClickListener(this);
         mLvMessage = (ListView) view.findViewById(R.id.lv_message);
-
-
+        mComposeView = (ComposeView) view.findViewById(R.id.compose);
+        mComposeView.setOperationDelegate(this);
         initData();
     }
 
@@ -129,7 +131,7 @@ public class MessageFragment extends BaseFragment implements EMEventListener {
             }
         }
 
-        mAdapter = new MessageAdapter(getActivity(), mToChatUsername, mChatType);
+        mAdapter = new MessageAdapter(getActivity(), mLvMessage, mToChatUsername, mChatType);
         // 显示消息
         mLvMessage.setAdapter(mAdapter);
 
@@ -146,46 +148,33 @@ public class MessageFragment extends BaseFragment implements EMEventListener {
     }
 
     private void sendTextMessage(String text) {
-        //获取到与聊天人的会话对象。参数username为聊天人的userid或者groupid，后文中的username皆是如此
-        EMConversation conversation = EMChatManager.getInstance().getConversation(mToChatUsername);
-        //创建一条文本消息
-        EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
-        //如果是群聊，设置chattype,默认是单聊
-        message.setChatType(EMMessage.ChatType.GroupChat);
-        //设置消息body
-        TextMessageBody txtBody = new TextMessageBody(text);
-        message.addBody(txtBody);
-        //设置接收人
-        message.setReceipt(mToChatUsername);
-        //把消息加入到此会话对象中
-        conversation.addMessage(message);
-        //发送消息
-        EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AppContext.showToastShort("发送成功");
-                    }
-                });
+        if (text.length() > 0) {
+            EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
+            // 如果是群聊，设置chattype,默认是单聊
+            if (mChatType == CHATTYPE_GROUP) {
+                message.setChatType(EMMessage.ChatType.GroupChat);
+            } else if (mChatType == CHATTYPE_CHATROOM) {
+                message.setChatType(EMMessage.ChatType.ChatRoom);
             }
 
-            @Override
-            public void onError(int i, final String s) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AppContext.showToastShort("发送失败:" + s);
-                    }
-                });
+            TextMessageBody txtBody = new TextMessageBody(text);
+            // 设置消息body
+            message.addBody(txtBody);
+
+            if(mChatType == CHATTYPE_SINGLE) {
+                //message.setAttribute("user_avatar", AppContext.getLoginInfo().getFace());
+                //message.setAttribute("user_nick_name", AppContext.getLoginInfo().getName());
             }
 
-            @Override
-            public void onProgress(int i, String s) {
-
-            }
-        });
+            // 设置要发给谁,用户username或者群聊groupid
+            message.setReceipt(mToChatUsername);
+            // 把messgage加到conversation中
+            mConversation.addMessage(message);
+            // 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法
+            mAdapter.refreshSelectLast();
+            mComposeView.clearText();
+            getActivity().setResult(Activity.RESULT_OK);
+        }
     }
 
     @Override
@@ -244,7 +233,7 @@ public class MessageFragment extends BaseFragment implements EMEventListener {
         if (mAdapter == null) {
             return;
         }
-        TLog.log(TAG,"refreshUI");
+        TLog.log(TAG, "refreshUI");
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 mAdapter.refresh();
@@ -257,11 +246,21 @@ public class MessageFragment extends BaseFragment implements EMEventListener {
         if (mAdapter == null) {
             return;
         }
-        TLog.log(TAG,"refreshUIWithNewMessage");
+        TLog.log(TAG, "refreshUIWithNewMessage");
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 mAdapter.refreshSelectLast();
             }
         });
+    }
+
+    @Override
+    public void onSendText(String text) {
+        sendTextMessage(text);
+    }
+
+    @Override
+    public void onSendVoice(String file) {
+
     }
 }

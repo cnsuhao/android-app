@@ -1,14 +1,18 @@
 package net.oschina.app.v2.model;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import net.oschina.app.v2.AppException;
 import net.oschina.app.v2.utils.StringUtils;
+import net.oschina.app.v2.utils.TLog;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.util.Log;
 import android.util.Xml;
 
 /**
@@ -194,7 +198,17 @@ public class User extends Base {
         this.pwd = pwd;
     }
 
+    public   static   String   inputStream2String(InputStream   is)   throws   IOException{
+        ByteArrayOutputStream   baos   =   new ByteArrayOutputStream();
+        int   i=-1;
+        while((i=is.read())!=-1){
+            baos.write(i);
+        }
+        return   baos.toString();
+    }
+
     public static User parse(InputStream stream) throws IOException, AppException {
+        //TLog.error("用户:" + inputStream2String(stream));
         User user = new User();
         Result res = null;
         // 获得XmlPullParser解析器

@@ -3,15 +3,15 @@ package net.oschina.app.v2.activity.chat;
 
 import com.tonlin.osc.happy.R;
 
+import net.oschina.app.v2.activity.chat.fragment.ContactFragment;
 import net.oschina.app.v2.activity.chat.fragment.ConversationFragment;
-import net.oschina.app.v2.activity.news.fragment.NewsFragment;
 import net.oschina.app.v2.model.BlogList;
 import net.oschina.app.v2.model.NewsList;
 
 
 public enum ChatTab {
     CONVERSATION(0,NewsList.CATALOG_ALL, R.string.frame_title_chat_conversation, ConversationFragment.class),
-    CONTACT(1, BlogList.CATALOG_LATEST,R.string.frame_title_chat_contact, NewsFragment.class);
+    CONTACT(1, BlogList.CATALOG_LATEST,R.string.frame_title_chat_contact, ContactFragment.class);
 
     private Class<?> clz;
     private int idx;
