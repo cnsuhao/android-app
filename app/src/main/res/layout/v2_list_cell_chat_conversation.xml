@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:id="@+id/avatar_container"
-        android:layout_width="60dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/space_13"
+            android:layout_marginRight="@dimen/space_3"
             android:background="@drawable/ic_unread_count_bg"
             android:gravity="center"
             android:textColor="@android:color/white"

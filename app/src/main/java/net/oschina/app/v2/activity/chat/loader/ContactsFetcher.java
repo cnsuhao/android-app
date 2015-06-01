@@ -50,8 +50,8 @@ public class ContactsFetcher extends NameWorker {
     }
 
     @Override
-    protected void queryValueFromRemoteDB(String data, CacheType cacheType,
-                                          final AwareView awareView) {
+    protected void queryValueFromRemoteDB(final String data, CacheType cacheType,
+                                         final INameCache mNameCache, final AwareView awareView) {
         if (CacheType.USER.equals(cacheType)) {
             Log.e(TAG,"queryValueFromRemoteDB:"+data);
             BmobQuery<IMUser> query = new BmobQuery<IMUser>();
@@ -61,8 +61,12 @@ public class ContactsFetcher extends NameWorker {
                 public void onSuccess(List<IMUser> list) {
                     Log.e(TAG,"查询用户成功");
                     if (list != null && list.size() > 0) {
-                        Log.e(TAG,"存在用户准备赋值:"+list.get(0).getName());
+                        Log.e(TAG, "存在用户准备赋值:" + list.get(0).getName());
                         executeOnQueryRemoteSuccess(list.get(0), awareView);
+                        //save to cache
+                        if(mNameCache != null){
+                            mNameCache.addBitmapToCache(data,list.get(0));
+                        }
                     }
                 }
 

@@ -258,7 +258,7 @@ public abstract class NameWorker {
                 } else {
                     Log.e("IMA-LOG","remote前有回调");
                 }
-                queryValueFromRemoteDB((String) mData, mCacheType, awareView);
+                queryValueFromRemoteDB((String) mData, mCacheType, mNameCache, awareView);
             }
         }
 
@@ -283,7 +283,7 @@ public abstract class NameWorker {
     }
 
     protected abstract void queryValueFromRemoteDB(String data,
-                                                   CacheType cacheType, AwareView awareView);
+                                                   CacheType cacheType, INameCache mNameCache, AwareView awareView);
 
     protected void executeOnQueryRemoteSuccess(IName value, AwareView awareView) {
         setAwareViewName(awareView, value);

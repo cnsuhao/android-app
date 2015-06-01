@@ -419,10 +419,7 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
                 user.setImUserName(imUserName);
                 user.setImPassword(imPassword);
                 user.setName(mUser.getName());
-                String photo = "http://static.oschina.net/uploads/user/"+mUser.getUid()+"/"+mUser.getFace();
-                Log.e("IMA-LOG","头像:"+photo);
-                user.setPhoto(photo);
-
+                user.setPhoto(mUser.getFace());
                 fragment.registerDB(user);
             } else {
                 if (errorCode == EMError.NONETWORK_ERROR) {

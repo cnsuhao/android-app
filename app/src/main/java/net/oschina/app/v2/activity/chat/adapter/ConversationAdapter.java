@@ -24,6 +24,8 @@ import net.oschina.app.v2.activity.chat.loader.IName;
 import net.oschina.app.v2.activity.chat.view.AsynTextView;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
+import net.oschina.app.v2.model.chat.IMGroup;
+import net.oschina.app.v2.model.chat.IMUser;
 import net.oschina.app.v2.utils.AvatarUtils;
 import net.oschina.app.v2.utils.DateUtil;
 import net.oschina.app.v2.utils.ImageUtils;
@@ -80,25 +82,61 @@ public class ConversationAdapter extends RecycleBaseAdapter {
             }
         }
 
-        if ("admin".equals(item.getUserName())) {
-            vh.name.setText(item.getUserName());
+        final ImageView avatar = vh.avatar;
+        vh.name.setText("");
+        vh.avatar.setImageBitmap(null);
+
+        if (item.isGroup()) {
+            vh.avatar.setImageResource(R.drawable.ic_default_avatar_group);
+
+            IName name = ContactsFetcher.getInstance().getNameCache().getBitmapFromMemCache(item.getUserName());
+            if(name == null){
+                name =  ContactsFetcher.getInstance().getNameCache().getBitmapFromDiskCache(item.getUserName(), CacheType.GROUP);
+            }
+            if(name != null && name instanceof IMGroup){
+                IMGroup group = (IMGroup)name;
+                vh.name.setText(group.getName());
+                ImageLoader.getInstance().displayImage(group.getPhoto(), avatar);
+            } else {
+                ContactsFetcher.getInstance().loadName(item.getUserName(), CacheType.GROUP, vh.name, new DisplayListener() {
+                    @Override
+                    public void onLoadSuccess(AwareView awareView, IName name) {
+                        ImageLoader.getInstance().displayImage(name.getPhoto(), avatar);
+                    }
+
+                    @Override
+                    public void onLoadFailure(AwareView awareView, IName name) {
+                    }
+                });
+            }
         } else {
-            vh.avatar.setImageBitmap(null);
             vh.avatar.setBackgroundResource(R.drawable.ic_default_avatar);
-            final ImageView avatar = vh.avatar;
-            ContactsFetcher.getInstance().loadName(item.getUserName(),
-                    CacheType.USER, vh.name, new DisplayListener() {
-                        @Override
-                        public void onLoadSuccess(AwareView awareView, IName name) {
-                            Log.e("IMA-LOG", "昵称加载完毕:" + name.getName() + ",头像:" + name.getPhoto());
-                            ImageLoader.getInstance().displayImage(name.getPhoto(), avatar);
-                        }
 
-                        @Override
-                        public void onLoadFailure(AwareView awareView, IName name) {
+            IName name = ContactsFetcher.getInstance().getNameCache().getBitmapFromMemCache(item.getUserName());
+            if(name == null){
+                name =  ContactsFetcher.getInstance().getNameCache().getBitmapFromDiskCache(item.getUserName(), CacheType.USER);
+            }
+            if(name != null && name instanceof IMUser){
+                IMUser user = (IMUser)name;
+                vh.name.setText(user.getName());
+                ImageLoader.getInstance().displayImage(user.getPhoto(), avatar);
+            } else {
+                if ("admin".equals(item.getUserName())) {
+                    vh.name.setText(item.getUserName());
+                } else {
+                    ContactsFetcher.getInstance().loadName(item.getUserName(),
+                            CacheType.USER, vh.name, new DisplayListener() {
+                                @Override
+                                public void onLoadSuccess(AwareView awareView, IName name) {
+                                    ImageLoader.getInstance().displayImage(name.getPhoto(), avatar);
+                                }
 
-                        }
-                    });
+                                @Override
+                                public void onLoadFailure(AwareView awareView, IName name) {
+                                }
+                            });
+                }
+            }
         }
     }
 

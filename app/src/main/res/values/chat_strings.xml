@@ -11,5 +11,8 @@
     <string name="file">[File]</string>
     <string name="voice_call">[Voice Call]</string>
 
+    <string name="new_friend">新的朋友</string>
+    <string name="group_chat">群聊</string>
+
     <string name="receive_the_passthrough">收到透传：action：</string>
 </resources>

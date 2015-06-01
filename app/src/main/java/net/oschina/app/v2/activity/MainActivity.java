@@ -4,6 +4,8 @@ import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.news.adapter.NewsTabPagerAdapter;
 import net.oschina.app.v2.base.BaseActivity;
 import net.oschina.app.v2.base.Constants;
+import net.oschina.app.v2.model.chat.IMUser;
+import net.oschina.app.v2.model.chat.Invite;
 import net.oschina.app.v2.service.NoticeUtils;
 import net.oschina.app.v2.ui.BadgeView;
 import net.oschina.app.v2.ui.tab.SlidingTabLayout;
@@ -47,6 +49,7 @@ import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactListener;
 import com.easemob.chat.EMContactManager;
+import com.easemob.exceptions.EaseMobException;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
@@ -63,6 +66,8 @@ import com.umeng.update.UpdateResponse;
 import com.umeng.update.UpdateStatus;
 
 import java.util.List;
+
+import cn.bmob.v3.listener.SaveListener;
 
 /**
  * 应用主界面
@@ -181,6 +186,7 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
         EMChatManager.getInstance().addGroupChangeListener(new MyGroupChangeListener());
         // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
         EMChat.getInstance().setAppInited();
+
     }
 
     @Override
@@ -315,7 +321,8 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
                 UIHelper.exitApp(this);
                 break;
             case R.id.main_menu_add:
-                UIHelper.showChatMessage(this, "4cea3c1b8835723ae979994460743c87");
+                //UIHelper.showChatMessage(this, "4cea3c1b8835723ae979994460743c87");
+                UIHelper.showAddNewFriend(this);
                 break;
             case R.id.main_menu_group:
                 UIHelper.showChatMessage(this,"9236292c5195efb073e106ba97ed2909");
@@ -547,8 +554,14 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
         }
 
         @Override
-        public void onContactInvited(String username, String reason) {
+        public void onContactInvited(final  String username,final String reason) {
             // 接到邀请的消息，如果不处理(同意或拒绝)，掉线后，服务器会自动再发过来，所以客户端不需要重复提醒
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AppContext.showToastShort("收到好友邀请:"+username+" reason "+reason);
+                }
+            });
         }
 
         @Override
@@ -612,8 +625,9 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
     private class MyGroupChangeListener implements EMGroupChangeListener {
 
         @Override
-        public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
+        public void onInvitationReceived(String groupId, String groupName, final String inviter, String reason) {
             boolean hasGroup = false;
+
         }
 
         @Override

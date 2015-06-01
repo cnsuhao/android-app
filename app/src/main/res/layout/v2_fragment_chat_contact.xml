@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <net.oschina.app.v2.ui.pinned.PinnedHeaderListView
+        android:id="@+id/listView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@color/list_divider_color"
+        android:dividerHeight="1.0px"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false" />
+
+    <net.oschina.app.v2.ui.pinned.BladeView
+        android:id="@+id/bv"
+        android:layout_width="20dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:background="#00000000" />
+</RelativeLayout>

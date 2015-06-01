@@ -133,18 +133,25 @@ public class ContactDataHelper {
         return list;
     }
 
-
     private IMUser cursorToUser(Cursor cursor) {
         IMUser user = new IMUser();
-
-
+        user.setObjectId(cursor.getString(cursor.getColumnIndex(COLUMN_U_ID)));
+        user.setName(cursor.getString(cursor.getColumnIndex(COLUMN_U_NAME_NICK)));
+        user.setImUserName(cursor.getString(cursor.getColumnIndex(COLUMN_IM_USERNAME)));
+        user.setPhoto(cursor.getString(cursor.getColumnIndex(COLUMN_U_PHOTO)));
+        user.setUsername(cursor.getString(cursor.getColumnIndex(COLUMN_DB_USERNAME)));
+        user.setCacheTime(cursor.getLong(cursor.getColumnIndex(COLUMN_U_CACHE_TIME)));
         return user;
     }
 
     private ContentValues userToContentValue(IMUser user) {
         ContentValues values = new ContentValues();
-
-
+        values.put(COLUMN_U_ID, user.getObjectId());
+        values.put(COLUMN_U_NAME_NICK, user.getName());
+        values.put(COLUMN_IM_USERNAME, user.getImUserName());
+        values.put(COLUMN_U_PHOTO, user.getPhoto());
+        values.put(COLUMN_DB_USERNAME, user.getUsername());
+        values.put(COLUMN_U_CACHE_TIME, System.currentTimeMillis());
         return values;
     }
 
@@ -195,17 +202,25 @@ public class ContactDataHelper {
         return null;
     }
 
+    private ContentValues groupToContentValue(IMGroup group) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_GROUP_ID, group.getObjectId());
+        values.put(COLUMN_GROUP_NAME, group.getName());
+        values.put(COLUMN_GROUP_PHOTO, group.getPhoto());
+        values.put(COLUMN_GROUP_IMID, group.getImId());
+        values.put(COLUMN_GROUP_CACHE_TIME, group.getCacheTime());
+        return values;
+    }
+
     private IMGroup cursorToGroup(Cursor cursor) {
         IMGroup group = new IMGroup();
-
-
+        group.setObjectId(cursor.getString(cursor.getColumnIndex(COLUMN_GROUP_ID)));
+        group.setName(cursor.getString(cursor.getColumnIndex(COLUMN_GROUP_NAME)));
+        group.setPhoto(cursor.getString(cursor.getColumnIndex(COLUMN_GROUP_PHOTO)));
+        group.setImId(cursor.getString(cursor.getColumnIndex(COLUMN_GROUP_IMID)));
+        group.setCacheTime(cursor.getLong(cursor.getColumnIndex(COLUMN_GROUP_CACHE_TIME)));
         return group;
     }
 
-    private ContentValues groupToContentValue(IMGroup group) {
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_GROUP_ID, group.getId());
-        values.put(COLUMN_GROUP_NAME, group.getName());
-        return values;
-    }
+
 }

@@ -33,6 +33,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.easemob.exceptions.EaseMobException;
 import com.tonlin.osc.happy.R;
 
 public abstract class BaseActivity extends AppCompatActivity implements
@@ -133,7 +134,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
         return 0;
     }
 
-    protected void init(Bundle savedInstanceState) {
+    protected void init(Bundle savedInstanceState)  {
         initStatusBar();
     }
 
