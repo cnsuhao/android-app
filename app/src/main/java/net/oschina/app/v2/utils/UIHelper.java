@@ -1,8 +1,9 @@
 package net.oschina.app.v2.utils;
 
 import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.activity.MainActivity;
 import net.oschina.app.v2.activity.chat.AddFriendActivity;
+import net.oschina.app.v2.activity.chat.AddGroupActivity;
+import net.oschina.app.v2.activity.chat.GroupActivity;
 import net.oschina.app.v2.activity.chat.MessageActivity;
 import net.oschina.app.v2.activity.chat.NewFriendActivity;
 import net.oschina.app.v2.activity.comment.fragment.CommentFragment;
@@ -14,7 +15,6 @@ import net.oschina.app.v2.activity.message.fragment.MessageDetailFragment;
 import net.oschina.app.v2.activity.message.fragment.MessageForwardFragment;
 import net.oschina.app.v2.activity.message.fragment.MessagePublicFragment;
 import net.oschina.app.v2.activity.news.DetailActivity;
-import net.oschina.app.v2.activity.news.fragment.NewsFragment;
 import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
 import net.oschina.app.v2.activity.search.SearchActivity;
 import net.oschina.app.v2.activity.user.LoginActivity;
@@ -1080,9 +1080,11 @@ public class UIHelper {
         return sb.toString();
     }
 
-    public static void showChatMessage(Context context, String account) {
+    public static void showChatMessage(Context context, String account, String name, int chatType) {
         Intent intent = new Intent(context, MessageActivity.class);
         intent.putExtra(MessageActivity.KEY_TO_CHAT_NAME, account);
+        intent.putExtra(MessageActivity.KEY_CHAT_NICK, name);
+        intent.putExtra(MessageActivity.KEY_CHAT_TYPE, chatType);
         context.startActivity(intent);
     }
 
@@ -1093,6 +1095,16 @@ public class UIHelper {
 
     public static void showNewFriend(Context context) {
         Intent intent = new Intent(context, NewFriendActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void showAddGroup(Context context) {
+        Intent intent = new Intent(context, AddGroupActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void showMyGroups(Context context) {
+        Intent intent = new Intent(context, GroupActivity.class);
         context.startActivity(intent);
     }
 }

@@ -2,12 +2,14 @@ package net.oschina.app.v2.activity.chat.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,9 +22,10 @@ import net.oschina.app.v2.model.chat.IMUser;
 import net.oschina.app.v2.model.chat.UserRelation;
 import net.oschina.app.v2.ui.pinned.PinnedHeaderListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ContactAdapter extends BaseAdapter implements PinnedHeaderListView.PinnedHeaderAdapter,
+public class AddGroupAdapter extends BaseAdapter implements PinnedHeaderListView.PinnedHeaderAdapter,
         OnScrollListener {
 
     private List<UserRelation> mList;
@@ -31,9 +34,10 @@ public class ContactAdapter extends BaseAdapter implements PinnedHeaderListView.
     private int mLocationPosition = -1;
     private LayoutInflater mInflater;
     private DisplayImageOptions options;
+    private List<UserRelation> mSelecteds = new ArrayList<>();
 
-    public ContactAdapter(List<UserRelation> mList, MySectionIndexer mIndexer,
-                          Context mContext) {
+    public AddGroupAdapter(List<UserRelation> mList, MySectionIndexer mIndexer,
+                           Context mContext) {
         this.mList = mList;
         this.mIndexer = mIndexer;
         this.mContext = mContext;
@@ -60,16 +64,21 @@ public class ContactAdapter extends BaseAdapter implements PinnedHeaderListView.
     @SuppressWarnings("deprecation")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        if (position == 0) {
+            convertView = mInflater.inflate(R.layout.v2_list_cell_chat_simple_text, null);
+            return convertView;
+        }
         View view;
         ViewHolder holder;
         if (convertView == null) {
-            view = mInflater.inflate(R.layout.v2_list_cell_chat_contact, null);
+            view = mInflater.inflate(R.layout.v2_list_cell_chat_add_group, null);
 
             holder = new ViewHolder();
             holder.group_title = (TextView) view.findViewById(R.id.group_title);
             holder.name = (TextView) view.findViewById(R.id.tv_name);
             holder.icon = (ImageView) view.findViewById(R.id.iv_icon);
             holder.item = view.findViewById(R.id.ly_item);
+            holder.selected = (CheckBox) view.findViewById(R.id.cb_selected);
             view.setTag(holder);
         } else {
             view = convertView;
@@ -86,32 +95,38 @@ public class ContactAdapter extends BaseAdapter implements PinnedHeaderListView.
             holder.group_title.setVisibility(View.GONE);
         }
 
-        if (position == 0) {
-            holder.group_title.setVisibility(View.GONE);
-            holder.name.setText(R.string.new_friend);
-            holder.icon.setBackgroundResource(R.drawable.ic_contact_add);
-        } else if (position == 1) {
-            holder.group_title.setVisibility(View.GONE);
-            holder.name.setText(R.string.group_chat);
-            holder.icon.setBackgroundResource(R.drawable.ic_contact_group);
-        } else {
-            holder.icon.setImageBitmap(null);
-            IMUser currentUser = IMUser.getCurrentUser(view.getContext(), IMUser.class);
-            if (currentUser != null) {
-                IMUser displayUser = null;
-                if (item.getFriend() != null && !item.getFriend().getObjectId().equals(currentUser.getObjectId())) {
-                    displayUser = item.getFriend();
-                }
-                if (item.getOwner() != null && !item.getOwner().getObjectId().equals(currentUser.getObjectId())) {
-                    displayUser = item.getOwner();
-                }
-                if (displayUser != null) {
-                    holder.name.setText(displayUser.getName());
-                    ImageLoader.getInstance().displayImage(displayUser.getPhoto(), holder.icon, options);
-                }
+        holder.icon.setImageBitmap(null);
+        IMUser currentUser = IMUser.getCurrentUser(view.getContext(), IMUser.class);
+        if (currentUser != null) {
+            IMUser displayUser = null;
+            if (item.getFriend() != null && !item.getFriend().getObjectId().equals(currentUser.getObjectId())) {
+                displayUser = item.getFriend();
+            }
+            if (item.getOwner() != null && !item.getOwner().getObjectId().equals(currentUser.getObjectId())) {
+                displayUser = item.getOwner();
+            }
+            if (displayUser != null) {
+                holder.name.setText(displayUser.getName());
+                ImageLoader.getInstance().displayImage(displayUser.getPhoto(), holder.icon, options);
             }
         }
+
+        holder.selected.setChecked(item.isSelected());
         return view;
+    }
+
+    public void toggle(int position) {
+        UserRelation item = (UserRelation) getItem(position);
+        if(item.isSelected()){
+            mSelecteds.remove(item);
+        } else {
+            mSelecteds.add(item);
+        }
+        item.setSelected(!item.isSelected());
+    }
+
+    public List<UserRelation> getSelecteds(){
+        return mSelecteds;
     }
 
     public static class ViewHolder {
@@ -119,11 +134,12 @@ public class ContactAdapter extends BaseAdapter implements PinnedHeaderListView.
         public TextView group_title;
         public TextView name;
         public ImageView icon;
+        public CheckBox selected;
     }
 
     @Override
     public int getPinnedHeaderState(int position) {
-        if (position == 0 || position == 1) {
+        if (position == 0) {
             return PINNED_HEADER_GONE;
         }
         int realPosition = position;

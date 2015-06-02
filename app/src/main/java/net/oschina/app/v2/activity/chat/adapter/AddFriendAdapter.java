@@ -28,7 +28,7 @@ public class AddFriendAdapter extends RecycleBaseAdapter {
 
     @Override
     protected View onCreateItemView(ViewGroup parent, int viewType) {
-        return getLayoutInflater(parent.getContext()).inflate(R.layout.v2_list_cell_add_friend, null);
+        return getLayoutInflater(parent.getContext()).inflate(R.layout.v2_list_cell_chat_add_friend, null);
     }
 
     @Override

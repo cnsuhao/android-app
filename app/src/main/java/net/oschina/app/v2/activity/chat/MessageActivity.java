@@ -13,6 +13,9 @@ import net.oschina.app.v2.base.BaseActivity;
  */
 public class MessageActivity extends BaseActivity {
     public static final String KEY_TO_CHAT_NAME = "key_to_chat_user_name";
+    public static final String KEY_CHAT_NICK = "key_chat_nick";
+    public static final String KEY_CHAT_TYPE = "key_chat_type";
+
     @Override
     protected boolean hasBackButton() {
         return true;

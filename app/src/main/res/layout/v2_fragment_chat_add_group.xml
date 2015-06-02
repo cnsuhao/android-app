@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/list_item_background_normal"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="10dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/chat_textfield_selector"
+            android:hint="搜索"
+            android:paddingLeft="34dp"
+            android:textColor="@color/main_black"
+            android:textColorHint="@color/main_gray"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_centerVertical="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_search_contact" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <net.oschina.app.v2.ui.pinned.PinnedHeaderListView
+            android:id="@+id/listView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@color/list_divider_color"
+            android:dividerHeight="1.0px"
+            android:footerDividersEnabled="false"
+            android:headerDividersEnabled="false" />
+
+        <net.oschina.app.v2.ui.pinned.BladeView
+            android:id="@+id/bv"
+            android:layout_width="20dp"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:background="#00000000" />
+    </RelativeLayout>
+</LinearLayout>
+

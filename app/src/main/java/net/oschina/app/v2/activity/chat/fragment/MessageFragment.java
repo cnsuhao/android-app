@@ -1,6 +1,7 @@
 package net.oschina.app.v2.activity.chat.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -51,8 +52,9 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mToChatUsername = getActivity().getIntent().getStringExtra(MessageActivity.KEY_TO_CHAT_NAME);
-        AppContext.showToastShort("to chat:" + mToChatUsername);
+        Intent intent = getActivity().getIntent();
+        mToChatUsername = intent.getStringExtra(MessageActivity.KEY_TO_CHAT_NAME);
+        mChatType = intent.getIntExtra(MessageActivity.KEY_CHAT_TYPE, CHATTYPE_SINGLE);
     }
 
     @Override
@@ -161,7 +163,7 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
             // 设置消息body
             message.addBody(txtBody);
 
-            if(mChatType == CHATTYPE_SINGLE) {
+            if (mChatType == CHATTYPE_SINGLE) {
                 //message.setAttribute("user_avatar", AppContext.getLoginInfo().getFace());
                 //message.setAttribute("user_nick_name", AppContext.getLoginInfo().getName());
             }

@@ -164,6 +164,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
             int layoutRes = getActionBarCustomView();
             if (layoutRes != 0) {
                 View view = inflateView(layoutRes);
+                mTvActionTitle = (TextView) view.findViewById(R.id.tv_title);
                 Toolbar.LayoutParams params = new Toolbar.LayoutParams(LayoutParams.MATCH_PARENT,
                         LayoutParams.MATCH_PARENT);
                 actionBar.addView(view, params);
@@ -199,6 +200,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
 
             if (titleRes != 0) {
                 actionBar.setTitle(titleRes);
+                setActionBarTitle(titleRes);
             }
 
             actionBar.setNavigationIcon(R.drawable.actionbar_back_icon_normal);
@@ -222,6 +224,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
             int titleRes = getActionBarTitle();
             if (titleRes != 0) {
                 actionBar.setTitle(titleRes);
+                setActionBarTitle(titleRes);
             }
             //actionBar.setLogo(0);
             actionBar.setPadding((int) TDevice.dpToPixel(16), 0, 0, 0);

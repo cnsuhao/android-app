@@ -13,6 +13,12 @@
 
     <string name="new_friend">新的朋友</string>
     <string name="group_chat">群聊</string>
+    <string name="chat_add_group">发起群聊</string>
+    <string name="chat_ok_zero">确定</string>
+    <plurals name="chat_format_ok">
+        <item quantity="zero">确定</item>
+        <item quantity="other">确定(%d)</item>
+    </plurals>
 
     <string name="receive_the_passthrough">收到透传：action：</string>
 </resources>

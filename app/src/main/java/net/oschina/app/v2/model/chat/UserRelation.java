@@ -1,13 +1,17 @@
 package net.oschina.app.v2.model.chat;
 
+import cn.bmob.v3.BmobObject;
+
 /**
  * Created by Tonlin on 2015/6/1.
  */
-public class UserRelation {
+public class UserRelation extends BmobObject {
 
     private IMUser owner;
     private IMUser friend;
     private String sortKey;
+
+    private boolean selected;
 
     public UserRelation(){
 
@@ -38,5 +42,13 @@ public class UserRelation {
 
     public void setFriend(IMUser friend) {
         this.friend = friend;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

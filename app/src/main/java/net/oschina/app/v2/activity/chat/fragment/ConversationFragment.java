@@ -26,6 +26,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.activity.chat.MessageActivity;
 import net.oschina.app.v2.activity.chat.adapter.ConversationAdapter;
 import net.oschina.app.v2.base.BaseTabFragment;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
@@ -327,8 +328,15 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
     public void onItemClick(View view) {
         int position = mRecycleView.getChildPosition(view);
         EMConversation conversation = (EMConversation) mAdapter.getItem(position);
+        if(conversation.isGroup()){
+            if(conversation.getType() == EMConversation.EMConversationType.ChatRoom){
 
-        UIHelper.showChatMessage(getActivity(), conversation.getUserName());
+            } else {
+                UIHelper.showChatMessage(getActivity(), conversation.getUserName(),"nick", MessageFragment.CHATTYPE_GROUP);
+            }
+        } else {
+            UIHelper.showChatMessage(getActivity(), conversation.getUserName(),"nick", MessageFragment.CHATTYPE_SINGLE);
+        }
     }
 
     @Override

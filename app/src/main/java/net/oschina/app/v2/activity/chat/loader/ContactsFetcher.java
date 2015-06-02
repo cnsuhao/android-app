@@ -3,6 +3,7 @@ package net.oschina.app.v2.activity.chat.loader;
 import android.util.Log;
 
 import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.model.chat.IMGroup;
 import net.oschina.app.v2.model.chat.IMUser;
 
 import java.util.List;
@@ -62,6 +63,28 @@ public class ContactsFetcher extends NameWorker {
                     Log.e(TAG,"查询用户成功");
                     if (list != null && list.size() > 0) {
                         Log.e(TAG, "存在用户准备赋值:" + list.get(0).getName());
+                        executeOnQueryRemoteSuccess(list.get(0), awareView);
+                        //save to cache
+                        if(mNameCache != null){
+                            mNameCache.addBitmapToCache(data,list.get(0));
+                        }
+                    }
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    Log.e(TAG,"查询用户失败");
+                }
+            });
+        } else if(CacheType.GROUP.equals(cacheType)) {
+            Log.e(TAG,"queryValueFromRemoteDB:"+data);
+            BmobQuery<IMGroup> query = new BmobQuery<>();
+            query.addWhereEqualTo("imId",data);
+            query.findObjects(AppContext.context(), new FindListener<IMGroup>() {
+                @Override
+                public void onSuccess(List<IMGroup> list) {
+                    Log.e(TAG,"查询群组成功");
+                    if (list != null && list.size() > 0) {
                         executeOnQueryRemoteSuccess(list.get(0), awareView);
                         //save to cache
                         if(mNameCache != null){

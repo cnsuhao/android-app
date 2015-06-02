@@ -325,7 +325,8 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
                 UIHelper.showAddNewFriend(this);
                 break;
             case R.id.main_menu_group:
-                UIHelper.showChatMessage(this,"9236292c5195efb073e106ba97ed2909");
+                //UIHelper.showChatMessage(this,"9236292c5195efb073e106ba97ed2909");
+                UIHelper.showAddGroup(this);
                 break;
         }
         return true;
@@ -627,7 +628,12 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
         @Override
         public void onInvitationReceived(String groupId, String groupName, final String inviter, String reason) {
             boolean hasGroup = false;
-
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AppContext.showToastShort("收到群组邀请;"+inviter);
+                }
+            });
         }
 
         @Override
