@@ -10,6 +10,7 @@ import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.chat.IMGroup;
+import net.oschina.app.v2.ui.AvatarView;
 
 /**
  * Created by Tonlin on 2015/6/2.
@@ -32,19 +33,20 @@ public class GroupAdapter extends RecycleBaseAdapter {
         ViewHolder vh = (ViewHolder)holder;
 
         IMGroup item = (IMGroup) getItem(position);
-        ImageLoader.getInstance().displayImage(item.getPhoto(),vh.avatar);
+        //ImageLoader.getInstance().displayImage(item.getPhoto(),vh.avatar);
+        vh.avatar.setAvatarUrl(item.getPhoto());
         vh.name.setText(item.getName());
     }
 
     public static class ViewHolder extends RecycleBaseAdapter.ViewHolder {
 
         private TextView name;
-        private ImageView avatar;
+        private AvatarView avatar;
 
         public ViewHolder(int viewType, View v) {
             super(viewType, v);
             name = (TextView) v.findViewById(R.id.tv_name);
-            avatar = (ImageView) v.findViewById(R.id.iv_avatar);
+            avatar = (AvatarView) v.findViewById(R.id.iv_avatar);
         }
     }
 }

@@ -127,7 +127,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name="net.oschina.app.v2.activity.chat.AddGroupActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait"/>
         <activity android:name="net.oschina.app.v2.activity.chat.GroupActivity"
             android:configChanges="keyboardHidden|orientation"

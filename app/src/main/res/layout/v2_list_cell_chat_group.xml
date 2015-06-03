@@ -3,9 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/list_item_background"
-    android:padding="8dp">
+    android:paddingLeft="@dimen/space_16"
+    android:paddingBottom="@dimen/space_12"
+    android:paddingTop="@dimen/space_12"
+    android:paddingRight="@dimen/space_8">
 
-    <ImageView
+    <net.oschina.app.v2.ui.AvatarView
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        fresco:placeholderImage="@drawable/ic_default_avatar"
+        fresco:roundAsCircle="true"
         android:id="@+id/iv_avatar"
         android:layout_width="@dimen/size_avatar"
         android:layout_height="@dimen/size_avatar"
@@ -18,7 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_centerVertical="true"
-        android:text="sdd"
         android:layout_toRightOf="@id/iv_avatar"
         android:textColor="@color/main_black"
         android:textSize="16sp" />

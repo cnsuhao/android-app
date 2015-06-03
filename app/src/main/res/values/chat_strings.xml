@@ -29,5 +29,9 @@
     <string name="add_friend">发送</string>
     <string name="add_friend_invite_message">Hello,加个好友吧</string>
 
+
+    <string name="chat_tip_create_group_failed">无法创建群组</string>
+    <string name="chat_tip_selecte_users">请先选择要聊天的用户</string>
+
     <string name="receive_the_passthrough">收到透传：action：</string>
 </resources>

@@ -3,6 +3,7 @@ package net.oschina.app.v2.activity.chat.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,8 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddGroupAdapter extends BaseAdapter implements PinnedHeaderListView.PinnedHeaderAdapter,
-        OnScrollListener {
+        OnScrollListener ,Filterable{
 
+    private List<IMUser> mSourceList = new ArrayList<>();
     private List<IMUser> mList;
     private MySectionIndexer mIndexer;
     private Context mContext;
@@ -37,9 +41,11 @@ public class AddGroupAdapter extends BaseAdapter implements PinnedHeaderListView
     private LayoutInflater mInflater;
     private DisplayImageOptions options;
     private List<IMUser> mSelecteds = new ArrayList<>();
+    private UserNameFilter mFilter;
 
     public AddGroupAdapter(List<IMUser> mList, MySectionIndexer mIndexer,
                            Context mContext) {
+        this.mSourceList = mList;
         this.mList = mList;
         this.mIndexer = mIndexer;
         this.mContext = mContext;
@@ -119,6 +125,14 @@ public class AddGroupAdapter extends BaseAdapter implements PinnedHeaderListView
         return mSelecteds;
     }
 
+    @Override
+    public Filter getFilter() {
+        if (null == mFilter) {
+            mFilter = new UserNameFilter();
+        }
+        return mFilter;
+    }
+
     public static class ViewHolder {
         public View item;
         public TextView group_title;
@@ -176,7 +190,59 @@ public class AddGroupAdapter extends BaseAdapter implements PinnedHeaderListView
         mIndexer = indexer;
     }
 
+    public List<IMUser> getSourcList(){
+        return mSourceList;
+    }
+
     public void setData(List<IMUser> data) {
+        mSourceList = data;
         mList = data;
+    }
+
+    public void setFilter(List<IMUser> list) {
+        mList = list;
+        notifyDataSetChanged();
+    }
+
+    // 自定义Filter类
+    class UserNameFilter extends Filter {
+        @Override
+        // 该方法在子线程中执行
+        // 自定义过滤规则
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+
+            List<IMUser> newValues = new ArrayList<>();
+            String filterString = constraint.toString().trim()
+                    .toLowerCase();
+
+            // 如果搜索框内容为空，就恢复原始数据
+            if (TextUtils.isEmpty(filterString)) {
+                newValues = mSourceList;
+            } else {
+                // 过滤出新数据
+                for (IMUser user : mSourceList) {
+                    if (-1 != user.getName().toLowerCase().indexOf(filterString)) {
+                        newValues.add(user);
+                    }
+                }
+            }
+
+            results.values = newValues;
+            results.count = newValues.size();
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint,
+                                      FilterResults results) {
+            mList = (List<IMUser>) results.values;
+            if (results.count > 0) {
+                notifyDataSetChanged();  // 通知数据发生了改变
+            } else {
+                notifyDataSetInvalidated(); // 通知数据失效
+            }
+        }
     }
 }

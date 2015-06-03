@@ -14,6 +14,7 @@
         android:paddingTop="10dp">
 
         <EditText
+            android:id="@+id/et_search"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@drawable/chat_textfield_selector"
@@ -53,5 +54,11 @@
             android:layout_alignParentRight="true"
             android:background="#00000000" />
     </RelativeLayout>
+
+    <net.oschina.app.v2.ui.empty.EmptyLayout
+        android:id="@+id/error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 </LinearLayout>
 

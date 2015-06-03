@@ -3,5 +3,5 @@
 
     <item android:drawable="@drawable/btn_white_normal" android:state_focused="false" android:state_pressed="false"/>
     <item android:drawable="@drawable/btn_white_pressed" android:state_pressed="true"/>
-
+    <item android:drawable="@drawable/btn_white_pressed" android:state_enabled="false"/>
 </selector> 
