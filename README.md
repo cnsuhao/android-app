@@ -5,14 +5,14 @@
 #介绍
 哎嘛fork于最初版的OSC官方客户端，在此基础上进行了代码大量的UI界面修改和代码重构并于2014/09/18发布第一个版本。
 如果同学你对哎嘛感兴趣，你可以star它关注它的最新动态。如果你有更多宝贵的时间来阅读哎嘛的代码，你将可以学习到如下几大部分内容：
-1. 如何搭建一个Material Design设计风格的APP。
-2. 如何使用FragmentTabHost、Fragment来搭建程序界面的主题框架
-3. 如何创建一个通用的数据适配器BaseAdapter。
-4. 如何使用async-http-loader请求网络数据
-5. 如何解析XML数据
-6. 如何缓存网络数据
-7. 如何使用ImageLoader、 Fresco 显示图片
-8. 如何快速搭建一个IM应用
+ 1. 如何搭建一个Material Design设计风格的APP。
+ 2. 如何使用FragmentTabHost、Fragment来搭建程序界面的主题框架
+ 3. 如何创建一个通用的数据适配器BaseAdapter。
+ 4. 如何使用async-http-loader请求网络数据
+ 5. 如何解析XML数据
+ 6. 如何缓存网络数据
+ 7. 如何使用ImageLoader、 Fresco 显示图片
+ 8. 如何快速搭建一个IM应用
 
 ## 开源协议
 本项目采用 GPL 授权协议，欢迎大家在这个基础上进行改进，并与大家分享。
