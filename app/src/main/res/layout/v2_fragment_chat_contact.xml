@@ -18,4 +18,10 @@
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
         android:background="#00000000" />
+
+    <net.oschina.app.v2.ui.empty.EmptyLayout
+        android:id="@+id/error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 </RelativeLayout>

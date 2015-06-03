@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="2dp"
-    android:paddingLeft="8dp"
+    android:paddingLeft="@dimen/space_16"
     android:paddingTop="2dp"
     android:id="@+id/group_title"
     android:text="A"

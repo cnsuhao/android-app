@@ -1,0 +1,342 @@
+-- Merging decision tree log ---
+manifest
+ADDED from AndroidManifest.xml:2:1
+	xmlns:android
+		ADDED from AndroidManifest.xml:2:11
+	package
+		ADDED from AndroidManifest.xml:3:5
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+	android:versionName
+		ADDED from AndroidManifest.xml:5:5
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+	android:versionCode
+		ADDED from AndroidManifest.xml:4:5
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+uses-sdk
+ADDED from AndroidManifest.xml:7:5
+MERGED from android-app:library-photoview:unspecified:7:5
+MERGED from android-app:library-pulltorefresh:unspecified:7:5
+MERGED from android-app:library-viewpager-indicator:unspecified:7:5
+MERGED from com.android.support:appcompat-v7:22.1.1:20:5
+MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from android-app:library-sticky-listheaders:unspecified:7:5
+MERGED from android-app:library-umengshare:unspecified:7:5
+MERGED from com.android.support:recyclerview-v7:21.0.3:15:5
+MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from com.github.ksoichiro:android-observablescrollview:1.5.0:21:5
+MERGED from com.android.support:recyclerview-v7:21.0.3:15:5
+MERGED from com.android.support:support-v4:22.1.1:20:5
+	android:targetSdkVersion
+		ADDED from AndroidManifest.xml:9:9
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+	android:minSdkVersion
+		ADDED from AndroidManifest.xml:8:9
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+uses-permission#android.permission.INTERNET
+ADDED from AndroidManifest.xml:11:5
+	android:name
+		ADDED from AndroidManifest.xml:11:22
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from AndroidManifest.xml:12:5
+	android:name
+		ADDED from AndroidManifest.xml:12:22
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from AndroidManifest.xml:13:5
+	android:name
+		ADDED from AndroidManifest.xml:13:22
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from AndroidManifest.xml:14:5
+	android:name
+		ADDED from AndroidManifest.xml:14:22
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from AndroidManifest.xml:15:5
+	android:name
+		ADDED from AndroidManifest.xml:15:22
+uses-permission#android.permission.RESTART_PACKAGES
+ADDED from AndroidManifest.xml:16:5
+	android:name
+		ADDED from AndroidManifest.xml:16:22
+uses-feature#android.hardware.camera
+ADDED from AndroidManifest.xml:18:5
+	android:required
+		ADDED from AndroidManifest.xml:20:9
+	android:name
+		ADDED from AndroidManifest.xml:19:9
+uses-feature#android.hardware.camera.front
+ADDED from AndroidManifest.xml:21:5
+	android:required
+		ADDED from AndroidManifest.xml:23:9
+	android:name
+		ADDED from AndroidManifest.xml:22:9
+uses-feature#android.hardware.camera.autofocus
+ADDED from AndroidManifest.xml:24:5
+	android:required
+		ADDED from AndroidManifest.xml:26:9
+	android:name
+		ADDED from AndroidManifest.xml:25:9
+uses-feature#android.hardware.camera.flash
+ADDED from AndroidManifest.xml:27:5
+	android:required
+		ADDED from AndroidManifest.xml:29:9
+	android:name
+		ADDED from AndroidManifest.xml:28:9
+uses-feature#android.hardware.screen.landscape
+ADDED from AndroidManifest.xml:30:5
+	android:name
+		ADDED from AndroidManifest.xml:30:19
+uses-feature#android.hardware.wifi
+ADDED from AndroidManifest.xml:31:5
+	android:required
+		ADDED from AndroidManifest.xml:33:9
+	android:name
+		ADDED from AndroidManifest.xml:32:9
+uses-feature#android.hardware.touchscreen
+ADDED from AndroidManifest.xml:34:5
+	android:required
+		ADDED from AndroidManifest.xml:36:9
+	android:name
+		ADDED from AndroidManifest.xml:35:9
+supports-screens
+ADDED from AndroidManifest.xml:38:5
+	android:largeScreens
+		ADDED from AndroidManifest.xml:40:9
+	android:anyDensity
+		ADDED from AndroidManifest.xml:39:9
+	android:normalScreens
+		ADDED from AndroidManifest.xml:41:9
+	android:xlargeScreens
+		ADDED from AndroidManifest.xml:43:9
+	android:smallScreens
+		ADDED from AndroidManifest.xml:42:9
+application
+ADDED from AndroidManifest.xml:45:5
+MERGED from android-app:library-photoview:unspecified:11:5
+MERGED from android-app:library-pulltorefresh:unspecified:11:5
+MERGED from com.android.support:appcompat-v7:22.1.1:22:5
+MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:recyclerview-v7:21.0.3:17:5
+MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:recyclerview-v7:21.0.3:17:5
+MERGED from com.android.support:support-v4:22.1.1:22:5
+	android:label
+		ADDED from AndroidManifest.xml:49:9
+	android:allowBackup
+		ADDED from AndroidManifest.xml:47:9
+	android:icon
+		ADDED from AndroidManifest.xml:48:9
+	android:hardwareAccelerated
+		ADDED from android-app:library-photoview:unspecified:13:9
+	android:theme
+		ADDED from AndroidManifest.xml:50:9
+	android:name
+		ADDED from AndroidManifest.xml:46:9
+activity#net.oschina.app.v2.activity.SplashActivity
+ADDED from AndroidManifest.xml:51:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:53:13
+	android:theme
+		ADDED from AndroidManifest.xml:54:13
+	android:name
+		ADDED from AndroidManifest.xml:52:13
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:55:13
+action#android.intent.action.MAIN
+ADDED from AndroidManifest.xml:56:17
+	android:name
+		ADDED from AndroidManifest.xml:56:25
+category#android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:58:17
+	android:name
+		ADDED from AndroidManifest.xml:58:27
+activity#net.oschina.app.v2.activity.oauth.AuthorizeActivity
+ADDED from AndroidManifest.xml:61:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:63:13
+	android:theme
+		ADDED from AndroidManifest.xml:64:13
+	android:name
+		ADDED from AndroidManifest.xml:62:13
+activity#net.oschina.app.v2.activity.user.LoginActivity
+ADDED from AndroidManifest.xml:65:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:69:13
+	android:configChanges
+		ADDED from AndroidManifest.xml:67:13
+	android:theme
+		ADDED from AndroidManifest.xml:68:13
+	android:name
+		ADDED from AndroidManifest.xml:66:13
+activity#net.oschina.app.v2.activity.MainActivity
+ADDED from AndroidManifest.xml:70:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:73:13
+	android:configChanges
+		ADDED from AndroidManifest.xml:72:13
+	android:name
+		ADDED from AndroidManifest.xml:71:13
+activity#net.oschina.app.v2.activity.news.DetailActivity
+ADDED from AndroidManifest.xml:74:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:78:13
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:77:13
+	android:configChanges
+		ADDED from AndroidManifest.xml:76:13
+	android:name
+		ADDED from AndroidManifest.xml:75:13
+activity#net.oschina.app.v2.activity.common.SimpleBackActivity
+ADDED from AndroidManifest.xml:79:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:82:13
+	android:configChanges
+		ADDED from AndroidManifest.xml:81:13
+	android:name
+		ADDED from AndroidManifest.xml:80:13
+activity#net.oschina.app.v2.activity.search.SearchActivity
+ADDED from AndroidManifest.xml:83:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:86:13
+	android:configChanges
+		ADDED from AndroidManifest.xml:85:13
+	android:name
+		ADDED from AndroidManifest.xml:84:13
+activity#net.oschina.app.v2.activity.image.ImagePreviewActivity
+ADDED from AndroidManifest.xml:87:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:90:13
+	android:configChanges
+		ADDED from AndroidManifest.xml:89:13
+	android:theme
+		ADDED from AndroidManifest.xml:91:13
+	android:name
+		ADDED from AndroidManifest.xml:88:13
+activity#com.umeng.update.UpdateDialogActivity
+ADDED from AndroidManifest.xml:92:9
+	android:theme
+		ADDED from AndroidManifest.xml:94:13
+	android:name
+		ADDED from AndroidManifest.xml:93:13
+activity#com.umeng.fb.ConversationActivity
+ADDED from AndroidManifest.xml:95:9
+	android:theme
+		ADDED from AndroidManifest.xml:97:13
+	android:name
+		ADDED from AndroidManifest.xml:96:13
+activity#com.umeng.fb.ContactActivity
+ADDED from AndroidManifest.xml:98:9
+	android:theme
+		ADDED from AndroidManifest.xml:100:13
+	android:name
+		ADDED from AndroidManifest.xml:99:13
+activity#com.tencent.tauth.AuthActivity
+ADDED from AndroidManifest.xml:102:9
+	android:noHistory
+		ADDED from AndroidManifest.xml:105:13
+	android:name
+		ADDED from AndroidManifest.xml:103:13
+	android:launchMode
+		ADDED from AndroidManifest.xml:104:13
+intent-filter#android.intent.action.VIEW+android.intent.category.BROWSABLE+android.intent.category.DEFAULT
+ADDED from AndroidManifest.xml:106:13
+action#android.intent.action.VIEW
+ADDED from AndroidManifest.xml:107:17
+	android:name
+		ADDED from AndroidManifest.xml:107:25
+category#android.intent.category.DEFAULT
+ADDED from AndroidManifest.xml:109:17
+	android:name
+		ADDED from AndroidManifest.xml:109:27
+category#android.intent.category.BROWSABLE
+ADDED from AndroidManifest.xml:110:17
+	android:name
+		ADDED from AndroidManifest.xml:110:27
+data
+ADDED from AndroidManifest.xml:112:17
+	android:scheme
+		ADDED from AndroidManifest.xml:112:23
+activity#com.tencent.connect.common.AssistActivity
+ADDED from AndroidManifest.xml:115:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:117:13
+	android:theme
+		ADDED from AndroidManifest.xml:118:13
+	android:name
+		ADDED from AndroidManifest.xml:116:13
+service#net.oschina.app.v2.service.ServerTaskService
+ADDED from AndroidManifest.xml:121:9
+	android:name
+		ADDED from AndroidManifest.xml:121:18
+intent-filter#net.oschina.app.v2.ACTION_PUBLIC_BLOG_COMMENT
+ADDED from AndroidManifest.xml:122:13
+action#net.oschina.app.v2.ACTION_PUBLIC_BLOG_COMMENT
+ADDED from AndroidManifest.xml:123:17
+	android:name
+		ADDED from AndroidManifest.xml:123:25
+intent-filter#net.oschina.app.v2.ACTION_PUBLIC_COMMENT
+ADDED from AndroidManifest.xml:125:13
+action#net.oschina.app.v2.ACTION_PUBLIC_COMMENT
+ADDED from AndroidManifest.xml:126:17
+	android:name
+		ADDED from AndroidManifest.xml:126:25
+intent-filter#net.oschina.app.v2.ACTION_PUBLIC_POST
+ADDED from AndroidManifest.xml:128:13
+action#net.oschina.app.v2.ACTION_PUBLIC_POST
+ADDED from AndroidManifest.xml:129:17
+	android:name
+		ADDED from AndroidManifest.xml:129:25
+intent-filter#net.oschina.app.v2.ACTION_PUBLIC_TWEET
+ADDED from AndroidManifest.xml:131:13
+action#net.oschina.app.v2.ACTION_PUBLIC_TWEET
+ADDED from AndroidManifest.xml:132:17
+	android:name
+		ADDED from AndroidManifest.xml:132:25
+receiver#net.oschina.app.v2.broadcast.AlarmReceiver
+ADDED from AndroidManifest.xml:136:9
+	android:name
+		ADDED from AndroidManifest.xml:136:19
+receiver#net.oschina.app.v2.broadcast.BootReceiver
+ADDED from AndroidManifest.xml:138:9
+	android:name
+		ADDED from AndroidManifest.xml:138:19
+intent-filter#android.intent.action.BOOT_COMPLETED
+ADDED from AndroidManifest.xml:139:13
+action#android.intent.action.BOOT_COMPLETED
+ADDED from AndroidManifest.xml:140:17
+	android:name
+		ADDED from AndroidManifest.xml:140:25
+service#net.oschina.app.v2.service.NoticeService
+ADDED from AndroidManifest.xml:145:9
+	android:process
+		ADDED from AndroidManifest.xml:147:13
+	android:name
+		ADDED from AndroidManifest.xml:146:13
+service#com.umeng.update.net.DownloadingService
+ADDED from AndroidManifest.xml:148:9
+	android:process
+		ADDED from AndroidManifest.xml:150:13
+	android:name
+		ADDED from AndroidManifest.xml:149:13
+meta-data#UMENG_APPKEY
+ADDED from AndroidManifest.xml:152:9
+	android:name
+		ADDED from AndroidManifest.xml:153:13
+	android:value
+		ADDED from AndroidManifest.xml:154:13
+meta-data#UMENG_CHANNEL
+ADDED from AndroidManifest.xml:156:9
+	android:name
+		ADDED from AndroidManifest.xml:157:13
+	android:value
+		ADDED from AndroidManifest.xml:158:13
+activity#android.support.v7.widget.TestActivity
+ADDED from com.android.support:recyclerview-v7:21.0.3:18:9
+MERGED from com.android.support:recyclerview-v7:21.0.3:18:9
+	android:label
+		ADDED from com.android.support:recyclerview-v7:21.0.3:18:19
+	android:name
+		ADDED from com.android.support:recyclerview-v7:21.0.3:18:60

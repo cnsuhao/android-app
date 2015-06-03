@@ -11,6 +11,7 @@ import com.tonlin.osc.happy.R;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.chat.IMUser;
 import net.oschina.app.v2.model.chat.Invite;
+import net.oschina.app.v2.ui.AvatarView;
 
 /**
  * Created by Tonlin on 2015/6/1.
@@ -43,7 +44,10 @@ public class NewFriendAdapter extends RecycleBaseAdapter {
 
         ViewHolder vh = (ViewHolder) holder;
         vh.name.setText(item.getFrom().getName());
-        ImageLoader.getInstance().displayImage(item.getFrom().getPhoto(), vh.avatar);
+        vh.message.setText(item.getMessage());
+
+        //ImageLoader.getInstance().displayImage(item.getFrom().getPhoto(), vh.avatar);
+        vh.avatar.setAvatarUrl(item.getFrom().getPhoto());
 
         vh.accept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,14 +61,15 @@ public class NewFriendAdapter extends RecycleBaseAdapter {
 
     public static class ViewHolder extends RecycleBaseAdapter.ViewHolder {
 
-        private TextView name, accept;
-        private ImageView avatar;
+        private TextView name, accept,message;
+        private AvatarView avatar;
 
         public ViewHolder(int viewType, View v) {
             super(viewType, v);
             accept = (TextView) v.findViewById(R.id.tv_accept);
-            avatar = (ImageView) v.findViewById(R.id.iv_avatar);
+            avatar = (AvatarView) v.findViewById(R.id.iv_avatar);
             name = (TextView) v.findViewById(R.id.tv_name);
+            message = (TextView) v.findViewById(R.id.tv_message);
         }
     }
 }

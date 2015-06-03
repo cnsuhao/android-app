@@ -7,7 +7,7 @@ import cn.bmob.v3.BmobObject;
  */
 public class GroupUserRelation extends BmobObject{
     private IMUser member;
-    private IMUser owner;//DB²éÑ¯ÏŞÖÆ
+    private IMUser owner;//DBæŸ¥è¯¢é™åˆ¶
     private IMGroup group;
     private int sate;
 

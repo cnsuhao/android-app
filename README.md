@@ -2,6 +2,8 @@
 ===========
 [![屏幕截图](http://git.oschina.net/tonlin/android-app/raw/master/screenshots/screen_shots.jpg)](http://zhushou.360.cn/detail/index/soft_id/1987733)
 
+哎嘛fork于最初版的OSC官方客户端，在此基础上进行了代码大量的UI界面修改和代码重构。
+
 
 ## 开源协议
 本项目采用 GPL 授权协议，欢迎大家在这个基础上进行改进，并与大家分享。

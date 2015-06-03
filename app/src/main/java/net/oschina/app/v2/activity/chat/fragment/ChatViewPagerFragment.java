@@ -28,8 +28,8 @@ public class ChatViewPagerFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.v2_fragment_viewpager2, container,
-                false);
+
+        View view = inflater.inflate(R.layout.v2_fragment_viewpager2, container,false);
         //mTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
         Activity parentActivity = getActivity();
         if (parentActivity instanceof IMainTab) {
@@ -70,6 +70,7 @@ public class ChatViewPagerFragment extends Fragment implements
             public void onPageScrollStateChanged(int state) {
             }
         });
+
         return view;
     }
 

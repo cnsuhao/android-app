@@ -4,6 +4,7 @@ import android.os.Environment;
 
 public class Constants {
     public static final String INTENT_ACTION_LOGOUT = "com.tonlin.osc.happy.LOGOUT";
+    public static final String INTENT_ACTION_LOGIN = "com.tonlin.osc.happy.LOGIN";
     public static final String INTENT_ACTION_COMMENT_CHANGED = "com.tonlin.osc.happy.COMMENT_CHANGED";
     public static final String INTENT_ACTION_NOTICE = "com.tonlin.osc.happy.action.APPWIDGET_UPDATE";
 

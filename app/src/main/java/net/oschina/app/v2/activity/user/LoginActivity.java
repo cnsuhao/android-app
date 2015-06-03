@@ -3,6 +3,7 @@ package net.oschina.app.v2.activity.user;
 import java.io.ByteArrayInputStream;
 
 import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.activity.chat.ChatHelper;
 import net.oschina.app.v2.api.ApiHttpClient;
 import net.oschina.app.v2.api.remote.UserApi;
 import net.oschina.app.v2.base.BaseActivity;
@@ -32,7 +33,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, ChatHelper.AsyncAccountCallback {
 
 	public static final int REQUEST_CODE_INIT = 0;
 	private static final String BUNDLE_KEY_REQUEST_CODE = "BUNDLE_KEY_REQUEST_CODE";
@@ -43,6 +44,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 	private Button mBtnLogin;
 	private int requestCode = REQUEST_CODE_INIT;
 	private String mUserName, mPassword;
+	private ChatHelper mChatHelper;
 
 	private TextWatcher mUserNameWatcher = new SimpleTextWatcher() {
 		@Override
@@ -90,7 +92,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 					// 保存登录信息
 					AppContext.instance().saveLoginInfo(user);
 					hideWaitDialog();
-					handleLoginSuccess();
+					loginDBIM();
+					//handleLoginSuccess();
 				} else {
 					AppContext.instance().cleanLoginInfo();
 					hideWaitDialog();
@@ -109,6 +112,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 			AppContext.showToast(R.string.tip_login_error_for_network);
 		}
 	};
+
+
+	private void loginDBIM() {
+		showWaitDialog("正在登陆IM...");
+		mChatHelper.asyncAccount();
+	}
 
 	protected int getLayoutId() {
 		return R.layout.v2_activity_login;
@@ -130,6 +139,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 	}
 
 	@Override
+	protected void onDestroy() {
+		mChatHelper.unregisterCallback(this);
+		super.onDestroy();
+	}
+
+	@Override
 	protected void init(Bundle savedInstanceState) {
 		super.init(savedInstanceState);
 		Intent data = getIntent();
@@ -138,6 +153,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 					REQUEST_CODE_INIT);
 		}
 		initViews();
+		mChatHelper = ChatHelper.getInstance(getApplicationContext());
+		mChatHelper.registerCallback(this);
 	}
 
 	private void initViews() {
@@ -219,5 +236,24 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 		super.onPause();
 		MobclickAgent.onPageEnd(LOGIN_SCREEN);
 		MobclickAgent.onPause(this);
+	}
+
+	@Override
+	public void onLoginSuccess() {
+		hideWaitDialog();
+		handleLoginSuccess();
+	}
+
+	@Override
+	public void onNeedLogin() {
+		AppContext.showToastShort("你需要重新登录");
+		hideWaitDialog();
+	}
+
+	@Override
+	public void onLoginFailed(String msg) {
+		AppContext.showToastShort("登陆IM失败了");
+		hideWaitDialog();
+		handleLoginSuccess();
 	}
 }

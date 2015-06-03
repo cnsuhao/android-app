@@ -1,7 +1,10 @@
 package net.oschina.app.v2.activity.chat.fragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.MySwipeRefreshLayout;
@@ -26,9 +29,11 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.activity.chat.ChatHelper;
 import net.oschina.app.v2.activity.chat.MessageActivity;
 import net.oschina.app.v2.activity.chat.adapter.ConversationAdapter;
 import net.oschina.app.v2.base.BaseTabFragment;
+import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.easemob.controller.HXSDKHelper;
 import net.oschina.app.v2.model.User;
@@ -60,13 +65,38 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
     protected LinearLayoutManager mLayoutManager;
     protected ConversationAdapter mAdapter;
     protected EmptyLayout mErrorLayout;
-    protected int mStoreEmptyState = -1;
-    protected String mStoreEmptyMessage;
 
     protected int mCurrentPage = 0;
+    private View mRootView;
+
+    private boolean mIsWatingLogin;
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mErrorLayout != null) {
+                mIsWatingLogin = true;
+                mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+                mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+            }
+        }
+    };
 
     public int getLayoutRes() {
         return R.layout.v2_fragment_swipe_refresh_recyclerview;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
+        getActivity().registerReceiver(mReceiver, filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        getActivity().unregisterReceiver(mReceiver);
+        super.onDestroy();
     }
 
     @Override
@@ -89,12 +119,19 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
         EMChatManager.getInstance().unregisterEventListener(this);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(getLayoutRes(), container, false);
-        initViews(view);
-        return view;
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (mRootView == null) {
+            mRootView = inflater.inflate(getLayoutRes(), container, false);
+            initViews(mRootView);
+        } else {
+            ViewGroup parent = (ViewGroup) mRootView.getParent();
+            if (parent != null) {
+                parent.removeView(mRootView);
+            }
+        }
+        return mRootView;
     }
 
     protected void initViews(View view) {
@@ -103,10 +140,11 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
 
             @Override
             public void onClick(View v) {
-                mCurrentPage = 0;
-                mState = STATE_REFRESH;
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                //requestData(true);
+                if (!mIsWatingLogin) {
+                    refresh();
+                } else {
+                    UIHelper.showLogin(getActivity());
+                }
             }
         });
 
@@ -143,23 +181,24 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
         if (parentActivity instanceof ObservableScrollViewCallbacks) {
             mRecycleView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
         }
-
-        executeWithAccount();
+        //executeWithAccount();
+        refresh();
     }
 
     private void executeWithAccount() {
         final User user = AppContext.getLoginInfo();
-        if (!AppContext.instance().isLogin()
-                || user == null || TextUtils.isEmpty(user.getAccount()) || TextUtils.isEmpty(user.getPwd())) {
-            AppContext.showToastShort("需要登录");
+        if (ChatHelper.needLogin()) {
+            mIsWatingLogin = true;
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+            mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
         } else {
+            mIsWatingLogin = false;
             IMUser iu = IMUser.getCurrentUser(getActivity(), IMUser.class);
             if (iu != null && AppContext.hasHXLogin()) {
                 AppContext.showToastShort("均已登陆");
                 refresh();
                 return;
             }
-
             // 检查是否注册过
             BmobQuery<IMUser> u = new BmobQuery<>();
             u.addWhereEqualTo("username", user.getAccount());
@@ -187,6 +226,19 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
         }
     }
 
+
+    private void refresh() {
+        if (ChatHelper.needLogin()) {
+            mIsWatingLogin = true;
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+            mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+            mSwipeRefresh.setRefreshing(false);
+        } else {
+            mIsWatingLogin = false;
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+            new LoadConversationTask(this).execute();
+        }
+    }
 
     private void registerDB(final IMUser user) {
         user.signUp(getActivity(), new SaveListener() {
@@ -219,7 +271,7 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
 
                 @Override
                 public void onFailure(int i, String s) {
-                    AppContext.showToastShort("登陆失败 DB"+s);
+                    AppContext.showToastShort("登陆失败 DB" + s);
                 }
             });
         }
@@ -260,10 +312,6 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
 
                     }
                 });
-    }
-
-    private void refresh() {
-        new LoadConversationTask(this).execute();
     }
 
 
@@ -328,14 +376,14 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
     public void onItemClick(View view) {
         int position = mRecycleView.getChildPosition(view);
         EMConversation conversation = (EMConversation) mAdapter.getItem(position);
-        if(conversation.isGroup()){
-            if(conversation.getType() == EMConversation.EMConversationType.ChatRoom){
+        if (conversation.isGroup()) {
+            if (conversation.getType() == EMConversation.EMConversationType.ChatRoom) {
 
             } else {
-                UIHelper.showChatMessage(getActivity(), conversation.getUserName(),"nick", MessageFragment.CHATTYPE_GROUP);
+                UIHelper.showChatMessage(getActivity(), conversation.getUserName(), "nick", MessageFragment.CHATTYPE_GROUP);
             }
         } else {
-            UIHelper.showChatMessage(getActivity(), conversation.getUserName(),"nick", MessageFragment.CHATTYPE_SINGLE);
+            UIHelper.showChatMessage(getActivity(), conversation.getUserName(), "nick", MessageFragment.CHATTYPE_SINGLE);
         }
     }
 
@@ -343,7 +391,6 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
     public void onEvent(EMNotifierEvent event) {
         switch (event.getEvent()) {
             case EventNewMessage: {// 普通消息
-                Log.d("IMA-LOG", "onEvent: new message");
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -387,13 +434,18 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
             fragment.mAdapter.clear();
             fragment.mAdapter.addData(list);
             fragment.mSwipeRefresh.setRefreshing(false);
+            if (list.size() == 0) {
+                fragment.mErrorLayout.setErrorType(EmptyLayout.NODATA);
+            } else {
+                fragment.mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            }
         }
     }
 
     public static class RegisterIMTask extends WeakAsyncTask<Void,
             Void, Integer, ConversationFragment> {
 
-        private String imUserName,imPassword;
+        private String imUserName, imPassword;
         private User mUser;
 
         public RegisterIMTask(ConversationFragment fragment,

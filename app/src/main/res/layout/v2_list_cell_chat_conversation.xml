@@ -14,12 +14,13 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/space_16">
 
-        <ImageView
+        <net.oschina.app.v2.ui.AvatarView
+            xmlns:fresco="http://schemas.android.com/apk/res-auto"
             android:id="@+id/iv_avatar"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_default_avatar" />
+            fresco:roundAsCircle="true"
+            fresco:placeholderImage="@drawable/ic_default_avatar"/>
 
         <TextView
             android:id="@+id/tv_unread_msg_number"
@@ -41,9 +42,9 @@
         android:layout_toRightOf="@id/avatar_container"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/space_16"
+        android:paddingBottom="@dimen/space_12"
         android:paddingRight="@dimen/space_8"
-        android:paddingTop="@dimen/space_16">
+        android:paddingTop="@dimen/space_12">
 
         <TextView
             android:id="@+id/tv_time"

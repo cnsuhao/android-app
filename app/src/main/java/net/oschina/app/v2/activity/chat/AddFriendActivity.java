@@ -54,6 +54,7 @@ public class AddFriendActivity extends BaseActivity{
         mIbClear.setOnClickListener(this);
         mEtContent = (EditText) view.findViewById(R.id.et_content);
         mEtContent.setOnClickListener(this);
+        mEtContent.setHint(R.string.chat_add_friend_hint);
         mEtContent.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         mEtContent.addTextChangedListener(new SimpleTextWatcher() {
             @Override
@@ -95,7 +96,7 @@ public class AddFriendActivity extends BaseActivity{
     private void handleSearch() {
         String text = mEtContent.getText().toString();
         if(TextUtils.isEmpty(text)){
-            AppContext.showToastShort("please input nickname");
+            AppContext.showToastShort(R.string.chat_tip_please_input_nick_name);
             return;
         }
         TDevice.hideSoftKeyboard(mEtContent);

@@ -9,23 +9,11 @@ public class UserRelation extends BmobObject {
 
     private IMUser owner;
     private IMUser friend;
+    private boolean selected;
     private String sortKey;
 
-    private boolean selected;
+    public UserRelation() {
 
-    public UserRelation(){
-
-    }
-    public UserRelation(String sortKey){
-        this.sortKey = sortKey;
-    }
-
-    public String getSortKey() {
-        return sortKey;
-    }
-
-    public void setSortKey(String sortKey) {
-        this.sortKey = sortKey;
     }
 
     public IMUser getOwner() {
@@ -50,5 +38,13 @@ public class UserRelation extends BmobObject {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public String getSortKey() {
+        return sortKey;
+    }
+
+    public void setSortKey(String sortKey) {
+        this.sortKey = sortKey;
     }
 }

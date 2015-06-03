@@ -2,6 +2,7 @@ package net.oschina.app.v2.activity.chat.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,11 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 
+import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.chat.fragment.MySectionIndexer;
 import net.oschina.app.v2.model.chat.IMUser;
 import net.oschina.app.v2.model.chat.UserRelation;
+import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.ui.pinned.PinnedHeaderListView;
 
 import java.util.List;
@@ -25,14 +28,14 @@ import java.util.List;
 public class ContactAdapter extends BaseAdapter implements PinnedHeaderListView.PinnedHeaderAdapter,
         OnScrollListener {
 
-    private List<UserRelation> mList;
+    private List<IMUser> mList;
     private MySectionIndexer mIndexer;
     private Context mContext;
     private int mLocationPosition = -1;
     private LayoutInflater mInflater;
     private DisplayImageOptions options;
 
-    public ContactAdapter(List<UserRelation> mList, MySectionIndexer mIndexer,
+    public ContactAdapter(List<IMUser> mList, MySectionIndexer mIndexer,
                           Context mContext) {
         this.mList = mList;
         this.mIndexer = mIndexer;
@@ -68,7 +71,7 @@ public class ContactAdapter extends BaseAdapter implements PinnedHeaderListView.
             holder = new ViewHolder();
             holder.group_title = (TextView) view.findViewById(R.id.group_title);
             holder.name = (TextView) view.findViewById(R.id.tv_name);
-            holder.icon = (ImageView) view.findViewById(R.id.iv_icon);
+            holder.icon = (AvatarView) view.findViewById(R.id.iv_icon);
             holder.item = view.findViewById(R.id.ly_item);
             view.setTag(holder);
         } else {
@@ -76,7 +79,7 @@ public class ContactAdapter extends BaseAdapter implements PinnedHeaderListView.
             holder = (ViewHolder) view.getTag();
         }
 
-        UserRelation item = mList.get(position);
+        IMUser item = mList.get(position);
 
         int section = mIndexer.getSectionForPosition(position);
         if (mIndexer.getPositionForSection(section) == position) {
@@ -89,36 +92,30 @@ public class ContactAdapter extends BaseAdapter implements PinnedHeaderListView.
         if (position == 0) {
             holder.group_title.setVisibility(View.GONE);
             holder.name.setText(R.string.new_friend);
-            holder.icon.setBackgroundResource(R.drawable.ic_contact_add);
+            holder.icon.setImageBitmap(null);
+            holder.icon.setImageResource(R.drawable.ic_contact_add);
         } else if (position == 1) {
             holder.group_title.setVisibility(View.GONE);
             holder.name.setText(R.string.group_chat);
-            holder.icon.setBackgroundResource(R.drawable.ic_contact_group);
-        } else {
             holder.icon.setImageBitmap(null);
-            IMUser currentUser = IMUser.getCurrentUser(view.getContext(), IMUser.class);
-            if (currentUser != null) {
-                IMUser displayUser = null;
-                if (item.getFriend() != null && !item.getFriend().getObjectId().equals(currentUser.getObjectId())) {
-                    displayUser = item.getFriend();
-                }
-                if (item.getOwner() != null && !item.getOwner().getObjectId().equals(currentUser.getObjectId())) {
-                    displayUser = item.getOwner();
-                }
-                if (displayUser != null) {
-                    holder.name.setText(displayUser.getName());
-                    ImageLoader.getInstance().displayImage(displayUser.getPhoto(), holder.icon, options);
-                }
-            }
+            holder.icon.setImageResource(R.drawable.ic_contact_group);
+        } else {
+            holder.name.setText(item.getName());
+            //ImageLoader.getInstance().displayImage(displayUser.getPhoto(), holder.icon, options);
+            holder.icon.setAvatarUrl(item.getPhoto());
         }
         return view;
+    }
+
+    public static Uri getResourceUri(int resId) {
+        return Uri.parse("android.resource://" + AppContext.instance().getPackageName() + "/" + resId);
     }
 
     public static class ViewHolder {
         public View item;
         public TextView group_title;
         public TextView name;
-        public ImageView icon;
+        public AvatarView icon;
     }
 
     @Override
@@ -170,7 +167,7 @@ public class ContactAdapter extends BaseAdapter implements PinnedHeaderListView.
         mIndexer = indexer;
     }
 
-    public void setData(List<UserRelation> data) {
+    public void setData(List<IMUser> data) {
         mList = data;
     }
 }

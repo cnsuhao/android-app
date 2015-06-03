@@ -18,8 +18,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.activity.chat.fragment.MySectionIndexer;
+import net.oschina.app.v2.model.chat.Avatar;
 import net.oschina.app.v2.model.chat.IMUser;
 import net.oschina.app.v2.model.chat.UserRelation;
+import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.ui.pinned.PinnedHeaderListView;
 
 import java.util.ArrayList;
@@ -28,15 +30,15 @@ import java.util.List;
 public class AddGroupAdapter extends BaseAdapter implements PinnedHeaderListView.PinnedHeaderAdapter,
         OnScrollListener {
 
-    private List<UserRelation> mList;
+    private List<IMUser> mList;
     private MySectionIndexer mIndexer;
     private Context mContext;
     private int mLocationPosition = -1;
     private LayoutInflater mInflater;
     private DisplayImageOptions options;
-    private List<UserRelation> mSelecteds = new ArrayList<>();
+    private List<IMUser> mSelecteds = new ArrayList<>();
 
-    public AddGroupAdapter(List<UserRelation> mList, MySectionIndexer mIndexer,
+    public AddGroupAdapter(List<IMUser> mList, MySectionIndexer mIndexer,
                            Context mContext) {
         this.mList = mList;
         this.mIndexer = mIndexer;
@@ -76,7 +78,7 @@ public class AddGroupAdapter extends BaseAdapter implements PinnedHeaderListView
             holder = new ViewHolder();
             holder.group_title = (TextView) view.findViewById(R.id.group_title);
             holder.name = (TextView) view.findViewById(R.id.tv_name);
-            holder.icon = (ImageView) view.findViewById(R.id.iv_icon);
+            holder.icon = (AvatarView) view.findViewById(R.id.iv_icon);
             holder.item = view.findViewById(R.id.ly_item);
             holder.selected = (CheckBox) view.findViewById(R.id.cb_selected);
             view.setTag(holder);
@@ -85,7 +87,7 @@ public class AddGroupAdapter extends BaseAdapter implements PinnedHeaderListView
             holder = (ViewHolder) view.getTag();
         }
 
-        UserRelation item = mList.get(position);
+        IMUser item = mList.get(position);
 
         int section = mIndexer.getSectionForPosition(position);
         if (mIndexer.getPositionForSection(section) == position) {
@@ -96,27 +98,15 @@ public class AddGroupAdapter extends BaseAdapter implements PinnedHeaderListView
         }
 
         holder.icon.setImageBitmap(null);
-        IMUser currentUser = IMUser.getCurrentUser(view.getContext(), IMUser.class);
-        if (currentUser != null) {
-            IMUser displayUser = null;
-            if (item.getFriend() != null && !item.getFriend().getObjectId().equals(currentUser.getObjectId())) {
-                displayUser = item.getFriend();
-            }
-            if (item.getOwner() != null && !item.getOwner().getObjectId().equals(currentUser.getObjectId())) {
-                displayUser = item.getOwner();
-            }
-            if (displayUser != null) {
-                holder.name.setText(displayUser.getName());
-                ImageLoader.getInstance().displayImage(displayUser.getPhoto(), holder.icon, options);
-            }
-        }
-
+        holder.name.setText(item.getName());
+        holder.icon.setAvatarUrl(item.getPhoto());
+        //ImageLoader.getInstance().displayImage(item.getPhoto(), holder.icon, options);
         holder.selected.setChecked(item.isSelected());
         return view;
     }
 
     public void toggle(int position) {
-        UserRelation item = (UserRelation) getItem(position);
+        IMUser item = (IMUser) getItem(position);
         if(item.isSelected()){
             mSelecteds.remove(item);
         } else {
@@ -125,7 +115,7 @@ public class AddGroupAdapter extends BaseAdapter implements PinnedHeaderListView
         item.setSelected(!item.isSelected());
     }
 
-    public List<UserRelation> getSelecteds(){
+    public List<IMUser> getSelecteds(){
         return mSelecteds;
     }
 
@@ -133,7 +123,7 @@ public class AddGroupAdapter extends BaseAdapter implements PinnedHeaderListView
         public View item;
         public TextView group_title;
         public TextView name;
-        public ImageView icon;
+        public AvatarView icon;
         public CheckBox selected;
     }
 
@@ -186,7 +176,7 @@ public class AddGroupAdapter extends BaseAdapter implements PinnedHeaderListView
         mIndexer = indexer;
     }
 
-    public void setData(List<UserRelation> data) {
+    public void setData(List<IMUser> data) {
         mList = data;
     }
 }

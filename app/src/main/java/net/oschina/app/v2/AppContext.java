@@ -10,6 +10,7 @@ import android.text.TextUtils;
 
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChat;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;
@@ -119,6 +120,8 @@ public class AppContext extends BaseApplication {
         Bmob.initialize(getApplicationContext(), net.oschina.app.v2.base.Config.BMOB_APPLICATION_ID);
 
         hxSDKHelper.onInit(getApplicationContext());
+
+        Fresco.initialize(this);
     }
 
     public static void requestDailyEnglish() {

@@ -13,9 +13,15 @@
         android:background="@drawable/list_item_background"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:paddingLeft="@dimen/space_16"
+        android:paddingBottom="@dimen/space_12"
+        android:paddingRight="@dimen/space_8"
+        android:paddingTop="@dimen/space_12">
 
-        <ImageView
+        <net.oschina.app.v2.ui.AvatarView
+            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+            fresco:roundAsCircle="true"
+            fresco:placeholderImage="@drawable/ic_default_avatar"
             android:id="@+id/iv_icon"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"

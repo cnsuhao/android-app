@@ -2,21 +2,26 @@ package net.oschina.app.v2.activity.chat.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 
+import com.bmob.BmobProFile;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.exceptions.EaseMobException;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.activity.MainActivity;
 import net.oschina.app.v2.activity.chat.adapter.AddGroupAdapter;
 import net.oschina.app.v2.activity.chat.adapter.ContactAdapter;
 import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.base.Config;
+import net.oschina.app.v2.model.chat.Avatar;
 import net.oschina.app.v2.model.chat.GroupUserRelation;
 import net.oschina.app.v2.model.chat.IMGroup;
 import net.oschina.app.v2.model.chat.IMUser;
@@ -24,9 +29,13 @@ import net.oschina.app.v2.model.chat.UserRelation;
 import net.oschina.app.v2.ui.pinned.BladeView;
 import net.oschina.app.v2.ui.pinned.PinnedHeaderListView;
 import net.oschina.app.v2.utils.UIHelper;
+import net.oschina.app.v2.utils.WeakAsyncTask;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import cn.bmob.v3.BmobQuery;
@@ -48,9 +57,11 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
     private MySectionIndexer mIndexer;
     private int[] counts;
     private PinnedHeaderListView mLvContact;
-    private List<UserRelation> mList = new ArrayList<>();
+    private List<IMUser> mList = new ArrayList<>();
     private AddGroupAdapter mAdapter;
     private Button mBtnOk;
+
+    private String mDefaultAvatar;
 
     @Nullable
     @Override
@@ -59,6 +70,23 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
 
         initViews(view);
 
+        // load default avatar
+        BmobQuery<Avatar> query = new BmobQuery<>();
+        query.addWhereEqualTo("sourceName", new Random().nextInt(Config.DEFAULT_AVATAR_SIZE) + ".png");
+        query.findObjects(getActivity(), new FindListener<Avatar>() {
+            @Override
+            public void onSuccess(List<Avatar> list) {
+                if (list != null && list.size() > 0) {
+                    Avatar a = list.get(0);
+                    mDefaultAvatar = BmobProFile.getInstance(getActivity())
+                            .signURL(a.getFileName(), a.getUrl(), Config.BMOB_ACCESS_KEY, 0, null);
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+            }
+        });
         return view;
     }
 
@@ -83,9 +111,7 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
             }
         });
 
-
         executeOnFinish();
-
         requestData();
     }
 
@@ -109,9 +135,7 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
         mainQuery.findObjects(getActivity(), new FindListener<UserRelation>() {
             @Override
             public void onSuccess(List<UserRelation> list) {
-                mList.clear();
-                mList.add(new UserRelation("#"));
-                mList.addAll(list);
+                startParserUR2User(list);
                 executeOnFinish();
             }
 
@@ -143,8 +167,8 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
 
     private void executeOnFinish() {
         counts = new int[sections.length];
-        for (UserRelation city : mList) {
-            String firstCharacter = city.getSortKey();
+        for (IMUser user : mList) {
+            String firstCharacter = user.getSortKey();
             int index = ALL_CHARACTER.indexOf(firstCharacter);
             counts[index]++;
         }
@@ -180,7 +204,7 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
     }
 
     private void handleCreateGroup() {
-        List<UserRelation> list = mAdapter.getSelecteds();
+        List<IMUser> list = mAdapter.getSelecteds();
         if (list.size() == 0) {
             return;
         }
@@ -199,12 +223,13 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
         }
     }
 
-    private void createDBGroup(final IMUser currentUser, final List<UserRelation> list) {
+    private void createDBGroup(final IMUser currentUser, final List<IMUser> list) {
         final IMGroup group = new IMGroup();
         group.setName("群聊(" + list.size() + ")");
         group.setOwner(currentUser);
         group.setIsPrivate(false);
-        group.setDesc("x");
+        group.setDesc("");
+        group.setPhoto(mDefaultAvatar);
         group.setImId(UUID.randomUUID().toString());
         group.save(getActivity(), new SaveListener() {
             @Override
@@ -221,45 +246,20 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
     }
 
     private void createDBGroupUsers(final IMGroup group, final IMUser currentUser,
-                                    final List<UserRelation> users) {
-        final String[] memebers = new String[users.size()];
+                                    final List<IMUser> users) {
+        final String[] members = new String[users.size()];
         int i = 0;
         BmobRelation relation = new BmobRelation();
-        for (UserRelation item : users) {
-            IMUser user = null;
-            if (item.getFriend() != null && !item.getFriend().getObjectId().equals(currentUser.getObjectId())) {
-                user = item.getFriend();
-            }
-            if (item.getOwner() != null && !item.getOwner().getObjectId().equals(currentUser.getObjectId())) {
-                user = item.getOwner();
-            }
-            if (user != null) {
-                memebers[i++] = user.getImUserName();
-//                GroupUserRelation gur = new GroupUserRelation();
-//                gur.setGroup(group);
-//                gur.setMember(user);
-//                gur.setSate(0);
-//                gur.setOwner(group.getOwner());
-//                gur.save(getActivity(), new SaveListener() {
-//                    @Override
-//                    public void onSuccess() {
-//                        AppContext.showToastShort("Save DB group users success");
-//                    }
-//
-//                    @Override
-//                    public void onFailure(int i, String s) {
-//
-//                    }
-//                });
-                relation.add(user);
-            }
+        for (IMUser user : users) {
+            members[i++] = user.getImUserName();
+            relation.add(user);
         }
         relation.add(currentUser);
         group.setMembers(relation);
         group.update(getActivity(), new UpdateListener() {
             @Override
             public void onSuccess() {
-                createIMGroup(group, currentUser, memebers);
+                createIMGroup(group, currentUser, members);
             }
 
             @Override
@@ -269,13 +269,13 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
         });
     }
 
-    private void createIMGroup(final IMGroup group, final IMUser currentUser, final String[] memebers) {
+    private void createIMGroup(final IMGroup group, final IMUser currentUser, final String[] members) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     final EMGroup eg = EMGroupManager.getInstance().createPublicGroup("group name",
-                            group.getDesc(), memebers, true);
+                            group.getDesc(), members, true);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -292,25 +292,71 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
                             });
                         }
                     });
-//                    for(String memeber:memebers) {
-//                        EMGroupManager.getInstance().inviteUser(group.getImId(), memeber);//需异步处理
-//                    }
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            AppContext.showToastShort("send invite succcess");
-//                        }
-//                    });
                 } catch (final EaseMobException e) {
                     e.printStackTrace();
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            AppContext.showToastShort("失败了"+e.getMessage());
+                            AppContext.showToastShort("失败了" + e.getMessage());
                         }
                     });
                 }
             }
         }).start();
+    }
+
+    private void startParserUR2User(List<UserRelation> list) {
+        IMUser currentUser = IMUser.getCurrentUser(getActivity(), IMUser.class);
+        new ParserUserRelationTask(list, currentUser, this).execute();
+    }
+
+    static class ParserUserRelationTask extends WeakAsyncTask<Void, Void, List<IMUser>, AddGroupFragment> {
+        private final IMUser mCurrentUser;
+        private List<UserRelation> mList;
+
+        public ParserUserRelationTask(List<UserRelation> list, IMUser currentUser, AddGroupFragment fragment) {
+            super(fragment);
+            mList = list;
+            mCurrentUser = currentUser;
+        }
+
+        @Override
+        protected List<IMUser> doInBackground(AddGroupFragment fragment, Void... params) {
+            List<IMUser> list = new ArrayList<>();
+            if (mList == null || mList.size() == 0 || mCurrentUser == null) return list;
+            for (UserRelation item : mList) {
+                IMUser user = null;
+                if (item.getFriend() != null && !item.getFriend()
+                        .getObjectId().equals(mCurrentUser.getObjectId())) {
+                    user = item.getFriend();
+                }
+                if (item.getOwner() != null && !item.getOwner()
+                        .getObjectId().equals(mCurrentUser.getObjectId())) {
+                    user = item.getOwner();
+                }
+                if (user != null) {
+                    list.add(user);
+                }
+            }
+
+            // sort list
+            Collections.sort(list, new Comparator<IMUser>() {
+                @Override
+                public int compare(IMUser lhs, IMUser rhs) {
+                    return lhs.getSortKey().compareTo(rhs.getSortKey());
+                }
+            });
+
+            return list;
+        }
+
+        @Override
+        protected void onPostExecute(AddGroupFragment fragment, List<IMUser> list) {
+            super.onPostExecute(fragment, list);
+            fragment.mList.clear();
+            fragment.mList.add(new IMUser());
+            fragment.mList.addAll(list);
+            fragment.executeOnFinish();
+        }
     }
 }

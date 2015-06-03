@@ -49,4 +49,6 @@ dependencies {
     //compile 'com.afollestad:material-dialogs:0.6.3.5'
     compile files('libs/easemobchat_2.1.9.jar')
     compile files('libs/BmobSDK_V3.3.8_0521.jar')
+    compile 'com.facebook.fresco:fresco:0.5.0'
+    compile files('libs/pinyin4j-2.5.0.jar')
 }

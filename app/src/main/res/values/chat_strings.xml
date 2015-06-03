@@ -20,5 +20,14 @@
         <item quantity="other">确定(%d)</item>
     </plurals>
 
+    <string name="chat_add_friend_hint">搜索好友的昵称eg.Tonlin</string>
+    <string name="chat_tip_please_input_nick_name">请输入要搜索的昵称</string>
+    <string name="chat_tip_cant_add_yourself">您无法添加自己为好友</string>
+    <string name="chat_tip_invite_sended">已发送好友请求</string>
+    <string name="chat_tip_invite_send_failed">发送失败</string>
+    <string name="chat_add_friend">添加好友</string>
+    <string name="add_friend">发送</string>
+    <string name="add_friend_invite_message">Hello,加个好友吧</string>
+
     <string name="receive_the_passthrough">收到透传：action：</string>
 </resources>

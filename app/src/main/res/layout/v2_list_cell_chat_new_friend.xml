@@ -6,39 +6,69 @@
     android:background="@drawable/list_item_background"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:paddingBottom="@dimen/space_12"
+    android:paddingLeft="@dimen/space_16"
+    android:paddingRight="@dimen/space_8"
+    android:paddingTop="@dimen/space_12">
 
-    <ImageView
+    <net.oschina.app.v2.ui.AvatarView xmlns:fresco="http://schemas.android.com/apk/res-auto"
         android:id="@+id/iv_avatar"
         android:layout_width="@dimen/size_avatar"
         android:layout_height="@dimen/size_avatar"
-        android:scaleType="centerCrop" />
+        android:layout_marginRight="12dp"
+        android:scaleType="centerCrop"
+        fresco:placeholderImage="@drawable/ic_default_avatar"
+        fresco:roundAsCircle="true" />
 
-    <TextView
-        android:id="@+id/tv_accept"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ly_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:background="@drawable/btn_chat_send_selector"
-        android:padding="4dp"
-        android:minWidth="50dp"
-        android:gravity="center"
-        android:text="同意"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_centerVertical="true"
         android:layout_marginRight="8dp"
-        android:layout_toLeftOf="@id/tv_add"
         android:layout_toRightOf="@id/iv_avatar"
-        android:textColor="@color/main_black"
-        android:textSize="16sp" />
+        android:orientation="horizontal"
+        android:paddingBottom="4dp">
 
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="杰伦"
+            android:textColor="@color/main_black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/btn_chat_send_selector"
+            android:gravity="center"
+            android:minWidth="60dp"
+            android:padding="4dp"
+            android:text="同意"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/ly_name"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:background="@color/list_divider_color" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:paddingTop="8dp"
+        android:textColor="@color/main_gray"
+        android:textSize="14sp" />
 
 </RelativeLayout>

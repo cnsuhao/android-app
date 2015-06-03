@@ -2,6 +2,8 @@
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$/app/libs/BmobSDK_V3.3.8_0521.jar" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/libs/pinyin4j-2.5.0.jar" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/ChatHelper.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/AddGroupAdapter.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/ContactAdapter.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/ConversationAdapter.java" charset="UTF-8" />
@@ -11,6 +13,9 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/MessageFragment.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/MySectionIndexer.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/NewFriendFragment.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/user/LoginActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/model/chat/GroupUserRelation.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/model/chat/IMUser.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/ui/pinned/BladeView.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/ui/pinned/PinnedHeaderListView.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/utils/MD5Utils.java" charset="UTF-8" />

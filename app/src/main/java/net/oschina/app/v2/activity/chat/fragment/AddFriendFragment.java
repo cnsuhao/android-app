@@ -1,12 +1,20 @@
 package net.oschina.app.v2.activity.chat.fragment;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactManager;
 import com.easemob.exceptions.EaseMobException;
+import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.activity.chat.ChatHelper;
 import net.oschina.app.v2.activity.chat.adapter.AddFriendAdapter;
 import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
@@ -14,6 +22,8 @@ import net.oschina.app.v2.model.chat.IMUser;
 import net.oschina.app.v2.model.chat.Invite;
 import net.oschina.app.v2.model.chat.UserRelation;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
+import net.oschina.app.v2.utils.UIHelper;
+import net.oschina.app.v2.utils.WeakAsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,23 +60,28 @@ public class AddFriendFragment extends BaseRecycleViewFragment implements AddFri
     }
 
     @Override
+    protected void onItemClick(View view, int position) {
+        super.onItemClick(view, position);
+        IMUser user = (IMUser) mAdapter.getItem(position);
+        if (user != null) {
+            UIHelper.showUserCenter(getActivity(), user.getUid(), user.getName());
+        }
+    }
+
+    @Override
     protected void requestData(boolean refresh) {
-        if (TextUtils.isEmpty(mName) || IMUser.getCurrentUser(getActivity())==null)
-            return;
         mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         BmobQuery<IMUser> query = new BmobQuery<>();
         query.addWhereContains("name", mName);
         query.findObjects(getActivity(), new FindListener<IMUser>() {
             @Override
             public void onSuccess(List<IMUser> list) {
-                AppContext.showToastShort("find user");
                 executeOnLoadDataSuccess(list);
                 executeOnLoadFinish();
             }
 
             @Override
             public void onError(int i, String s) {
-                AppContext.showToastShort("find error");
                 executeOnLoadDataError(s);
                 executeOnLoadFinish();
             }
@@ -75,72 +90,68 @@ public class AddFriendFragment extends BaseRecycleViewFragment implements AddFri
 
     @Override
     public void onAddUser(final IMUser user) {
-        // 添加到DB
-
-        final IMUser currentUser = IMUser.getCurrentUser(getActivity(),IMUser.class);
-        if(currentUser != null){
-            if(user.getObjectId().equals(currentUser.getObjectId())){
-                AppContext.showToastShort("you can't add yourself");
-                return;
-            }
-            // 检查不是好友
-            //BmobQuery<UserRelation> ur = new BmobQuery<>();
-            //ur.addWhereEqualTo("")
-
-            // 检查还没有邀请
-            BmobQuery<Invite> invite = new BmobQuery<>();
-            invite.addWhereEqualTo("to", user.getObjectId());
-            invite.addWhereEqualTo("from", currentUser.getObjectId());
-            invite.findObjects(getActivity(), new FindListener<Invite>() {
-                @Override
-                public void onSuccess(List<Invite> list) {
-                    if(list !=null && list.size()>0){
-                        AppContext.showToastShort("请求已发送");
-                    } else {
-                        sendInvite(currentUser,user);
-                    }
-                }
-
-                @Override
-                public void onError(int i, String s) {
-                    AppContext.showToastShort("请求失败");
-                }
-            });
+        final IMUser currentUser = IMUser.getCurrentUser(getActivity(), IMUser.class);
+        if (ChatHelper.needLogin()) {
+            UIHelper.showLogin(getActivity());
+            return;
         }
+        if (user.getObjectId().equals(currentUser.getObjectId())) {
+            AppContext.showToastShort(R.string.chat_tip_cant_add_yourself);
+            return;
+        }
+        showWaitDialog();
+        // 检查是否已经发送邀请
+        BmobQuery<Invite> invite = new BmobQuery<>();
+        invite.addWhereEqualTo("to", user.getObjectId());
+        invite.addWhereEqualTo("from", currentUser.getObjectId());
+        invite.findObjects(getActivity(), new FindListener<Invite>() {
+            @Override
+            public void onSuccess(List<Invite> list) {
+                hideWaitDialog();
+                if (list != null && list.size() > 0) {
+                    AppContext.showToastShort(R.string.chat_tip_invite_sended);
+                } else {
+                    sendInvite(currentUser, user);
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                AppContext.showToastShort(s);
+                hideWaitDialog();
+            }
+        });
     }
 
-    private void sendInvite(final IMUser from,final IMUser to){
-        // 发送请求
+    private void sendInvite(final IMUser from, final IMUser to) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.view_dialog_chat_invite, null);
+        final AppCompatEditText text = (AppCompatEditText) view.findViewById(R.id.et_message);
+        text.setSelection(text.getText().toString().length());
+        new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle(R.string.chat_add_friend)
+                .setView(view)
+                .setPositiveButton(R.string.add_friend, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        String message = text.getText().toString();
+                        addInviteToDB(from, to, message);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null).show();
+    }
+
+    private void addInviteToDB(final IMUser from, final IMUser to, final String message) {
+        showWaitDialog(R.string.progress_submit);
         Invite invite = new Invite();
         invite.setTo(to);
         invite.setFrom(from);
+        invite.setMessage(message);
         showWaitDialog();
         invite.save(getActivity(), new SaveListener() {
             @Override
             public void onSuccess() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            EMContactManager.getInstance().addContact(to.getImUserName(), "加个好友吧");
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    AppContext.showToastShort("已发送请求");
-                                    hideWaitDialog();
-                                }
-                            });
-                        } catch (EaseMobException e) {
-                            e.printStackTrace();
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    hideWaitDialog();
-                                }
-                            });
-                        }
-                    }
-                }).start();
+                sendInviteNotification(from, to, message);
             }
 
             @Override
@@ -149,5 +160,43 @@ public class AddFriendFragment extends BaseRecycleViewFragment implements AddFri
                 hideWaitDialog();
             }
         });
+    }
+
+    private void sendInviteNotification(IMUser from, IMUser to, String message) {
+        new InviteIMContactTask(from, to, message, this).execute();
+    }
+
+    static class InviteIMContactTask extends WeakAsyncTask<Void, Void, Integer, AddFriendFragment> {
+        private IMUser from, to;
+        private String message;
+
+        public InviteIMContactTask(IMUser from, IMUser to, String message, AddFriendFragment fragment) {
+            super(fragment);
+            this.from = from;
+            this.to = to;
+            this.message = message;
+        }
+
+        @Override
+        protected Integer doInBackground(AddFriendFragment fragment, Void... params) {
+            try {
+                EMContactManager.getInstance().addContact(to.getImUserName(), message);
+            } catch (EaseMobException e) {
+                e.printStackTrace();
+                return e.getErrorCode();
+            }
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(AddFriendFragment fragment, Integer code) {
+            super.onPostExecute(fragment, code);
+            fragment.hideWaitDialog();
+            if(code ==0) {
+                AppContext.showToastShort(R.string.chat_tip_invite_sended);
+            } else {
+                AppContext.showToastShort(R.string.chat_tip_invite_send_failed);
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package net.oschina.app.v2.activity.chat.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.MessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 
@@ -24,11 +26,15 @@ import net.oschina.app.v2.activity.chat.loader.IName;
 import net.oschina.app.v2.activity.chat.view.AsynTextView;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
+import net.oschina.app.v2.model.chat.Avatar;
 import net.oschina.app.v2.model.chat.IMGroup;
 import net.oschina.app.v2.model.chat.IMUser;
+import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.utils.AvatarUtils;
 import net.oschina.app.v2.utils.DateUtil;
 import net.oschina.app.v2.utils.ImageUtils;
+
+import java.net.URL;
 
 /**
  * Created by Tonlin on 2015/5/27.
@@ -82,26 +88,25 @@ public class ConversationAdapter extends RecycleBaseAdapter {
             }
         }
 
-        final ImageView avatar = vh.avatar;
+        final AvatarView avatar = vh.avatar;
         vh.name.setText("");
-        vh.avatar.setImageBitmap(null);
-
+        vh.avatar.setGroup(item.isGroup());
         if (item.isGroup()) {
-            vh.avatar.setImageResource(R.drawable.ic_default_avatar_group);
-
             IName name = ContactsFetcher.getInstance().getNameCache().getBitmapFromMemCache(item.getUserName());
-            if(name == null){
-                name =  ContactsFetcher.getInstance().getNameCache().getBitmapFromDiskCache(item.getUserName(), CacheType.GROUP);
+            if (name == null) {
+                name = ContactsFetcher.getInstance().getNameCache().getBitmapFromDiskCache(item.getUserName(), CacheType.GROUP);
             }
-            if(name != null && name instanceof IMGroup){
-                IMGroup group = (IMGroup)name;
+            if (name != null && name instanceof IMGroup) {
+                IMGroup group = (IMGroup) name;
                 vh.name.setText(group.getName());
-                ImageLoader.getInstance().displayImage(group.getPhoto(), avatar);
+                //ImageLoader.getInstance().displayImage(group.getPhoto(), avatar);
+                avatar.setAvatarUrl(name.getPhoto());
             } else {
                 ContactsFetcher.getInstance().loadName(item.getUserName(), CacheType.GROUP, vh.name, new DisplayListener() {
                     @Override
                     public void onLoadSuccess(AwareView awareView, IName name) {
-                        ImageLoader.getInstance().displayImage(name.getPhoto(), avatar);
+                        //ImageLoader.getInstance().displayImage(name.getPhoto(), avatar);
+                        avatar.setAvatarUrl(name.getPhoto());
                     }
 
                     @Override
@@ -110,25 +115,26 @@ public class ConversationAdapter extends RecycleBaseAdapter {
                 });
             }
         } else {
-            vh.avatar.setBackgroundResource(R.drawable.ic_default_avatar);
-
             IName name = ContactsFetcher.getInstance().getNameCache().getBitmapFromMemCache(item.getUserName());
-            if(name == null){
-                name =  ContactsFetcher.getInstance().getNameCache().getBitmapFromDiskCache(item.getUserName(), CacheType.USER);
+            if (name == null) {
+                name = ContactsFetcher.getInstance().getNameCache().getBitmapFromDiskCache(item.getUserName(), CacheType.USER);
             }
-            if(name != null && name instanceof IMUser){
-                IMUser user = (IMUser)name;
+            if (name != null && name instanceof IMUser) {
+                IMUser user = (IMUser) name;
                 vh.name.setText(user.getName());
-                ImageLoader.getInstance().displayImage(user.getPhoto(), avatar);
+                //ImageLoader.getInstance().displayImage(user.getPhoto(), avatar);
+                avatar.setAvatarUrl(name.getPhoto());
             } else {
                 if ("admin".equals(item.getUserName())) {
                     vh.name.setText(item.getUserName());
+                    vh.avatar.setImageURI(Uri.parse(""));
                 } else {
                     ContactsFetcher.getInstance().loadName(item.getUserName(),
                             CacheType.USER, vh.name, new DisplayListener() {
                                 @Override
                                 public void onLoadSuccess(AwareView awareView, IName name) {
-                                    ImageLoader.getInstance().displayImage(name.getPhoto(), avatar);
+                                    //ImageLoader.getInstance().displayImage(name.getPhoto(), avatar);
+                                    avatar.setAvatarUrl(name.getPhoto());
                                 }
 
                                 @Override
@@ -143,7 +149,8 @@ public class ConversationAdapter extends RecycleBaseAdapter {
     public static class ViewHolder extends RecycleBaseAdapter.ViewHolder {
         private TextView message, time, unreadCount;
         private AsynTextView name;
-        private ImageView msgState, avatar;
+        private ImageView msgState;
+        private AvatarView avatar;
 
         public ViewHolder(int viewType, View v) {
             super(viewType, v);
@@ -152,7 +159,7 @@ public class ConversationAdapter extends RecycleBaseAdapter {
             time = (TextView) v.findViewById(R.id.tv_time);
             unreadCount = (TextView) v.findViewById(R.id.tv_unread_msg_number);
             msgState = (ImageView) v.findViewById(R.id.iv_msg_state);
-            avatar = (ImageView) v.findViewById(R.id.iv_avatar);
+            avatar = (AvatarView) v.findViewById(R.id.iv_avatar);
         }
     }
 
