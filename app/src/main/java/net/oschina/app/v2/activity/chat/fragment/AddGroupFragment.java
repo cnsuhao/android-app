@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bmob.BmobProFile;
 import com.easemob.chat.EMGroup;
@@ -25,6 +27,7 @@ import com.tonlin.osc.happy.R;
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.chat.ChatHelper;
 import net.oschina.app.v2.activity.chat.adapter.AddGroupAdapter;
+import net.oschina.app.v2.activity.chat.adapter.ContactSearchAdapter;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.base.Config;
 import net.oschina.app.v2.base.Constants;
@@ -72,6 +75,9 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
     private EmptyLayout mErrorLayout;
     private EditText mEtSearch;
     private String mDefaultAvatar;
+    private ContactSearchAdapter mSearchAdapter;
+    private ListView mLvSearch;
+    private TextView mTvEmptySearch;
 
     private boolean mIsWatingLogin;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -99,15 +105,27 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             TLog.log(TAG, "search change:" + charSequence);
             //mLvContact.setFilterText(charSequence+"");
-            if (mAdapter != null) {
-                new StartFilterAdapterTask(charSequence + "", mAdapter.getSourcList(),
-                        AddGroupFragment.this).execute();
+            if (TextUtils.isEmpty(charSequence)) {
+                mLvSearch.setVisibility(View.GONE);
+                mTvEmptySearch.setVisibility(View.GONE);
+            } else {
+                if (mAdapter != null) {
+                    new StartFilterAdapterTask(charSequence + "", mAdapter.getData(),
+                            AddGroupFragment.this).execute();
+                }
             }
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
 
+        }
+    };
+    private AdapterView.OnItemClickListener mSearchItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            AppContext.showToastShort("toggle:" + position);
+            mSearchAdapter.toggle(position);
         }
     };
 
@@ -169,6 +187,12 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
 
         mEtSearch = (EditText) view.findViewById(R.id.et_search);
         mEtSearch.addTextChangedListener(mTextWatcher);
+
+        mLvSearch = (ListView) view.findViewById(R.id.lv_search_result);
+        mTvEmptySearch = (TextView) view.findViewById(R.id.tv_empty_search);
+        mSearchAdapter = new ContactSearchAdapter();
+        mLvSearch.setAdapter(mSearchAdapter);
+        mLvSearch.setOnItemClickListener(mSearchItemClickListener);
 
         mLvContact = (PinnedHeaderListView) view.findViewById(R.id.listView);
         //mLvContact.setTextFilterEnabled(true);
@@ -240,6 +264,7 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
         mainQuery.findObjects(getActivity(), new FindListener<UserRelation>() {
             @Override
             public void onSuccess(List<UserRelation> list) {
+                if (getActivity() == null) return;
                 startParserUR2User(list);
                 executeOnFinish();
             }
@@ -526,7 +551,7 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
             } else {
                 // 过滤出新数据
                 for (IMUser user : sourceList) {
-                    if(TextUtils.isEmpty(user.getName()))
+                    if (TextUtils.isEmpty(user.getName()))
                         continue;
                     if (-1 != user.getName().toLowerCase().indexOf(filter)) {
                         newValues.add(user);
@@ -537,9 +562,17 @@ public class AddGroupFragment extends BaseFragment implements AdapterView.OnItem
         }
 
         @Override
-        protected void onPostExecute(AddGroupFragment fragment, List<IMUser> imUsers) {
-            super.onPostExecute(fragment, imUsers);
-            fragment.mAdapter.setFilter(imUsers);
+        protected void onPostExecute(AddGroupFragment fragment, List<IMUser> list) {
+            super.onPostExecute(fragment, list);
+            if (list == null || list.size() == 0) {
+                fragment.mTvEmptySearch.setVisibility(View.VISIBLE);
+                fragment.mLvSearch.setVisibility(View.GONE);
+            } else {
+                fragment.mTvEmptySearch.setVisibility(View.GONE);
+                fragment.mLvSearch.setVisibility(View.VISIBLE);
+                fragment.mSearchAdapter.setSelecteds(fragment.mAdapter.getSelecteds());
+                fragment.mSearchAdapter.setData((ArrayList) list);
+            }
         }
     }
 }

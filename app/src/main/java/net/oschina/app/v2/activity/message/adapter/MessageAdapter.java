@@ -3,6 +3,7 @@ package net.oschina.app.v2.activity.message.adapter;
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.Message;
+import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
 import net.oschina.app.v2.ui.text.MyURLSpan;
 import net.oschina.app.v2.ui.text.TweetTextView;
@@ -66,25 +67,27 @@ public class MessageAdapter extends RecycleBaseAdapter {
         vh.count.setText(context.getResources().getString(
                 R.string.message_count,item.getMessageCount()));
 
-        ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
-        vh.avatar.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                UIHelper.showUserCenter(context,
-                        item.getFriendId(), item.getFriendName());
-            }
-        });
+//        ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
+//        vh.avatar.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                UIHelper.showUserCenter(context,
+//                        item.getFriendId(), item.getFriendName());
+//            }
+//        });
+        vh.avatar.setAvatarUrl(item.getFace());
+        vh.avatar.setUserInfo(item.getFriendId(),item.getFriendName());
     }
 
 	static class ViewHolder extends RecycleBaseAdapter.ViewHolder{
-		ImageView avatar;
+        AvatarView avatar;
 		TextView name, sender, time,count;
 		TweetTextView content;
 
 		ViewHolder(int viewType,View view) {
             super(viewType,view);
-			avatar = (ImageView) view.findViewById(R.id.iv_avatar);
+			avatar = (AvatarView) view.findViewById(R.id.iv_avatar);
 			sender = (TextView) view.findViewById(R.id.tv_sender);
 			name = (TextView) view.findViewById(R.id.tv_name);
 			time = (TextView) view.findViewById(R.id.tv_time);

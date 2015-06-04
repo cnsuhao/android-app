@@ -22,14 +22,20 @@
             android:background="@drawable/chat_to_bg_selector"
             android:gravity="center_vertical"
             android:textColor="@color/main_black"
-            android:textSize="@dimen/text_size_16" />
+            android:textSize="@dimen/text_size_15"
+            android:paddingBottom="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="12dp"
+            android:paddingTop="8dp"/>
     </LinearLayout>
 
-    <ImageView
+    <net.oschina.app.v2.ui.AvatarView
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        fresco:placeholderImage="@drawable/ic_default_avatar"
+        fresco:roundAsCircle="true"
         android:id="@+id/iv_avatar"
         android:layout_width="@dimen/list_item_avatar_size"
         android:layout_height="@dimen/list_item_avatar_size"
-        android:background="@drawable/ic_default_avatar"
         android:contentDescription="@null" />
 
 </LinearLayout>

@@ -60,5 +60,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"/>
+
+    <ListView
+        android:id="@+id/lv_search_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:listSelector="@color/transparent"
+        android:background="@color/window_background"
+        android:cacheColorHint="@color/transparent"
+        android:dividerHeight="1px"
+        android:divider="@color/list_divider_color"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_empty_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="无结果"
+        android:textColor="@color/main_black"
+        android:textSize="14sp"
+        android:padding="20dp"
+        android:gravity="center_horizontal|top"
+        android:background="@color/window_background"
+        android:visibility="gone"/>
 </LinearLayout>
 

@@ -100,6 +100,42 @@ public class AddFriendFragment extends BaseRecycleViewFragment implements AddFri
             return;
         }
         showWaitDialog();
+        // 检查是否已经是好友
+        BmobQuery<UserRelation> friendQuery = new BmobQuery<>();
+        friendQuery.addWhereEqualTo("friend", currentUser.getObjectId());
+        friendQuery.addWhereEqualTo("owner", user.getObjectId());
+
+        BmobQuery<UserRelation> ownerQuery = new BmobQuery<>();
+        ownerQuery.addWhereEqualTo("owner", currentUser.getObjectId());
+        ownerQuery.addWhereEqualTo("friend", user.getObjectId());
+
+        List<BmobQuery<UserRelation>> queries = new ArrayList<>();
+        queries.add(friendQuery);
+        queries.add(ownerQuery);
+
+        BmobQuery<UserRelation> mainQuery = new BmobQuery<>();
+        mainQuery.or(queries);
+        mainQuery.findObjects(getActivity(), new FindListener<UserRelation>() {
+            @Override
+            public void onSuccess(List<UserRelation> list) {
+                if (list != null && list.size() > 0) {
+                    AppContext.showToastShort("你们已经是好友了");
+                    hideWaitDialog();
+                } else {
+                    // 还不是好友则检查是否已经邀请
+                    checkInvite(currentUser,user);
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                AppContext.showToastShort(s);
+                hideWaitDialog();
+            }
+        });
+    }
+
+    private void checkInvite(final IMUser currentUser, final IMUser user) {
         // 检查是否已经发送邀请
         BmobQuery<Invite> invite = new BmobQuery<>();
         invite.addWhereEqualTo("to", user.getObjectId());
@@ -192,7 +228,7 @@ public class AddFriendFragment extends BaseRecycleViewFragment implements AddFri
         protected void onPostExecute(AddFriendFragment fragment, Integer code) {
             super.onPostExecute(fragment, code);
             fragment.hideWaitDialog();
-            if(code ==0) {
+            if (code == 0) {
                 AppContext.showToastShort(R.string.chat_tip_invite_sended);
             } else {
                 AppContext.showToastShort(R.string.chat_tip_invite_send_failed);

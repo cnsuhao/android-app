@@ -181,51 +181,8 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
         if (parentActivity instanceof ObservableScrollViewCallbacks) {
             mRecycleView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
         }
-        //executeWithAccount();
         refresh();
     }
-
-    private void executeWithAccount() {
-        final User user = AppContext.getLoginInfo();
-        if (ChatHelper.needLogin()) {
-            mIsWatingLogin = true;
-            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-            mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
-        } else {
-            mIsWatingLogin = false;
-            IMUser iu = IMUser.getCurrentUser(getActivity(), IMUser.class);
-            if (iu != null && AppContext.hasHXLogin()) {
-                AppContext.showToastShort("均已登陆");
-                refresh();
-                return;
-            }
-            // 检查是否注册过
-            BmobQuery<IMUser> u = new BmobQuery<>();
-            u.addWhereEqualTo("username", user.getAccount());
-            u.findObjects(getActivity(), new FindListener<IMUser>() {
-                @Override
-                public void onSuccess(List<IMUser> list) {
-                    if (list != null && list.size() > 0) {
-                        AppContext.showToastShort("找到用户:" + list.get(0).getUsername());
-                        IMUser u = list.get(0);
-                        u.setUsername(user.getAccount());
-                        u.setPassword(user.getPwd());
-                        handlerUserRealExist(u);
-                    } else {
-                        AppContext.showToastShort("没有找到用户");
-
-                        new RegisterIMTask(ConversationFragment.this, user).execute();
-                    }
-                }
-
-                @Override
-                public void onError(int i, String s) {
-                    AppContext.showToastShort("没有找到用户,查询失败");
-                }
-            });
-        }
-    }
-
 
     private void refresh() {
         if (ChatHelper.needLogin()) {
@@ -239,81 +196,6 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
             new LoadConversationTask(this).execute();
         }
     }
-
-    private void registerDB(final IMUser user) {
-        user.signUp(getActivity(), new SaveListener() {
-            @Override
-            public void onSuccess() {
-                AppContext.showToastShort("注册成功 DB");
-                handlerUserRealExist(user);
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                AppContext.showToastShort("注册失败 DB");
-            }
-        });
-    }
-
-    private void handlerUserRealExist(final IMUser u) {
-        IMUser uu = IMUser.getCurrentUser(getActivity(), IMUser.class);
-        if (uu != null) {
-            AppContext.showToastShort("DB用户已登录");
-            loginIMServer(u);
-        } else {
-            AppContext.showToastShort("DB用户未登录");
-            u.login(getActivity(), new SaveListener() {
-                @Override
-                public void onSuccess() {
-                    AppContext.showToastShort("登陆成功 DB");
-                    loginIMServer(u);
-                }
-
-                @Override
-                public void onFailure(int i, String s) {
-                    AppContext.showToastShort("登陆失败 DB" + s);
-                }
-            });
-        }
-    }
-
-    private void loginIMServer(final IMUser u) {
-        EMChatManager.getInstance().login(u.getImUserName(),
-                u.getImPassword(), new EMCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                EMGroupManager.getInstance().loadAllGroups();
-                                EMChatManager.getInstance().loadAllConversations();
-                                AppContext.showToastShort("登陆聊天服务器成功！:" + u.getImUserName());
-
-                                // 登陆成功，保存用户名密码
-                                AppContext.instance().setHXUserName(u.getImUserName());
-                                AppContext.instance().setHXPassword(u.getImPassword());
-
-                                refresh();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(int i, String s) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                AppContext.showToastShort("登陆聊天服务器失败！");
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onProgress(int i, String s) {
-
-                    }
-                });
-    }
-
 
     /**
      * 获取所有会话
@@ -376,9 +258,10 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
     public void onItemClick(View view) {
         int position = mRecycleView.getChildPosition(view);
         EMConversation conversation = (EMConversation) mAdapter.getItem(position);
+        if(conversation==null)return;
         if (conversation.isGroup()) {
             if (conversation.getType() == EMConversation.EMConversationType.ChatRoom) {
-
+                AppContext.showToastShort("聊天室暂不支持");
             } else {
                 UIHelper.showChatMessage(getActivity(), conversation.getUserName(), "nick", MessageFragment.CHATTYPE_GROUP);
             }
@@ -442,56 +325,4 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
         }
     }
 
-    public static class RegisterIMTask extends WeakAsyncTask<Void,
-            Void, Integer, ConversationFragment> {
-
-        private String imUserName, imPassword;
-        private User mUser;
-
-        public RegisterIMTask(ConversationFragment fragment,
-                              User user) {
-            super(fragment);
-            mUser = user;
-            imUserName = MD5Utils.getMD5Code(mUser.getAccount().toLowerCase());
-            imPassword = MD5Utils.getMD5Code(mUser.getPwd().toLowerCase());
-        }
-
-        @Override
-        protected Integer doInBackground(ConversationFragment fragment, Void... params) {
-            try {
-                // 调用sdk注册方法
-                EMChatManager.getInstance().createAccountOnServer(imUserName, imPassword);
-                return 0;
-            } catch (final EaseMobException e) {
-                //注册失败
-                return e.getErrorCode();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(ConversationFragment fragment, Integer errorCode) {
-            super.onPostExecute(fragment, errorCode);
-            if (errorCode == 0) {
-                IMUser user = new IMUser();
-
-                user.setUsername(mUser.getAccount());
-                user.setPassword(mUser.getPwd());
-                user.setImUserName(imUserName);
-                user.setImPassword(imPassword);
-                user.setName(mUser.getName());
-                user.setPhoto(mUser.getFace());
-                fragment.registerDB(user);
-            } else {
-                if (errorCode == EMError.NONETWORK_ERROR) {
-                    AppContext.showToastShort("网络异常，请检查网络！");
-                } else if (errorCode == EMError.USER_ALREADY_EXISTS) {
-                    AppContext.showToastShort("用户已存在！");
-                } else if (errorCode == EMError.UNAUTHORIZED) {
-                    AppContext.showToastShort("注册失败，无权限！");
-                } else {
-                    AppContext.showToastShort("注册失败: 其他原因");
-                }
-            }
-        }
-    }
 }

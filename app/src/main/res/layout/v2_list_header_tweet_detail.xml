@@ -10,12 +10,14 @@
         android:background="@color/list_item_background_normal"
         android:padding="@dimen/space_16" >
 
-        <ImageView
+        <net.oschina.app.v2.ui.AvatarView
+            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+            fresco:placeholderImage="@drawable/ic_default_avatar"
+            fresco:roundAsCircle="true"
             android:id="@+id/iv_avatar"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginRight="@dimen/space_8"
-            android:background="@drawable/ic_default_avatar"
             android:contentDescription="@null" />
 
         <TextView

@@ -8,6 +8,7 @@ import net.oschina.app.v2.model.Comment;
 import net.oschina.app.v2.model.Comment.Refer;
 import net.oschina.app.v2.model.Comment.Reply;
 import net.oschina.app.v2.model.Tweet;
+import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
 import net.oschina.app.v2.ui.text.MyURLSpan;
 import net.oschina.app.v2.ui.text.TweetTextView;
@@ -181,16 +182,17 @@ public class CommentAdapter extends RecycleBaseAdapter {
             }
         }
 
-        ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
-
-        vh.avatar.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                UIHelper.showUserCenter(context,
-                        item.getAuthorId(), item.getAuthor());
-            }
-        });
+        //ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
+//        vh.avatar.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                UIHelper.showUserCenter(context,
+//                        item.getAuthorId(), item.getAuthor());
+//            }
+//        });
+        vh.avatar.setAvatarUrl(item.getFace());
+        vh.avatar.setUserInfo(item.getAuthorId(),item.getAuthor());
 
         vh.more.setVisibility(View.GONE);
         vh.more.setOnClickListener(new View.OnClickListener() {
@@ -211,11 +213,11 @@ public class CommentAdapter extends RecycleBaseAdapter {
 		TweetTextView content;
 		LinearLayout relies, refers;
 		View split, more;
-		ImageView avatar;
+		AvatarView avatar;
 
 		ViewHolder(int viewType,View view) {
             super(viewType,view);
-			avatar = (ImageView) view.findViewById(R.id.iv_avatar);
+			avatar = (AvatarView) view.findViewById(R.id.iv_avatar);
 			name = (TextView) view.findViewById(R.id.tv_name);
 			content = (TweetTextView) view.findViewById(R.id.tv_content);
 			time = (TextView) view.findViewById(R.id.tv_time);

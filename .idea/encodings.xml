@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" defaultCharsetForPropertiesFiles="UTF-8">
     <file url="file://$PROJECT_DIR$/app/libs/BmobSDK_V3.3.8_0521.jar" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/libs/pinyin4j-2.5.0.jar" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/ChatHelper.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/AddGroupAdapter.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/ContactAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/ContactSearchAdapter.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/ConversationAdapter.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/AddFriendFragment.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/AddGroupFragment.java" charset="UTF-8" />
@@ -24,5 +25,6 @@
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_contact_add.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_contact_group.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/v2_list_cell_chat_contact_letter_header.xml" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

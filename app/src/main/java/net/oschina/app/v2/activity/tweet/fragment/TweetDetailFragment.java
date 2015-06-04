@@ -54,6 +54,7 @@ import net.oschina.app.v2.model.Result;
 import net.oschina.app.v2.model.Tweet;
 import net.oschina.app.v2.service.PublicCommentTask;
 import net.oschina.app.v2.service.ServerTaskUtils;
+import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
 import net.oschina.app.v2.ui.text.MyURLSpan;
@@ -84,7 +85,8 @@ public class TweetDetailFragment extends BaseFragment implements
 	private static final String TWEET_DETAIL_SCREEN = "tweet_detail_screen";
 	private FixedRecyclerView mListView;
 	private EmptyLayout mEmptyView;
-	private ImageView mIvAvatar, mIvPic;
+	private AvatarView mIvAvatar;
+	private ImageView mIvPic;
 	private TextView mTvName, mTvFrom, mTvTime, mTvCommentCount;
 	private WebView mWVContent;
 	private int mTweetId;
@@ -201,15 +203,15 @@ public class TweetDetailFragment extends BaseFragment implements
 		//mListView.setOnItemLongClickListener(this);
 		View header = LayoutInflater.from(getActivity()).inflate(
 				R.layout.v2_list_header_tweet_detail, null);
-		mIvAvatar = (ImageView) header.findViewById(R.id.iv_avatar);
-		mIvAvatar.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				UIHelper.showUserCenter(getActivity(), mTweet.getAuthorId(),
-						mTweet.getAuthor());
-			}
-		});
+		mIvAvatar = (AvatarView) header.findViewById(R.id.iv_avatar);
+//		mIvAvatar.setOnClickListener(new View.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				UIHelper.showUserCenter(getActivity(), mTweet.getAuthorId(),
+//						mTweet.getAuthor());
+//			}
+//		});
 
 		mTvName = (TextView) header.findViewById(R.id.tv_name);
 		mTvFrom = (TextView) header.findViewById(R.id.tv_from);
@@ -265,7 +267,9 @@ public class TweetDetailFragment extends BaseFragment implements
 	}
 
 	private void fillUI() {
-		ImageLoader.getInstance().displayImage(mTweet.getFace(), mIvAvatar);
+		mIvAvatar.setAvatarUrl(mTweet.getFace());
+		mIvAvatar.setUserInfo(mTweet.getAuthorId(),mTweet.getAuthor());
+		//ImageLoader.getInstance().displayImage(mTweet.getFace(), mIvAvatar);
 		mTvName.setText(mTweet.getAuthor());
 		mTvTime.setText(StringUtils.friendly_time(mTweet.getPubDate()));
 		switch (mTweet.getAppClient()) {
