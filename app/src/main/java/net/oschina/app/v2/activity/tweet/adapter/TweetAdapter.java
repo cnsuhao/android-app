@@ -87,8 +87,6 @@ public class TweetAdapter extends RecycleBaseAdapter {
 
         vh.commentCount.setText(String.valueOf(item.getCommentCount()));
 
-        TLog.log(TAG,item.getAuthor()+ " face:"+item.getFace());
-
         vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
         vh.avatar.setAvatarUrl(item.getFace());
 

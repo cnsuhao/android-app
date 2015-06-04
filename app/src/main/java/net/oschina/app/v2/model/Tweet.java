@@ -3,6 +3,8 @@ package net.oschina.app.v2.model;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.oschina.app.v2.AppException;
 import net.oschina.app.v2.utils.StringUtils;
@@ -175,6 +177,8 @@ public class Tweet extends Entity implements Parcelable {
     public static Tweet parse(InputStream inputStream) throws IOException,
             AppException {
         Tweet tweet = null;
+        List<User> likeList = null;
+        User user = null;
         // 获得XmlPullParser解析器
         XmlPullParser xmlParser = Xml.newPullParser();
         try {
@@ -189,7 +193,21 @@ public class Tweet extends Entity implements Parcelable {
                         if (tag.equalsIgnoreCase(NODE_START)) {
                             tweet = new Tweet();
                         } else if (tweet != null) {
-                            if (tag.equalsIgnoreCase(NODE_ID)) {
+                            if (tag.equalsIgnoreCase("likeList")) {
+                                likeList = new ArrayList<>();
+                            } else if (likeList != null) {
+                                if (tag.equalsIgnoreCase("user")) {
+                                    user = new User();
+                                } else if (user != null) {
+                                    if (tag.equalsIgnoreCase("name")) {
+                                        user.setName(xmlParser.nextText());
+                                    } else if (tag.equalsIgnoreCase("portrait")) {
+                                        String face = xmlParser.nextText();
+                                        //TLog.log(TAG, "parser like user face：" + face);
+                                        user.setFace(face);
+                                    }
+                                }
+                            } else if (tag.equalsIgnoreCase(NODE_ID)) {
                                 tweet.id = StringUtils.toInt(xmlParser.nextText(),
                                         0);
                             } else if (tag.equalsIgnoreCase(NODE_FACE)) {
@@ -217,7 +235,7 @@ public class Tweet extends Entity implements Parcelable {
                                         xmlParser.nextText(), 0));
                             } else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {
                                 tweet.setNotice(new Notice());
-                            }  else if (tweet.getNotice() != null) {
+                            } else if (tweet.getNotice() != null) {
                                 if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
                                     tweet.getNotice().setAtmeCount(
                                             StringUtils.toInt(xmlParser.nextText(), 0));
@@ -235,6 +253,11 @@ public class Tweet extends Entity implements Parcelable {
                         }
                         break;
                     case XmlPullParser.END_TAG:
+                        if (tag.equalsIgnoreCase("likeList") && likeList != null) {
+                            likeList = null;
+                        } else if (tag.equalsIgnoreCase("user") && user != null) {
+                            user = null;
+                        }
                         break;
                 }
                 // 如果xml没有结束，则导航到下一个节点
