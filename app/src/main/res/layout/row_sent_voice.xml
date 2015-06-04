@@ -15,7 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <net.oschina.app.v2.ui.AvatarView
+            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+            fresco:placeholderImage="@drawable/ic_default_avatar"
+            fresco:roundAsCircle="true"
             android:id="@+id/iv_userhead"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"
@@ -28,7 +31,8 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/iv_userhead" />
+            android:layout_toLeftOf="@id/iv_userhead"
+            android:background="@drawable/chat_to_bg_selector"/>
 
         <TextView
             android:id="@+id/tv_length"
@@ -36,7 +40,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/iv_voice"
-            android:gravity="center" />
+            android:gravity="center"
+            />
 
         <ImageView
             android:id="@+id/msg_status"

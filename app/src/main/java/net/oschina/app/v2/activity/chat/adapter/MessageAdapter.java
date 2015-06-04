@@ -15,7 +15,6 @@ package net.oschina.app.v2.activity.chat.adapter;
 
 import java.io.File;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Timer;
@@ -24,9 +23,6 @@ import java.util.TimerTask;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.Spannable;
@@ -43,7 +39,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
-import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
@@ -58,7 +53,6 @@ import com.easemob.chat.LocationMessageBody;
 import com.easemob.chat.NormalFileMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VideoMessageBody;
-import com.easemob.chat.VoiceMessageBody;
 //import com.easemob.chatuidemo.Constant;
 //import com.easemob.chatuidemo.R;
 //import com.easemob.chatuidemo.activity.AlertDialog;
@@ -74,29 +68,23 @@ import com.easemob.chat.VoiceMessageBody;
 //import com.easemob.chatuidemo.utils.ImageUtils;
 //import com.easemob.chatuidemo.utils.SmileUtils;
 //import com.easemob.chatuidemo.utils.UserUtils;
-import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.DateUtils;
 import com.easemob.util.EMLog;
-import com.easemob.util.FileUtils;
 import com.easemob.util.LatLng;
 import com.easemob.util.TextFormater;
 import com.tonlin.osc.happy.R;
-import com.umeng.analytics.MobclickAgent;
 
 import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.activity.chat.MessageActivity;
 import net.oschina.app.v2.activity.chat.loader.AwareView;
 import net.oschina.app.v2.activity.chat.loader.CacheType;
 import net.oschina.app.v2.activity.chat.loader.ContactsFetcher;
 import net.oschina.app.v2.activity.chat.loader.DisplayListener;
 import net.oschina.app.v2.activity.chat.loader.IName;
-import net.oschina.app.v2.activity.chat.view.AsynTextView;
+import net.oschina.app.v2.activity.chat.view.AsyncTextView;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.model.User;
-import net.oschina.app.v2.model.chat.IMGroup;
 import net.oschina.app.v2.model.chat.IMUser;
 import net.oschina.app.v2.ui.AvatarView;
-import net.oschina.app.v2.utils.ImageUtils;
 import net.oschina.app.v2.utils.SmileUtils;
 
 public class MessageAdapter extends BaseAdapter {
@@ -325,7 +313,7 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv = (TextView) convertView.findViewById(R.id.percentage);
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.progressBar);
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
-                    holder.tv_usernick = (AsynTextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv_usernick = (AsyncTextView) convertView.findViewById(R.id.tv_userid);
                 } catch (Exception e) {
                 }
 
@@ -337,7 +325,7 @@ public class MessageAdapter extends BaseAdapter {
                     holder.iv_avatar = (AvatarView) convertView.findViewById(R.id.iv_userhead);
                     // 这里是文字内容
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
-                    holder.tv_usernick = (AsynTextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv_usernick = (AsyncTextView) convertView.findViewById(R.id.tv_userid);
                 } catch (Exception e) {
                 }
 
@@ -355,7 +343,7 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_length);
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
-                    holder.tv_usernick = (AsynTextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv_usernick = (AsyncTextView) convertView.findViewById(R.id.tv_userid);
                     holder.iv_read_status = (ImageView) convertView.findViewById(R.id.iv_unread_voice);
                 } catch (Exception e) {
                 }
@@ -365,7 +353,7 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_location);
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
-                    holder.tv_usernick = (AsynTextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv_usernick = (AsyncTextView) convertView.findViewById(R.id.tv_userid);
                 } catch (Exception e) {
                 }
             } else if (message.getType() == Type.VIDEO) {
@@ -379,7 +367,7 @@ public class MessageAdapter extends BaseAdapter {
                     holder.timeLength = (TextView) convertView.findViewById(R.id.chatting_length_iv);
                     holder.playBtn = (ImageView) convertView.findViewById(R.id.chatting_status_btn);
                     holder.container_status_btn = (LinearLayout) convertView.findViewById(R.id.container_status_btn);
-                    holder.tv_usernick = (AsynTextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv_usernick = (AsyncTextView) convertView.findViewById(R.id.tv_userid);
 
                 } catch (Exception e) {
                 }
@@ -397,7 +385,7 @@ public class MessageAdapter extends BaseAdapter {
                 } catch (Exception e) {
                 }
                 try {
-                    holder.tv_usernick = (AsynTextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv_usernick = (AsyncTextView) convertView.findViewById(R.id.tv_userid);
                 } catch (Exception e) {
                 }
 
@@ -533,7 +521,7 @@ public class MessageAdapter extends BaseAdapter {
      * @param message
      * @param imageView
      */
-    private void setUserAvatar(EMMessage message, final AsynTextView displayName,
+    private void setUserAvatar(EMMessage message, final AsyncTextView displayName,
                                final AvatarView imageView) {
         if (message.direct == Direct.SEND) {
             User user = AppContext.getLoginInfo();
@@ -1371,7 +1359,7 @@ public class MessageAdapter extends BaseAdapter {
         ProgressBar pb;
         ImageView staus_iv;
         AvatarView iv_avatar;
-        AsynTextView tv_usernick;
+        AsyncTextView tv_usernick;
         ImageView playBtn;
         TextView timeLength;
         TextView size;

@@ -20,18 +20,18 @@ import com.tonlin.osc.happy.R;
 /**
  * Created by Tonlin on 2015/5/29.
  */
-public class ComposeView extends RelativeLayout implements View.OnClickListener {
+public class ComposeView extends RelativeLayout implements View.OnClickListener, RecordButton.OnFinishedRecordListener {
 
     private ImageView mIvEmoji;
     private ImageView mIvVoiceText;
     private Animation mShowAnim, mDismissAnim, mShowMoreAnim, mDismissMoreAnim;
     private ImageView mIvMore;
-    private Button mBtnSend, mBtnVoice;
+    private Button mBtnSend;
+    private RecordButton mBtnVoice;
     private EditText mEtText;
 
     private OnComposeOperationDelegate mDelegate;
     private View mRlBottom;
-
 
     public interface OnComposeOperationDelegate {
         void onSendText(String text);
@@ -143,11 +143,19 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener 
         mIvMore.setOnClickListener(this);
         mBtnSend = (Button) findViewById(R.id.btn_send);
         mBtnSend.setOnClickListener(this);
-        mBtnVoice = (Button) findViewById(R.id.btn_voice);
+        mBtnVoice = (RecordButton) findViewById(R.id.btn_voice);
+        mBtnVoice.setRecorderCallback(this);
         mIvVoiceText = (ImageView) findViewById(R.id.iv_voice_text);
         mIvVoiceText.setOnClickListener(this);
 
         mRlBottom = findViewById(R.id.rl_bottom);
+    }
+
+    @Override
+    public void onFinishedRecord(String audioPath) {
+        if(mDelegate != null){
+            mDelegate.onSendVoice(audioPath);
+        }
     }
 
     @Override

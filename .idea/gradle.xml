@@ -5,19 +5,8 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="D:\Program Files\Android Studio\gradle\gradle-2.2.1" />
+        <option name="gradleHome" value="$APPLICATION_HOME_DIR$/gradle/gradle-2.2.1" />
         <option name="gradleJvm" value="1.7" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/libraries/library-photoview" />
-            <option value="$PROJECT_DIR$/libraries/library-pulltorefresh" />
-            <option value="$PROJECT_DIR$/libraries/library-sticky-listheaders" />
-            <option value="$PROJECT_DIR$/libraries/library-umengshare" />
-            <option value="$PROJECT_DIR$/libraries/library-viewpager-indicator" />
-          </set>
-        </option>
       </GradleProjectSettings>
     </option>
   </component>

@@ -15,24 +15,24 @@ import java.lang.ref.WeakReference;
 /**
  * Created by Tonlin on 2015/1/27.
  */
-public class AsynTextView extends TextView implements AwareView {
+public class AsyncTextView extends TextView implements AwareView {
     private DisplayListener listenerWeakReference;
     private Object holder;
 
-    public AsynTextView(Context context) {
+    public AsyncTextView(Context context) {
         super(context);
     }
 
-    public AsynTextView(Context context, AttributeSet attrs) {
+    public AsyncTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public AsynTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AsyncTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public AsynTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public AsyncTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

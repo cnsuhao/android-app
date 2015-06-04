@@ -17,6 +17,7 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
+import com.easemob.chat.VoiceMessageBody;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
@@ -29,6 +30,7 @@ import net.oschina.app.v2.easemob.controller.HXSDKHelper;
 import net.oschina.app.v2.utils.MD5Utils;
 import net.oschina.app.v2.utils.TLog;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -263,6 +265,25 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
 
     @Override
     public void onSendVoice(String file) {
+        try {
+            final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VOICE);
+            // 如果是群聊，设置chattype,默认是单聊
+            if (mChatType == CHATTYPE_GROUP){
+                message.setChatType(EMMessage.ChatType.GroupChat);
+            }else if(mChatType == CHATTYPE_CHATROOM){
+                message.setChatType(EMMessage.ChatType.ChatRoom);
+            }
+            message.setReceipt(mToChatUsername);
+            VoiceMessageBody body = new VoiceMessageBody(new File(file), 60);
+            message.addBody(body);
 
+            mConversation.addMessage(message);
+            mAdapter.refreshSelectLast();
+            getActivity().setResult(Activity.RESULT_OK);
+            // send file
+            // sendVoiceSub(filePath, fileName, message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

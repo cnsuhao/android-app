@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.activity.chat.fragment.MessageFragment;
-import net.oschina.app.v2.activity.chat.view.AsynTextView;
+import net.oschina.app.v2.activity.chat.view.AsyncTextView;
 import net.oschina.app.v2.base.BaseActivity;
 
 /**
@@ -18,7 +18,7 @@ public class MessageActivity extends BaseActivity {
     public static final String KEY_TO_CHAT_NAME = "key_to_chat_user_name";
     public static final String KEY_CHAT_NICK = "key_chat_nick";
     public static final String KEY_CHAT_TYPE = "key_chat_type";
-    private AsynTextView mTvTitle;
+    private AsyncTextView mTvTitle;
 
     @Override
     protected boolean hasBackButton() {
@@ -38,7 +38,7 @@ public class MessageActivity extends BaseActivity {
     @Override
     protected void initActionBar(Toolbar actionBar) {
         super.initActionBar(actionBar);
-        mTvTitle = (AsynTextView) actionBar.findViewById(R.id.tv_title);
+        mTvTitle = (AsyncTextView) actionBar.findViewById(R.id.tv_title);
         String nick = getIntent().getStringExtra(KEY_CHAT_NICK);
         String uid = getIntent().getStringExtra(KEY_TO_CHAT_NAME);
         int type = getIntent().getIntExtra(KEY_CHAT_TYPE, MessageFragment.CHATTYPE_SINGLE);

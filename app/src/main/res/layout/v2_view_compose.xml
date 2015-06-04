@@ -50,7 +50,7 @@
                 android:src="@drawable/btn_chat_emoji_selector"
                 android:visibility="visible" />
 
-            <Button
+            <net.oschina.app.v2.activity.chat.view.RecordButton
                 android:id="@+id/btn_voice"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"

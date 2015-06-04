@@ -2,7 +2,6 @@ package net.oschina.app.v2.activity.chat.adapter;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,11 +10,7 @@ import android.widget.TextView;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.ImageMessageBody;
-import com.easemob.chat.MessageBody;
 import com.easemob.chat.TextMessageBody;
-import com.easemob.exceptions.EaseMobException;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.activity.chat.loader.AwareView;
@@ -23,18 +18,13 @@ import net.oschina.app.v2.activity.chat.loader.CacheType;
 import net.oschina.app.v2.activity.chat.loader.ContactsFetcher;
 import net.oschina.app.v2.activity.chat.loader.DisplayListener;
 import net.oschina.app.v2.activity.chat.loader.IName;
-import net.oschina.app.v2.activity.chat.view.AsynTextView;
+import net.oschina.app.v2.activity.chat.view.AsyncTextView;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
-import net.oschina.app.v2.model.chat.Avatar;
 import net.oschina.app.v2.model.chat.IMGroup;
 import net.oschina.app.v2.model.chat.IMUser;
 import net.oschina.app.v2.ui.AvatarView;
-import net.oschina.app.v2.utils.AvatarUtils;
 import net.oschina.app.v2.utils.DateUtil;
-import net.oschina.app.v2.utils.ImageUtils;
-
-import java.net.URL;
 
 /**
  * Created by Tonlin on 2015/5/27.
@@ -153,13 +143,13 @@ public class ConversationAdapter extends RecycleBaseAdapter {
 
     public static class ViewHolder extends RecycleBaseAdapter.ViewHolder {
         private TextView message, time, unreadCount;
-        private AsynTextView name;
+        private AsyncTextView name;
         private ImageView msgState;
         private AvatarView avatar;
 
         public ViewHolder(int viewType, View v) {
             super(viewType, v);
-            name = (AsynTextView) v.findViewById(R.id.tv_name);
+            name = (AsyncTextView) v.findViewById(R.id.tv_name);
             message = (TextView) v.findViewById(R.id.tv_message);
             time = (TextView) v.findViewById(R.id.tv_time);
             unreadCount = (TextView) v.findViewById(R.id.tv_unread_msg_number);

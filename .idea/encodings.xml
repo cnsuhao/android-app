@@ -14,12 +14,21 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/MessageFragment.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/MySectionIndexer.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/NewFriendFragment.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/AudioFocusChangeManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/AudioMediaPlayer.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/AudioMediaRecorder.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/MediaPlayerOnProgressListener.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/MediaPlayerOnStopListener.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/MediaRecorderOnErrorListener.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/MediaRecorderOnProgressListener.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/ProximitySensorListener.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/user/LoginActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/model/chat/GroupUserRelation.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/model/chat/IMUser.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/ui/pinned/BladeView.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/ui/pinned/PinnedHeaderListView.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/utils/MD5Utils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/utils/RecordUtils.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/utils/SystemBarTintManager.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/index_toast_bg.9.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_contact_add.png" charset="UTF-8" />

@@ -15,6 +15,8 @@ public class Constants {
 
     public final static String IMAGE_SAVE_PAHT = BASE_DIR + "download_images";
 
+    public static final String RECORD_DIR = BASE_DIR + "recorders";;
+
     public static final String WEICHAT_APPID = "wx7aac2075450f71a2";
     public static final String WEICHAT_SECRET = "0101b0595ffe2042c214420fac358abc";
 
@@ -32,4 +34,5 @@ public class Constants {
     public static final String MESSAGE_ATTR_IS_VOICE_CALL = "is_voice_call";
     public static final String MESSAGE_ATTR_IS_VIDEO_CALL = "is_video_call";
     public static final String ACCOUNT_REMOVED = "account_removed";
+
 }

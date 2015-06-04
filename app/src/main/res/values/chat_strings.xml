@@ -33,5 +33,11 @@
     <string name="chat_tip_create_group_failed">无法创建群组</string>
     <string name="chat_tip_selecte_users">请先选择要聊天的用户</string>
 
+
+    <!-- Do not translate. Duration format for duration < 1 hour -->
+    <string name="durationformatshort">%2$d\'%5$02d\'\'</string>
+    <!-- Do not translate. Duration format for duration >= 1 hour -->
+    <string name="durationformatlong">%1$d\'%3$02d\'%5$02d\'\'</string>
+
     <string name="receive_the_passthrough">收到透传：action：</string>
 </resources>

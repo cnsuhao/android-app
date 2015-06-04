@@ -54,7 +54,7 @@
             android:textColor="#888888"
             android:textSize="@dimen/text_size_12" />
 
-        <net.oschina.app.v2.activity.chat.view.AsynTextView
+        <net.oschina.app.v2.activity.chat.view.AsyncTextView
             android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
