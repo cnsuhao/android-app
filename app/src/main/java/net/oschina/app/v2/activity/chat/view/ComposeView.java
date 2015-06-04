@@ -30,6 +30,7 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener 
     private EditText mEtText;
 
     private OnComposeOperationDelegate mDelegate;
+    private View mRlBottom;
 
 
     public interface OnComposeOperationDelegate {
@@ -139,11 +140,14 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener 
         mEtText = (EditText) findViewById(R.id.et_text);
         mEtText.addTextChangedListener(mTextWatcher);
         mIvMore = (ImageView) findViewById(R.id.iv_more);
+        mIvMore.setOnClickListener(this);
         mBtnSend = (Button) findViewById(R.id.btn_send);
         mBtnSend.setOnClickListener(this);
         mBtnVoice = (Button) findViewById(R.id.btn_voice);
         mIvVoiceText = (ImageView) findViewById(R.id.iv_voice_text);
         mIvVoiceText.setOnClickListener(this);
+
+        mRlBottom = findViewById(R.id.rl_bottom);
     }
 
     @Override
@@ -164,6 +168,12 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener 
                 mEtText.setVisibility(View.GONE);
                 mIvEmoji.setVisibility(View.GONE);
                 mIvVoiceText.setImageResource(R.drawable.btn_to_text_selector);
+            }
+        } else if (id == R.id.iv_more) {
+            if (mRlBottom.getVisibility() == View.VISIBLE) {
+                mRlBottom.setVisibility(View.GONE);
+            } else {
+                mRlBottom.setVisibility(View.VISIBLE);
             }
         }
     }

@@ -1,15 +1,5 @@
 package net.oschina.app.v2.activity.tweet.adapter;
 
-import net.oschina.app.v2.base.ListBaseAdapter;
-import net.oschina.app.v2.base.RecycleBaseAdapter;
-import net.oschina.app.v2.model.Tweet;
-import net.oschina.app.v2.ui.AvatarView;
-import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
-import net.oschina.app.v2.ui.text.MyURLSpan;
-import net.oschina.app.v2.ui.text.TweetTextView;
-import net.oschina.app.v2.utils.DateUtil;
-import net.oschina.app.v2.utils.UIHelper;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.Html;
@@ -23,12 +13,22 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.tonlin.osc.happy.R;
+
+import net.oschina.app.v2.base.RecycleBaseAdapter;
+import net.oschina.app.v2.model.Tweet;
+import net.oschina.app.v2.ui.AvatarView;
+import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
+import net.oschina.app.v2.ui.text.MyURLSpan;
+import net.oschina.app.v2.ui.text.TweetTextView;
+import net.oschina.app.v2.utils.DateUtil;
+import net.oschina.app.v2.utils.TLog;
+import net.oschina.app.v2.utils.UIHelper;
 
 public class TweetAdapter extends RecycleBaseAdapter {
 
-	private DisplayImageOptions options;
+    private static final java.lang.String TAG = "TweetAdapter";
+    private DisplayImageOptions options;
 
 	public TweetAdapter() {
 		options = new DisplayImageOptions.Builder().cacheInMemory(true)
@@ -86,6 +86,8 @@ public class TweetAdapter extends RecycleBaseAdapter {
         }
 
         vh.commentCount.setText(String.valueOf(item.getCommentCount()));
+
+        TLog.log(TAG,item.getAuthor()+ " face:"+item.getFace());
 
         vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
         vh.avatar.setAvatarUrl(item.getFace());

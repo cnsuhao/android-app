@@ -6,6 +6,7 @@ import java.io.InputStream;
 
 import net.oschina.app.v2.AppException;
 import net.oschina.app.v2.utils.StringUtils;
+import net.oschina.app.v2.utils.TLog;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -120,6 +121,7 @@ public class Tweet extends Entity implements Parcelable {
 
     public void setFace(String face) {
         this.face = face;
+        //TLog.log("TweetList",""+author + "setface:"+face);
     }
 
     public String getBody() {

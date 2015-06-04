@@ -5,6 +5,7 @@
     android:background="@color/white">
 
     <LinearLayout
+        android:id="@+id/ly_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -14,12 +15,12 @@
             android:id="@+id/iv_voice_text"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="8dp"
-            android:scaleType="centerInside"
+            android:layout_marginTop="8dp"
             android:clickable="true"
+            android:scaleType="centerInside"
             android:src="@drawable/btn_to_voice_selector" />
 
         <RelativeLayout
@@ -37,27 +38,27 @@
                 android:textColorHint="@color/main_gray"
                 android:textCursorDrawable="@null"
                 android:textSize="16sp"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/iv_emoji"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_alignParentRight="true"
-                android:scaleType="centerInside"
                 android:clickable="true"
+                android:scaleType="centerInside"
                 android:src="@drawable/btn_chat_emoji_selector"
-                android:visibility="visible"/>
-            
+                android:visibility="visible" />
+
             <Button
                 android:id="@+id/btn_voice"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
+                android:background="@drawable/btn_chat_voice_selector"
+                android:text="按住 说话"
                 android:textColor="@color/main_black"
                 android:textSize="15sp"
-                android:text="按住 说话"
-                android:background="@drawable/btn_chat_voice_selector"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -69,8 +70,8 @@
                 android:id="@+id/iv_more"
                 android:layout_width="50dp"
                 android:layout_height="35dp"
-                android:scaleType="centerInside"
                 android:clickable="true"
+                android:scaleType="centerInside"
                 android:src="@drawable/btn_chat_more_selector"
                 android:visibility="visible" />
 
@@ -82,12 +83,120 @@
                 android:text="发送"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </RelativeLayout>
     </LinearLayout>
 
     <View
+        android:id="@+id/split"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/list_divider_color"/>
+        android:layout_below="@id/ly_input"
+        android:background="@color/list_divider_color" />
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/split"
+        android:minHeight="180dp"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_chat_voice_selector"
+                    android:src="@drawable/ic_chat_opt_picture" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="图片"
+                    android:textColor="@color/main_gray"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_chat_voice_selector"
+                    android:src="@drawable/ic_chat_opt_location" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="位置"
+                    android:textColor="@color/main_gray"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_chat_voice_selector"
+                    android:src="@drawable/ic_chat_opt_video" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="视频"
+                    android:textColor="@color/main_gray"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_chat_voice_selector"
+                    android:src="@drawable/ic_chat_opt_card" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="名片"
+                    android:textColor="@color/main_gray"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/list_divider_color" />
 </RelativeLayout>

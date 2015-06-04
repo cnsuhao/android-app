@@ -52,6 +52,10 @@
         android:id="@+id/main_menu_quit"
         android:title="退出应用"
         osc:showAsAction="never"/>
+    <item
+        android:id="@+id/main_menu_feedback"
+        android:title="意见反馈"
+        osc:showAsAction="never"/>
 
     <!--<item
         android:id="@+id/main_menu_more"
