@@ -85,7 +85,17 @@ import com.umeng.analytics.MobclickAgent;
 
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.chat.MessageActivity;
+import net.oschina.app.v2.activity.chat.loader.AwareView;
+import net.oschina.app.v2.activity.chat.loader.CacheType;
+import net.oschina.app.v2.activity.chat.loader.ContactsFetcher;
+import net.oschina.app.v2.activity.chat.loader.DisplayListener;
+import net.oschina.app.v2.activity.chat.loader.IName;
+import net.oschina.app.v2.activity.chat.view.AsynTextView;
 import net.oschina.app.v2.base.Constants;
+import net.oschina.app.v2.model.User;
+import net.oschina.app.v2.model.chat.IMGroup;
+import net.oschina.app.v2.model.chat.IMUser;
+import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.utils.ImageUtils;
 import net.oschina.app.v2.utils.SmileUtils;
 
@@ -311,11 +321,11 @@ public class MessageAdapter extends BaseAdapter {
             if (message.getType() == Type.IMAGE) {
                 try {
                     holder.iv = ((ImageView) convertView.findViewById(R.id.iv_sendPicture));
-                    holder.iv_avatar = (ImageView) convertView.findViewById(R.id.iv_userhead);
+                    holder.iv_avatar = (AvatarView) convertView.findViewById(R.id.iv_userhead);
                     holder.tv = (TextView) convertView.findViewById(R.id.percentage);
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.progressBar);
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
-                    holder.tv_usernick = (TextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv_usernick = (AsynTextView) convertView.findViewById(R.id.tv_userid);
                 } catch (Exception e) {
                 }
 
@@ -324,10 +334,10 @@ public class MessageAdapter extends BaseAdapter {
                 try {
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
-                    holder.iv_avatar = (ImageView) convertView.findViewById(R.id.iv_userhead);
+                    holder.iv_avatar = (AvatarView) convertView.findViewById(R.id.iv_userhead);
                     // 这里是文字内容
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
-                    holder.tv_usernick = (TextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv_usernick = (AsynTextView) convertView.findViewById(R.id.tv_userid);
                 } catch (Exception e) {
                 }
 
@@ -341,27 +351,27 @@ public class MessageAdapter extends BaseAdapter {
             } else if (message.getType() == Type.VOICE) {
                 try {
                     holder.iv = ((ImageView) convertView.findViewById(R.id.iv_voice));
-                    holder.iv_avatar = (ImageView) convertView.findViewById(R.id.iv_userhead);
+                    holder.iv_avatar = (AvatarView) convertView.findViewById(R.id.iv_userhead);
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_length);
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
-                    holder.tv_usernick = (TextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv_usernick = (AsynTextView) convertView.findViewById(R.id.tv_userid);
                     holder.iv_read_status = (ImageView) convertView.findViewById(R.id.iv_unread_voice);
                 } catch (Exception e) {
                 }
             } else if (message.getType() == Type.LOCATION) {
                 try {
-                    holder.iv_avatar = (ImageView) convertView.findViewById(R.id.iv_userhead);
+                    holder.iv_avatar = (AvatarView) convertView.findViewById(R.id.iv_userhead);
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_location);
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
-                    holder.tv_usernick = (TextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv_usernick = (AsynTextView) convertView.findViewById(R.id.tv_userid);
                 } catch (Exception e) {
                 }
             } else if (message.getType() == Type.VIDEO) {
                 try {
                     holder.iv = ((ImageView) convertView.findViewById(R.id.chatting_content_iv));
-                    holder.iv_avatar = (ImageView) convertView.findViewById(R.id.iv_userhead);
+                    holder.iv_avatar = (AvatarView) convertView.findViewById(R.id.iv_userhead);
                     holder.tv = (TextView) convertView.findViewById(R.id.percentage);
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.progressBar);
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
@@ -369,13 +379,13 @@ public class MessageAdapter extends BaseAdapter {
                     holder.timeLength = (TextView) convertView.findViewById(R.id.chatting_length_iv);
                     holder.playBtn = (ImageView) convertView.findViewById(R.id.chatting_status_btn);
                     holder.container_status_btn = (LinearLayout) convertView.findViewById(R.id.container_status_btn);
-                    holder.tv_usernick = (TextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv_usernick = (AsynTextView) convertView.findViewById(R.id.tv_userid);
 
                 } catch (Exception e) {
                 }
             } else if (message.getType() == Type.FILE) {
                 try {
-                    holder.iv_avatar = (ImageView) convertView.findViewById(R.id.iv_userhead);
+                    holder.iv_avatar = (AvatarView) convertView.findViewById(R.id.iv_userhead);
                     holder.tv_file_name = (TextView) convertView.findViewById(R.id.tv_file_name);
                     holder.tv_file_size = (TextView) convertView.findViewById(R.id.tv_file_size);
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
@@ -387,7 +397,7 @@ public class MessageAdapter extends BaseAdapter {
                 } catch (Exception e) {
                 }
                 try {
-                    holder.tv_usernick = (TextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv_usernick = (AsynTextView) convertView.findViewById(R.id.tv_userid);
                 } catch (Exception e) {
                 }
 
@@ -443,7 +453,7 @@ public class MessageAdapter extends BaseAdapter {
         }
 
         //设置用户头像
-        setUserAvatar(message, holder.iv_avatar);
+        setUserAvatar(message, holder.tv_usernick, holder.iv_avatar);
 
         switch (message.getType()) {
             // 根据消息type显示item
@@ -519,15 +529,45 @@ public class MessageAdapter extends BaseAdapter {
 
     /**
      * 显示用户头像
+     *
      * @param message
      * @param imageView
      */
-    private void setUserAvatar(EMMessage message, ImageView imageView) {
+    private void setUserAvatar(EMMessage message, final AsynTextView displayName,
+                               final AvatarView imageView) {
         if (message.direct == Direct.SEND) {
-            //显示自己头像
-            //UserUtils.setUserAvatar(context, EMChatManager.getInstance().getCurrentUser(), imageView);
+            User user = AppContext.getLoginInfo();
+            imageView.setAvatarUrl(user.getFace());
+            if (displayName != null) {
+                displayName.setText(user.getName());
+            }
         } else {
-            //UserUtils.setUserAvatar(context, message.getFrom(), imageView);
+            IName name = ContactsFetcher.getInstance().getNameCache().getBitmapFromMemCache(message.getUserName());
+            if (name == null) {
+                name = ContactsFetcher.getInstance().getNameCache().getBitmapFromDiskCache(message.getUserName(), CacheType.USER);
+            }
+            if (name != null && name instanceof IMUser) {
+                IMUser user = (IMUser) name;
+                displayName.setText(user.getName());
+                imageView.setAvatarUrl(user.getPhoto());
+            } else {
+                if ("admin".equals(message.getUserName())) {
+                    displayName.setText(message.getUserName());
+                    imageView.setImageURI(Uri.parse(""));
+                } else {
+                    ContactsFetcher.getInstance().loadName(message.getUserName(),
+                            CacheType.USER, displayName, new DisplayListener() {
+                                @Override
+                                public void onLoadSuccess(AwareView awareView, IName name) {
+                                    imageView.setAvatarUrl(name.getPhoto());
+                                }
+
+                                @Override
+                                public void onLoadFailure(AwareView awareView, IName name) {
+                                }
+                            });
+                }
+            }
         }
     }
 
@@ -1316,11 +1356,9 @@ public class MessageAdapter extends BaseAdapter {
     /**
      * 展示视频缩略图
      *
-     * @param localThumb
-     *            本地缩略图路径
+     * @param localThumb   本地缩略图路径
      * @param iv
-     * @param thumbnailUrl
-     *            远程缩略图路径
+     * @param thumbnailUrl 远程缩略图路径
      * @param message
      */
     private void showVideoThumbView(String localThumb, ImageView iv, String thumbnailUrl, final EMMessage message) {
@@ -1332,8 +1370,8 @@ public class MessageAdapter extends BaseAdapter {
         TextView tv;
         ProgressBar pb;
         ImageView staus_iv;
-        ImageView iv_avatar;
-        TextView tv_usernick;
+        AvatarView iv_avatar;
+        AsynTextView tv_usernick;
         ImageView playBtn;
         TextView timeLength;
         TextView size;

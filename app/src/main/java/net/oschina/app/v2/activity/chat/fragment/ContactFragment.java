@@ -156,6 +156,8 @@ public class ContactFragment extends BaseFragment implements AdapterView.OnItemC
         mainQuery.findObjects(getActivity(), new FindListener<UserRelation>() {
             @Override
             public void onSuccess(List<UserRelation> list) {
+                if(getActivity()==null||getActivity().isFinishing())
+                    return;
                 startParserUR2User(list);
                 executeOnFinish();
             }

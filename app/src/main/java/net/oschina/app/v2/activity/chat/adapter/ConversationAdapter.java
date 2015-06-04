@@ -54,7 +54,7 @@ public class ConversationAdapter extends RecycleBaseAdapter {
     @Override
     protected void onBindItemViewHolder(RecycleBaseAdapter.ViewHolder holder, int position) {
         super.onBindItemViewHolder(holder, position);
-        EMConversation item = (EMConversation) getItem(position);
+        final EMConversation item = (EMConversation) getItem(position);
 
         ViewHolder vh = (ViewHolder) holder;
 
@@ -99,12 +99,14 @@ public class ConversationAdapter extends RecycleBaseAdapter {
             if (name != null && name instanceof IMGroup) {
                 IMGroup group = (IMGroup) name;
                 vh.name.setText(group.getName());
+                item.setExtField(name.getName());
                 //ImageLoader.getInstance().displayImage(group.getPhoto(), avatar);
                 avatar.setAvatarUrl(name.getPhoto());
             } else {
                 ContactsFetcher.getInstance().loadName(item.getUserName(), CacheType.GROUP, vh.name, new DisplayListener() {
                     @Override
                     public void onLoadSuccess(AwareView awareView, IName name) {
+                        item.setExtField(name.getName());
                         //ImageLoader.getInstance().displayImage(name.getPhoto(), avatar);
                         avatar.setAvatarUrl(name.getPhoto());
                     }
@@ -122,10 +124,12 @@ public class ConversationAdapter extends RecycleBaseAdapter {
             if (name != null && name instanceof IMUser) {
                 IMUser user = (IMUser) name;
                 vh.name.setText(user.getName());
+                item.setExtField(name.getName());
                 //ImageLoader.getInstance().displayImage(user.getPhoto(), avatar);
                 avatar.setAvatarUrl(name.getPhoto());
             } else {
                 if ("admin".equals(item.getUserName())) {
+                    item.setExtField(item.getUserName());
                     vh.name.setText(item.getUserName());
                     vh.avatar.setImageURI(Uri.parse(""));
                 } else {
@@ -133,6 +137,7 @@ public class ConversationAdapter extends RecycleBaseAdapter {
                             CacheType.USER, vh.name, new DisplayListener() {
                                 @Override
                                 public void onLoadSuccess(AwareView awareView, IName name) {
+                                    item.setExtField(name.getName());
                                     //ImageLoader.getInstance().displayImage(name.getPhoto(), avatar);
                                     avatar.setAvatarUrl(name.getPhoto());
                                 }

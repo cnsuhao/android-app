@@ -257,16 +257,16 @@ public class ConversationFragment extends BaseTabFragment implements RecycleBase
     @Override
     public void onItemClick(View view) {
         int position = mRecycleView.getChildPosition(view);
-        EMConversation conversation = (EMConversation) mAdapter.getItem(position);
-        if(conversation==null)return;
-        if (conversation.isGroup()) {
-            if (conversation.getType() == EMConversation.EMConversationType.ChatRoom) {
+        EMConversation item = (EMConversation) mAdapter.getItem(position);
+        if (item == null) return;
+        if (item.isGroup()) {
+            if (item.getType() == EMConversation.EMConversationType.ChatRoom) {
                 AppContext.showToastShort("聊天室暂不支持");
             } else {
-                UIHelper.showChatMessage(getActivity(), conversation.getUserName(), "nick", MessageFragment.CHATTYPE_GROUP);
+                UIHelper.showChatMessage(getActivity(), item.getUserName(), item.getExtField(), MessageFragment.CHATTYPE_GROUP);
             }
         } else {
-            UIHelper.showChatMessage(getActivity(), conversation.getUserName(), "nick", MessageFragment.CHATTYPE_SINGLE);
+            UIHelper.showChatMessage(getActivity(), item.getUserName(), item.getExtField(), MessageFragment.CHATTYPE_SINGLE);
         }
     }
 

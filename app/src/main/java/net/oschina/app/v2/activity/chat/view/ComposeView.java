@@ -22,19 +22,21 @@ import com.tonlin.osc.happy.R;
  */
 public class ComposeView extends RelativeLayout implements View.OnClickListener {
 
+    private ImageView mIvEmoji;
+    private ImageView mIvVoiceText;
+    private Animation mShowAnim, mDismissAnim, mShowMoreAnim, mDismissMoreAnim;
+    private ImageView mIvMore;
+    private Button mBtnSend, mBtnVoice;
+    private EditText mEtText;
+
+    private OnComposeOperationDelegate mDelegate;
+
 
     public interface OnComposeOperationDelegate {
         void onSendText(String text);
 
         void onSendVoice(String file);
     }
-
-    private Animation mShowAnim, mDismissAnim, mShowMoreAnim, mDismissMoreAnim;
-    private ImageView mIvMore;
-    private Button mBtnSend;
-    private EditText mEtText;
-
-    private OnComposeOperationDelegate mDelegate;
 
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
@@ -133,12 +135,15 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener 
             public void onAnimationRepeat(Animation animation) {
             }
         });
-
+        mIvEmoji = (ImageView) findViewById(R.id.iv_emoji);
         mEtText = (EditText) findViewById(R.id.et_text);
         mEtText.addTextChangedListener(mTextWatcher);
         mIvMore = (ImageView) findViewById(R.id.iv_more);
         mBtnSend = (Button) findViewById(R.id.btn_send);
         mBtnSend.setOnClickListener(this);
+        mBtnVoice = (Button) findViewById(R.id.btn_voice);
+        mIvVoiceText = (ImageView) findViewById(R.id.iv_voice_text);
+        mIvVoiceText.setOnClickListener(this);
     }
 
     @Override
@@ -147,6 +152,18 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener 
         if (id == R.id.btn_send) {
             if (mDelegate != null) {
                 mDelegate.onSendText(mEtText.getText().toString());
+            }
+        } else if (id == R.id.iv_voice_text) {
+            if (mBtnVoice.getVisibility() == View.VISIBLE) {
+                mBtnVoice.setVisibility(View.GONE);
+                mEtText.setVisibility(View.VISIBLE);
+                mIvEmoji.setVisibility(View.VISIBLE);
+                mIvVoiceText.setImageResource(R.drawable.btn_to_voice_selector);
+            } else {
+                mBtnVoice.setVisibility(View.VISIBLE);
+                mEtText.setVisibility(View.GONE);
+                mIvEmoji.setVisibility(View.GONE);
+                mIvVoiceText.setImageResource(R.drawable.btn_to_text_selector);
             }
         }
     }
