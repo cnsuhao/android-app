@@ -3,6 +3,7 @@ package net.oschina.app.v2.activity.chat.view;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Rect;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Handler;
@@ -32,6 +33,11 @@ import java.io.File;
 public class RecordButton extends Button {
     private static final double MAX_RECORD_AUDIO_TIME = 120 * 1000;
     private static final java.lang.String TAG = "RecordButton";
+    private static final int STATE_INIT = 0;
+    private static final int STATE_NORMAL = 1;
+    private static final int STATE_UP_CANCEL = 2;
+    private static final int STATE_TO_SHROT = 3;
+
     private long mStartTime;
     private Dialog mTipDialog;
     private AudioMediaRecorder mMediaRecorder;
@@ -48,6 +54,8 @@ public class RecordButton extends Button {
             R.drawable.ic_chat_recorder_v6,
             R.drawable.ic_chat_recorder_v7
     };
+    private View mLyNormal, mLyUpToCancel, mLyTooShort;
+    private int mState = STATE_INIT;
 
     private MediaRecorderOnProgressListener onRecordProgressListener = new MediaRecorderOnProgressListener() {
 
@@ -93,9 +101,12 @@ public class RecordButton extends Button {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    private void init(Context context){
+    private void init(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.v2_dialog_recorder, null);
-        mTipDialog = new Dialog(context,R.style.chat_recorder_style);
+        mLyNormal = view.findViewById(R.id.ly_normal);
+        mLyUpToCancel = view.findViewById(R.id.ly_up_to_cancel);
+        mLyTooShort = view.findViewById(R.id.ly_too_short);
+        mTipDialog = new Dialog(context, R.style.chat_recorder_style);
         mTipDialog.setContentView(view);
         WindowManager.LayoutParams lp = mTipDialog.getWindow().getAttributes();
         lp.gravity = Gravity.CENTER;
@@ -107,6 +118,8 @@ public class RecordButton extends Button {
         mMediaRecorder.setMaxRecordTime(MAX_RECORD_AUDIO_TIME);
         mMediaRecorder.setOnProgressListener(onRecordProgressListener);
         mMediaRecorder.setOnErrorListener(onRecordErrorListener);
+
+
     }
 
     @Override
@@ -114,6 +127,7 @@ public class RecordButton extends Button {
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                mState = STATE_NORMAL;
                 mStartTime = System.currentTimeMillis();
                 // start record
                 mTipDialog.show();
@@ -125,25 +139,89 @@ public class RecordButton extends Button {
 
                 mAnimThread = new ObtainDecibelThread();
                 mAnimThread.start();
-                break;
+
+                updateDialog();
+                setBackgroundResource(R.drawable.btn_chat_voice_pressed);
+                return true;
             case MotionEvent.ACTION_UP:
                 //finish record
                 mAnimThread.exit();
-                mTipDialog.dismiss();
                 mMediaRecorder.stop();
-
-                if(mCallback!= null){
-                    mCallback.onFinishedRecord(mRecordFilePath);
+                int len = (int) ((System.currentTimeMillis() - mStartTime) / 1000);
+                if (len < 3) {
+                    mState = STATE_TO_SHROT;
+                    updateDialog();
+                } else {
+                    mTipDialog.dismiss();
+                    if (mCallback != null && mState != STATE_UP_CANCEL) {
+                        mCallback.onFinishedRecord(mRecordFilePath, len);
+                    }
                 }
+                setText("按住 说话");
+                setBackgroundResource(R.drawable.btn_chat_voice_normal);
+                mState = STATE_INIT;
                 break;
             case MotionEvent.ACTION_CANCEL:// 当手指移动到view外面，会cancel
+                TLog.log(TAG,"cancel");
                 //cancelRecord();
+                mAnimThread.exit();
+                mMediaRecorder.stop();
+                mTipDialog.dismiss();
+
+                setText("按住 说话");
+                setBackgroundResource(R.drawable.btn_chat_voice_normal);
+                mState = STATE_INIT;
                 break;
+            case MotionEvent.ACTION_MOVE:
+                Rect out = new Rect();
+                getDrawingRect(out);
+                int y = (int) event.getY();
+                int x = (int) event.getX();
+                int initState = mState;
+                if (out.contains(x, y)) {
+                    //TLog.log(TAG, "未按钮外");
+                    mState = STATE_NORMAL;
+                } else {
+                    //TLog.log(TAG, "移出按钮外");
+                    mState = STATE_UP_CANCEL;
+                }
+                if (initState != mState) {
+                    updateDialog();
+                }
+                return true;
         }
-        return true;
+        return super.onTouchEvent(event);
     }
 
-    public void setRecorderCallback(OnFinishedRecordListener callback){
+    private void updateDialog() {
+        switch (mState) {
+            case STATE_TO_SHROT:
+                mLyNormal.setVisibility(View.INVISIBLE);
+                mLyUpToCancel.setVisibility(View.INVISIBLE);
+                mLyTooShort.setVisibility(View.VISIBLE);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTipDialog.dismiss();
+                    }
+                }, 500);
+                break;
+            case STATE_NORMAL:
+                mLyNormal.setVisibility(View.VISIBLE);
+                mLyUpToCancel.setVisibility(View.INVISIBLE);
+                mLyTooShort.setVisibility(View.INVISIBLE);
+                setText("松开 结束");
+                break;
+            case STATE_UP_CANCEL:
+                mLyNormal.setVisibility(View.INVISIBLE);
+                mLyUpToCancel.setVisibility(View.VISIBLE);
+                mLyTooShort.setVisibility(View.INVISIBLE);
+                setText("松开手指，取消发送");
+                break;
+        }
+    }
+
+    public void setRecorderCallback(OnFinishedRecordListener callback) {
         mCallback = callback;
     }
 
@@ -159,7 +237,7 @@ public class RecordButton extends Button {
         public void run() {
             while (running) {
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -168,9 +246,9 @@ public class RecordButton extends Button {
                 }
                 int amplitude = mMediaRecorder.getMaxAmplitude();
                 if (amplitude != 0) {
-                   // int f = (int) (10 * Math.log(amplitude) / Math.log(10));
+                    // int f = (int) (10 * Math.log(amplitude) / Math.log(10));
                     double f = 0.8f + ((2.0 * Math.log10(amplitude / 20)) / 10.0) * 9.0f;
-                    TLog.log(TAG,"f:"+f);
+                    //TLog.log(TAG, "f:" + f);
                     if (f < 3.5)
                         mAnimHandler.sendEmptyMessage(0);
                     else if (f < 4)
@@ -193,7 +271,7 @@ public class RecordButton extends Button {
     static class ShowVolumeHandler extends Handler {
         private ImageView animView;
 
-        ShowVolumeHandler(ImageView animView){
+        ShowVolumeHandler(ImageView animView) {
             this.animView = animView;
         }
 
@@ -204,6 +282,6 @@ public class RecordButton extends Button {
     }
 
     public interface OnFinishedRecordListener {
-        public void onFinishedRecord(String audioPath);
+        public void onFinishedRecord(String audioPath, int length);
     }
 }

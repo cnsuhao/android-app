@@ -3,60 +3,67 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:paddingBottom="10dp"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/timestamp"
-        android:text="早上11:10"
+        style="@style/chat_time_lb"
         android:layout_marginBottom="10dp"
-        style="@style/chat_time_lb"/>
+        android:text="早上11:10" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <net.oschina.app.v2.ui.AvatarView
-            xmlns:fresco="http://schemas.android.com/apk/res-auto"
-            fresco:placeholderImage="@drawable/ic_default_avatar"
-            fresco:roundAsCircle="true"
+        <net.oschina.app.v2.ui.AvatarView xmlns:fresco="http://schemas.android.com/apk/res-auto"
             android:id="@+id/iv_userhead"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="4dp"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            fresco:placeholderImage="@drawable/ic_default_avatar"
+            fresco:roundAsCircle="true"/>
 
-        <TextView
-            android:id="@+id/tv_chatcontent"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/iv_userhead"
-            android:autoLink="web"
-            android:background="@drawable/chat_from_bg_selector"
-            android:clickable="true"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:paddingRight="8dp"
-            android:paddingLeft="12dp"
-            android:focusable="true"
-            android:gravity="left|center"
-            android:lineSpacingExtra="2dp"
-            android:minHeight="@dimen/size_avatar"
-            android:textColor="@color/chat_message_color"
-            android:textSize="15sp" />
+            android:layout_toRightOf="@id/iv_userhead">
 
-        <net.oschina.app.v2.activity.chat.view.AsyncTextView
-            android:id="@+id/tv_userid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/iv_userhead"
-            android:layout_toLeftOf="@id/tv_chatcontent"
-            android:visibility="gone"/>
+            <net.oschina.app.v2.activity.chat.view.AsyncTextView
+                android:id="@+id/tv_userid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="4dp"
+                android:textColor="@color/main_gray"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_chatcontent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:background="@drawable/chat_from_bg_selector"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_below="@id/tv_userid"
+                android:gravity="left|center"
+                android:lineSpacingExtra="2dp"
+                android:minHeight="@dimen/size_avatar"
+                android:paddingBottom="8dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="8dp"
+                android:paddingTop="8dp"
+                android:textColor="@color/chat_message_color"
+                android:textSize="15sp" />
+        </RelativeLayout>
+
     </RelativeLayout>
 
 </LinearLayout>

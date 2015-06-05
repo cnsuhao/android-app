@@ -19,6 +19,7 @@ public class MessageActivity extends BaseActivity {
     public static final String KEY_CHAT_NICK = "key_chat_nick";
     public static final String KEY_CHAT_TYPE = "key_chat_type";
     private AsyncTextView mTvTitle;
+    public String playMsgId;
 
     @Override
     protected boolean hasBackButton() {

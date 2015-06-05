@@ -36,7 +36,7 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener,
     public interface OnComposeOperationDelegate {
         void onSendText(String text);
 
-        void onSendVoice(String file);
+        void onSendVoice(String file,int length);
     }
 
     private TextWatcher mTextWatcher = new TextWatcher() {
@@ -47,7 +47,7 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener,
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (TextUtils.isEmpty(s)) {//
+            if (TextUtils.isEmpty(s) || s.toString().trim().equals("")) {//
                 if (mBtnSend.getVisibility() == View.VISIBLE) {
                     dismissSendButton();
                 }
@@ -152,9 +152,9 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener,
     }
 
     @Override
-    public void onFinishedRecord(String audioPath) {
+    public void onFinishedRecord(String audioPath,int length) {
         if(mDelegate != null){
-            mDelegate.onSendVoice(audioPath);
+            mDelegate.onSendVoice(audioPath,length);
         }
     }
 

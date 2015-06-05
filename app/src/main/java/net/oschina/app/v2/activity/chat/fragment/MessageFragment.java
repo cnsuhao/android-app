@@ -264,7 +264,7 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
     }
 
     @Override
-    public void onSendVoice(String file) {
+    public void onSendVoice(String file,int length) {
         try {
             final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VOICE);
             // 如果是群聊，设置chattype,默认是单聊
@@ -274,7 +274,7 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
                 message.setChatType(EMMessage.ChatType.ChatRoom);
             }
             message.setReceipt(mToChatUsername);
-            VoiceMessageBody body = new VoiceMessageBody(new File(file), 60);
+            VoiceMessageBody body = new VoiceMessageBody(new File(file), length);
             message.addBody(body);
 
             mConversation.addMessage(message);

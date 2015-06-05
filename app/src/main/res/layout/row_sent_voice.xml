@@ -4,12 +4,16 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="13dp">
+    android:paddingBottom="10dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        style="@style/chat_time_lb"
+        android:layout_marginBottom="10dp"
+        android:text="早上11:10" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,31 +21,48 @@
 
         <net.oschina.app.v2.ui.AvatarView
             xmlns:fresco="http://schemas.android.com/apk/res-auto"
-            fresco:placeholderImage="@drawable/ic_default_avatar"
-            fresco:roundAsCircle="true"
             android:id="@+id/iv_userhead"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:scaleType="fitXY" />
+            android:layout_marginLeft="4dp"
+            android:background="@drawable/ic_default_avatar"
+            fresco:placeholderImage="@drawable/ic_default_avatar"
+            fresco:roundAsCircle="true" />
 
-        <ImageView
-            android:id="@+id/iv_voice"
+        <LinearLayout
+            android:id="@+id/ly_voice_content"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginRight="10dp"
+            android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/chat_to_bg_selector"/>
+            android:background="@drawable/chat_to_bg_selector"
+            android:gravity="right|center_vertical"
+            android:minWidth="60dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="12dp"
+            android:paddingTop="8dp">
+
+            <ImageView
+                android:id="@+id/iv_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:scaleType="centerInside" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_length"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/iv_voice"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/ly_voice_content"
             android:gravity="center"
-            />
+            android:textStyle="bold"
+            android:textColor="@color/main_gray"
+            android:text="3\”"/>
 
         <ImageView
             android:id="@+id/msg_status"

@@ -23,6 +23,7 @@ import java.util.TimerTask;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.Spannable;
@@ -37,6 +38,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
@@ -68,6 +70,7 @@ import com.easemob.chat.VideoMessageBody;
 //import com.easemob.chatuidemo.utils.ImageUtils;
 //import com.easemob.chatuidemo.utils.SmileUtils;
 //import com.easemob.chatuidemo.utils.UserUtils;
+import com.easemob.chat.VoiceMessageBody;
 import com.easemob.util.DateUtils;
 import com.easemob.util.EMLog;
 import com.easemob.util.LatLng;
@@ -75,6 +78,7 @@ import com.easemob.util.TextFormater;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.activity.chat.MessageActivity;
 import net.oschina.app.v2.activity.chat.loader.AwareView;
 import net.oschina.app.v2.activity.chat.loader.CacheType;
 import net.oschina.app.v2.activity.chat.loader.ContactsFetcher;
@@ -86,6 +90,7 @@ import net.oschina.app.v2.model.User;
 import net.oschina.app.v2.model.chat.IMUser;
 import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.utils.SmileUtils;
+import net.oschina.app.v2.utils.TDevice;
 
 public class MessageAdapter extends BaseAdapter {
 
@@ -318,7 +323,6 @@ public class MessageAdapter extends BaseAdapter {
                 }
 
             } else if (message.getType() == Type.TXT) {
-
                 try {
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
@@ -345,6 +349,7 @@ public class MessageAdapter extends BaseAdapter {
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
                     holder.tv_usernick = (AsyncTextView) convertView.findViewById(R.id.tv_userid);
                     holder.iv_read_status = (ImageView) convertView.findViewById(R.id.iv_unread_voice);
+                    holder.voice_content = convertView.findViewById(R.id.ly_voice_content);
                 } catch (Exception e) {
                 }
             } else if (message.getType() == Type.LOCATION) {
@@ -388,7 +393,6 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv_usernick = (AsyncTextView) convertView.findViewById(R.id.tv_userid);
                 } catch (Exception e) {
                 }
-
             }
 
             convertView.setTag(holder);
@@ -396,11 +400,17 @@ public class MessageAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        // 群聊时，显示接收的消息的发送人的名称
-        if ((chatType == ChatType.GroupChat || chatType == chatType.ChatRoom) && message.direct == Direct.RECEIVE) {
-            //demo里使用username代码nick
-            holder.tv_usernick.setText(message.getFrom());
+        if(holder.tv_usernick != null) {
+            // 群聊时，显示接收的消息的发送人的名称
+            if ((chatType == ChatType.GroupChat || chatType == ChatType.ChatRoom) && message.direct == Direct.RECEIVE) {
+                //demo里使用username代码nick
+                holder.tv_usernick.setText(message.getFrom());
+                holder.tv_usernick.setVisibility(View.VISIBLE);
+            } else {
+                holder.tv_usernick.setVisibility(View.GONE);
+            }
         }
+
         // 如果是发送的消息并且不是群聊消息，显示已读textview
         if (!(chatType == ChatType.GroupChat || chatType == chatType.ChatRoom) && message.direct == Direct.SEND) {
             holder.tv_ack = (TextView) convertView.findViewById(R.id.tv_ack);
@@ -426,7 +436,8 @@ public class MessageAdapter extends BaseAdapter {
             }
         } else {
             // 如果是文本或者地图消息并且不是group messgae,chatroom message，显示的时候给对方发送已读回执
-            if ((message.getType() == Type.TXT || message.getType() == Type.LOCATION) && !message.isAcked && chatType != ChatType.GroupChat && chatType != ChatType.ChatRoom) {
+            if ((message.getType() == Type.TXT || message.getType() == Type.LOCATION)
+                    && !message.isAcked && chatType != ChatType.GroupChat && chatType != ChatType.ChatRoom) {
                 // 不是语音通话记录
                 if (!message.getBooleanAttribute(Constants.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
                     try {
@@ -861,105 +872,117 @@ public class MessageAdapter extends BaseAdapter {
      * @param convertView
      */
     private void handleVoiceMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
-//		VoiceMessageBody voiceBody = (VoiceMessageBody) message.getBody();
-//		holder.tv.setText(voiceBody.getLength() + "\"");
-//		holder.iv.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, username));
-//		holder.iv.setOnLongClickListener(new OnLongClickListener() {
-//			@Override
-//			public boolean onLongClick(View v) {
+		VoiceMessageBody voiceBody = (VoiceMessageBody) message.getBody();
+		holder.tv.setText(voiceBody.getLength() + "\"");
+		holder.voice_content.setOnClickListener(new VoicePlayClickListener(message,
+                holder.iv, holder.iv_read_status, this, activity, username));
+		holder.voice_content.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
 //				activity.startActivityForResult(
 //						(new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
 //								Type.VOICE.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
-//				return true;
-//			}
-//		});
-//		if (((ChatActivity)activity).playMsgId != null
-//				&& ((ChatActivity)activity).playMsgId.equals(message
-//						.getMsgId())&&VoicePlayClickListener.isPlaying) {
-//			AnimationDrawable voiceAnimation;
-//			if (message.direct == Direct.RECEIVE) {
-//				holder.iv.setImageResource(R.anim.voice_from_icon);
-//			} else {
-//				holder.iv.setImageResource(R.anim.voice_to_icon);
-//			}
-//			voiceAnimation = (AnimationDrawable) holder.iv.getDrawable();
-//			voiceAnimation.start();
-//		} else {
-//			if (message.direct == Direct.RECEIVE) {
-//				holder.iv.setImageResource(R.drawable.chatfrom_voice_playing);
-//			} else {
-//				holder.iv.setImageResource(R.drawable.chatto_voice_playing);
-//			}
-//		}
-//
-//
-//		if (message.direct == Direct.RECEIVE) {
-//			if (message.isListened()) {
-//				// 隐藏语音未听标志
-//				holder.iv_read_status.setVisibility(View.INVISIBLE);
-//			} else {
-//				holder.iv_read_status.setVisibility(View.VISIBLE);
-//			}
-//			EMLog.d(TAG, "it is receive msg");
-//			if (message.status == EMMessage.Status.INPROGRESS) {
-//				holder.pb.setVisibility(View.VISIBLE);
-//				EMLog.d(TAG, "!!!! back receive");
-//				((FileMessageBody) message.getBody()).setDownloadCallback(new EMCallBack() {
-//
-//					@Override
-//					public void onSuccess() {
-//						activity.runOnUiThread(new Runnable() {
-//
-//							@Override
-//							public void run() {
-//								holder.pb.setVisibility(View.INVISIBLE);
-//								notifyDataSetChanged();
-//							}
-//						});
-//
-//					}
-//
-//					@Override
-//					public void onProgress(int progress, String status) {
-//					}
-//
-//					@Override
-//					public void onError(int code, String message) {
-//						activity.runOnUiThread(new Runnable() {
-//
-//							@Override
-//							public void run() {
-//								holder.pb.setVisibility(View.INVISIBLE);
-//							}
-//						});
-//
-//					}
-//				});
-//
-//			} else {
-//				holder.pb.setVisibility(View.INVISIBLE);
-//
-//			}
-//			return;
-//		}
-//
-//		// until here, deal with send voice msg
-//		switch (message.status) {
-//		case SUCCESS:
-//			holder.pb.setVisibility(View.GONE);
-//			holder.staus_iv.setVisibility(View.GONE);
-//			break;
-//		case FAIL:
-//			holder.pb.setVisibility(View.GONE);
-//			holder.staus_iv.setVisibility(View.VISIBLE);
-//			break;
-//		case INPROGRESS:
-//			holder.pb.setVisibility(View.VISIBLE);
-//			holder.staus_iv.setVisibility(View.GONE);
-//			break;
-//		default:
-//			sendMsgInBackground(message, holder);
-//		}
+				return true;
+			}
+		});
+
+        int total = (int) (TDevice.getScreenWidth()-TDevice.dpToPixel(60));
+        int min = (int) TDevice.dpToPixel(60);
+        int width = (total-min)/128 * voiceBody.getLength() + min;
+        if (message.direct == Direct.RECEIVE) {
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder.voice_content.getLayoutParams();
+            lp.width = width;
+            holder.voice_content.setLayoutParams(lp);
+        } else {
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.voice_content.getLayoutParams();
+            lp.width = width;
+            holder.voice_content.setLayoutParams(lp);
+        }
+
+		if (((MessageActivity)activity).playMsgId != null
+				&& ((MessageActivity)activity).playMsgId.equals(message
+						.getMsgId())&&VoicePlayClickListener.isPlaying) {
+			AnimationDrawable voiceAnimation;
+			if (message.direct == Direct.RECEIVE) {
+				holder.iv.setImageResource(R.anim.voice_from_icon);
+			} else {
+				holder.iv.setImageResource(R.anim.voice_to_icon);
+			}
+			voiceAnimation = (AnimationDrawable) holder.iv.getDrawable();
+			voiceAnimation.start();
+		} else {
+			if (message.direct == Direct.RECEIVE) {
+				holder.iv.setImageResource(R.drawable.chatfrom_voice_playing);
+			} else {
+				holder.iv.setImageResource(R.drawable.chatto_voice_playing);
+			}
+		}
+
+		if (message.direct == Direct.RECEIVE) {
+			if (message.isListened()) {
+				// 隐藏语音未听标志
+				holder.iv_read_status.setVisibility(View.INVISIBLE);
+			} else {
+				holder.iv_read_status.setVisibility(View.VISIBLE);
+			}
+			EMLog.d(TAG, "it is receive msg");
+			if (message.status == EMMessage.Status.INPROGRESS) {
+				holder.pb.setVisibility(View.VISIBLE);
+				EMLog.d(TAG, "!!!! back receive");
+				((FileMessageBody) message.getBody()).setDownloadCallback(new EMCallBack() {
+
+					@Override
+					public void onSuccess() {
+						activity.runOnUiThread(new Runnable() {
+
+							@Override
+							public void run() {
+								holder.pb.setVisibility(View.INVISIBLE);
+								notifyDataSetChanged();
+							}
+						});
+
+					}
+
+					@Override
+					public void onProgress(int progress, String status) {
+					}
+
+					@Override
+					public void onError(int code, String message) {
+						activity.runOnUiThread(new Runnable() {
+
+							@Override
+							public void run() {
+								holder.pb.setVisibility(View.INVISIBLE);
+							}
+						});
+					}
+				});
+
+			} else {
+				holder.pb.setVisibility(View.INVISIBLE);
+			}
+			return;
+		}
+
+		// until here, deal with send voice msg
+		switch (message.status) {
+		case SUCCESS:
+			holder.pb.setVisibility(View.GONE);
+			holder.staus_iv.setVisibility(View.GONE);
+			break;
+		case FAIL:
+			holder.pb.setVisibility(View.GONE);
+			holder.staus_iv.setVisibility(View.VISIBLE);
+			break;
+		case INPROGRESS:
+			holder.pb.setVisibility(View.VISIBLE);
+			holder.staus_iv.setVisibility(View.GONE);
+			break;
+		default:
+			sendMsgInBackground(message, holder);
+		}
     }
 
     /**
@@ -1374,6 +1397,7 @@ public class MessageAdapter extends BaseAdapter {
         TextView tv_file_name;
         TextView tv_file_size;
         TextView tv_file_download_state;
+        View voice_content;
     }
 
     /*
