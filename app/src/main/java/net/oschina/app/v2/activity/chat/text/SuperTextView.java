@@ -11,10 +11,12 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
+import net.oschina.app.v2.activity.chat.emoji.EmojiconTextView;
+
 /**
  * Created by Tonlin on 2015/6/8.
  */
-public class SuperTextView extends TextView {
+public class SuperTextView extends EmojiconTextView {
 
     public SuperTextView(Context context) {
         super(context);
@@ -26,11 +28,6 @@ public class SuperTextView extends TextView {
 
     public SuperTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public SuperTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     @Override

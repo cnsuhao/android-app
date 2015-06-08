@@ -65,7 +65,6 @@ public class EmojiconEditText extends EditText {
      */
     public void setEmojiconSize(int pixels) {
         mEmojiconSize = pixels;
-
         updateText();
     }
 

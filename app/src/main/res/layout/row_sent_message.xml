@@ -32,6 +32,8 @@
             android:scaleType="fitXY" />
 
         <net.oschina.app.v2.activity.chat.text.SuperTextView
+            xmlns:emoji="http://schemas.android.com/apk/res-auto"
+            emoji:emojiconSize="20dp"
             android:id="@+id/tv_chatcontent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,13 +42,13 @@
             android:linksClickable="true"
             android:textColorLink="@color/chat_link_color"
             android:background="@drawable/chat_to_bg_selector"
-            android:gravity="left|center"
+            android:gravity="left|center_vertical"
             android:lineSpacingExtra="2dp"
-            android:paddingBottom="8dp"
             android:paddingLeft="8dp"
             android:paddingRight="12dp"
-            android:paddingTop="8dp"
-            android:textSize="15sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:textSize="16sp"
             android:minHeight="@dimen/size_avatar"
             android:textColor="@color/chat_message_color"/>
 

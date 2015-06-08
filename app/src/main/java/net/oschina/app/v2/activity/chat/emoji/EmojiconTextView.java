@@ -80,7 +80,6 @@ public class EmojiconTextView extends TextView {
      */
     public void setEmojiconSize(int pixels) {
         mEmojiconSize = pixels;
-
         super.setText(getText());
     }
 

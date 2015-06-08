@@ -46,16 +46,19 @@
                 android:visibility="gone" />
 
             <net.oschina.app.v2.activity.chat.emoji.EmojiconEditText
+                xmlns:emoji="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/et_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
                 android:background="@drawable/chat_textfield_selector"
                 android:minHeight="35dp"
                 android:textColor="@color/main_black"
                 android:textColorHint="@color/main_gray"
                 android:textCursorDrawable="@null"
                 android:textSize="16sp"
-                android:visibility="visible" />
+                android:visibility="visible"
+                emoji:emojiconSize="20sp"/>
 
             <ImageView
                 android:id="@+id/iv_emoji"
