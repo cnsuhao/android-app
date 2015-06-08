@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/list_divider_color" />
 
     <LinearLayout
         android:id="@+id/ly_input"
@@ -28,7 +35,17 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <EditText
+            <net.oschina.app.v2.activity.chat.view.RecordButton
+                android:id="@+id/btn_voice"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:background="@drawable/btn_chat_voice_selector"
+                android:text="按住 说话"
+                android:textColor="@color/main_black"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <net.oschina.app.v2.activity.chat.emoji.EmojiconEditText
                 android:id="@+id/et_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,15 +67,6 @@
                 android:src="@drawable/btn_chat_emoji_selector"
                 android:visibility="visible" />
 
-            <net.oschina.app.v2.activity.chat.view.RecordButton
-                android:id="@+id/btn_voice"
-                android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:background="@drawable/btn_chat_voice_selector"
-                android:text="按住 说话"
-                android:textColor="@color/main_black"
-                android:textSize="15sp"
-                android:visibility="gone" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -91,22 +99,21 @@
         android:id="@+id/split"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_below="@id/ly_input"
         android:background="@color/list_divider_color" />
 
     <RelativeLayout
         android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/split"
-        android:minHeight="180dp"
-        android:padding="16dp"
-        android:visibility="gone">
+        android:layout_below="@+id/split">
 
         <LinearLayout
+            android:id="@+id/ly_opt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -193,10 +200,31 @@
             </LinearLayout>
         </LinearLayout>
 
-    </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/ly_emoji"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/list_divider_color" />
-</RelativeLayout>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="180dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="center_horizontal">
+
+                <com.viewpagerindicator.CirclePageIndicator
+                    android:id="@+id/indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:padding="@dimen/space_4" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

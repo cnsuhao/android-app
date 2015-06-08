@@ -31,12 +31,14 @@
             android:layout_marginLeft="4dp"
             android:scaleType="fitXY" />
 
-        <TextView
+        <net.oschina.app.v2.activity.chat.text.SuperTextView
             android:id="@+id/tv_chatcontent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:autoLink="web"
+            android:autoLink="web|email|phone"
+            android:linksClickable="true"
+            android:textColorLink="@color/chat_link_color"
             android:background="@drawable/chat_to_bg_selector"
             android:gravity="left|center"
             android:lineSpacingExtra="2dp"

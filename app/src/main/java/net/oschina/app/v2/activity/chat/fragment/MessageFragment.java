@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Spannable;
+import android.text.style.URLSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -286,4 +288,7 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
             e.printStackTrace();
         }
     }
+
+
+    Spannable s;
 }

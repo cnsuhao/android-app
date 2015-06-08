@@ -44,11 +44,13 @@
                 android:textSize="13sp"
                 android:visibility="gone" />
 
-            <TextView
+            <net.oschina.app.v2.activity.chat.text.SuperTextView
                 android:id="@+id/tv_chatcontent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autoLink="web"
+                android:autoLink="web|email|phone"
+                android:linksClickable="true"
+                android:textColorLink="@color/chat_link_color"
                 android:background="@drawable/chat_from_bg_selector"
                 android:clickable="true"
                 android:focusable="true"

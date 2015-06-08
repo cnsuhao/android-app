@@ -8,6 +8,18 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/ContactAdapter.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/ContactSearchAdapter.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/ConversationAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/EmojiAdapter.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/EmojiViewPagerAdapter.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/Emojicon.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/EmojiconEditText.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/EmojiconHandler.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/EmojiconSpan.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/EmojiconTextView.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/Nature.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/Objects.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/People.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/Places.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/Symbols.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/AddFriendFragment.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/AddGroupFragment.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/ConversationFragment.java" charset="UTF-8" />
@@ -22,6 +34,8 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/MediaRecorderOnErrorListener.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/MediaRecorderOnProgressListener.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/ProximitySensorListener.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/text/MyURLSpan.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/text/SuperTextView.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/user/LoginActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/model/chat/GroupUserRelation.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/model/chat/IMUser.java" charset="UTF-8" />
@@ -34,6 +48,7 @@
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_contact_add.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_contact_group.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/v2_list_cell_chat_contact_letter_header.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/v2_list_cell_emojicon_item.xml" charset="GBK" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

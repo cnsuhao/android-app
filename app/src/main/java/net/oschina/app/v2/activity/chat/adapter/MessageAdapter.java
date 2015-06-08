@@ -84,6 +84,7 @@ import net.oschina.app.v2.activity.chat.loader.CacheType;
 import net.oschina.app.v2.activity.chat.loader.ContactsFetcher;
 import net.oschina.app.v2.activity.chat.loader.DisplayListener;
 import net.oschina.app.v2.activity.chat.loader.IName;
+import net.oschina.app.v2.activity.chat.text.AdvanceTextHelper;
 import net.oschina.app.v2.activity.chat.view.AsyncTextView;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.model.User;
@@ -579,9 +580,11 @@ public class MessageAdapter extends BaseAdapter {
      */
     private void handleTextMessage(EMMessage message, ViewHolder holder, final int position) {
         TextMessageBody txtBody = (TextMessageBody) message.getBody();
-        Spannable span = SmileUtils.getSmiledText(context, txtBody.getMessage());
+       // Spannable span = SmileUtils.getSmiledText(context, txtBody.getMessage());
         // 设置内容
-        holder.tv.setText(span, BufferType.SPANNABLE);
+        //holder.tv.setText(span, BufferType.SPANNABLE);
+        AdvanceTextHelper.parseLinkText(holder.tv,txtBody.getMessage());
+
         // 设置长按事件监听
         holder.tv.setOnLongClickListener(new OnLongClickListener() {
             @Override

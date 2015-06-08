@@ -3,4 +3,6 @@
     <color name="chat_message_color">#353535</color>
     <color name="chat_time_bg">#D4D4D4</color>
     <color name="chat_message_bg">#EAEAEA</color>
+
+    <color name="chat_link_color">#596D93</color>
 </resources>

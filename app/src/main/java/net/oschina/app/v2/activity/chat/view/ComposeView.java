@@ -1,26 +1,44 @@
 package net.oschina.app.v2.activity.chat.view;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.os.Handler;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.tonlin.osc.happy.R;
+import com.viewpagerindicator.CirclePageIndicator;
+
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.activity.chat.emoji.EmojiViewPagerAdapter;
+import net.oschina.app.v2.activity.chat.emoji.Emojicon;
+import net.oschina.app.v2.activity.chat.emoji.EmojiconEditText;
+import net.oschina.app.v2.activity.chat.emoji.EmojiconTextView;
+import net.oschina.app.v2.activity.chat.emoji.People;
+import net.oschina.app.v2.emoji.SoftKeyboardStateHelper;
+import net.oschina.app.v2.utils.TDevice;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Tonlin on 2015/5/29.
  */
-public class ComposeView extends RelativeLayout implements View.OnClickListener, RecordButton.OnFinishedRecordListener {
+public class ComposeView extends LinearLayout implements View.OnClickListener, RecordButton.OnFinishedRecordListener, SoftKeyboardStateHelper.SoftKeyboardStateListener, EmojiViewPagerAdapter.OnClickEmojiListener {
 
     private ImageView mIvEmoji;
     private ImageView mIvVoiceText;
@@ -28,15 +46,23 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener,
     private ImageView mIvMore;
     private Button mBtnSend;
     private RecordButton mBtnVoice;
-    private EditText mEtText;
+    private EmojiconEditText mEtText;
 
     private OnComposeOperationDelegate mDelegate;
     private View mRlBottom;
+    private SoftKeyboardStateHelper mKeyboardHelper;
+    private ViewPager mViewPager;
+    private EmojiViewPagerAdapter mPagerAdapter;
+    private int mCurrentKeyboardHeigh;
+    private View mLyOpt, mLyEmoji;
+    private boolean mIsKeyboardVisible;
+    private boolean mNeedShowEmojiOnKeyboardClosed;
+
 
     public interface OnComposeOperationDelegate {
         void onSendText(String text);
 
-        void onSendVoice(String file,int length);
+        void onSendVoice(String file, int length);
     }
 
     private TextWatcher mTextWatcher = new TextWatcher() {
@@ -89,6 +115,7 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener,
         init(context);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private ComposeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
@@ -137,7 +164,8 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener,
             }
         });
         mIvEmoji = (ImageView) findViewById(R.id.iv_emoji);
-        mEtText = (EditText) findViewById(R.id.et_text);
+        mIvEmoji.setOnClickListener(this);
+        mEtText = (EmojiconEditText) findViewById(R.id.et_text);
         mEtText.addTextChangedListener(mTextWatcher);
         mIvMore = (ImageView) findViewById(R.id.iv_more);
         mIvMore.setOnClickListener(this);
@@ -148,15 +176,59 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener,
         mIvVoiceText = (ImageView) findViewById(R.id.iv_voice_text);
         mIvVoiceText.setOnClickListener(this);
 
+        mLyEmoji = findViewById(R.id.ly_emoji);
+        mLyOpt = findViewById(R.id.ly_opt);
         mRlBottom = findViewById(R.id.rl_bottom);
+
+
+        mKeyboardHelper = new SoftKeyboardStateHelper(((Activity) getContext()).getWindow()
+                .getDecorView());
+        mKeyboardHelper.addSoftKeyboardStateListener(this);
+
+
+        mViewPager = (ViewPager) findViewById(R.id.view_pager);
+
+        int emojiHeight = caculateEmojiPanelHeight();
+
+        Emojicon[] emojis = People.DATA;
+        List<List<Emojicon>> pagers = new ArrayList<List<Emojicon>>();
+        List<Emojicon> es = null;
+        int size = 0;
+        boolean justAdd = false;
+        for (Emojicon ej : emojis) {
+            if (size == 0) {
+                es = new ArrayList<>();
+            }
+            if (size == 27) {
+                es.add(new Emojicon(""));
+            } else {
+                es.add(ej);
+            }
+            size++;
+            if (size == 28) {
+                pagers.add(es);
+                size = 0;
+                justAdd = true;
+            } else {
+                justAdd = false;
+            }
+        }
+        if (!justAdd && es != null) {
+            int exSize = 28 - es.size();
+            for (int i = 0; i < exSize; i++) {
+                es.add(new Emojicon(""));
+            }
+            pagers.add(es);
+        }
+
+        mPagerAdapter = new EmojiViewPagerAdapter(getContext(), pagers,
+                emojiHeight, this);
+        mViewPager.setAdapter(mPagerAdapter);
+
+        CirclePageIndicator indicator = (CirclePageIndicator) findViewById(R.id.indicator);
+        indicator.setViewPager(mViewPager);
     }
 
-    @Override
-    public void onFinishedRecord(String audioPath,int length) {
-        if(mDelegate != null){
-            mDelegate.onSendVoice(audioPath,length);
-        }
-    }
 
     @Override
     public void onClick(View v) {
@@ -178,11 +250,149 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener,
                 mIvVoiceText.setImageResource(R.drawable.btn_to_text_selector);
             }
         } else if (id == R.id.iv_more) {
-            if (mRlBottom.getVisibility() == View.VISIBLE) {
-                mRlBottom.setVisibility(View.GONE);
+            if (mLyOpt.getVisibility() == View.VISIBLE) {
+                mLyOpt.setVisibility(View.GONE);
             } else {
-                mRlBottom.setVisibility(View.VISIBLE);
+                mLyOpt.setVisibility(View.VISIBLE);
             }
+            hideEmojiAndKeyboard();
+        } else if (id == R.id.iv_emoji) {//点击表情
+            if (mLyOpt.getVisibility() == View.VISIBLE) {
+                mLyOpt.setVisibility(View.GONE);
+            }
+
+            if (mLyEmoji.getVisibility() == View.GONE) {
+                mNeedShowEmojiOnKeyboardClosed = true;
+                tryShowEmojiPanel();
+            } else {
+                tryHideEmojiPanel();
+            }
+        }
+    }
+
+    private int caculateEmojiPanelHeight() {
+        mCurrentKeyboardHeigh = AppContext.getSoftKeyboardHeight();
+        if (mCurrentKeyboardHeigh == 0) {
+            mCurrentKeyboardHeigh = (int) TDevice.dpToPixel(180);
+        }
+
+        mLyOpt.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, mCurrentKeyboardHeigh));
+
+        int emojiPanelHeight = (int) (mCurrentKeyboardHeigh - TDevice
+                .dpToPixel(20));
+        int emojiHeight = (int) (emojiPanelHeight / 4);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, emojiPanelHeight);
+        mViewPager.setLayoutParams(lp);
+        if (mPagerAdapter != null) {
+            mPagerAdapter.setEmojiHeight(emojiHeight);
+        }
+        return emojiHeight;
+    }
+
+    private void tryShowEmojiPanel() {
+        if (mIsKeyboardVisible) {
+            TDevice.hideSoftKeyboard(mEtText);
+        } else {
+            showEmojiPanel();
+        }
+    }
+
+    private void tryHideEmojiPanel() {
+        if (!mIsKeyboardVisible) {
+            mEtText.requestFocus();
+            TDevice.showSoftKeyboard(mEtText);
+        } else {
+            hideEmojiPanel();
+        }
+    }
+
+    private void showEmojiPanel() {
+        mNeedShowEmojiOnKeyboardClosed = false;
+        mLyEmoji.setVisibility(View.VISIBLE);
+        //mDelegate.onEmojiPanelVisiable(true, mLyEmoji.getHeight());
+        //mIvEmoji.setBackgroundResource(R.drawable.btn_emoji_pressed);
+    }
+
+    private void hideEmojiPanel() {
+        if (mLyEmoji.getVisibility() == View.VISIBLE) {
+            mLyEmoji.setVisibility(View.GONE);
+            //mDelegate.onEmojiPanelVisiable(true,0);
+            //mIvEmoji.setBackgroundResource(R.drawable.btn_emoji_selector);
+        }
+    }
+
+    public void hideEmojiAndKeyboard() {
+        hideEmojiPanel();
+        TDevice.hideSoftKeyboard(mEtText);
+    }
+
+    @Override
+    public void onSoftKeyboardOpened(int keyboardHeightInPx) {
+        int realKeyboardHeight = keyboardHeightInPx
+                - TDevice.getStatusBarHeight();
+
+        AppContext.setSoftKeyboardHeight(realKeyboardHeight);
+        if (mCurrentKeyboardHeigh != realKeyboardHeight) {
+            caculateEmojiPanelHeight();
+        }
+
+        mIsKeyboardVisible = true;
+        hideEmojiPanel();
+
+        if (mDelegate != null) {
+            //mDelegate.onSoftKeyboardOpened();
+        }
+    }
+
+    @Override
+    public void onSoftKeyboardClosed() {
+        mIsKeyboardVisible = false;
+        if (mNeedShowEmojiOnKeyboardClosed) {
+            showEmojiPanel();
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                }
+//            },1000);
+        }
+    }
+
+
+    public static void input(EditText editText, Emojicon emojicon) {
+        if (editText == null || emojicon == null) {
+            return;
+        }
+
+        int start = editText.getSelectionStart();
+        int end = editText.getSelectionEnd();
+        if (start < 0) {
+            editText.append(emojicon.getEmoji());
+        } else {
+            editText.getText().replace(Math.min(start, end), Math.max(start, end), emojicon.getEmoji(), 0, emojicon.getEmoji().length());
+        }
+    }
+
+    public static void backspace(EditText editText) {
+        KeyEvent event = new KeyEvent(0, 0, 0, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0, KeyEvent.KEYCODE_ENDCALL);
+        editText.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public void onEmojiClick(Emojicon emoji) {
+        input(mEtText,emoji);
+    }
+
+    @Override
+    public void onDelete() {
+        backspace(mEtText);
+    }
+
+    @Override
+    public void onFinishedRecord(String audioPath, int length) {
+        if (mDelegate != null) {
+            mDelegate.onSendVoice(audioPath, length);
         }
     }
 
@@ -192,7 +402,7 @@ public class ComposeView extends RelativeLayout implements View.OnClickListener,
 
     public void clearText() {
         if (mEtText != null) {
-            mEtText.getText().clear();
+            mEtText.setText("");
         }
     }
 }
