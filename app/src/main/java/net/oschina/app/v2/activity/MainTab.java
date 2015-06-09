@@ -15,7 +15,7 @@ public enum MainTab {
 	QUESTION(1, R.string.tab_name_question, R.drawable.tab_icon_question,
 			QuestionViewPagerFragment.class),
 
-	CHAT(2, R.string.tab_name_chat, R.drawable.tab_icon_tweet, ChatViewPagerFragment.class),
+	CHAT(2, R.string.tab_name_chat, R.drawable.tab_icon_chat, ChatViewPagerFragment.class),
 
 	TWEET(3, R.string.tab_name_tweet, R.drawable.tab_icon_tweet, TweetViewPagerFragment.class),
 

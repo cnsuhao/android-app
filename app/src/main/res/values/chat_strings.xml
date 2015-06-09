@@ -2,14 +2,14 @@
 <resources>
 
     <string name="location_recv">[%1$s\'s location]</string>
-    <string name="location_message">Location Message</string>
-    <string name="recording_video">Record Video</string>
-    <string name="location_prefix">[My location]</string>
-    <string name="voice">[Audio]</string>
-    <string name="picture">[Image]</string>
-    <string name="video">[Video]</string>
-    <string name="file">[File]</string>
-    <string name="voice_call">[Voice Call]</string>
+    <string name="location_message">位置</string>
+    <string name="recording_video">视频</string>
+    <string name="location_prefix">[我的位置]</string>
+    <string name="voice">[语音]</string>
+    <string name="picture">[图片]</string>
+    <string name="video">[视频]</string>
+    <string name="file">[文件]</string>
+    <string name="voice_call">[来电]</string>
 
     <string name="new_friend">新的朋友</string>
     <string name="group_chat">群聊</string>
