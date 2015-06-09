@@ -22,9 +22,9 @@
 ## 编译
 
 ### 注意
-从V1.3.0.0beta版本开始使用了[环信SDK](http://www.easemob.com/)在AndroidManifest.xml文件中有关于环信的APPKEY配置
-笔者这里没有上传自己的Key,同学们需要自行到环信官网注册。
-同时也使用了[BmobSDK](http://www.bmob.cn/)需要在net.oschina.app.v2.base.Config类中配置相应的APPID和ACCESS_KEY,也需要同学们自行到Bmob官网注册配置。
+  从V1.3.0.0beta版本开始使用了[环信SDK](http://www.easemob.com/)，在AndroidManifest.xml文件中有关于环信的APPKEY配置。
+笔者这里没有上传自己的Key，同学们需要自行到环信官网注册。 同时也使用了[BmobSDK](http://www.bmob.cn/)，
+需要在net.oschina.app.v2.base.Config类中配置相应的APPID和ACCESS_KEY，也需要同学们自行到Bmob官网注册配置。
 
 ### 使用Gradle编译
 最简单的方法是通过安装[Android Studio](https://developer.android.com/sdk/index.html) v1.+和[Gradle](https://www.gradle.org/) v2.2.1进行编译，
