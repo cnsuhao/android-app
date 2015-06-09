@@ -2,14 +2,19 @@ package net.oschina.app.v2.activity.chat.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.easemob.EMCallBack;
@@ -18,6 +23,7 @@ import com.easemob.EMNotifierEvent;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VoiceMessageBody;
 import com.tonlin.osc.happy.R;
@@ -25,14 +31,24 @@ import com.tonlin.osc.happy.R;
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.DemoHXSDKHelper;
 import net.oschina.app.v2.activity.chat.MessageActivity;
+import net.oschina.app.v2.activity.chat.SelectImageActivity;
 import net.oschina.app.v2.activity.chat.adapter.MessageAdapter;
+import net.oschina.app.v2.activity.chat.image.Photo;
 import net.oschina.app.v2.activity.chat.view.ComposeView;
 import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.easemob.controller.HXSDKHelper;
+import net.oschina.app.v2.utils.ImageUtils;
 import net.oschina.app.v2.utils.MD5Utils;
+import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.TLog;
+import net.oschina.app.v2.utils.UIHelper;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,6 +59,7 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
     public static final int CHATTYPE_GROUP = 2;
     public static final int CHATTYPE_CHATROOM = 3;
     private static final java.lang.String TAG = "IMA-LOG";
+    private static final int REQUEST_CODE_IMAGE = 1;
 
 
     private String mToChatUsername;
@@ -104,6 +121,13 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
 
     private void initViews(View view) {
         mLvMessage = (ListView) view.findViewById(R.id.lv_message);
+        mLvMessage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mComposeView.hideEmojiOptAndKeyboard();
+                return false;
+            }
+        });
         mComposeView = (ComposeView) view.findViewById(R.id.compose);
         mComposeView.setOperationDelegate(this);
         initData();
@@ -266,13 +290,13 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
     }
 
     @Override
-    public void onSendVoice(String file,int length) {
+    public void onSendVoice(String file, int length) {
         try {
             final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VOICE);
             // 如果是群聊，设置chattype,默认是单聊
-            if (mChatType == CHATTYPE_GROUP){
+            if (mChatType == CHATTYPE_GROUP) {
                 message.setChatType(EMMessage.ChatType.GroupChat);
-            }else if(mChatType == CHATTYPE_CHATROOM){
+            } else if (mChatType == CHATTYPE_CHATROOM) {
                 message.setChatType(EMMessage.ChatType.ChatRoom);
             }
             message.setReceipt(mToChatUsername);
@@ -289,6 +313,86 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
         }
     }
 
+    @Override
+    public void onSendImageClicked(View v) {
+        Intent intent = new Intent(getActivity(), SelectImageActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_IMAGE);
+    }
 
-    Spannable s;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        TLog.error("onActivityResult:" + resultCode);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_IMAGE) { // 发送本地图片
+                if (data != null) {
+                    int type = data.getIntExtra(SelectImageActivity.BUBDLE_KEY_FROM, -1);
+                    if (type == SelectImageActivity.FROM_TYPE_CAMERA) {
+                        String path = data.getStringExtra(SelectImageActivity.BUBDLE_KEY_FILE);
+                        File mCameraFile = new File(path);
+                        if (mCameraFile != null && mCameraFile.exists())
+                            sendPicture(mCameraFile.getAbsolutePath());
+                    } else if (type == SelectImageActivity.FROM_TYPE_LIB) {
+                        ArrayList<Photo> photos = data.getParcelableArrayListExtra(SelectImageActivity.BUBDLE_KEY_PHOTOS);
+                        if (photos != null && photos.size() > 0) {
+                            for (Photo p : photos)
+                                sendPicture(p.getUrl());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void sendPicture(String filePath) {
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        try {
+            File file = new File(filePath);
+            BitmapFactory.decodeStream(new FileInputStream(file), null, o);
+            int minSize = (int) TDevice.dpToPixel(90);
+            if (o.outHeight < minSize || o.outWidth < minSize) {
+                TLog.log(TAG, "缩放目标文件:" + filePath);
+                Bitmap bitmap = ImageUtils.getResizedBitmap(minSize, minSize, filePath);
+                bitmap = Bitmap.createScaledBitmap(bitmap,minSize, minSize, true);
+                TLog.log(TAG,"新图片大小:"+bitmap.getWidth()+" : "+bitmap.getHeight());
+                File newFIle = new File(Constants.CACHE_DIR,file.getName());
+                ImageUtils.saveImageToSD(getActivity(), newFIle.getAbsolutePath(), bitmap, 100);
+                filePath = newFIle.getAbsolutePath();
+                TLog.log(TAG,"新图片:"+filePath);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        TLog.error("发送图片:" + filePath);
+        String to = mToChatUsername;
+        // create and add image message in view
+        final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
+        // 如果是群聊，设置chattype,默认是单聊
+        if (mChatType == CHATTYPE_GROUP) {
+            message.setChatType(EMMessage.ChatType.GroupChat);
+        } else if (mChatType == CHATTYPE_CHATROOM) {
+            message.setChatType(EMMessage.ChatType.ChatRoom);
+        }
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+        message.setAttribute("pic_width", options.outWidth);
+        message.setAttribute("pic_height", options.outHeight);
+
+        message.setReceipt(to);
+        ImageMessageBody body = new ImageMessageBody(new File(filePath));
+        // 默认超过100k的图片会压缩后发给对方，可以设置成发送原图
+        // body.setSendOriginalImage(true);
+        message.addBody(body);
+        mConversation.addMessage(message);
+
+        mLvMessage.setAdapter(mAdapter);
+        mAdapter.refreshSelectLast();
+        getActivity().setResult(Activity.RESULT_OK);
+        // more(more);
+    }
 }

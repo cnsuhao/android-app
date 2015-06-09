@@ -41,5 +41,14 @@
 
     <string name="tip_voice_downloading">正在下载语音</string>
 
+    <string name="chat_send_zero">发送</string>
+    <string name="chat_send_other">发送(%d)</string>
+
+    <string name="chat_preview_zero">预览</string>
+    <string name="chat_preview_other">预览(%d)</string>
+
+    <string name="tip_max_select_picture">最多只能选择这么多张了</string>
+    <string name="chat_select_image">选择图片</string>
+
     <string name="receive_the_passthrough">收到透传：action：</string>
 </resources>

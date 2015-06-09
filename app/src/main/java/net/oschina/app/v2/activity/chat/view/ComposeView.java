@@ -56,13 +56,15 @@ public class ComposeView extends LinearLayout implements View.OnClickListener, R
     private int mCurrentKeyboardHeigh;
     private View mLyOpt, mLyEmoji;
     private boolean mIsKeyboardVisible;
-    private boolean mNeedShowEmojiOnKeyboardClosed;
+    private boolean mNeedShowEmojiOnKeyboardClosed, mNeedShowOptOnKeyboardClosed;
 
 
     public interface OnComposeOperationDelegate {
         void onSendText(String text);
 
         void onSendVoice(String file, int length);
+
+        void onSendImageClicked(View v);
     }
 
     private TextWatcher mTextWatcher = new TextWatcher() {
@@ -176,6 +178,12 @@ public class ComposeView extends LinearLayout implements View.OnClickListener, R
         mIvVoiceText = (ImageView) findViewById(R.id.iv_voice_text);
         mIvVoiceText.setOnClickListener(this);
 
+        findViewById(R.id.iv_opt_picture).setOnClickListener(this);
+        findViewById(R.id.iv_opt_location).setOnClickListener(this);
+        findViewById(R.id.iv_opt_video).setOnClickListener(this);
+        findViewById(R.id.iv_opt_card).setOnClickListener(this);
+
+
         mLyEmoji = findViewById(R.id.ly_emoji);
         mLyOpt = findViewById(R.id.ly_opt);
         mRlBottom = findViewById(R.id.rl_bottom);
@@ -239,35 +247,63 @@ public class ComposeView extends LinearLayout implements View.OnClickListener, R
             }
         } else if (id == R.id.iv_voice_text) {
             if (mBtnVoice.getVisibility() == View.VISIBLE) {
-                mBtnVoice.setVisibility(View.GONE);
-                mEtText.setVisibility(View.VISIBLE);
-                mIvEmoji.setVisibility(View.VISIBLE);
-                mIvVoiceText.setImageResource(R.drawable.btn_to_voice_selector);
+                //正处于录音状态，切换回输入模式
+                changeToInput();
+
+                showKeyboard();
             } else {
-                mBtnVoice.setVisibility(View.VISIBLE);
-                mEtText.setVisibility(View.GONE);
-                mIvEmoji.setVisibility(View.GONE);
-                mIvVoiceText.setImageResource(R.drawable.btn_to_text_selector);
+                // 正处于输入状态切换为语音模式
+                changeToVoice();
+
+                hideEmojiPanel();
+                hideOptPanel();
+                hideKeyboard();
             }
         } else if (id == R.id.iv_more) {
-            if (mLyOpt.getVisibility() == View.VISIBLE) {
-                mLyOpt.setVisibility(View.GONE);
+            if (mBtnVoice.getVisibility() == View.VISIBLE) {
+                changeToInput();
+            }
+            hideEmojiPanel();
+            if (mLyOpt.getVisibility() == View.GONE) {
+                mNeedShowOptOnKeyboardClosed = true;
+                tryShowOptPanel();
             } else {
-                mLyOpt.setVisibility(View.VISIBLE);
+                tryHideOptPanel();
             }
-            hideEmojiAndKeyboard();
         } else if (id == R.id.iv_emoji) {//点击表情
-            if (mLyOpt.getVisibility() == View.VISIBLE) {
-                mLyOpt.setVisibility(View.GONE);
-            }
-
+            hideOptPanel();
             if (mLyEmoji.getVisibility() == View.GONE) {
                 mNeedShowEmojiOnKeyboardClosed = true;
                 tryShowEmojiPanel();
             } else {
                 tryHideEmojiPanel();
             }
+        } else if(id == R.id.iv_opt_picture) {
+            if(mDelegate != null){
+                mDelegate.onSendImageClicked(v);
+            }
+            hideEmojiOptAndKeyboard();
+        } else if(id == R.id.iv_opt_location) {
+
+        } else if(id == R.id.iv_opt_video) {
+
+        } else if(id == R.id.iv_opt_picture) {
+
         }
+    }
+
+    private void changeToVoice() {
+        mBtnVoice.setVisibility(View.VISIBLE);
+        mEtText.setVisibility(View.GONE);
+        mIvEmoji.setVisibility(View.GONE);
+        mIvVoiceText.setImageResource(R.drawable.btn_to_text_selector);
+    }
+
+    private void changeToInput() {
+        mBtnVoice.setVisibility(View.GONE);
+        mEtText.setVisibility(View.VISIBLE);
+        mIvEmoji.setVisibility(View.VISIBLE);
+        mIvVoiceText.setImageResource(R.drawable.btn_to_voice_selector);
     }
 
     private int caculateEmojiPanelHeight() {
@@ -276,7 +312,8 @@ public class ComposeView extends LinearLayout implements View.OnClickListener, R
             mCurrentKeyboardHeigh = (int) TDevice.dpToPixel(180);
         }
 
-        mLyOpt.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, mCurrentKeyboardHeigh));
+        mLyOpt.setLayoutParams(new RelativeLayout
+                .LayoutParams(LayoutParams.MATCH_PARENT, mCurrentKeyboardHeigh));
 
         int emojiPanelHeight = (int) (mCurrentKeyboardHeigh - TDevice
                 .dpToPixel(20));
@@ -293,7 +330,7 @@ public class ComposeView extends LinearLayout implements View.OnClickListener, R
 
     private void tryShowEmojiPanel() {
         if (mIsKeyboardVisible) {
-            TDevice.hideSoftKeyboard(mEtText);
+            hideKeyboard();
         } else {
             showEmojiPanel();
         }
@@ -301,8 +338,7 @@ public class ComposeView extends LinearLayout implements View.OnClickListener, R
 
     private void tryHideEmojiPanel() {
         if (!mIsKeyboardVisible) {
-            mEtText.requestFocus();
-            TDevice.showSoftKeyboard(mEtText);
+            showKeyboard();
         } else {
             hideEmojiPanel();
         }
@@ -312,20 +348,57 @@ public class ComposeView extends LinearLayout implements View.OnClickListener, R
         mNeedShowEmojiOnKeyboardClosed = false;
         mLyEmoji.setVisibility(View.VISIBLE);
         //mDelegate.onEmojiPanelVisiable(true, mLyEmoji.getHeight());
-        //mIvEmoji.setBackgroundResource(R.drawable.btn_emoji_pressed);
+        mIvEmoji.setImageResource(R.drawable.btn_emoji_pressed);
     }
 
     private void hideEmojiPanel() {
         if (mLyEmoji.getVisibility() == View.VISIBLE) {
             mLyEmoji.setVisibility(View.GONE);
             //mDelegate.onEmojiPanelVisiable(true,0);
-            //mIvEmoji.setBackgroundResource(R.drawable.btn_emoji_selector);
+            mIvEmoji.setImageResource(R.drawable.btn_emoji_selector);
         }
     }
 
-    public void hideEmojiAndKeyboard() {
+    public void hideEmojiOptAndKeyboard() {
         hideEmojiPanel();
+        hideOptPanel();
         TDevice.hideSoftKeyboard(mEtText);
+    }
+
+    private void tryHideOptPanel() {
+        if (!mIsKeyboardVisible) {
+            showKeyboard();
+        } else {
+            hideOptPanel();
+        }
+    }
+
+    private void tryShowOptPanel() {
+        if (mIsKeyboardVisible) {
+            hideKeyboard();
+        } else {
+            showOptPanel();
+        }
+    }
+
+    private void showOptPanel() {
+        mNeedShowOptOnKeyboardClosed = false;
+        mLyOpt.setVisibility(View.VISIBLE);
+    }
+
+    private void hideOptPanel() {
+        if (mLyOpt.getVisibility() == View.VISIBLE) {
+            mLyOpt.setVisibility(View.GONE);
+        }
+    }
+
+    private void hideKeyboard() {
+        TDevice.hideSoftKeyboard(mEtText);
+    }
+
+    private void showKeyboard() {
+        mEtText.requestFocus();
+        TDevice.showSoftKeyboard(mEtText);
     }
 
     @Override
@@ -340,7 +413,7 @@ public class ComposeView extends LinearLayout implements View.OnClickListener, R
 
         mIsKeyboardVisible = true;
         hideEmojiPanel();
-
+        hideOptPanel();
         if (mDelegate != null) {
             //mDelegate.onSoftKeyboardOpened();
         }
@@ -351,11 +424,9 @@ public class ComposeView extends LinearLayout implements View.OnClickListener, R
         mIsKeyboardVisible = false;
         if (mNeedShowEmojiOnKeyboardClosed) {
             showEmojiPanel();
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                }
-//            },1000);
+        }
+        if(mNeedShowOptOnKeyboardClosed){
+            showOptPanel();
         }
     }
 
@@ -370,7 +441,8 @@ public class ComposeView extends LinearLayout implements View.OnClickListener, R
         if (start < 0) {
             editText.append(emojicon.getEmoji());
         } else {
-            editText.getText().replace(Math.min(start, end), Math.max(start, end), emojicon.getEmoji(), 0, emojicon.getEmoji().length());
+            editText.getText().replace(Math.min(start, end), Math.max(start, end),
+                    emojicon.getEmoji(), 0, emojicon.getEmoji().length());
         }
     }
 
@@ -381,7 +453,7 @@ public class ComposeView extends LinearLayout implements View.OnClickListener, R
 
     @Override
     public void onEmojiClick(Emojicon emoji) {
-        input(mEtText,emoji);
+        input(mEtText, emoji);
     }
 
     @Override

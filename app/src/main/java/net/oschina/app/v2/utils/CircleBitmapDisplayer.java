@@ -55,6 +55,7 @@ public class CircleBitmapDisplayer implements BitmapDisplayer {
                 paint2.setStyle(Paint.Style.STROKE);
                 canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, (float) (bitmap.getWidth() / 2 - Math.ceil(this.borderWidth / 2)), paint2);
             }
+			
             imageAware.setImageBitmap(output);
     }
  

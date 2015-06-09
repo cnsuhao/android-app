@@ -373,4 +373,12 @@
         <item name="android:layout_width">@dimen/error_icon_size</item>
         <item name="android:layout_height">@dimen/error_icon_size</item>
     </style>
+
+    <style name="Widget.SelectImage.Spinner" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar">
+        <item name="android:background">?android:selectableItemBackground</item>
+        <item name="android:dropDownSelector">?android:selectableItemBackground</item>
+        <item name="android:divider">@null</item>
+        <item name="android:overlapAnchor">true</item>
+        <item name="overlapAnchor">true</item>
+    </style>
 </resources>

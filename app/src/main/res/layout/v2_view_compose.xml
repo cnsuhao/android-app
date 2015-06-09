@@ -126,8 +126,10 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/iv_opt_picture"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
                     android:background="@drawable/btn_chat_voice_selector"
                     android:src="@drawable/ic_chat_opt_picture" />
 
@@ -147,6 +149,8 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/iv_opt_location"
+                    android:clickable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_chat_voice_selector"
@@ -168,6 +172,8 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/iv_opt_video"
+                    android:clickable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_chat_voice_selector"
@@ -189,6 +195,8 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/iv_opt_card"
+                    android:clickable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_chat_voice_selector"

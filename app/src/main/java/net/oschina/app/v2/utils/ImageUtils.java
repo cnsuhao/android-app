@@ -25,6 +25,7 @@ import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -32,11 +33,20 @@ import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.NinePatchDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.util.DisplayMetrics;
+
+import com.easemob.util.EMLog;
+import com.easemob.util.PathUtil;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.tonlin.osc.happy.R;
+
+import net.oschina.app.v2.AppContext;
 
 /**
  * 图片操作工具包
@@ -56,6 +66,7 @@ public class ImageUtils {
 	public static final int REQUEST_CODE_GETIMAGE_BYCAMERA = 1;
 	/** 请求裁剪 */
 	public static final int REQUEST_CODE_GETIMAGE_BYCROP = 2;
+	private static DisplayImageOptions mPictureDisplayOption;
 
 	/**
 	 * 写图片文件 在Android系统中，文件保存在 /data/data/PACKAGE_NAME/files 目录下
@@ -689,13 +700,6 @@ public class ImageUtils {
 		return (b[0] == 0x42) && (b[1] == 0x4d);
 	}
 
-	/**
-	 * 获取图片路径 2014年8月12日
-	 * 
-	 * @param uri
-	 * @param cursor
-	 * @return E-mail:mr.huangwenwei@gmail.com
-	 */
 	public static String getImagePath(Uri uri, Activity context) {
 
 		String[] projection = { MediaColumns.DATA };
@@ -713,12 +717,7 @@ public class ImageUtils {
 	}
 
 	static Bitmap bitmap = null;
-	/**
-	 *2014年8月13日
-	 *@param uri
-	 *@param context
-	 * E-mail:mr.huangwenwei@gmail.com
-	 */
+
 	public static Bitmap loadPicasaImageFromGalley(final Uri uri, final Activity context) {
 		
 		String[] projection = { MediaColumns.DATA, MediaColumns.DISPLAY_NAME };
@@ -750,5 +749,159 @@ public class ImageUtils {
 			return bitmap;
 		}else
 			return null;
+	}
+
+	public static DisplayImageOptions getPictureDisplayOptions() {
+		if (mPictureDisplayOption == null) {
+			mPictureDisplayOption = new DisplayImageOptions.Builder()
+					.cacheInMemory(true)
+					.cacheOnDisk(true)
+							//.displayer(new MessageBitmapDisplayer())
+					.bitmapConfig(Bitmap.Config.RGB_565)
+					.build();
+		}
+		return mPictureDisplayOption;
+	}
+
+	public static Bitmap getMessageBitmap(Bitmap bitmap, boolean from,boolean bg_normal) {
+		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+				bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(output);
+		final Paint paint = new Paint();
+		final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+		Bitmap b;
+		if (bg_normal) {
+			b = getNinePatch(from ? R.drawable.ic_receive_picture : R.drawable.ic_send_picture,
+					bitmap.getWidth(), bitmap.getHeight(), AppContext.context());
+		} else{
+			b = getNinePatch(from ? R.drawable.ic_receive_picture : R.drawable.ic_send_picture,
+					bitmap.getWidth(), bitmap.getHeight(), AppContext.context());
+		}
+		canvas.drawBitmap(b, rect, rect, paint);
+
+		paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+		canvas.drawBitmap(bitmap, rect, rect, paint);
+		return output;
+	}
+
+	public static Bitmap getNinePatch(int id, int x, int y, Context context) {
+		// id is a resource id for a valid ninepatch
+
+		Bitmap bitmap = BitmapFactory.decodeResource(
+				context.getResources(), id);
+
+		byte[] chunk = bitmap.getNinePatchChunk();
+		NinePatchDrawable np_drawable = new NinePatchDrawable(bitmap,
+				chunk, new Rect(), null);
+		np_drawable.setBounds(0, 0, x, y);
+
+		Bitmap output_bitmap = Bitmap.createBitmap(x, y, Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(output_bitmap);
+		np_drawable.draw(canvas);
+
+		return output_bitmap;
+	}
+
+	public static String getThumbnailImagePath(String thumbRemoteUrl) {
+		String thumbImageName = thumbRemoteUrl.substring(thumbRemoteUrl.lastIndexOf("/") + 1, thumbRemoteUrl.length());
+		String path = PathUtil.getInstance().getImagePath() + "/" + "th" + thumbImageName;
+		EMLog.d("msg", "thum image path:" + path);
+		return path;
+	}
+
+	public static Bitmap decodeFile(File f,int WIDTH,int HIGHT){
+		try {
+			//Decode image size
+			BitmapFactory.Options o = new BitmapFactory.Options();
+			o.inJustDecodeBounds = true;
+			BitmapFactory.decodeStream(new FileInputStream(f),null,o);
+
+			//The new size we want to scale to
+			final int REQUIRED_WIDTH=WIDTH;
+			final int REQUIRED_HIGHT=HIGHT;
+			//Find the correct scale value. It should be the power of 2.
+			int scale=1;
+			while(o.outWidth/scale/2>=REQUIRED_WIDTH && o.outHeight/scale/2>=REQUIRED_HIGHT)
+				scale*=2;
+
+			//Decode with inSampleSize
+			BitmapFactory.Options o2 = new BitmapFactory.Options();
+			o2.inSampleSize=scale;
+			return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+		} catch (FileNotFoundException e) {}
+		return null;
+	}
+
+	public static Bitmap getResizedBitmap(int targetW, int targetH,  String imagePath) {
+		// Get the dimensions of the bitmap
+		BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+		//inJustDecodeBounds = true <-- will not load the bitmap into memory
+		bmOptions.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(imagePath, bmOptions);
+		int photoW = bmOptions.outWidth;
+		int photoH = bmOptions.outHeight;
+
+		// Determine how much to scale down the image
+		int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+		// Decode the image file into a Bitmap sized to fill the View
+		bmOptions.inJustDecodeBounds = false;
+		bmOptions.inSampleSize = scaleFactor;
+		bmOptions.inPurgeable = true;
+
+		Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
+		return(bitmap);
+	}
+
+	public static String getImagePath(String remoteUrl) {
+		String imageName = remoteUrl.substring(remoteUrl.lastIndexOf("/") + 1, remoteUrl.length());
+		String path = PathUtil.getInstance().getImagePath() + "/" + imageName;
+		EMLog.d("msg", "image path:" + path);
+		return path;
+	}
+
+	public static int getBitmapDegree(String path) {
+		int degree = 0;
+		try {
+			// 从指定路径下读取图片，并获取其EXIF信息
+			ExifInterface exifInterface = new ExifInterface(path);
+			// 获取图片的旋转信息
+			int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+					ExifInterface.ORIENTATION_NORMAL);
+			switch (orientation) {
+				case ExifInterface.ORIENTATION_ROTATE_90:
+					degree = 90;
+					break;
+				case ExifInterface.ORIENTATION_ROTATE_180:
+					degree = 180;
+					break;
+				case ExifInterface.ORIENTATION_ROTATE_270:
+					degree = 270;
+					break;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return degree;
+	}
+
+	public static Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
+		Bitmap returnBm = null;
+
+		// 根据旋转角度，生成旋转矩阵
+		Matrix matrix = new Matrix();
+		matrix.postRotate(degree);
+		try {
+			// 将原始图片按照旋转矩阵进行旋转，并得到新的图片
+			returnBm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+		} catch (OutOfMemoryError e) {
+		}
+		if (returnBm == null) {
+			returnBm = bm;
+		}
+		if (bm != returnBm) {
+			bm.recycle();
+		}
+		return returnBm;
 	}
 }

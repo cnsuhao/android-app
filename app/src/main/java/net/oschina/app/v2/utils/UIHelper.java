@@ -6,6 +6,7 @@ import net.oschina.app.v2.activity.chat.AddGroupActivity;
 import net.oschina.app.v2.activity.chat.GroupActivity;
 import net.oschina.app.v2.activity.chat.MessageActivity;
 import net.oschina.app.v2.activity.chat.NewFriendActivity;
+import net.oschina.app.v2.activity.chat.SelectImageActivity;
 import net.oschina.app.v2.activity.comment.fragment.CommentFragment;
 import net.oschina.app.v2.activity.comment.fragment.CommentReplyFragment;
 import net.oschina.app.v2.activity.common.SimpleBackActivity;
@@ -1107,4 +1108,5 @@ public class UIHelper {
         Intent intent = new Intent(context, GroupActivity.class);
         context.startActivity(intent);
     }
+
 }

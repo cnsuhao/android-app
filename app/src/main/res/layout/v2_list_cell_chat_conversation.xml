@@ -74,7 +74,9 @@
             android:src="@drawable/ic_msg_state_fail_resend"
             android:visibility="visible" />
 
-        <TextView xmlns:emoji="http://schemas.android.com/apk/res-auto"
+        <net.oschina.app.v2.activity.chat.emoji.EmojiconTextView
+            xmlns:emoji="http://schemas.android.com/apk/res-auto"
+            emoji:emojiconSize="15dp"
             android:id="@+id/tv_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

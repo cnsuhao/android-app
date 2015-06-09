@@ -23,6 +23,7 @@ import java.util.TimerTask;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -71,10 +72,14 @@ import com.easemob.chat.VideoMessageBody;
 //import com.easemob.chatuidemo.utils.SmileUtils;
 //import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.chat.VoiceMessageBody;
+import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.DateUtils;
 import com.easemob.util.EMLog;
 import com.easemob.util.LatLng;
 import com.easemob.util.TextFormater;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
@@ -90,8 +95,11 @@ import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.model.User;
 import net.oschina.app.v2.model.chat.IMUser;
 import net.oschina.app.v2.ui.AvatarView;
+import net.oschina.app.v2.utils.ImageUtils;
 import net.oschina.app.v2.utils.SmileUtils;
 import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.TLog;
+import net.oschina.app.v2.utils.UIHelper;
 
 public class MessageAdapter extends BaseAdapter {
 
@@ -454,11 +462,12 @@ public class MessageAdapter extends BaseAdapter {
 
         //设置用户头像
         setUserAvatar(message, holder.tv_usernick, holder.iv_avatar);
+        boolean bg_normal = false;
 
         switch (message.getType()) {
             // 根据消息type显示item
             case IMAGE: // 图片
-                handleImageMessage(message, holder, position, convertView);
+                handleImageMessage(message, holder, position, convertView, bg_normal);
                 break;
             case TXT: // 文本
                 if (message.getBooleanAttribute(Constants.MESSAGE_ATTR_IS_VOICE_CALL, false)
@@ -636,7 +645,8 @@ public class MessageAdapter extends BaseAdapter {
      * @param position
      * @param convertView
      */
-    private void handleImageMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
+    private void handleImageMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView
+                                    , boolean bg_normal) {
         holder.pb.setTag(position);
         holder.iv.setOnLongClickListener(new OnLongClickListener() {
             @Override
@@ -644,6 +654,8 @@ public class MessageAdapter extends BaseAdapter {
                 return true;
             }
         });
+
+        setImageSize(holder.iv, message);
 
         // 接收方向的消息
         if (message.direct == Direct.RECEIVE) {
@@ -657,15 +669,16 @@ public class MessageAdapter extends BaseAdapter {
                 // "!!!! not back receive, show image directly");
                 holder.pb.setVisibility(View.GONE);
                 holder.tv.setVisibility(View.GONE);
-                holder.iv.setImageResource(R.drawable.ic_default_pic);
+                //holder.iv.setImageResource(R.drawable.ic_default_pic);
                 ImageMessageBody imgBody = (ImageMessageBody) message.getBody();
                 if (imgBody.getLocalUrl() != null) {
                     // String filePath = imgBody.getLocalUrl();
                     String remotePath = imgBody.getRemoteUrl();
-                    //String filePath = ImageUtils.getImagePath(remotePath);
-                    //String thumbRemoteUrl = imgBody.getThumbnailUrl();
-                    //String thumbnailPath = ImageUtils.getThumbnailImagePath(thumbRemoteUrl);
-                    //showImageView(thumbnailPath, holder.iv, filePath, imgBody.getRemoteUrl(), message);
+                    String filePath = ImageUtils.getImagePath(remotePath);
+                    String thumbRemoteUrl = imgBody.getThumbnailUrl();
+                    String thumbnailPath = ImageUtils.getThumbnailImagePath(thumbRemoteUrl);
+                    Log.d(TAG, "接收方向的图片消息:" + thumbRemoteUrl);
+                    showImageView(thumbnailPath, holder.iv, filePath, imgBody.getRemoteUrl(), message, bg_normal);
                 }
             }
             return;
@@ -677,9 +690,9 @@ public class MessageAdapter extends BaseAdapter {
         ImageMessageBody imgBody = (ImageMessageBody) message.getBody();
         String filePath = imgBody.getLocalUrl();
         if (filePath != null && new File(filePath).exists()) {
-            //showImageView(ImageUtils.getThumbnailImagePath(filePath), holder.iv, filePath, null, message);
+            showImageView(ImageUtils.getThumbnailImagePath(filePath), holder.iv, filePath, null, message,bg_normal);
         } else {
-            //showImageView(ImageUtils.getThumbnailImagePath(filePath), holder.iv, filePath, IMAGE_DIR, message);
+            showImageView(ImageUtils.getThumbnailImagePath(filePath), holder.iv, filePath, IMAGE_DIR, message,bg_normal);
         }
 
         switch (message.status) {
@@ -736,6 +749,50 @@ public class MessageAdapter extends BaseAdapter {
                 break;
             default:
                 sendPictureMessage(message, holder);
+        }
+    }
+
+    private void setImageSize(ImageView iv, EMMessage message) {
+        try {
+            int width = message.getIntAttribute("pic_width");
+            int height = message.getIntAttribute("pic_height");
+            if (width != 0 && height != 0) {
+                TLog.log(TAG, "图片存在宽高:" + width + "/" + height);
+
+                //ImageSize targetSize = decodingInfo.getTargetSize();
+                //boolean powerOf2 = scaleType == ImageScaleType.IN_SAMPLE_POWER_OF_2;
+                //scale = ImageSizeUtils.computeImageSampleSize(imageSize, targetSize, decodingInfo.getViewScaleType(), powerOf2);
+
+                if (width > 160 && height > 160) {
+                    float ws = width / 160f;
+                    float hs = height / 160f;
+                    float s = ws > hs ? ws : hs;
+                    width = (int) (width / s * 2);
+                    height = (int) (height / s * 2);
+                } else if (width > 160) {
+                    float ws = width / 160f;
+                    width = (int) (width / ws * 2);
+                    height = (int) (height / ws * 2);
+                } else if (height > 160) {
+                    float hs = height / 160f;
+                    width = (int) (width / hs * 2);
+                    height = (int) (height / hs * 2);
+                }
+                TLog.log(TAG, "图片存在宽高缩放结果:" + width + "/" + height);
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
+                iv.setLayoutParams(lp);
+            } else {
+                TLog.log(TAG, "图片不存在宽高");
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+                iv.setLayoutParams(lp);
+            }
+        } catch (EaseMobException e) {
+            TLog.log(TAG, "找不到图片宽高属性");
+            //e.printStackTrace();
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            iv.setLayoutParams(lp);
         }
     }
 
@@ -1313,58 +1370,90 @@ public class MessageAdapter extends BaseAdapter {
      * @return the image exists or not
      */
     private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath, String remoteDir,
-                                  final EMMessage message) {
-//		// String imagename =
-//		// localFullSizePath.substring(localFullSizePath.lastIndexOf("/") + 1,
-//		// localFullSizePath.length());
-//		// final String remote = remoteDir != null ? remoteDir+imagename :
-//		// imagename;
-//		final String remote = remoteDir;
-//		EMLog.d("###", "local = " + localFullSizePath + " remote: " + remote);
-//		// first check if the thumbnail image already loaded into cache
-//		Bitmap bitmap = ImageCache.getInstance().get(thumbernailPath);
-//		if (bitmap != null) {
-//			// thumbnail image is already loaded, reuse the drawable
-//			iv.setImageBitmap(bitmap);
-//			iv.setClickable(true);
-//			iv.setOnClickListener(new OnClickListener() {
-//				@Override
-//				public void onClick(View v) {
-//					EMLog.d(TAG, "image view on click");
-//					Intent intent = new Intent(activity, ShowBigImage.class);
-//					File file = new File(localFullSizePath);
-//					if (file.exists()) {
-//						Uri uri = Uri.fromFile(file);
-//						intent.putExtra("uri", uri);
-//						EMLog.d(TAG, "here need to check why download everytime");
-//					} else {
-//						// The local full size pic does not exist yet.
-//						// ShowBigImage needs to download it from the server
-//						// first
-//						// intent.putExtra("", message.get);
-//						ImageMessageBody body = (ImageMessageBody) message.getBody();
-//						intent.putExtra("secret", body.getSecret());
-//						intent.putExtra("remotepath", remote);
-//					}
-//					if (message != null && message.direct == Direct.RECEIVE && !message.isAcked
-//							&& message.getChatType() != ChatType.GroupChat && message.getChatType() != ChatType.ChatRoom) {
-//						try {
-//							EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
-//							message.isAcked = true;
-//						} catch (Exception e) {
-//							e.printStackTrace();
-//						}
-//					}
-//					activity.startActivity(intent);
-//				}
-//			});
-//			return true;
-//		} else {
-//
-//			new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, activity, message);
-//			return true;
-//		}
-        return false;
+                                  final EMMessage message, final boolean bg_normal) {
+//		 // String imagename =
+        // localFullSizePath.substring(localFullSizePath.lastIndexOf("/") + 1,
+        // localFullSizePath.length());
+        // final String remote = remoteDir != null ? remoteDir+imagename :
+        // imagename;
+        final String remote = remoteDir;
+        EMLog.d("###", "local = " + localFullSizePath + " remote: " + remote);
+        // first check if the thumbnail image already loaded into cache
+        //Bitmap bitmap = null;ImageCache.getInstance().get(thumbernailPath);
+        //if (bitmap != null) {
+        // thumbnail image is already loaded, reuse the drawable
+        //iv.setImageBitmap(bitmap);
+        Log.d(TAG, "图片:" + thumbernailPath + " 远程:" + remoteDir);
+        File file = new File(thumbernailPath);
+        ImageSize size = new ImageSize(160, 160);
+        final boolean fromPic = message.direct == EMMessage.Direct.RECEIVE;
+        if (fromPic) {
+            Log.d(TAG, "接收到的图片：" + remote);
+            ImageLoader.getInstance().loadImage(remote, size,
+                    ImageUtils.getPictureDisplayOptions(), new SimpleImageLoadingListener() {
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            super.onLoadingComplete(imageUri, view, loadedImage);
+                            TLog.log(TAG, "图片载完 :" + loadedImage.getWidth() + "/" + loadedImage.getHeight());
+                            iv.setImageBitmap(ImageUtils.getMessageBitmap(loadedImage, fromPic, bg_normal));
+                        }
+                    });
+        } else if (file.exists()) {
+            ImageLoader.getInstance().loadImage("file://" + file.getAbsolutePath(), size,
+                    ImageUtils.getPictureDisplayOptions(), new SimpleImageLoadingListener() {
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            super.onLoadingComplete(imageUri, view, loadedImage);
+                            TLog.log(TAG, "图片载完 :" + loadedImage.getWidth() + "/" + loadedImage.getHeight());
+                            iv.setImageBitmap(ImageUtils.getMessageBitmap(loadedImage, fromPic, bg_normal));
+                        }
+                    });
+        } else if (message.direct == EMMessage.Direct.SEND) {
+            ImageLoader.getInstance().loadImage("file://" + localFullSizePath, size,
+                    ImageUtils.getPictureDisplayOptions(), new SimpleImageLoadingListener() {
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            super.onLoadingComplete(imageUri, view, loadedImage);
+                            TLog.log(TAG, "图片载完 :" + loadedImage.getWidth() + "/" + loadedImage.getHeight());
+                            iv.setImageBitmap(ImageUtils.getMessageBitmap(loadedImage, fromPic, bg_normal));
+                        }
+                    });
+        } else {
+            Log.d(TAG, "接收到的图片：" + remote);
+            ImageLoader.getInstance().loadImage(remote, size,
+                    ImageUtils.getPictureDisplayOptions(), new SimpleImageLoadingListener() {
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            super.onLoadingComplete(imageUri, view, loadedImage);
+                            TLog.log(TAG, "图片载完 :" + loadedImage.getWidth() + "/" + loadedImage.getHeight());
+                            iv.setImageBitmap(ImageUtils.getMessageBitmap(loadedImage, fromPic, bg_normal));
+                        }
+                    });
+        }
+        iv.setClickable(true);
+        iv.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url;
+                File file = new File(localFullSizePath);
+                if (file.exists()) {
+                    url = "file://" + file.getAbsolutePath();
+                } else {
+                    url = remote;
+                }
+                if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
+                        && message.getChatType() != ChatType.GroupChat) {
+                    try {
+                        EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
+                        message.isAcked = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                UIHelper.showImagePreview(v.getContext(),new String[]{url});
+            }
+        });
+        return true;
     }
 
     /**

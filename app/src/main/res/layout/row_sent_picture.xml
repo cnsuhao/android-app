@@ -4,24 +4,31 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="13dp">
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:text="早上11:10"
+        style="@style/chat_time_lb"
+        android:layout_marginBottom="10dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <net.oschina.app.v2.ui.AvatarView
+            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+            fresco:placeholderImage="@drawable/ic_default_avatar"
+            fresco:roundAsCircle="true"
+            android:layout_marginLeft="4dp"
             android:id="@+id/iv_userhead"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:scaleType="fitXY" />
+            android:layout_alignParentTop="true"/>
 
         <RelativeLayout
             android:id="@+id/rl_picture"
@@ -33,7 +40,8 @@
                 android:id="@+id/iv_sendPicture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/chat_to_bg_selector"
+                android:minWidth="80dp"
+                android:minHeight="80dp"
                 android:scaleType="fitCenter" />
         </RelativeLayout>
 

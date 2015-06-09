@@ -8,6 +8,8 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/ContactAdapter.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/ContactSearchAdapter.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/ConversationAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/PhotoAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/adapter/PhotoAlbumAdapter.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/EmojiAdapter.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/EmojiViewPagerAdapter.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/emoji/Emojicon.java" charset="GBK" />
@@ -26,6 +28,7 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/MessageFragment.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/MySectionIndexer.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/fragment/NewFriendFragment.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/image" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/AudioFocusChangeManager.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/AudioMediaPlayer.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/chat/recoder/AudioMediaRecorder.java" charset="UTF-8" />
@@ -47,8 +50,11 @@
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/index_toast_bg.9.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_contact_add.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_contact_group.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/v2_grid_cell_select_pic.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/v2_list_cell_chat_contact_letter_header.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/v2_list_cell_emojicon_item.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/v2_list_cell_photo_album.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/v2_list_cell_photo_album_bar.xml" charset="GBK" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

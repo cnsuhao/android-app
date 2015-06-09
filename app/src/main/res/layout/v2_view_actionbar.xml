@@ -4,7 +4,6 @@
     android:id="@+id/actionBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="?attr/actionBarSize"
     android:background="@color/actionbar_background"
 
     app:theme="@style/ActionBarThemeOverlay"

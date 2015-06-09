@@ -20,7 +20,7 @@
        android:layout_centerVertical="true"
        android:layout_marginRight="12dp"
        android:background="@drawable/btn_white_selector"
-       android:textColor="@color/main_green"
+       android:textColor="@color/chat_green_color_selector"
        android:textSize="14sp"
        android:text="@string/chat_ok_zero"/>
 

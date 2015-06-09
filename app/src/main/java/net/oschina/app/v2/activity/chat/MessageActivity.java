@@ -1,5 +1,6 @@
 package net.oschina.app.v2.activity.chat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,7 @@ import com.tonlin.osc.happy.R;
 import net.oschina.app.v2.activity.chat.fragment.MessageFragment;
 import net.oschina.app.v2.activity.chat.view.AsyncTextView;
 import net.oschina.app.v2.base.BaseActivity;
+import net.oschina.app.v2.utils.TLog;
 
 /**
  * Created by Tonlin on 2015/5/28.
@@ -61,5 +63,11 @@ public class MessageActivity extends BaseActivity {
                 .beginTransaction();
         trans.replace(R.id.container, new MessageFragment());
         trans.commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        TLog.error("activity onActivityResult");
     }
 }

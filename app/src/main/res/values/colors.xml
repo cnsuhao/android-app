@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="main_green">#40AA53</color>
+    <color name="main_green80">#8040AA53</color>
     <color name="main_gray">#9A9A9A</color>
     <color name="main_black">#353535</color>
     <color name="main_purple">#576B95</color>
@@ -33,7 +34,8 @@
     <color name="light_gray">#1a000000</color>
     <color name="lightest_gray">#0a000000</color>
     <color name="bg_touch">@color/lightest_gray</color>
-    
+
+    <color name="white80">#80FFFFFF</color>
     <color name="white40">#40FFFFFF</color>
 	<color name="white">#FFFFFF</color>
 	<color name="black">#000000</color>
