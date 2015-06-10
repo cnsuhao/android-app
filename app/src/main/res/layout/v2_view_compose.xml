@@ -15,7 +15,7 @@
         android:id="@+id/ly_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
+        android:gravity="bottom"
         android:orientation="horizontal">
 
         <ImageView
@@ -28,19 +28,23 @@
             android:layout_marginTop="8dp"
             android:clickable="true"
             android:scaleType="centerInside"
-            android:src="@drawable/btn_to_voice_selector" />
+            android:src="@drawable/btn_to_voice_selector"/>
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
 
             <net.oschina.app.v2.activity.chat.view.RecordButton
                 android:id="@+id/btn_voice"
                 android:layout_width="match_parent"
-                android:layout_height="38dp"
+                android:layout_height="35dp"
                 android:background="@drawable/btn_chat_voice_selector"
                 android:text="按住 说话"
+                android:layout_centerVertical="true"
                 android:textColor="@color/main_black"
                 android:textSize="15sp"
                 android:visibility="gone" />
@@ -51,8 +55,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left|center_vertical"
-                android:background="@drawable/chat_textfield_selector"
+                android:paddingRight="40dp"
+                android:paddingLeft="4dp"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                android:text=""
                 android:minHeight="35dp"
+                android:background="@drawable/chat_textfield_selector"
                 android:textColor="@color/main_black"
                 android:textColorHint="@color/main_gray"
                 android:textCursorDrawable="@null"
@@ -66,6 +75,9 @@
                 android:layout_height="32dp"
                 android:layout_alignParentRight="true"
                 android:clickable="true"
+                android:layout_marginBottom="3dp"
+                android:layout_marginRight="4dp"
+                android:layout_alignBottom="@+id/et_text"
                 android:scaleType="centerInside"
                 android:src="@drawable/btn_chat_emoji_selector"
                 android:visibility="visible" />
@@ -75,7 +87,10 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp">
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="8dp">
 
             <ImageView
                 android:id="@+id/iv_more"

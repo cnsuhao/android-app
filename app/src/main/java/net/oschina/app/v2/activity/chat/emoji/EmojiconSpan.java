@@ -23,6 +23,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.style.DynamicDrawableSpan;
 
+import java.lang.ref.WeakReference;
+
 /**
  * @author Hieu Rocker (rockerhieu@gmail.com)
  */
@@ -33,7 +35,7 @@ class EmojiconSpan extends DynamicDrawableSpan {
     private Drawable mDrawable;
 
     public EmojiconSpan(Context context, int resourceId, int size) {
-        super();
+        super(ALIGN_BASELINE);
         mContext = context;
         mResourceId = resourceId;
         mSize = size;

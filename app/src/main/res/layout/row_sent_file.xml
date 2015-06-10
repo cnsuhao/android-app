@@ -30,7 +30,11 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/iv_userhead"
             android:layout_toRightOf="@+id/ll_loading"
-            android:background="@drawable/chat_to_bg_selector" >
+            android:background="@drawable/chat_to_bg_selector"
+            android:paddingBottom="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="12dp"
+            android:paddingTop="4dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -53,8 +57,8 @@
                     android:layout_gravity="center_vertical"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text=""
-                    android:textColor="#000"
+                    android:text="文件名"
+                    android:textColor="@color/chat_message_color"
                     android:textSize="15sp" />
 
                 <RelativeLayout
@@ -67,8 +71,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:textColor="#818181"
-                        android:textSize="14sp" />
+                        android:textColor="@color/main_gray"
+                        android:textSize="13sp"
+                        android:text="12M"/>
 
                     <TextView
                         android:id="@+id/tv_file_state"
@@ -76,8 +81,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center_vertical"
-                        android:textColor="#818181"
-                        android:textSize="14sp" />
+                        android:textColor="@color/main_gray"
+                        android:textSize="13sp"
+                        android:text="未下载"/>
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
@@ -129,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0%"
-                android:textColor="@android:color/black"
+                android:textColor="@color/main_gray"
                 android:visibility="visible" />
         </LinearLayout>
     </RelativeLayout>

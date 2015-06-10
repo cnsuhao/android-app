@@ -2,102 +2,119 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="时间"
-        android:textColor="@color/main_gray" />
+        style="@style/chat_time_lb"
+        android:layout_marginBottom="10dp"
+        android:text="早上11:10" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <net.oschina.app.v2.ui.AvatarView xmlns:fresco="http://schemas.android.com/apk/res-auto"
             android:id="@+id/iv_userhead"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/ic_default_avatar"
-            android:scaleType="fitXY" />
+            android:layout_marginRight="4dp"
+            fresco:placeholderImage="@drawable/ic_default_avatar"
+            fresco:roundAsCircle="true" />
 
-        <TextView
-            android:id="@+id/tv_userid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/iv_userhead"
-            android:layout_toLeftOf="@+id/ll_file_container" />
-
-        <LinearLayout
-            android:id="@+id/ll_file_container"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/pb_sending"
-            android:layout_toRightOf="@id/iv_userhead"
-            android:background="@drawable/chat_from_bg_selector">
+            android:layout_toRightOf="@id/iv_userhead">
 
-            <ImageView
+            <net.oschina.app.v2.activity.chat.view.AsyncTextView
+                android:id="@+id/tv_userid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:src="@drawable/chat_item_file" />
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="4dp"
+                android:textColor="@color/main_gray"
+                android:textSize="13sp"
+                android:visibility="gone"/>
 
             <LinearLayout
+                android:id="@+id/ll_file_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="7dp"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:layout_below="@id/tv_userid"
+                android:background="@drawable/chat_from_bg_selector"
+                android:paddingBottom="4dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp">
 
-                <TextView
-                    android:id="@+id/tv_file_name"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="文件名称"
-                    android:textColor="@color/main_black"
-                    android:textSize="15sp" />
+                    android:layout_margin="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/chat_item_file" />
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp">
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="7dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_file_size"
+                        android:id="@+id/tv_file_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="12M"
-                        android:textColor="#818181"
-                        android:textSize="14sp" />
+                        android:text="文件名称"
+                        android:textColor="@color/chat_message_color"
+                        android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/tv_file_state"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_gravity="center_vertical"
-                        android:text="未下载"
-                        android:textColor="#818181"
-                        android:textSize="14sp" />
-                </RelativeLayout>
+                        android:layout_marginTop="3dp">
+
+                        <TextView
+                            android:id="@+id/tv_file_size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="12M"
+                            android:textColor="@color/main_gray"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/tv_file_state"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="center_vertical"
+                            android:text="未下载"
+                            android:textColor="@color/main_gray"
+                            android:textSize="12sp" />
+                    </RelativeLayout>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
 
         <ProgressBar
             android:id="@+id/pb_sending"
             style="?android:attr/progressBarStyleSmall"
             android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_height="30dp"
+            android:layout_marginLeft="4dp"
+            android:layout_alignParentRight="true"
             android:visibility="invisible" />
     </RelativeLayout>
 

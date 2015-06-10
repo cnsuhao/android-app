@@ -19,7 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <net.oschina.app.v2.ui.AvatarView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        <net.oschina.app.v2.ui.AvatarView
+            xmlns:fresco="http://schemas.android.com/apk/res-auto"
             android:id="@+id/iv_userhead"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"
@@ -79,7 +80,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/ly_voice_content"
                     android:gravity="center"
-                    android:text="3&apos;&apos;"
                     android:textColor="@color/main_gray"
                     android:textStyle="bold" />
 

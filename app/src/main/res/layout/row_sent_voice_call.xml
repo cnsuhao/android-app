@@ -4,18 +4,26 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="13dp">
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        style="@style/chat_time_lb"
+        android:layout_marginBottom="10dp"
+        android:text="早上11:10" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <net.oschina.app.v2.ui.AvatarView
+            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+            fresco:placeholderImage="@drawable/ic_default_avatar"
+            fresco:roundAsCircle="true"
+            android:layout_marginLeft="4dp"
             android:id="@+id/iv_userhead"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"
@@ -28,6 +36,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/iv_userhead"
+            android:paddingLeft="8dp"
+            android:paddingRight="12dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:background="@drawable/chat_to_bg_selector">
 
             <ImageView
@@ -37,15 +49,17 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="4dp" />
 
-            <TextView
+            <net.oschina.app.v2.activity.chat.text.SuperTextView
+                xmlns:emoji="http://schemas.android.com/apk/res-auto"
+                emoji:emojiconSize="20dp"
                 android:id="@+id/tv_chatcontent"
+                android:textSize="15sp"
+                android:textColor="@color/chat_message_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/iv_call_icon"
-                android:background="@null"
-                android:minHeight="40dp"
-                android:padding="6dp" />
+                android:background="@null" />
         </RelativeLayout>
 
         <ImageView
