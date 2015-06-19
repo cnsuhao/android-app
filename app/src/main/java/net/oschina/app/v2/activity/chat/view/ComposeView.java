@@ -65,6 +65,8 @@ public class ComposeView extends LinearLayout implements View.OnClickListener, R
         void onSendVoice(String file, int length);
 
         void onSendImageClicked(View v);
+
+        void onSendLocationClicked(View v);
     }
 
     private TextWatcher mTextWatcher = new TextWatcher() {
@@ -284,7 +286,10 @@ public class ComposeView extends LinearLayout implements View.OnClickListener, R
             }
             hideEmojiOptAndKeyboard();
         } else if(id == R.id.iv_opt_location) {
-
+            if(mDelegate != null){
+                mDelegate.onSendLocationClicked(v);
+            }
+            hideEmojiOptAndKeyboard();
         } else if(id == R.id.iv_opt_video) {
 
         } else if(id == R.id.iv_opt_picture) {

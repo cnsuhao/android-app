@@ -12,7 +12,7 @@ import net.oschina.app.v2.activity.comment.fragment.CommentReplyFragment;
 import net.oschina.app.v2.activity.common.SimpleBackActivity;
 import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
 import net.oschina.app.v2.activity.image.ImagePreviewActivity;
-import net.oschina.app.v2.activity.message.fragment.MessageDetailFragment;
+//import net.oschina.app.v2.activity.message.fragment.MessageDetailFragment;
 import net.oschina.app.v2.activity.message.fragment.MessageForwardFragment;
 import net.oschina.app.v2.activity.message.fragment.MessagePublicFragment;
 import net.oschina.app.v2.activity.news.DetailActivity;
@@ -338,8 +338,8 @@ public class UIHelper {
         // intent.putExtra("friend_id", friendid);
         // context.startActivity(intent);
         Bundle args = new Bundle();
-        args.putInt(MessageDetailFragment.BUNDLE_KEY_FID, friendid);
-        args.putString(MessageDetailFragment.BUNDLE_KEY_FNAME, friendname);
+      //  args.putInt(MessageDetailFragment.BUNDLE_KEY_FID, friendid);
+      //  args.putString(MessageDetailFragment.BUNDLE_KEY_FNAME, friendname);
         showSimpleBack(context, SimpleBackPage.MESSAGE_DETAIL, args);
     }
 

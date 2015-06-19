@@ -1,25 +1,23 @@
 package net.oschina.app.v2.activity.question.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.os.Bundle;
+import android.view.View;
+
+import com.tonlin.osc.happy.R;
+import com.umeng.analytics.MobclickAgent;
 
 import net.oschina.app.v2.activity.question.adapter.QuestionAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseActivity;
-import net.oschina.app.v2.base.BaseListFragment;
 import net.oschina.app.v2.base.BaseRecycleViewFragment;
-import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.Post;
 import net.oschina.app.v2.model.PostList;
 import net.oschina.app.v2.utils.UIHelper;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 
-import com.tonlin.osc.happy.R;
-import com.umeng.analytics.MobclickAgent;
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * 相关问题

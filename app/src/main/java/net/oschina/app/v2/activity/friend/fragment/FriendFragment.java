@@ -1,14 +1,13 @@
 package net.oschina.app.v2.activity.friend.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.view.View;
+
+import com.umeng.analytics.MobclickAgent;
 
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.friend.adapter.FriendAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
-import net.oschina.app.v2.base.BaseListFragment;
 import net.oschina.app.v2.base.BaseRecycleViewFragment;
-import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.FriendList;
 import net.oschina.app.v2.model.FriendList.Friend;
@@ -17,10 +16,9 @@ import net.oschina.app.v2.model.Notice;
 import net.oschina.app.v2.model.User;
 import net.oschina.app.v2.service.NoticeUtils;
 import net.oschina.app.v2.utils.UIHelper;
-import android.view.View;
-import android.widget.AdapterView;
 
-import com.umeng.analytics.MobclickAgent;
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * 我的好友

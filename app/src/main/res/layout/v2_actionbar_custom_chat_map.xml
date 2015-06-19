@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_centerVertical="true"
+        android:textColor="@color/white"/>
+
+
+
+
+   <Button
+       android:id="@+id/btn_send"
+       android:layout_width="wrap_content"
+       android:layout_height="32dp"
+       android:minWidth="60dp"
+       android:layout_alignParentRight="true"
+       android:layout_centerVertical="true"
+       android:layout_marginRight="12dp"
+       android:background="@drawable/btn_white_selector"
+       android:textColor="@color/chat_green_color_selector"
+       android:textSize="14sp"
+       android:text="@string/chat_send_zero"/>
+
+</RelativeLayout>

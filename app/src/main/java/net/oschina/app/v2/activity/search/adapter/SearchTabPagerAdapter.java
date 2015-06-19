@@ -1,18 +1,19 @@
 package net.oschina.app.v2.activity.search.adapter;
 
-import java.util.Iterator;
-import java.util.List;
-
-import net.oschina.app.v2.activity.search.SearchTab;
-import net.oschina.app.v2.activity.search.fragment.SearchFragment;
-import net.oschina.app.v2.base.BaseListFragment;
-import net.oschina.app.v2.base.BaseTabFragment;
-import net.oschina.app.v2.ui.tab.SlidingTabPagerAdapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+
+import net.oschina.app.v2.activity.search.SearchTab;
+import net.oschina.app.v2.activity.search.fragment.SearchFragment;
+import net.oschina.app.v2.base.BaseRecycleViewFragment;
+import net.oschina.app.v2.base.BaseTabFragment;
+import net.oschina.app.v2.ui.tab.SlidingTabPagerAdapter;
+
+import java.util.Iterator;
+import java.util.List;
 
 public final class SearchTabPagerAdapter extends SlidingTabPagerAdapter {
 
@@ -46,7 +47,7 @@ public final class SearchTabPagerAdapter extends SlidingTabPagerAdapter {
 			//tabFragment.a(this);
 			if (!tabFragment.isAdded()) {
 				Bundle args = new Bundle();
-				args.putString(BaseListFragment.BUNDLE_KEY_CATALOG,
+				args.putString(BaseRecycleViewFragment.BUNDLE_KEY_CATALOG,
 						values[i].getCatalog());
 				tabFragment.setArguments(args);
 			}

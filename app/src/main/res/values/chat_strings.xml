@@ -51,4 +51,7 @@
     <string name="chat_select_image">选择图片</string>
 
     <string name="receive_the_passthrough">收到透传：action：</string>
+
+
+    <string name="actionbar_title_location">位置</string>
 </resources>

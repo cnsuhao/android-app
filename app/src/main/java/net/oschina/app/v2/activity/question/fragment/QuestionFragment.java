@@ -1,27 +1,24 @@
 package net.oschina.app.v2.activity.question.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.app.Activity;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.question.adapter.QuestionAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
-import net.oschina.app.v2.base.BaseListFragment;
 import net.oschina.app.v2.base.BaseRecycleViewFragment;
-import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.Post;
 import net.oschina.app.v2.model.PostList;
 import net.oschina.app.v2.utils.UIHelper;
 
-import android.app.Activity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.tonlin.osc.happy.R;
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * 问答

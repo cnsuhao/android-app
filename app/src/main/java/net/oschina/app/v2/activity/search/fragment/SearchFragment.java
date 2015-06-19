@@ -1,25 +1,23 @@
 package net.oschina.app.v2.activity.search.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
+
+import com.umeng.analytics.MobclickAgent;
 
 import net.oschina.app.v2.activity.search.adapter.SearchAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
-import net.oschina.app.v2.base.BaseListFragment;
 import net.oschina.app.v2.base.BaseRecycleViewFragment;
-import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.SearchList;
 import net.oschina.app.v2.model.SearchList.Result;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.UIHelper;
-import android.os.Bundle;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 
-import com.umeng.analytics.MobclickAgent;
+import java.io.InputStream;
+import java.io.Serializable;
 
 public class SearchFragment extends BaseRecycleViewFragment {
 	protected static final String TAG = SearchFragment.class.getSimpleName();

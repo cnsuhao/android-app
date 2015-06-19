@@ -1,24 +1,21 @@
 package net.oschina.app.v2.activity.software.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.os.Bundle;
+import android.view.View;
+
+import com.umeng.analytics.MobclickAgent;
 
 import net.oschina.app.v2.activity.software.adapter.SoftwareAdapter;
 import net.oschina.app.v2.api.remote.NewsApi;
-import net.oschina.app.v2.base.BaseListFragment;
 import net.oschina.app.v2.base.BaseRecycleViewFragment;
-import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
 import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.SoftwareList;
 import net.oschina.app.v2.model.SoftwareList.Software;
 import net.oschina.app.v2.utils.UIHelper;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-
-import com.umeng.analytics.MobclickAgent;
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * 软件列表

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
+    <!--<com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,7 +17,7 @@
         android:fadingEdge="none"
         android:fadingEdgeLength="0dp"
         app:ptrDrawable="@drawable/ic_pullrefresh"
-        app:ptrHeaderTextColor="@android:color/darker_gray" />
+        app:ptrHeaderTextColor="@android:color/darker_gray" />-->
 
     <net.oschina.app.v2.ui.empty.EmptyLayout
         android:id="@+id/error_layout"

@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Spannable;
+import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,8 @@ import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.DemoHXSDKHelper;
 import net.oschina.app.v2.activity.chat.MessageActivity;
 import net.oschina.app.v2.activity.chat.SelectImageActivity;
+import net.oschina.app.v2.activity.chat.SelectLocationActivity;
+import net.oschina.app.v2.activity.chat.SelectLocationActivity2;
 import net.oschina.app.v2.activity.chat.adapter.MessageAdapter;
 import net.oschina.app.v2.activity.chat.image.Photo;
 import net.oschina.app.v2.activity.chat.view.ComposeView;
@@ -43,6 +46,7 @@ import net.oschina.app.v2.utils.MD5Utils;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.TLog;
 import net.oschina.app.v2.utils.UIHelper;
+import net.oschina.app.v2.utils.WeakAsyncTask;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -60,6 +64,7 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
     public static final int CHATTYPE_CHATROOM = 3;
     private static final java.lang.String TAG = "IMA-LOG";
     private static final int REQUEST_CODE_IMAGE = 1;
+    private static final int REQUEST_CODE_LOCATION = 2;
 
 
     private String mToChatUsername;
@@ -320,6 +325,12 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
     }
 
     @Override
+    public void onSendLocationClicked(View v) {
+        Intent intent = new Intent(getActivity(), SelectLocationActivity2.class);
+        startActivityForResult(intent, REQUEST_CODE_LOCATION);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         TLog.error("onActivityResult:" + resultCode);
@@ -330,13 +341,17 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
                     if (type == SelectImageActivity.FROM_TYPE_CAMERA) {
                         String path = data.getStringExtra(SelectImageActivity.BUBDLE_KEY_FILE);
                         File mCameraFile = new File(path);
-                        if (mCameraFile != null && mCameraFile.exists())
-                            sendPicture(mCameraFile.getAbsolutePath());
+                        if (mCameraFile != null && mCameraFile.exists()) {
+                            new ResizeImageSendTask(this,mCameraFile.getAbsolutePath()).execute();
+                            //sendPicture(mCameraFile.getAbsolutePath());
+                        }
                     } else if (type == SelectImageActivity.FROM_TYPE_LIB) {
                         ArrayList<Photo> photos = data.getParcelableArrayListExtra(SelectImageActivity.BUBDLE_KEY_PHOTOS);
                         if (photos != null && photos.size() > 0) {
-                            for (Photo p : photos)
-                                sendPicture(p.getUrl());
+                            for (Photo p : photos) {
+                                new ResizeImageSendTask(this,p.getUrl()).execute();
+                                //sendPicture(p.getUrl());
+                            }
                         }
                     }
                 }
@@ -345,28 +360,7 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
     }
 
     private void sendPicture(String filePath) {
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        try {
-            File file = new File(filePath);
-            BitmapFactory.decodeStream(new FileInputStream(file), null, o);
-            int minSize = (int) TDevice.dpToPixel(90);
-            if (o.outHeight < minSize || o.outWidth < minSize) {
-                TLog.log(TAG, "缩放目标文件:" + filePath);
-                Bitmap bitmap = ImageUtils.getResizedBitmap(minSize, minSize, filePath);
-                bitmap = Bitmap.createScaledBitmap(bitmap,minSize, minSize, true);
-                TLog.log(TAG,"新图片大小:"+bitmap.getWidth()+" : "+bitmap.getHeight());
-                File newFIle = new File(Constants.CACHE_DIR,file.getName());
-                ImageUtils.saveImageToSD(getActivity(), newFIle.getAbsolutePath(), bitmap, 100);
-                filePath = newFIle.getAbsolutePath();
-                TLog.log(TAG,"新图片:"+filePath);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        TLog.error("发送图片:" + filePath);
+        TLog.log(TAG, "发送图片:" + filePath);
         String to = mToChatUsername;
         // create and add image message in view
         final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
@@ -394,5 +388,58 @@ public class MessageFragment extends BaseFragment implements EMEventListener, Co
         mAdapter.refreshSelectLast();
         getActivity().setResult(Activity.RESULT_OK);
         // more(more);
+    }
+
+    static class ResizeImageSendTask extends WeakAsyncTask<Void, Void, String, MessageFragment> {
+        private String mImagePath;
+
+        public ResizeImageSendTask(MessageFragment fragment, String imagePath) {
+            super(fragment);
+            mImagePath = imagePath;
+        }
+
+        @Override
+        protected String doInBackground(MessageFragment fragment, Void... params) {
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            try {
+                File file = new File(mImagePath);
+                BitmapFactory.decodeStream(new FileInputStream(file), null, o);
+                int minSize = (int) TDevice.dpToPixel(90);
+                if (o.outHeight < minSize || o.outWidth < minSize) {
+                    TLog.log(TAG, "缩放目标文件:" + mImagePath);
+                    Bitmap bitmap = ImageUtils.getResizedBitmap(minSize, minSize, mImagePath);
+
+                    TLog.log(TAG, "原图片大小:" + o.outWidth + " : " + o.outHeight);
+                    TLog.log(TAG, "原图片大小2:" + bitmap.getWidth() + " : " + bitmap.getHeight());
+
+                    float wd = minSize / (o.outWidth * 1f);
+                    float hd = minSize / (o.outHeight * 1f);
+
+                    float td = wd < hd ? hd : wd;
+
+                    bitmap = Bitmap.createScaledBitmap(bitmap, (int) (o.outWidth * td), (int) (o.outHeight * td), true);
+                    TLog.log(TAG, "新图片大小:" + bitmap.getWidth() + " : " + bitmap.getHeight());
+                    File newFIle = new File(Constants.CACHE_DIR, file.getName());
+                    ImageUtils.saveImageToSD(fragment.getActivity(), newFIle.getAbsolutePath(), bitmap, 100);
+                    mImagePath = newFIle.getAbsolutePath();
+                    TLog.log(TAG, "新图片:" + mImagePath);
+                }
+                return mImagePath;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(MessageFragment fragment, String s) {
+            super.onPostExecute(fragment, s);
+            if(!TextUtils.isEmpty(s)){
+                fragment.sendPicture(s);
+            }
+        }
     }
 }

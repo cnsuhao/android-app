@@ -93,6 +93,9 @@
         <item name="photoItemForeground">?android:selectableItemBackground</item>
         <item name="photoItemForegroundBorderless">?android:selectableItemBackground</item>
 
+        <item name="actionBarSize">48dp</item>
+        <item name="android:actionBarSize">48dp</item>
+
         <!--<item name="actionBarStyle">@style/ActionBarBaseStyle</item>
         <item name="actionOverflowButtonStyle">@style/OverflowButton</item>-->
         <item name="actionBarItemBackground">@drawable/umeng_socialize_titlebar_item_background_selector</item>

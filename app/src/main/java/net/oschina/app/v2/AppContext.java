@@ -8,6 +8,10 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap.Config;
 import android.text.TextUtils;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.mapapi.SDKInitializer;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChat;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -86,11 +90,15 @@ public class AppContext extends BaseApplication {
     private static final String KEY_DETAIL_FONT_SIZE = "key_font_size";
     private static final String KEY_USERNAEM = "KEY_USERNAME";
     private static final String KEY_PWD = "KEY_PWD";
+    private static final java.lang.String TAG = "AppContext";
 
     private static Set<String> mReadedNewsIds, mReadedQuestionIds, mReadedBlogIds; //已读IDS
 
     private static AppContext instance;
     public static DemoHXSDKHelper hxSDKHelper = new DemoHXSDKHelper();
+
+    public LocationClient mLocationClient;
+    public MyLocationListener mMyLocationListener;
 
     @Override
     public void onCreate() {
@@ -122,6 +130,11 @@ public class AppContext extends BaseApplication {
         hxSDKHelper.onInit(getApplicationContext());
 
         Fresco.initialize(this);
+
+        SDKInitializer.initialize(getApplicationContext());
+
+//        mLocationClient = new LocationClient(this.getApplicationContext());
+//        mMyLocationListener = new MyLocationListener();
     }
 
     public static void requestDailyEnglish() {
@@ -767,5 +780,37 @@ public class AppContext extends BaseApplication {
     public void logoutHX(final EMCallBack emCallBack) {
         // 先调用sdk logout，在清理app中自己的数据
         hxSDKHelper.logout(emCallBack);
+    }
+
+    public class MyLocationListener implements BDLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            if (location == null)
+                return;
+            StringBuffer sb = new StringBuffer(256);
+            sb.append("time : ");
+            sb.append(location.getTime());
+            sb.append("\nerror code : ");
+            sb.append(location.getLocType());
+            sb.append("\nlatitude : ");
+            sb.append(location.getLatitude());
+            sb.append("\nlontitude : ");
+            sb.append(location.getLongitude());
+            sb.append("\nradius : ");
+            sb.append(location.getRadius());
+            if (location.getLocType() == BDLocation.TypeGpsLocation) {
+                sb.append("\nspeed : ");
+                sb.append(location.getSpeed());
+                sb.append("\nsatellite : ");
+                sb.append(location.getSatelliteNumber());
+            } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
+                sb.append("\naddr : ");
+                sb.append(location.getAddrStr());
+            }
+
+            TLog.log(TAG,sb.toString());
+
+            //requestLocationNearby(location.getLatitude(), location.getLongitude());
+        }
     }
 }
