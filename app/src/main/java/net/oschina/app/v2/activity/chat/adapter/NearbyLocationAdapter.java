@@ -5,7 +5,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.baidu.mapapi.search.core.PoiInfo;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.base.ListBaseAdapter;
@@ -29,10 +28,9 @@ public class NearbyLocationAdapter extends ListBaseAdapter {
             vh = (ViewHolder) convertView.getTag();
         }
 
-        PoiInfo p = (PoiInfo) _data.get(position);
 
-        vh.name.setText(p.name);
-        vh.desc.setText(p.address);
+        //vh.name.setText(p.name);
+        //vh.desc.setText(p.address);
 
         vh.selected.setVisibility(mSelectedIdx == position ? View.VISIBLE : View.INVISIBLE);
 

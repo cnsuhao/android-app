@@ -33,7 +33,6 @@ import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.DemoHXSDKHelper;
 import net.oschina.app.v2.activity.chat.MessageActivity;
 import net.oschina.app.v2.activity.chat.SelectImageActivity;
-import net.oschina.app.v2.activity.chat.SelectLocationActivity;
 import net.oschina.app.v2.activity.chat.SelectLocationActivity2;
 import net.oschina.app.v2.activity.chat.adapter.MessageAdapter;
 import net.oschina.app.v2.activity.chat.image.Photo;

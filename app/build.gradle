@@ -54,4 +54,5 @@ dependencies {
     compile files('libs/baidumapapi_v3_5_0.jar')
     compile files('libs/BaiduLBS_Android.jar')
     compile files('libs/RasterSDKv1.1.0.15299.jar')
+    compile files('libs/TencentLocationSDK_v4.1.1_r175129.jar')
 }

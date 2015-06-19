@@ -2,7 +2,7 @@ package net.oschina.app.v2.api;
 
 import java.util.ArrayList;
 
-import org.apache.commons.lang3.StringUtils;
+//import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.client.HttpResponseException;
 import org.json.JSONArray;
@@ -130,7 +130,8 @@ public class BaseApiResponseHandler extends JsonHttpResponseHandler {
 				list.add(String.valueOf(response.getErrorCode()));
 				list.add(response.getMessage());
 			}
-			return StringUtils.join(list, ": ");
+			//return StringUtils.join(list, ": ");
+			return "message";
 		}
 	}
 }

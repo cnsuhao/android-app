@@ -19,7 +19,7 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <com.baidu.mapapi.map.MapView
+            <!--<com.baidu.mapapi.map.MapView
                 android:id="@+id/bmapView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -34,7 +34,7 @@
                 android:layout_alignBottom="@id/bmapView"
                 android:layout_alignLeft="@id/bmapView"
                 android:src="@drawable/main_icon_location"
-                android:background="@drawable/btn_chat_locate_selector"/>
+                android:background="@drawable/btn_chat_locate_selector"/>-->
 
         </RelativeLayout>
 
