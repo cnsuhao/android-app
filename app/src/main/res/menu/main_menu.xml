@@ -36,7 +36,7 @@
         osc:showAsAction="never"/>
     <item
         android:id="@+id/main_menu_feedback"
-        android:title="用戶返回"
+        android:title="用戶反馈"
         osc:showAsAction="never"/>
     <item
         android:id="@+id/main_menu_quit"
