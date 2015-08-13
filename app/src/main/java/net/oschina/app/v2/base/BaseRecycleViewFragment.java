@@ -114,7 +114,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         mRecycleView = (FixedRecyclerView) view.findViewById(R.id.recycleView);
         mRecycleView.setOnScrollListener(mScrollListener);
 
-        if(isNeedListDivider()) {
+        if (isNeedListDivider()) {
             // use a linear layout manager
             mRecycleView.addItemDecoration(new DividerItemDecoration(getActivity(),
                     DividerItemDecoration.VERTICAL_LIST));
@@ -225,7 +225,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
     public void loadMore() {
         if (mState == STATE_NONE) {
             if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
-                TLog.log(TAG,"begin to load more data.");
+                TLog.log(TAG, "begin to load more data.");
                 mCurrentPage++;
                 mState = STATE_LOADMORE;
                 requestData(false);
@@ -317,10 +317,10 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         public void onSuccess(int i, Header[] headers, byte[] responseBytes) {
             if (mInstance != null) {
                 BaseRecycleViewFragment instance = mInstance.get();
-                if (instance.isAdded()) {
+                if (instance != null && instance.isAdded()) {
                     //if (instance.mState == STATE_REFRESH) {
                     //    instance.onRefreshNetworkSuccess();
-                        //AppContext.setRefreshTime(instance.getCacheKey(),System.currentTimeMillis());
+                    //AppContext.setRefreshTime(instance.getCacheKey(),System.currentTimeMillis());
                     //}
                     instance.executeParserTask(responseBytes, false);
                 }
@@ -331,7 +331,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
             if (mInstance != null) {
                 BaseRecycleViewFragment instance = mInstance.get();
-                if (instance.isAdded()) {
+                if (instance != null && instance.isAdded()) {
                     //.readCacheData(instance.getCacheKey());
                     instance.executeOnLoadDataError(null);
                     instance.executeOnLoadFinish();
@@ -360,7 +360,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             if (instance == null) return null;
             try {
                 ListEntity data = instance.parseList(new ByteArrayInputStream(responseData));
-                if (!fromCache){
+                if (!fromCache) {
                     UIHelper.sendNoticeBroadcast(instance.getActivity(), data);
                 }
                 //new SaveCacheTask(instance, data, instance.getCacheKey()).execute();
@@ -387,7 +387,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
                     instance.executeOnLoadDataError(null);
                 } else {
                     instance.executeOnLoadDataSuccess(list);
-                    if(!fromCache) {
+                    if (!fromCache) {
                         if (instance.mState == STATE_REFRESH) {
                             instance.onRefreshNetworkSuccess();
                         }
