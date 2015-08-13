@@ -52,6 +52,7 @@ import net.oschina.app.v2.model.Comment;
 import net.oschina.app.v2.model.CommentList;
 import net.oschina.app.v2.model.Result;
 import net.oschina.app.v2.model.Tweet;
+import net.oschina.app.v2.model.TweetDetail;
 import net.oschina.app.v2.service.PublicCommentTask;
 import net.oschina.app.v2.service.ServerTaskUtils;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
@@ -63,6 +64,7 @@ import net.oschina.app.v2.utils.HTMLSpirit;
 import net.oschina.app.v2.utils.StringUtils;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
+import net.oschina.app.v2.utils.XmlUtils;
 
 import org.apache.http.Header;
 
@@ -575,7 +577,7 @@ public class TweetDetailFragment extends BaseFragment implements
 		private String key;
 
 		private SaveCacheTask(Context context, Serializable seri, String key) {
-			mContext = new WeakReference<Context>(context);
+			mContext = new WeakReference<>(context);
 			this.seri = seri;
 			this.key = key;
 		}
@@ -592,7 +594,8 @@ public class TweetDetailFragment extends BaseFragment implements
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			try {
-				mTweet = Tweet.parse(new ByteArrayInputStream(arg2));
+				mTweet = XmlUtils.toBean(TweetDetail.class,arg2).getTweet();
+				//Tweet.parse(new ByteArrayInputStream(arg2));
 				if (mTweet != null && mTweet.getId() > 0) {
                     UIHelper.sendNoticeBroadcast(getActivity(),mTweet);
 					executeOnLoadDataSuccess(mTweet);

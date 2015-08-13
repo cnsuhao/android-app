@@ -35,6 +35,10 @@
         android:title="应用设置"
         osc:showAsAction="never"/>
     <item
+        android:id="@+id/main_menu_feedback"
+        android:title="用戶返回"
+        osc:showAsAction="never"/>
+    <item
         android:id="@+id/main_menu_quit"
         android:title="退出应用"
         osc:showAsAction="never"/>

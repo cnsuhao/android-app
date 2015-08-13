@@ -1,24 +1,5 @@
 package net.oschina.app.v2.activity.user;
 
-import java.io.ByteArrayInputStream;
-
-import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.api.ApiHttpClient;
-import net.oschina.app.v2.api.remote.UserApi;
-import net.oschina.app.v2.base.BaseActivity;
-import net.oschina.app.v2.model.Result;
-import net.oschina.app.v2.model.User;
-import net.oschina.app.v2.utils.SimpleTextWatcher;
-import net.oschina.app.v2.utils.TDevice;
-import net.oschina.app.v2.utils.TLog;
-import net.oschina.app.v2.utils.UIHelper;
-
-import org.apache.http.Header;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.protocol.HttpContext;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -31,6 +12,25 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
+
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.api.ApiHttpClient;
+import net.oschina.app.v2.api.remote.UserApi;
+import net.oschina.app.v2.base.BaseActivity;
+import net.oschina.app.v2.model.LoginUserBean;
+import net.oschina.app.v2.model.Result;
+import net.oschina.app.v2.model.User;
+import net.oschina.app.v2.utils.SimpleTextWatcher;
+import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.TLog;
+import net.oschina.app.v2.utils.UIHelper;
+import net.oschina.app.v2.utils.XmlUtils;
+
+import org.apache.http.Header;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.protocol.HttpContext;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
@@ -80,12 +80,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 					AppContext.setCookie(tmpcookies);
 					ApiHttpClient.setCookie(ApiHttpClient.getCookie(AppContext.instance()));
 				}
-				User user = User.parse(new ByteArrayInputStream(arg2));
+				LoginUserBean lb = XmlUtils.toBean(LoginUserBean.class, arg2);
+				User user = lb.getUser();
+				//User.parse(new ByteArrayInputStream(arg2));
                 UIHelper.sendNoticeBroadcast(LoginActivity.this, user);
 				user.setAccount(mUserName);
 				user.setPwd(mPassword);
 				user.setRememberMe(false);
-				Result res = user.getValidate();
+				Result res = lb.getResult();
 				if (res.OK()) {
 					// 保存登录信息
 					AppContext.instance().saveLoginInfo(user);

@@ -3,50 +3,80 @@
     android:id="@+id/pageerrLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/window_background" >
+    android:background="@color/window_background">
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:id="@+id/rl_state_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/rl_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:id="@+id/iv_bg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_empty_view_bg"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_empty_view_network" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_empty_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rl_icon"
+            android:layout_centerHorizontal="true"
+            android:text=""
+            android:textColor="@color/main_black"
+            android:textSize="16sp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_empty_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_icon"
+            android:layout_marginTop="8dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/error_view_load_error_click_to_refresh"
+            android:textColor="@color/main_gray"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_loading_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_loading_outer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:orientation="vertical" >
+            android:background="@drawable/loading_outer_bg" />
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" >
-
-                <ImageView
-                    android:id="@+id/img_error_layout"
-                    android:layout_width="@dimen/error_icon_size"
-                    android:layout_height="@dimen/error_icon_size"
-                    android:background="@drawable/page_icon_error"
-                    android:visibility="gone"
-                    android:scaleType="fitXY"/>
-
-                <ProgressBar
-                    android:id="@+id/animProgress"
-                    style="@style/ListSpinner"
-                    android:layout_centerInParent="true"
-                    android:visibility="visible"/>
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/tv_error_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10.0dip"
-                android:lines="2"
-                android:gravity="center"
-                android:text="@string/error_view_click_to_refresh"
-                android:textColor="@color/main_gray"
-                android:textSize="@dimen/text_size_16" />
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_loading_inner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/loading_inner_bg" />
     </RelativeLayout>
-
 </RelativeLayout>

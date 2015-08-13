@@ -76,7 +76,7 @@
     <string name="tip_load_data_error">对不起,无法加载数据.</string>
 
     <string name="loading">加载中…</string>
-    <string name="loading_no_more">没有更多.</string>
+    <string name="loading_no_more">没有更多了喲.</string>
     
     <string name="publish_comment">写点什么吧</string>
     <!-- software detail -->
@@ -88,11 +88,11 @@
     <string name="software_download">软件下载</string>
     <string name="software_document">软件文档</string>
     
-    <string name="from_mobile">来自:手机</string>
-    <string name="from_android">来自:Android</string>
-    <string name="from_iphone">来自:Iphone</string>
-    <string name="from_windows_phone">来自:Windows Phone</string>
-    <string name="from_wechat">来自:微信</string>
+    <string name="from_mobile">来自 手机</string>
+    <string name="from_android">来自 Android</string>
+    <string name="from_iphone">来自 Iphone</string>
+    <string name="from_windows_phone">来自 Windows Phone</string>
+    <string name="from_wechat">来自 微信</string>
     
     <string name="unlogin">未登录</string>
     <string name="unlogin_tip">您还未登录\r\n点击屏幕登录</string>
@@ -134,6 +134,7 @@
     
     <string name="actionbar_title_profile">个人中心</string>
     <string name="favorite">收藏</string>
+    <string name="score">积分</string>
     <string name="following">关注</string>
     <string name="follower">粉丝</string>
     <string name="join_time">加入时间:</string>

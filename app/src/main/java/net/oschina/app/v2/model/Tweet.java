@@ -3,6 +3,8 @@ package net.oschina.app.v2.model;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.oschina.app.v2.AppException;
 import net.oschina.app.v2.utils.StringUtils;
@@ -14,6 +16,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Xml;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
  * 动弹实体类
  *
@@ -23,6 +27,8 @@ import android.util.Xml;
  * @changed 2014-01-21
  * @difference 1.添加语音动弹属性
  */
+@SuppressWarnings("serial")
+@XStreamAlias("tweet")
 public class Tweet extends Entity implements Parcelable {
 
     public final static String NODE_ID = "id";
@@ -43,43 +49,73 @@ public class Tweet extends Entity implements Parcelable {
     public final static int CLIENT_WINDOWS_PHONE = 5;
     public final static int CLIENT_WECHAT = 6;
 
-    private String face;
-    private String body;
-    private String author;
-    private int authorId;
-    private int commentCount;
-    private String pubDate;
-    private String imgSmall;
-    private String imgBig;
+//    private String face;
+//    private String body;
+//    private String author;
+//    private int authorId;
+//    private int commentCount;
+//    private String pubDate;
+//    private String imgSmall;
+//    private String imgBig;
     private File imageFile;
     private File amrFile;// 语音
-    private int appClient;
-    private String attach;
+//    private int appClient;
+//    private String attach;
+
 
     private String imageFilePath;
+
+    @XStreamAlias("portrait")
+    private String portrait;
+    @XStreamAlias("author")
+    private String author;
+    @XStreamAlias("authorid")
+    private int authorid;
+    @XStreamAlias("body")
+    private String body;
+    @XStreamAlias("appclient")
+    private int appclient;
+    @XStreamAlias("commentCount")
+    private int commentCount;
+    @XStreamAlias("pubDate")
+    private String pubDate;
+    @XStreamAlias("imgSmall")
+    private String imgSmall;
+    @XStreamAlias("imgBig")
+    private String imgBig;
+    @XStreamAlias("attach")
+    private String attach;
+    @XStreamAlias("likeCount")
+    private int likeCount;
+    @XStreamAlias("isLike")
+    private int isLike;
+    @XStreamAlias("likeList")
+    private List<User> likeUser = new ArrayList<>();
 
     public Tweet() {
     }
 
     public Tweet(Parcel source) {
         body = source.readString();
-        authorId = source.readInt();
+        portrait = source.readString();
+        authorid = source.readInt();
         imageFilePath = source.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(body);
-        dest.writeInt(authorId);
+        dest.writeString(portrait);
+        dest.writeInt(authorid);
         dest.writeString(imageFilePath);
     }
 
     public int getAppClient() {
-        return appClient;
+        return appclient;
     }
 
     public void setAppClient(int appClient) {
-        this.appClient = appClient;
+        this.appclient = appClient;
     }
 
     public File getImageFile() {
@@ -115,11 +151,11 @@ public class Tweet extends Entity implements Parcelable {
     }
 
     public String getFace() {
-        return face;
+        return portrait;
     }
 
     public void setFace(String face) {
-        this.face = face;
+        this.portrait = face;
     }
 
     public String getBody() {
@@ -139,11 +175,11 @@ public class Tweet extends Entity implements Parcelable {
     }
 
     public int getAuthorId() {
-        return authorId;
+        return authorid;
     }
 
     public void setAuthorId(int authorId) {
-        this.authorId = authorId;
+        this.authorid = authorId;
     }
 
     public int getCommentCount() {
@@ -170,81 +206,81 @@ public class Tweet extends Entity implements Parcelable {
         this.attach = attach;
     }
 
-    public static Tweet parse(InputStream inputStream) throws IOException,
-            AppException {
-        Tweet tweet = null;
-        // 获得XmlPullParser解析器
-        XmlPullParser xmlParser = Xml.newPullParser();
-        try {
-            xmlParser.setInput(inputStream, UTF8);
-            // 获得解析到的事件类别，这里有开始文档，结束文档，开始标签，结束标签，文本等等事件。
-            int evtType = xmlParser.getEventType();
-            // 一直循环，直到文档结束
-            while (evtType != XmlPullParser.END_DOCUMENT) {
-                String tag = xmlParser.getName();
-                switch (evtType) {
-                    case XmlPullParser.START_TAG:
-                        if (tag.equalsIgnoreCase(NODE_START)) {
-                            tweet = new Tweet();
-                        } else if (tweet != null) {
-                            if (tag.equalsIgnoreCase(NODE_ID)) {
-                                tweet.id = StringUtils.toInt(xmlParser.nextText(),
-                                        0);
-                            } else if (tag.equalsIgnoreCase(NODE_FACE)) {
-                                tweet.setFace(xmlParser.nextText());
-                            } else if (tag.equalsIgnoreCase(NODE_BODY)) {
-                                tweet.setBody(xmlParser.nextText());
-                            } else if (tag.equalsIgnoreCase(NODE_AUTHOR)) {
-                                tweet.setAuthor(xmlParser.nextText());
-                            } else if (tag.equalsIgnoreCase(NODE_AUTHORID)) {
-                                tweet.setAuthorId(StringUtils.toInt(
-                                        xmlParser.nextText(), 0));
-                            } else if (tag.equalsIgnoreCase(NODE_COMMENTCOUNT)) {
-                                tweet.setCommentCount(StringUtils.toInt(
-                                        xmlParser.nextText(), 0));
-                            } else if (tag.equalsIgnoreCase(NODE_PUBDATE)) {
-                                tweet.setPubDate(xmlParser.nextText());
-                            } else if (tag.equalsIgnoreCase(NODE_IMGSMALL)) {
-                                tweet.setImgSmall(xmlParser.nextText());
-                            } else if (tag.equalsIgnoreCase(NODE_IMGBIG)) {
-                                tweet.setImgBig(xmlParser.nextText());
-                            } else if (tag.equalsIgnoreCase(NODE_ATTACH)) {
-                                tweet.setAttach(xmlParser.nextText());
-                            } else if (tag.equalsIgnoreCase(NODE_APPCLIENT)) {
-                                tweet.setAppClient(StringUtils.toInt(
-                                        xmlParser.nextText(), 0));
-                            } else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {
-                                tweet.setNotice(new Notice());
-                            }  else if (tweet.getNotice() != null) {
-                                if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
-                                    tweet.getNotice().setAtmeCount(
-                                            StringUtils.toInt(xmlParser.nextText(), 0));
-                                } else if (tag.equalsIgnoreCase(Notice.NODE_MESSAGE_COUNT)) {
-                                    tweet.getNotice().setMsgCount(
-                                            StringUtils.toInt(xmlParser.nextText(), 0));
-                                } else if (tag.equalsIgnoreCase(Notice.NODE_REVIEW_COUNT)) {
-                                    tweet.getNotice().setReviewCount(
-                                            StringUtils.toInt(xmlParser.nextText(), 0));
-                                } else if (tag.equalsIgnoreCase(Notice.NODE_NEWFANS_COUNT)) {
-                                    tweet.getNotice().setNewFansCount(
-                                            StringUtils.toInt(xmlParser.nextText(), 0));
-                                }
-                            }
-                        }
-                        break;
-                    case XmlPullParser.END_TAG:
-                        break;
-                }
-                // 如果xml没有结束，则导航到下一个节点
-                evtType = xmlParser.next();
-            }
-        } catch (XmlPullParserException e) {
-            throw AppException.xml(e);
-        } finally {
-            inputStream.close();
-        }
-        return tweet;
-    }
+//    public static Tweet parse(InputStream inputStream) throws IOException,
+//            AppException {
+//        Tweet tweet = null;
+//        // 获得XmlPullParser解析器
+//        XmlPullParser xmlParser = Xml.newPullParser();
+//        try {
+//            xmlParser.setInput(inputStream, UTF8);
+//            // 获得解析到的事件类别，这里有开始文档，结束文档，开始标签，结束标签，文本等等事件。
+//            int evtType = xmlParser.getEventType();
+//            // 一直循环，直到文档结束
+//            while (evtType != XmlPullParser.END_DOCUMENT) {
+//                String tag = xmlParser.getName();
+//                switch (evtType) {
+//                    case XmlPullParser.START_TAG:
+//                        if (tag.equalsIgnoreCase(NODE_START)) {
+//                            tweet = new Tweet();
+//                        } else if (tweet != null) {
+//                            if (tag.equalsIgnoreCase(NODE_ID)) {
+//                                tweet.id = StringUtils.toInt(xmlParser.nextText(),
+//                                        0);
+//                            } else if (tag.equalsIgnoreCase(NODE_FACE)) {
+//                                tweet.setFace(xmlParser.nextText());
+//                            } else if (tag.equalsIgnoreCase(NODE_BODY)) {
+//                                tweet.setBody(xmlParser.nextText());
+//                            } else if (tag.equalsIgnoreCase(NODE_AUTHOR)) {
+//                                tweet.setAuthor(xmlParser.nextText());
+//                            } else if (tag.equalsIgnoreCase(NODE_AUTHORID)) {
+//                                tweet.setAuthorId(StringUtils.toInt(
+//                                        xmlParser.nextText(), 0));
+//                            } else if (tag.equalsIgnoreCase(NODE_COMMENTCOUNT)) {
+//                                tweet.setCommentCount(StringUtils.toInt(
+//                                        xmlParser.nextText(), 0));
+//                            } else if (tag.equalsIgnoreCase(NODE_PUBDATE)) {
+//                                tweet.setPubDate(xmlParser.nextText());
+//                            } else if (tag.equalsIgnoreCase(NODE_IMGSMALL)) {
+//                                tweet.setImgSmall(xmlParser.nextText());
+//                            } else if (tag.equalsIgnoreCase(NODE_IMGBIG)) {
+//                                tweet.setImgBig(xmlParser.nextText());
+//                            } else if (tag.equalsIgnoreCase(NODE_ATTACH)) {
+//                                tweet.setAttach(xmlParser.nextText());
+//                            } else if (tag.equalsIgnoreCase(NODE_APPCLIENT)) {
+//                                tweet.setAppClient(StringUtils.toInt(
+//                                        xmlParser.nextText(), 0));
+//                            } else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {
+//                                tweet.setNotice(new Notice());
+//                            }  else if (tweet.getNotice() != null) {
+//                                if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
+//                                    tweet.getNotice().setAtmeCount(
+//                                            StringUtils.toInt(xmlParser.nextText(), 0));
+//                                } else if (tag.equalsIgnoreCase(Notice.NODE_MESSAGE_COUNT)) {
+//                                    tweet.getNotice().setMsgCount(
+//                                            StringUtils.toInt(xmlParser.nextText(), 0));
+//                                } else if (tag.equalsIgnoreCase(Notice.NODE_REVIEW_COUNT)) {
+//                                    tweet.getNotice().setReviewCount(
+//                                            StringUtils.toInt(xmlParser.nextText(), 0));
+//                                } else if (tag.equalsIgnoreCase(Notice.NODE_NEWFANS_COUNT)) {
+//                                    tweet.getNotice().setNewFansCount(
+//                                            StringUtils.toInt(xmlParser.nextText(), 0));
+//                                }
+//                            }
+//                        }
+//                        break;
+//                    case XmlPullParser.END_TAG:
+//                        break;
+//                }
+//                // 如果xml没有结束，则导航到下一个节点
+//                evtType = xmlParser.next();
+//            }
+//        } catch (XmlPullParserException e) {
+//            throw AppException.xml(e);
+//        } finally {
+//            inputStream.close();
+//        }
+//        return tweet;
+//    }
 
     @Override
     public int describeContents() {
@@ -271,4 +307,16 @@ public class Tweet extends Entity implements Parcelable {
             return new Tweet(source);
         }
     };
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public int getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(int isLike) {
+        this.isLike = isLike;
+    }
 }

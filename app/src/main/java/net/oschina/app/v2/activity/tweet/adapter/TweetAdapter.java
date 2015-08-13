@@ -9,6 +9,7 @@ import net.oschina.app.v2.ui.text.MyURLSpan;
 import net.oschina.app.v2.ui.text.TweetTextView;
 import net.oschina.app.v2.utils.DateUtil;
 import net.oschina.app.v2.utils.UIHelper;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -28,12 +29,12 @@ import com.tonlin.osc.happy.R;
 
 public class TweetAdapter extends RecycleBaseAdapter {
 
-	private DisplayImageOptions options;
+    private DisplayImageOptions options;
 
-	public TweetAdapter() {
-		options = new DisplayImageOptions.Builder().cacheInMemory(true)
-				.cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565).build();
-	}
+    public TweetAdapter() {
+        options = new DisplayImageOptions.Builder().cacheInMemory(true)
+                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565).build();
+    }
 
     @Override
     protected View onCreateItemView(ViewGroup parent, int viewType) {
@@ -43,13 +44,13 @@ public class TweetAdapter extends RecycleBaseAdapter {
 
     @Override
     protected RecycleBaseAdapter.ViewHolder onCreateItemViewHolder(View view, int viewType) {
-        return new ViewHolder(viewType,view);
+        return new ViewHolder(viewType, view);
     }
 
     @Override
     protected void onBindItemViewHolder(RecycleBaseAdapter.ViewHolder holder, int position) {
         super.onBindItemViewHolder(holder, position);
-        ViewHolder vh = (ViewHolder)holder;
+        ViewHolder vh = (ViewHolder) holder;
 
         final Tweet item = (Tweet) _data.get(position);
         vh.name.setText(item.getAuthor());
@@ -85,7 +86,9 @@ public class TweetAdapter extends RecycleBaseAdapter {
                 break;
         }
 
-        vh.commentCount.setText(String.valueOf(item.getCommentCount()));
+        vh.commentCount.setText(item.getCommentCount() > 999 ? "999+" : String.valueOf(item.getCommentCount()));
+        vh.likeCount.setText(item.getLikeCount() > 999 ? "999+" : String.valueOf(item.getLikeCount()));
+        vh.likeCount.setCompoundDrawablesWithIntrinsicBounds(item.getIsLike()==1 ? R.drawable.ic_like_selected : R.drawable.ic_like_normal, 0, 0, 0);
 
         vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
         vh.avatar.setAvatarUrl(item.getFace());
@@ -117,7 +120,7 @@ public class TweetAdapter extends RecycleBaseAdapter {
                     // UIHelper.showImageZoomDialog(parent.getContext(),
                     // item.getImgBig());
                     UIHelper.showImagePreview(context,
-                            new String[] { item.getImgBig() });
+                            new String[]{item.getImgBig()});
                 }
             });
         } else {
@@ -126,22 +129,23 @@ public class TweetAdapter extends RecycleBaseAdapter {
         }
     }
 
-	static class ViewHolder extends RecycleBaseAdapter.ViewHolder {
-		public TextView name, from, time, commentCount, longPicTip;
-		public TweetTextView title;
-		public ImageView pic;
-		public AvatarView avatar;
+    static class ViewHolder extends RecycleBaseAdapter.ViewHolder {
+        public TextView name, from, time, commentCount, likeCount, longPicTip;
+        public TweetTextView title;
+        public ImageView pic;
+        public AvatarView avatar;
 
-		public ViewHolder(int viewType,View view) {
-            super(viewType,view);
-			longPicTip = (TextView) view.findViewById(R.id.long_pic_tip);
-			name = (TextView) view.findViewById(R.id.tv_name);
-			title = (TweetTextView) view.findViewById(R.id.tv_title);
-			from = (TextView) view.findViewById(R.id.tv_from);
-			time = (TextView) view.findViewById(R.id.tv_time);
-			commentCount = (TextView) view.findViewById(R.id.tv_comment_count);
-			avatar = (AvatarView) view.findViewById(R.id.iv_avatar);
-			pic = (ImageView) view.findViewById(R.id.iv_pic);
-		}
-	}
+        public ViewHolder(int viewType, View view) {
+            super(viewType, view);
+            longPicTip = (TextView) view.findViewById(R.id.long_pic_tip);
+            name = (TextView) view.findViewById(R.id.tv_name);
+            title = (TweetTextView) view.findViewById(R.id.tv_title);
+            from = (TextView) view.findViewById(R.id.tv_from);
+            time = (TextView) view.findViewById(R.id.tv_time);
+            commentCount = (TextView) view.findViewById(R.id.tv_comment_count);
+            likeCount = (TextView) view.findViewById(R.id.tv_like_count);
+            avatar = (AvatarView) view.findViewById(R.id.iv_avatar);
+            pic = (ImageView) view.findViewById(R.id.iv_pic);
+        }
+    }
 }

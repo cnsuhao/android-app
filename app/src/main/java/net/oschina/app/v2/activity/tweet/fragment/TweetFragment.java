@@ -30,6 +30,7 @@ import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.HTMLSpirit;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
+import net.oschina.app.v2.utils.XmlUtils;
 
 import org.apache.http.Header;
 
@@ -160,8 +161,8 @@ public class TweetFragment extends BaseRecycleViewFragment {
 
     @Override
     protected ListEntity parseList(InputStream is) throws Exception {
-        TweetList list = TweetList.parse(is);
-        return list;
+        //TweetList list = TweetList.parse(is);
+        return XmlUtils.toBean(TweetList.class,is);
     }
 
     @Override

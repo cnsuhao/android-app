@@ -320,6 +320,7 @@ public class AppContext extends BaseApplication {
         this.cleanCookie();
         //this.login = false;
         //this.loginUid = 0;
+        cleanLoginInfo();
 
         Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
         sendBroadcast(intent);

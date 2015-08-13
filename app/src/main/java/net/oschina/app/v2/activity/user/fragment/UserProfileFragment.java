@@ -23,11 +23,13 @@ import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.cache.CacheManager;
 import net.oschina.app.v2.model.MyInformation;
+import net.oschina.app.v2.model.User;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.AvatarUtils;
 import net.oschina.app.v2.utils.HTMLSpirit;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
+import net.oschina.app.v2.utils.XmlUtils;
 
 import org.apache.http.Header;
 
@@ -39,11 +41,11 @@ public class UserProfileFragment extends BaseFragment {
 	private static final String USER_PROFILE_SCREEN = "user_profile_screen";
 	private ImageView mIvAvatar, mIvGender;
 	private TextView mTvName;
-	private TextView mTvFavorite, mTvFollowing, mTvFollower;
+	private TextView mTvFavorite,mTvScore, mTvFollowing, mTvFollower;
 	private TextView mTvJoinTime, mTvLocation, mTvDevelopmentPlatform,
 			mTvAcademicFocus;
 	private EmptyLayout mEmptyView;
-	private MyInformation mInfo;
+	private User mUser;
 	private AsyncTask<String, Void, MyInformation> mCacheTask;
 
 	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
@@ -51,11 +53,13 @@ public class UserProfileFragment extends BaseFragment {
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			try {
-				mInfo = MyInformation.parse(new ByteArrayInputStream(arg2));
-				if (mInfo != null) {
+				MyInformation info = XmlUtils.toBean(MyInformation.class,arg2);
+				//MyInformation.parse(new ByteArrayInputStream(arg2));
+				if (info != null) {
+					mUser = info.getUser();
 					fillUI();
 					mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
-					new SaveCacheTask(getActivity(), mInfo, getCacheKey())
+					new SaveCacheTask(getActivity(), info, getCacheKey())
 							.execute();
 				} else {
 					onFailure(arg0, arg1, arg2, new Throwable());
@@ -96,6 +100,7 @@ public class UserProfileFragment extends BaseFragment {
 		mTvName = (TextView) view.findViewById(R.id.tv_name);
 		mIvGender = (ImageView) view.findViewById(R.id.iv_gender);
 
+		mTvScore= (TextView) view.findViewById(R.id.tv_score);
 		mTvFavorite = (TextView) view.findViewById(R.id.tv_favorite);
 		mTvFollowing = (TextView) view.findViewById(R.id.tv_following);
 		mTvFollower = (TextView) view.findViewById(R.id.tv_follower);
@@ -115,19 +120,20 @@ public class UserProfileFragment extends BaseFragment {
 
 	private void fillUI() {
 		ImageLoader.getInstance().displayImage(
-				AvatarUtils.getLargeAvatar(mInfo.getFace()), mIvAvatar);
-		mTvName.setText(mInfo.getName());
+				AvatarUtils.getLargeAvatar(mUser.getFace()), mIvAvatar);
+		mTvName.setText(mUser.getName());
 		mIvGender
-				.setImageResource(mInfo.getGender() == 1 ? R.drawable.userinfo_icon_male
+				.setImageResource(mUser.getGender().equals("1") ? R.drawable.userinfo_icon_male
 						: R.drawable.userinfo_icon_female);
-		mTvFavorite.setText(String.valueOf(mInfo.getFavoritecount()));
-		mTvFollowing.setText(String.valueOf(mInfo.getFollowerscount()));
-		mTvFollower.setText(String.valueOf(mInfo.getFanscount()));
+		mTvScore.setText(String.valueOf(mUser.getScore()));
+		mTvFavorite.setText(String.valueOf(mUser.getFavoriteCount()));
+		mTvFollowing.setText(String.valueOf(mUser.getFollowers()));
+		mTvFollower.setText(String.valueOf(mUser.getFans()));
 
-		mTvJoinTime.setText(mInfo.getJointime());
-		mTvLocation.setText(mInfo.getFrom());
-		mTvDevelopmentPlatform.setText(mInfo.getDevplatform());
-		mTvAcademicFocus.setText(mInfo.getExpertise());
+		mTvJoinTime.setText(mUser.getJointime());
+		mTvLocation.setText(mUser.getFrom());
+		mTvDevelopmentPlatform.setText(mUser.getDevplatform());
+		mTvAcademicFocus.setText(mUser.getExpertise());
 	}
 
 	@Override
@@ -260,8 +266,8 @@ public class UserProfileFragment extends BaseFragment {
 		@Override
 		protected void onPostExecute(MyInformation info) {
 			super.onPostExecute(info);
-			mInfo = info;
-			if (mInfo != null) {
+			if (info != null) {
+				mUser = info.getUser();
 				fillUI();
 				mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
 			} else {

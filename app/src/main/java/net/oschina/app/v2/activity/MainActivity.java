@@ -51,6 +51,7 @@ import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
@@ -295,6 +296,10 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
                 break;
             case R.id.main_menu_quit:
                 UIHelper.exitApp(this);
+                break;
+            case R.id.main_menu_feedback:
+                FeedbackAgent agent = new FeedbackAgent(this);
+                agent.startFeedbackActivity();
                 break;
         }
         return true;

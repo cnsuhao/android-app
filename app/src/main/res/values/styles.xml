@@ -116,12 +116,15 @@
         <item name="android:dropDownListViewStyle">@style/Widget.IMA.ListView.DropDown</item>
 
         <item name="android:windowAnimationStyle">@style/ActivityTransitions</item>
+
+        <item name="actionBarSize">48dp</item>
     </style>
 
     <style name="Theme.IMA" parent="Theme.IMA.Base" />
 
     <style name="Theme.IMA.Splash" parent="Theme">
         <item name="colorPrimaryDark">@color/white</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="Theme.IMA.Preview" parent="@style/Theme.IMA">

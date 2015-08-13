@@ -13,6 +13,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
  * 动弹列表实体类
  * 
@@ -20,26 +22,39 @@ import android.util.Xml;
  * @version 1.0
  * @created 2012-3-21
  */
+@SuppressWarnings("serial")
+@XStreamAlias("oschina")
 public class TweetList extends Entity implements ListEntity {
 
 	public final static int CATALOG_LASTEST = 0;
 	public final static int CATALOG_HOT = -1;
     private static final String NODE_TWEET_COUNT = "tweetCount";
 
-    private int pageSize;
+	@XStreamAlias("tweetcount")
 	private int tweetCount;
-	private List<Tweet> tweetlist = new ArrayList<Tweet>();
+	@XStreamAlias("pagesize")
+	private int pagesize;
+	@XStreamAlias("tweets")
+	private List<Tweet> tweetslist = new ArrayList<>();
+//	private int pageSize;
+//	private int tweetCount;
+//	private List<Tweet> tweetlist = new ArrayList<Tweet>();
 
 	public int getPageSize() {
-		return pageSize;
+		return pagesize;
 	}
 
 	public int getTweetCount() {
 		return tweetCount;
 	}
 
+	@Override
+	public List<?> getList() {
+		return tweetslist;
+	}
+
 	public List<Tweet> getTweetlist() {
-		return tweetlist;
+		return tweetslist;
 	}
 
 	public static TweetList parse(InputStream inputStream) throws IOException,
@@ -61,16 +76,15 @@ public class TweetList extends Entity implements ListEntity {
 						tweetlist.tweetCount = StringUtils.toInt(
 								xmlParser.nextText(), 0);
 					} else if (tag.equalsIgnoreCase(NODE_PAGE_SIZE)) {
-						tweetlist.pageSize = StringUtils.toInt(
-								xmlParser.nextText(), 0);
+						//tweetlist.pageSize = StringUtils.toInt(
+						//		xmlParser.nextText(), 0);
 					} else if (tag.equalsIgnoreCase(Tweet.NODE_START)) {
 						tweet = new Tweet();
 					} else if (tweet != null) {
 						if (tag.equalsIgnoreCase(Tweet.NODE_ID)) {
-							tweet.id = StringUtils.toInt(xmlParser.nextText(),
-									0);
+							tweet.id = StringUtils.toInt(xmlParser.nextText(),0);
 						} else if (tag.equalsIgnoreCase(Tweet.NODE_FACE)) {
-							tweet.setFace(xmlParser.nextText());
+							//tweet.setFace(xmlParser.nextText());
 						} else if (tag.equalsIgnoreCase(Tweet.NODE_BODY)) {
 							tweet.setBody(xmlParser.nextText());
 						} else if (tag.equalsIgnoreCase(Tweet.NODE_AUTHOR)) {
@@ -129,8 +143,4 @@ public class TweetList extends Entity implements ListEntity {
 		return tweetlist;
 	}
 
-	@Override
-	public List<?> getList() {
-		return tweetlist;
-	}
 }

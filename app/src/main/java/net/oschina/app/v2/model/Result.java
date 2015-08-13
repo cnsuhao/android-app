@@ -13,6 +13,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
  * 数据操作结果实体类
  *
@@ -20,6 +22,8 @@ import android.util.Xml;
  * @version 1.0
  * @created 2012-3-21
  */
+@SuppressWarnings("serial")
+@XStreamAlias("result")
 public class Result extends Base {
 
     private static final String NODE_RESULT = "result";
@@ -40,7 +44,10 @@ public class Result extends Base {
     private static final String NODE_REFER = "refer";
     private static final String NODE_REFER_TITLE = "refertitle";
     private static final String NODE_REFER_BODY = "referbody";
+
+    @XStreamAlias("errorCode")
     private int errorCode;
+    @XStreamAlias("errorMessage")
     private String errorMessage;
 
     private Comment comment;

@@ -3,18 +3,28 @@ package net.oschina.app.v2.model;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /** 
- * 我的资料实体类
  * @author FireAnt（http://my.oschina.net/LittleDY）
- * @version 创建时间：2014年10月30日 下午4:08:30 
+ * @version 创建时间：2014年9月27日 下午2:45:57 
  * 
  */
 
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
-public class MyInformation extends Base {
+public class LoginUserBean extends Entity {
+	
+	@XStreamAlias("result")
+	private Result result;
 	
 	@XStreamAlias("user")
 	private User user;
+
+	public Result getResult() {
+		return result;
+	}
+
+	public void setResult(Result result) {
+		this.result = result;
+	}
 
 	public User getUser() {
 		return user;
@@ -23,4 +33,5 @@ public class MyInformation extends Base {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
 }

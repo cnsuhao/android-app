@@ -66,6 +66,7 @@
         android:paddingRight="@dimen/space_16"
         android:layout_toRightOf="@id/iv_avatar"
         android:focusable="false"
+        android:text=""
         android:focusableInTouchMode="false"
         android:textColor="@color/main_black"
         android:textSize="@dimen/text_size_16" />
@@ -78,6 +79,7 @@
         android:layout_marginTop="4dp"
         android:paddingRight="@dimen/space_16"
         android:layout_toRightOf="@id/iv_avatar"
+        android:layout_marginRight="8dp"
         android:background="@drawable/comment_reply_container_bg2"
         android:visibility="gone" >
 
@@ -132,7 +134,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:drawableRight="@drawable/ic_comment_count"
+            android:drawableLeft="@drawable/ic_comment_normal"
             android:drawablePadding="@dimen/space_2"
             android:gravity="center_vertical"
             android:textColor="@color/main_gray"
@@ -145,7 +147,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/space_10"
-            android:drawableLeft="@drawable/ic_retweet_count"
+            android:drawableLeft="@drawable/ic_retweet_normal"
             android:drawablePadding="@dimen/space_2"
             android:gravity="center_vertical"
             android:textColor="@color/main_gray"

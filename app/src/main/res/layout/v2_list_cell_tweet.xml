@@ -39,6 +39,7 @@
         android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/iv_avatar"
         android:focusable="false"
+        android:paddingRight="8dp"
         android:focusableInTouchMode="false"
         android:textColor="@color/main_black"
         android:textSize="@dimen/text_size_16" />
@@ -75,7 +76,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/long_pic_tip"
         android:layout_marginTop="4dp"
-        android:paddingBottom="@dimen/space_12"
         android:layout_toRightOf="@id/iv_avatar"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
@@ -91,12 +91,31 @@
 
         <TextView
             android:id="@+id/tv_comment_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:paddingLeft="@dimen/space_8"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="@dimen/space_16"
-            android:drawableRight="@drawable/ic_comment_count"
+            android:drawableLeft="@drawable/ic_comment_normal"
             android:drawablePadding="@dimen/space_2"
+            android:text="0"
+            android:background="@drawable/list_item_background_transparent"
+            android:singleLine="true"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:textColor="@color/main_gray"
+            android:textSize="@dimen/text_size_12" />
+        <TextView
+            android:id="@+id/tv_like_count"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:paddingLeft="@dimen/space_8"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:singleLine="true"
+            android:background="@drawable/list_item_background_transparent"
+            android:drawableLeft="@drawable/ic_like_normal"
+            android:drawablePadding="@dimen/space_2"
+            android:text="0"
             android:gravity="center_vertical"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
