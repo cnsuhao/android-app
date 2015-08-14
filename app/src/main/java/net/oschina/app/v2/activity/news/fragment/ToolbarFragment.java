@@ -172,4 +172,12 @@ public class ToolbarFragment extends BaseFragment {
 			mTvCommentCount.setVisibility(View.VISIBLE);
 		}
 	}
+
+	public void setCommentCount(String text,int visible) {
+		mCommentCountText = text;
+		if (mTvCommentCount != null && mCommentCountText != null) {
+			mTvCommentCount.setText(mCommentCountText);
+			mTvCommentCount.setVisibility(visible);
+		}
+	}
 }

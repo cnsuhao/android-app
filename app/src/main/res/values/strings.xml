@@ -57,7 +57,9 @@
     <string name="frame_title_software_lastest">最新</string>    
     <string name="frame_title_software_hot">热门</string>
     <string name="frame_title_software_china">国产</string>
-    
+
+    <string name="frame_title_event_recent">近期活动</string>
+    <string name="frame_title_event_mine">我的活动</string>
     
     <!-- V2 -->
     <string name="tab_name_article">资讯</string>
@@ -109,6 +111,7 @@
     <string name="actionbar_title_software">软件详情</string>
     <string name="actionbar_title_question">帖子详情</string>
     <string name="actionbar_title_tweet">动弹详情</string>
+    <string name="actionbar_title_event_detail">活动详情</string>
     <string name="actionbar_title_detail">详情</string>
     <string name="tip_logout_success">注销成功.</string>
     
@@ -177,7 +180,10 @@
     <string name="actionbar_title_friends">我的好友</string>
     <string name="actionbar_title_favorites">我的收藏</string>
     <string name="actionbar_title_ossoftware">开源软件</string>
-    
+
+    <string name="actionbar_title_event">开源活动</string>
+    <string name="actionbar_title_event_applies">活动出席人员</string>
+
     <string name="actionbar_title_comment">评论</string>
     <string name="actionbar_title_question_tag">%s相关</string>
     <string name="comment_count">%s评论</string>
@@ -309,4 +315,16 @@
 	<string name="tip_click_back_again_to_exist">再按一次退出哎嘛</string>
 	<string name="draft_tweet_message">要保存为草稿吗?</string>
 	<string name="long_pic_tip">这是一张长图,不予显示.您可以点击查看大图</string>
+
+    <string name="empty_tip_my_event_list">惭愧！\n您至今未参加任何活动哟</string>
+    <string name="empty_tip_my_event_apply_list">目前还没有人出席哟</string>
+
+    <string name="event_start_time">开始时间: %s</string>
+    <string name="event_end_time">结束时间: %s</string>
+    <string name="present_members">出席人员</string>
+    <string name="apply_event">我要报名</string>
+
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="version_format">Version : %s</string>
 </resources>

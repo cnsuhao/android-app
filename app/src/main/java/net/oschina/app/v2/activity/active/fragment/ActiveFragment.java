@@ -46,14 +46,14 @@ public class ActiveFragment extends BaseRecycleViewFragment {
 
     protected static final String TAG = ActiveFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "active_list";
-    private boolean mIsWatingLogin;
+    private boolean mIsWaitingLogin;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mErrorLayout != null) {
-                mIsWatingLogin = true;
+                mIsWaitingLogin = true;
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                 mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
             }
@@ -75,7 +75,7 @@ public class ActiveFragment extends BaseRecycleViewFragment {
 
     @Override
     public void onResume() {
-        if (mIsWatingLogin) {
+        if (mIsWaitingLogin) {
             mCurrentPage = 0;
             mState = STATE_REFRESH;
             requestData(false);
@@ -153,10 +153,10 @@ public class ActiveFragment extends BaseRecycleViewFragment {
     protected void requestData(boolean refresh) {
         // mErrorLayout.setErrorMessage("");
         if (AppContext.instance().isLogin()) {
-            mIsWatingLogin = false;
+            mIsWaitingLogin = false;
             super.requestData(refresh);
         } else {
-            mIsWatingLogin = true;
+            mIsWaitingLogin = true;
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
             mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
         }

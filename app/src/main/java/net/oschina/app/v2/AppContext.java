@@ -349,7 +349,7 @@ public class AppContext extends BaseApplication {
 
         setProperty("user.uid", String.valueOf(user.getUid()));
         setProperty("user.name", user.getName());
-        setProperty("user.face", FileUtils.getFileName(user.getFace()));// 用户头像-文件名
+        setProperty("user.face", user.getFace());//FileUtils.getFileName());// 用户头像-文件名
         setProperty("user.account", user.getAccount());
         setProperty("user.pwd",
                 CyptoUtils.encode("oschinaApp", user.getPwd()));

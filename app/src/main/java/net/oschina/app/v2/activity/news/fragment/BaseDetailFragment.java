@@ -174,6 +174,7 @@ public class BaseDetailFragment extends BaseFragment implements
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
             try {
+                //TLog.log("TTT","--->"+new String(arg2));
                 Entity entity = parseData(new ByteArrayInputStream(arg2));
                 if (entity != null && entity.getId() > 0) {
                     UIHelper.sendNoticeBroadcast(getActivity(), entity);

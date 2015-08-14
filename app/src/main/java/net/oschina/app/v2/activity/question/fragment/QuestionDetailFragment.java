@@ -201,7 +201,7 @@ public class QuestionDetailFragment extends BaseDetailFragment implements
         //}
         if (mToolBarFragment != null) {
             mToolBarFragment.setCommentCount(mPost.getAnswerCount() + "/"
-                    + mPost.getViewCount());
+                    + mPost.getViewCount(), mPost.getViewCount() > 0 ? View.VISIBLE : View.GONE);
         }
         notifyFavorite(mPost.getFavorite() == 1);
     }

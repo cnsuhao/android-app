@@ -49,7 +49,7 @@ public class AppException extends Exception implements UncaughtExceptionHandler{
 		super(excp);
 		this.type = type;
 		this.code = code;		
-		if(Debug){
+		if(Debug){//dfgz
 			this.saveErrorLog(excp);
 		}
 	}

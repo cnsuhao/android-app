@@ -3,6 +3,8 @@ package net.oschina.app.v2.model;
 import net.oschina.app.v2.activity.comment.fragment.CommentFragment;
 import net.oschina.app.v2.activity.comment.fragment.CommentReplyFragment;
 import net.oschina.app.v2.activity.daily.DailyEnglishFragment;
+import net.oschina.app.v2.activity.event.fragment.EventAppliesFragment;
+import net.oschina.app.v2.activity.event.fragment.EventViewPagerFragment;
 import net.oschina.app.v2.activity.favorite.fragment.FavoriteViewPagerFragment;
 import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
 import net.oschina.app.v2.activity.message.fragment.MessageDetailFragment;
@@ -42,7 +44,9 @@ public enum SimpleBackPage {
 	LISENCE(16, R.string.actionbar_title_lisence, LisenceFragment.class),
 	MESSAGE_FORWARD(17, R.string.actionbar_title_message_forward, MessageForwardFragment.class),
 	NOTIFICATION_SETTINGS(18, R.string.actionbar_title_notification_settings, NotifIcationSettingsFragment.class),
-	DAILY_ENGLISH(19, R.string.actionbar_title_daily_english, DailyEnglishFragment.class);
+	DAILY_ENGLISH(19, R.string.actionbar_title_daily_english, DailyEnglishFragment.class),
+	EVENTS(20, R.string.actionbar_title_event, EventViewPagerFragment.class),
+	EVENT_APPLIES(21, R.string.actionbar_title_event_applies, EventAppliesFragment.class);
 
 	private int title;
 	private Class<?> clz;

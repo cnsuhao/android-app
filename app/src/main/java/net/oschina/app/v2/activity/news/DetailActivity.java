@@ -4,6 +4,7 @@ import java.lang.ref.WeakReference;
 
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.blog.fragment.BlogDetailFragment;
+import net.oschina.app.v2.activity.event.fragment.EventDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
 import net.oschina.app.v2.activity.news.fragment.NewsDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.ToolbarFragment;
@@ -39,6 +40,7 @@ public class DetailActivity extends BaseActivity implements
 	public static final int DISPLAY_SOFTWARE = 2;
 	public static final int DISPLAY_QUESTION = 3;
 	public static final int DISPLAY_TWEET = 4;
+	public static final int DISPLAY_EVENT = 5;
 	public static final String BUNDLE_KEY_DISPLAY_TYPE = "BUNDLE_KEY_DISPLAY_TYPE";
 	// private static final String DETAIL_SCREEN = "detail_screen";
 
@@ -92,6 +94,10 @@ public class DetailActivity extends BaseActivity implements
 		case DISPLAY_TWEET:
 			actionBarTitle = R.string.actionbar_title_tweet;
 			fragment = new TweetDetailFragment();
+			break;
+		case DISPLAY_EVENT:
+			actionBarTitle = R.string.actionbar_title_event_detail;
+			fragment = new EventDetailFragment();
 			break;
 		default:
 			break;

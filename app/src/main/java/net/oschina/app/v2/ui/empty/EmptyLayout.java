@@ -188,7 +188,7 @@ public class EmptyLayout extends LinearLayout implements
     }
 
     private void hideState() {
-        // Òş²ØEmptyState
+        // éšè—EmptyState
         if (mRlStateContainer.getVisibility() == View.VISIBLE) {
             mRlStateContainer.setVisibility(View.GONE);
         }
@@ -208,7 +208,7 @@ public class EmptyLayout extends LinearLayout implements
 
     private void showState() {
         setVisibility(View.VISIBLE);
-        // Òş²ØLoading
+        // éšè—Loading
         hideLoading();
 
         mRlStateContainer.setVisibility(View.VISIBLE);

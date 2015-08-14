@@ -24,11 +24,18 @@
     <item
         android:id="@+id/main_menu_profile"
         android:title="个人中心"
+        android:visible="false"
         osc:showAsAction="never"/>
 
     <item
         android:id="@+id/main_menu_open_software"
         android:title="开源软件"
+        android:visible="false"
+        osc:showAsAction="never"/>
+    <item
+        android:id="@+id/main_menu_event"
+        android:title="开源活动"
+        android:visible="false"
         osc:showAsAction="never"/>
     <item
         android:id="@+id/main_menu_settings"

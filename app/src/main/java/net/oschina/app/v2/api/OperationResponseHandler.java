@@ -8,6 +8,8 @@ import android.os.Looper;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import net.oschina.app.v2.utils.TLog;
+
 public class OperationResponseHandler extends AsyncHttpResponseHandler {
 
 	private Object[] args;

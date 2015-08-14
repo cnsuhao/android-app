@@ -84,7 +84,7 @@ public class ServerTaskService extends IntentService {
 
 					@Override
 					public void run() {
-						cancellNotification(id);
+						cancelNotification(id);
 					}
 				}, 3000);
 				removePenddingTask(KEY_COMMENT + id);
@@ -132,7 +132,7 @@ public class ServerTaskService extends IntentService {
 
 					@Override
 					public void run() {
-						cancellNotification(id);
+						cancelNotification(id);
 					}
 				}, 3000);
 				removePenddingTask(KEY_POST + id);
@@ -180,7 +180,7 @@ public class ServerTaskService extends IntentService {
 
 					@Override
 					public void run() {
-						cancellNotification(id);
+						cancelNotification(id);
 					}
 				}, 3000);
 				removePenddingTask(KEY_TWEET + id);
@@ -240,7 +240,6 @@ public class ServerTaskService extends IntentService {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
 	}
 
     @Override
@@ -384,7 +383,7 @@ public class ServerTaskService extends IntentService {
 		NotificationManagerCompat.from(this).notify(id, notification);
 	}
 
-	private void cancellNotification(int id) {
+	private void cancelNotification(int id) {
 		NotificationManagerCompat.from(this).cancel(id);
 	}
 }

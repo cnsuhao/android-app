@@ -93,6 +93,7 @@
     <orderEntry type="library" exported="" name="support-v4-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="android-observablescrollview-1.5.0" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="joda-time-2.2" level="project" />
     <orderEntry type="library" exported="" name="xstream-1.4.7" level="project" />
     <orderEntry type="library" exported="" name="android-async-http-loader" level="project" />
@@ -101,6 +102,7 @@
     <orderEntry type="library" exported="" name="umeng-feedback-v4.3" level="project" />
     <orderEntry type="library" exported="" name="commons-lang3-3.3.2" level="project" />
     <orderEntry type="library" exported="" name="umeng-update-v2.4.2" level="project" />
+    <orderEntry type="library" exported="" name="design-22.2.1" level="project" />
     <orderEntry type="module" module-name="library-pulltorefresh" exported="" />
     <orderEntry type="module" module-name="library-photoview" exported="" />
     <orderEntry type="module" module-name="library-sticky-listheaders" exported="" />

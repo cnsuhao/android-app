@@ -339,7 +339,7 @@ public class CommentFragment extends BaseRecycleViewFragment implements
 		task.setContent(text);
 		task.setUid(AppContext.instance().getLoginUid());
 		if(!mIsBlogComment) {
-			task.setCatalog(CommentList.CATALOG_NEWS);
+			task.setCatalog(mCatalog);//CommentList.CATALOG_NEWS
 			task.setIsPostToMyZone(0);
 			ServerTaskUtils.publicComment(getActivity(), task);
 		} else{

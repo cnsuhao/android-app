@@ -1,13 +1,11 @@
 package net.oschina.app.v2.activity;
 
 import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.activity.news.adapter.NewsTabPagerAdapter;
 import net.oschina.app.v2.base.BaseActivity;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.service.NoticeUtils;
 import net.oschina.app.v2.ui.BadgeView;
 import net.oschina.app.v2.ui.tab.SlidingTabLayout;
-import net.oschina.app.v2.utils.SmartBarUtils;
 import net.oschina.app.v2.utils.TLog;
 import net.oschina.app.v2.utils.UIHelper;
 
@@ -16,24 +14,24 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.ListPopupWindow;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
-import android.view.KeyEvent;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 //import android.view.ViewPropertyAnimator;
 import android.view.ViewConfiguration;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TabHost.OnTabChangeListener;
@@ -48,7 +46,6 @@ import com.github.ksoichiro.android.observablescrollview.Scrollable;
 import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
-import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
@@ -61,10 +58,10 @@ import com.umeng.update.UpdateStatus;
  * 应用主界面
  *
  * @author tonlin
- * @since 2014/08
  * @update 2015/03/08
+ * @since 2014/08
  */
-public class MainActivity extends BaseActivity implements OnTabChangeListener,IMainTab,
+public class MainActivity extends BaseActivity implements OnTabChangeListener, IMainTab,
         ObservableScrollViewCallbacks, ActionBar.TabListener {
 
     private static final String MAIN_SCREEN = "MainScreen";
@@ -73,12 +70,16 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
     private BadgeView mBvTweet;
     private SlidingTabLayout mSlidingTabLayout;
 
-    private View mToolbarView;
+    private Toolbar mToolbarView;
 
     private int mSlop;
     private boolean mScrolled;
     private ScrollState mLastScrollState;
     private TouchInterceptionFrameLayout mInterceptionLayout;
+
+    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
 
     private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
 
@@ -94,9 +95,9 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
             // newFansCount;//
             // 信息总数
 
-            TLog.log(TAG,"Main收到广播 @me:" + atmeCount + " msg:" + msgCount + " review:"
+            TLog.log(TAG, "Main收到广播 @me:" + atmeCount + " msg:" + msgCount + " review:"
                     + reviewCount + " newFans:" + newFansCount + " active:"
-                    + activeCount+" from:"+ intent.getStringExtra("from"));
+                    + activeCount + " from:" + intent.getStringExtra("from"));
 
             if (activeCount > 0) {
                 mBvTweet.setText(activeCount + "");
@@ -117,7 +118,6 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
         super.onResume();
         MobclickAgent.onPageStart(MAIN_SCREEN);
         MobclickAgent.onResume(this);
-
         //supportInvalidateOptionsMenu();
     }
 
@@ -136,7 +136,41 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
 
         AppContext.instance().initLoginInfo();
 
-        mToolbarView = findViewById(R.id.actionBar);
+        mToolbarView = (Toolbar) findViewById(R.id.action_bar);
+
+        setSupportActionBar(mToolbarView);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.navigation_drawer);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.root);
+        // Set up the drawer.
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                null, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close) {
+
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                //getActivity().invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                //getActivity().invalidateOptionsMenu();
+            }
+        };
+
+        mDrawerLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mDrawerToggle.syncState();
+            }
+        });
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
 
         final int tabHeight = getResources().getDimensionPixelSize(R.dimen.tab_height);
         findViewById(R.id.pager_wrapper).setPadding(0, getActionBarSize() + tabHeight, 0, 0);
@@ -164,6 +198,25 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
         mSlop = vc.getScaledTouchSlop();
         mInterceptionLayout = (TouchInterceptionFrameLayout) findViewById(R.id.container);
         mInterceptionLayout.setScrollInterceptionListener(mInterceptionListener);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggls
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected int getActionBarCustomView() {
+        return super.getActionBarCustomView();
     }
 
     @Override
@@ -268,6 +321,13 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                if(mDrawerLayout.isDrawerOpen(Gravity.LEFT)){
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                } else {
+                    mDrawerLayout.openDrawer(Gravity.LEFT);
+                }
+                break;
             case R.id.main_menu_post:
                 if (mTabHost.getCurrentTab() == 1) {
                     UIHelper.showQuestionPub(this);
@@ -300,6 +360,9 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener,IM
             case R.id.main_menu_feedback:
                 FeedbackAgent agent = new FeedbackAgent(this);
                 agent.startFeedbackActivity();
+                break;
+            case R.id.main_menu_event:
+                UIHelper.showEvents(this);
                 break;
         }
         return true;

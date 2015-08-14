@@ -72,4 +72,9 @@
         <item>18</item>
         <item>20</item>
     </integer-array>
+
+    <string-array name="gender">
+        <item>男</item>
+        <item>女</item>
+    </string-array>
 </resources>

@@ -15,27 +15,29 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Xml;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
  * 帖子实体类
- * 
+ *
  * @author liux (http://my.oschina.net/liux)
  * @version 1.0
  * @created 2012-3-21
  */
 public class Post extends Entity implements Parcelable {
 
-	public final static String NODE_ID = "id";
-	public final static String NODE_TITLE = "title";
-	public final static String NODE_URL = "url";
-	public final static String NODE_FACE = "portrait";
-	public final static String NODE_BODY = "body";
-	public final static String NODE_AUTHORID = "authorid";
-	public final static String NODE_AUTHOR = "author";
-	public final static String NODE_PUBDATE = "pubDate";
-	public final static String NODE_ANSWERCOUNT = "answerCount";
-	public final static String NODE_VIEWCOUNT = "viewCount";
-	public final static String NODE_FAVORITE = "favorite";
-	public final static String NODE_START = "post";
+    public final static String NODE_ID = "id";
+    public final static String NODE_TITLE = "title";
+    public final static String NODE_URL = "url";
+    public final static String NODE_FACE = "portrait";
+    public final static String NODE_BODY = "body";
+    public final static String NODE_AUTHORID = "authorid";
+    public final static String NODE_AUTHOR = "author";
+    public final static String NODE_PUBDATE = "pubDate";
+    public final static String NODE_ANSWERCOUNT = "answerCount";
+    public final static String NODE_VIEWCOUNT = "viewCount";
+    public final static String NODE_FAVORITE = "favorite";
+    public final static String NODE_START = "post";
 
     public static final String NODE_TAGS = "tags";
     public static final String NODE_TAG = "tag";
@@ -49,240 +51,291 @@ public class Post extends Entity implements Parcelable {
 
 
     private String title;
-	private String url;
-	private String face;
-	private String body;
-	private String author;
-	private int authorId;
-	private int answerCount;
-	private int viewCount;
-	private String pubDate;
-	private int catalog;
-	private int isNoticeMe;
-	private int favorite;
-	private List<String> tags;
+    private String url;
+    private String face;
+    private String body;
+    private String author;
+    private int authorId;
+    private int answerCount;
+    private int viewCount;
+    private String pubDate;
+    private int catalog;
+    private int isNoticeMe;
+    private int favorite;
+    private List<String> tags;
 
-	public Post(){}
-	
-	public Post(Parcel source) {
-		title = source.readString();
-		body = source.readString();
-		authorId = source.readInt();
-		isNoticeMe = source.readInt();
-		catalog = source.readInt();
-	}
+    private Event event;
 
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(title);
-		dest.writeString(body);
-		dest.writeInt(authorId);
-		dest.writeInt(isNoticeMe);
-		dest.writeInt(catalog);
-	}
+    public Post() {
+    }
 
-	public List<String> getTags() {
-		return tags;
-	}
+    public Post(Parcel source) {
+        title = source.readString();
+        body = source.readString();
+        authorId = source.readInt();
+        isNoticeMe = source.readInt();
+        catalog = source.readInt();
+    }
 
-	public void setTags(List<String> tags) {
-		this.tags = tags;
-	}
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(body);
+        dest.writeInt(authorId);
+        dest.writeInt(isNoticeMe);
+        dest.writeInt(catalog);
+    }
 
-	public int getFavorite() {
-		return favorite;
-	}
+    public List<String> getTags() {
+        return tags;
+    }
 
-	public void setFavorite(int favorite) {
-		this.favorite = favorite;
-	}
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
 
-	public int getCatalog() {
-		return catalog;
-	}
+    public int getFavorite() {
+        return favorite;
+    }
 
-	public void setCatalog(int catalog) {
-		this.catalog = catalog;
-	}
+    public void setFavorite(int favorite) {
+        this.favorite = favorite;
+    }
 
-	public int getIsNoticeMe() {
-		return isNoticeMe;
-	}
+    public int getCatalog() {
+        return catalog;
+    }
 
-	public void setIsNoticeMe(int isNoticeMe) {
-		this.isNoticeMe = isNoticeMe;
-	}
+    public void setCatalog(int catalog) {
+        this.catalog = catalog;
+    }
 
-	public String getPubDate() {
-		return this.pubDate;
-	}
+    public int getIsNoticeMe() {
+        return isNoticeMe;
+    }
 
-	public void setPubDate(String pubDate) {
-		this.pubDate = pubDate;
-	}
+    public void setIsNoticeMe(int isNoticeMe) {
+        this.isNoticeMe = isNoticeMe;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getPubDate() {
+        return this.pubDate;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getBody() {
-		return body;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public void setBody(String body) {
-		this.body = body;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public String getAuthor() {
-		return author;
-	}
+    public String getBody() {
+        return body;
+    }
 
-	public void setAuthor(String author) {
-		this.author = author;
-	}
+    public void setBody(String body) {
+        this.body = body;
+    }
 
-	public int getAuthorId() {
-		return authorId;
-	}
+    public String getAuthor() {
+        return author;
+    }
 
-	public void setAuthorId(int authorId) {
-		this.authorId = authorId;
-	}
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
-	public String getFace() {
-		return face;
-	}
+    public int getAuthorId() {
+        return authorId;
+    }
 
-	public void setFace(String face) {
-		this.face = face;
-	}
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
 
-	public int getAnswerCount() {
-		return answerCount;
-	}
+    public String getFace() {
+        return face;
+    }
 
-	public void setAnswerCount(int answerCount) {
-		this.answerCount = answerCount;
-	}
+    public void setFace(String face) {
+        this.face = face;
+    }
 
-	public int getViewCount() {
-		return viewCount;
-	}
+    public int getAnswerCount() {
+        return answerCount;
+    }
 
-	public void setViewCount(int viewCount) {
-		this.viewCount = viewCount;
-	}
+    public void setAnswerCount(int answerCount) {
+        this.answerCount = answerCount;
+    }
 
-	public static Post parse(InputStream inputStream) throws IOException,
-			AppException {
-		Post post = null;
-		// 获得XmlPullParser解析器
-		XmlPullParser xmlParser = Xml.newPullParser();
-		try {
-			xmlParser.setInput(inputStream, UTF8);
-			// 获得解析到的事件类别，这里有开始文档，结束文档，开始标签，结束标签，文本等等事件。
-			int evtType = xmlParser.getEventType();
-			// 一直循环，直到文档结束
-			while (evtType != XmlPullParser.END_DOCUMENT) {
-				String tag = xmlParser.getName();
-				switch (evtType) {
-				case XmlPullParser.START_TAG:
-					if (tag.equalsIgnoreCase(NODE_START)) {
-						post = new Post();
-					} else if (post != null) {
-						if (tag.equalsIgnoreCase(NODE_ID)) {
-							post.id = StringUtils
-									.toInt(xmlParser.nextText(), 0);
-						} else if (tag.equalsIgnoreCase(NODE_TITLE)) {
-							post.setTitle(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase(NODE_URL)) {
-							post.setUrl(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase(NODE_FACE)) {
-							post.setFace(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase(NODE_BODY)) {
-							post.setBody(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase(NODE_AUTHOR)) {
-							post.setAuthor(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase(NODE_AUTHORID)) {
-							post.setAuthorId(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase(NODE_ANSWERCOUNT)) {
-							post.setAnswerCount(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase(NODE_VIEWCOUNT)) {
-							post.setViewCount(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase(NODE_PUBDATE)) {
-							post.setPubDate(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase(NODE_FAVORITE)) {
-							post.setFavorite(StringUtils.toInt(
-									xmlParser.nextText(), 0));
-						} else if (tag.equalsIgnoreCase(NODE_TAGS)) {// 标签
-							post.tags = new ArrayList<>();
-						} else if (post.getTags() != null
-								&& tag.equalsIgnoreCase(NODE_TAG)) {
-							post.getTags().add(xmlParser.nextText());
-						} else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {// 通知信息
-                            post.setNotice(new Notice());
-                        } else if (post.getNotice() != null) {
-                            if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
-                                post.getNotice().setAtmeCount(
-                                        StringUtils.toInt(xmlParser.nextText(), 0));
-                            } else if (tag.equalsIgnoreCase(Notice.NODE_MESSAGE_COUNT)) {
-                                post.getNotice().setMsgCount(
-                                        StringUtils.toInt(xmlParser.nextText(), 0));
-                            } else if (tag.equalsIgnoreCase(Notice.NODE_REVIEW_COUNT)) {
-                                post.getNotice().setReviewCount(
-                                        StringUtils.toInt(xmlParser.nextText(), 0));
-                            } else if (tag.equalsIgnoreCase(Notice.NODE_NEWFANS_COUNT)) {
-                                post.getNotice().setNewFansCount(
-                                        StringUtils.toInt(xmlParser.nextText(), 0));
+    public int getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    public static Post parse(InputStream inputStream) throws IOException,
+            AppException {
+
+        Post post = null;
+        // 获得XmlPullParser解析器
+        XmlPullParser xmlParser = Xml.newPullParser();
+        try {
+            xmlParser.setInput(inputStream, UTF8);
+            // 获得解析到的事件类别，这里有开始文档，结束文档，开始标签，结束标签，文本等等事件。
+            int evtType = xmlParser.getEventType();
+            // 一直循环，直到文档结束
+            boolean inEvent = false;
+            while (evtType != XmlPullParser.END_DOCUMENT) {
+                String tag = xmlParser.getName();
+                switch (evtType) {
+                    case XmlPullParser.START_TAG:
+                        if (tag.equalsIgnoreCase(NODE_START)) {
+                            post = new Post();
+                        } else if (post != null) {
+                            if (tag.equalsIgnoreCase("event")) {
+                                inEvent = true;
+                                post.event = new Event();
+                            } else if (inEvent && post.event != null) {
+                                if (tag.equalsIgnoreCase("id")) {
+                                    post.event.setId(StringUtils.toInt(xmlParser.nextText(), 0));
+                                } else if (tag.equalsIgnoreCase("cover")) {
+                                    post.event.setCover(xmlParser.nextText());
+                                } else if (tag.equalsIgnoreCase("title")) {
+                                    post.event.setTitle(xmlParser.nextText());
+                                } else if (tag.equalsIgnoreCase("category")) {
+                                    post.event.setCategory(StringUtils.toInt(xmlParser.nextText(), 0));
+                                } else if (tag.equalsIgnoreCase("url")) {
+                                    post.event.setUrl(xmlParser.nextText());
+                                } else if (tag.equalsIgnoreCase("startTime")) {
+                                    post.event.setStartTime(xmlParser.nextText());
+                                } else if (tag.equalsIgnoreCase("endTime")) {
+                                    post.event.setEndTime(xmlParser.nextText());
+                                } else if (tag.equalsIgnoreCase("createTime")) {
+                                    post.event.setCreateTime(xmlParser.nextText());
+                                } else if (tag.equalsIgnoreCase("spot")) {
+                                    post.event.setSpot(xmlParser.nextText());
+                                } else if (tag.equalsIgnoreCase("actor_count")) {
+                                    post.event.setActor_count(StringUtils.toInt(xmlParser.nextText(), 0));
+                                } else if (tag.equalsIgnoreCase("location")) {
+                                    post.event.setLocation(xmlParser.nextText());
+                                } else if (tag.equalsIgnoreCase("city")) {
+                                    post.event.setCity(xmlParser.nextText());
+                                } else if (tag.equalsIgnoreCase("status")) {
+                                    post.event.setStatus(StringUtils.toInt(xmlParser.nextText(), 0));
+                                } else if (tag.equalsIgnoreCase("applyStatus")) {
+                                    post.event.setApplyStatus(StringUtils.toInt(xmlParser.nextText(), 0));
+                                } else if (tag.equalsIgnoreCase("body")) {
+                                    post.event.setBody(xmlParser.nextText());
+                                }
+                            } else if (tag.equalsIgnoreCase(NODE_ID)) {
+                                post.id = StringUtils
+                                        .toInt(xmlParser.nextText(), 0);
+                            } else if (tag.equalsIgnoreCase(NODE_TITLE)) {
+                                post.setTitle(xmlParser.nextText());
+                            } else if (tag.equalsIgnoreCase(NODE_URL)) {
+                                post.setUrl(xmlParser.nextText());
+                            } else if (tag.equalsIgnoreCase(NODE_FACE)) {
+                                post.setFace(xmlParser.nextText());
+                            } else if (tag.equalsIgnoreCase(NODE_BODY)) {
+                                post.setBody(xmlParser.nextText());
+                            } else if (tag.equalsIgnoreCase(NODE_AUTHOR)) {
+                                post.setAuthor(xmlParser.nextText());
+                            } else if (tag.equalsIgnoreCase(NODE_AUTHORID)) {
+                                post.setAuthorId(StringUtils.toInt(
+                                        xmlParser.nextText(), 0));
+                            } else if (tag.equalsIgnoreCase(NODE_ANSWERCOUNT)) {
+                                post.setAnswerCount(StringUtils.toInt(
+                                        xmlParser.nextText(), 0));
+                            } else if (tag.equalsIgnoreCase(NODE_VIEWCOUNT)) {
+                                post.setViewCount(StringUtils.toInt(
+                                        xmlParser.nextText(), 0));
+                            } else if (tag.equalsIgnoreCase(NODE_PUBDATE)) {
+                                post.setPubDate(xmlParser.nextText());
+                            } else if (tag.equalsIgnoreCase(NODE_FAVORITE)) {
+                                post.setFavorite(StringUtils.toInt(
+                                        xmlParser.nextText(), 0));
+                            } else if (tag.equalsIgnoreCase(NODE_TAGS)) {// 标签
+                                post.tags = new ArrayList<>();
+                            } else if (post.getTags() != null
+                                    && tag.equalsIgnoreCase(NODE_TAG)) {
+                                post.getTags().add(xmlParser.nextText());
+                            } else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {// 通知信息
+                                post.setNotice(new Notice());
+                            } else if (post.getNotice() != null) {
+                                if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
+                                    post.getNotice().setAtmeCount(
+                                            StringUtils.toInt(xmlParser.nextText(), 0));
+                                } else if (tag.equalsIgnoreCase(Notice.NODE_MESSAGE_COUNT)) {
+                                    post.getNotice().setMsgCount(
+                                            StringUtils.toInt(xmlParser.nextText(), 0));
+                                } else if (tag.equalsIgnoreCase(Notice.NODE_REVIEW_COUNT)) {
+                                    post.getNotice().setReviewCount(
+                                            StringUtils.toInt(xmlParser.nextText(), 0));
+                                } else if (tag.equalsIgnoreCase(Notice.NODE_NEWFANS_COUNT)) {
+                                    post.getNotice().setNewFansCount(
+                                            StringUtils.toInt(xmlParser.nextText(), 0));
+                                }
                             }
                         }
-					}
-					break;
-				case XmlPullParser.END_TAG:
-					break;
-				}
-				// 如果xml没有结束，则导航到下一个节点
-				evtType = xmlParser.next();
-			}
-		} catch (XmlPullParserException e) {
-			throw AppException.xml(e);
-		} finally {
-			inputStream.close();
-		}
-		return post;
-	}
+                        break;
+                    case XmlPullParser.END_TAG:
+                        if (tag.equalsIgnoreCase("event")) {
+                            inEvent = false;
+                        }
+                        break;
+                }
+                // 如果xml没有结束，则导航到下一个节点
+                evtType = xmlParser.next();
+            }
+        } catch (XmlPullParserException e) {
+            throw AppException.xml(e);
+        } finally {
+            inputStream.close();
+        }
+        return post;
+    }
 
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int describeContents() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	public static final Creator<Post> CREATOR = new Creator<Post>() {
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
 
-		@Override
-		public Post[] newArray(int size) {
-			return new Post[size];
-		}
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
 
-		@Override
-		public Post createFromParcel(Parcel source) {
-			return new Post(source);
-		}
-	};
+        @Override
+        public Post createFromParcel(Parcel source) {
+            return new Post(source);
+        }
+    };
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
 }

@@ -411,6 +411,9 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         if (data.size() == 0 && mState == STATE_REFRESH) {
             mErrorLayout.setErrorType(EmptyLayout.NODATA);
+            String emptyTip = getEmptyTip();
+            if(!TextUtils.isEmpty(emptyTip))
+                mErrorLayout.setErrorMessage(emptyTip);
         } else if (data.size() < TDevice.getPageSize()) {
             if (mState == STATE_REFRESH)
                 mAdapter.setState(ListBaseAdapter.STATE_LESS_ONE_PAGE);
@@ -419,6 +422,10 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         } else {
             mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
         }
+    }
+
+    protected String getEmptyTip() {
+        return null;
     }
 
     protected void onRefreshNetworkSuccess() {

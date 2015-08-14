@@ -13,6 +13,7 @@ import net.oschina.app.v2.activity.news.DetailActivity;
 import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
 import net.oschina.app.v2.activity.search.SearchActivity;
 import net.oschina.app.v2.activity.user.LoginActivity;
+import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.model.Active;
 import net.oschina.app.v2.model.Base;
@@ -189,6 +190,21 @@ import com.tonlin.osc.happy.R;
 		intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
 				DetailActivity.DISPLAY_SOFTWARE);
 		context.startActivity(intent);
+	}
+
+	/**
+	 * 显示Event详情
+	 *
+	 * @param context
+	 * @param id
+	 */
+	public static void showEventDetail(Context context, int id) {
+		Intent intent = new Intent(context, DetailActivity.class);
+		intent.putExtra("id", id);
+		intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				DetailActivity.DISPLAY_EVENT);
+		context.startActivity(intent);
+
 	}
 
 	/**
@@ -547,6 +563,17 @@ import com.tonlin.osc.happy.R;
 					urls.getObjKey());
 		} else {
 			openBrowser(context, url);
+		}
+	}
+
+	public static void openSysBrowser(Context context, String url) {
+		try {
+			Uri uri = Uri.parse(url);
+			Intent it = new Intent(Intent.ACTION_VIEW, uri);
+			context.startActivity(it);
+		} catch (Exception e) {
+			e.printStackTrace();
+			AppContext.showToastShort("无法浏览此网页");
 		}
 	}
 
@@ -957,7 +984,7 @@ import com.tonlin.osc.happy.R;
 			public void onImageClick(String bigImageUrl) {
 				if (bigImageUrl != null) {
 					// UIHelper.showImageZoomDialog(cxt, bigImageUrl);
-					UIHelper.showImagePreview(cxt, new String[] { bigImageUrl });
+					UIHelper.showImagePreview(cxt, new String[]{bigImageUrl});
 				}
 			}
 		}, "mWebViewImageListener");
@@ -1074,4 +1101,15 @@ import com.tonlin.osc.happy.R;
         StringBuffer sb = new StringBuffer(UIHelper.WEB_STYLE).append(String.format(WEB_FONT_SIZE,fontSize,fontSize+4,fontSize+2,fontSize)).append(body);
         return sb.toString();
     }
+
+	public static void showEvents(Context context) {
+		Bundle args = new Bundle();
+		showSimpleBack(context, SimpleBackPage.EVENTS, args);
+	}
+
+	public static void showEventApplies(Context context, int id) {
+		Bundle args = new Bundle();
+		args.putInt(BaseRecycleViewFragment.BUNDLE_KEY_CATALOG, id);
+		showSimpleBack(context, SimpleBackPage.EVENT_APPLIES, args);
+	}
 }
