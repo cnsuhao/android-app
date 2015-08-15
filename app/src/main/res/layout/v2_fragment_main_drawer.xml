@@ -49,7 +49,7 @@
                     android:layout_toRightOf="@id/iv_avatar"
                     android:text="@string/unlogin"
                     android:textColor="@color/white"
-                    android:textSize="24sp" />
+                    android:textSize="22sp" />
             </RelativeLayout>
 
             <TextView

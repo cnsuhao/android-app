@@ -70,7 +70,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="58dp"
             android:layout_gravity="bottom"
             android:background="@color/primarybar_background">
 
@@ -99,5 +99,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:layout_marginRight="50dp" />
+        android:layout_marginRight="25dp" />
 </android.support.v4.widget.DrawerLayout>

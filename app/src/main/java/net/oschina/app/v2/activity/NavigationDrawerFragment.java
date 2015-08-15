@@ -81,6 +81,7 @@ public class NavigationDrawerFragment extends BaseFragment {
                 UIHelper.showEvents(getActivity());
                 break;
             case R.id.tv_shake:
+                UIHelper.showShake(getActivity());
                 break;
             case R.id.tv_scan:
                 break;

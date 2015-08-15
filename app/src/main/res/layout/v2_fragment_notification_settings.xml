@@ -23,7 +23,7 @@
                 android:id="@+id/tb_notification_sound"
                 android:layout_width="65dp"
                 android:layout_height="30dp"
-                toggle:borderWidth="0.1dp"
+                toggle:borderWidth1="0.1dp"
                 toggle:onColor="@color/main_green" />
         </LinearLayout>
 
@@ -48,7 +48,7 @@
                 android:id="@+id/tb_notification_disable_when_exit"
                 android:layout_width="65dp"
                 android:layout_height="30dp"
-                toggle:borderWidth="0.1dp"
+                toggle:borderWidth1="0.1dp"
                 toggle:onColor="@color/main_green" />
         </LinearLayout>
     </LinearLayout>

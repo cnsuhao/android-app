@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
-    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/event/fragment/EventDetailFragment.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/activity/event/view/EventApplyDialog.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/api/remote/EventApi.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/model/ResultBean.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/ui/empty/EmptyLayout.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/utils/SimpleAnminationListener.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/net/oschina/app/v2/utils/SystemBarTintManager.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/anim_empty_icon_show.xml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/anim_empty_message_show.xml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/anim_empty_title_show.xml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/anim_loading_hide_inner.xml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/anim_loading_hide_outer.xml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/anim_loading_inner.xml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/anim_loading_outer.xml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/ic_empty_view_bg.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/loading_inner_bg.xml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/loading_outer_bg.xml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/v2_dialog_event_apply.xml" charset="UTF-8" />
+  <component name="Encoding">
+    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

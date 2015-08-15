@@ -17,6 +17,7 @@ import net.oschina.app.v2.activity.settings.fragment.AboutFragment;
 import net.oschina.app.v2.activity.settings.fragment.LisenceFragment;
 import net.oschina.app.v2.activity.settings.fragment.NotifIcationSettingsFragment;
 import net.oschina.app.v2.activity.settings.fragment.SettingsFragment;
+import net.oschina.app.v2.activity.shake.ShakeFragment;
 import net.oschina.app.v2.activity.software.fragment.SoftwareViewPagerFragment;
 import net.oschina.app.v2.activity.tweet.fragment.TweetPublicFragment;
 import net.oschina.app.v2.activity.user.fragment.UserCenterFragment;
@@ -46,7 +47,8 @@ public enum SimpleBackPage {
 	NOTIFICATION_SETTINGS(18, R.string.actionbar_title_notification_settings, NotifIcationSettingsFragment.class),
 	DAILY_ENGLISH(19, R.string.actionbar_title_daily_english, DailyEnglishFragment.class),
 	EVENTS(20, R.string.actionbar_title_event, EventViewPagerFragment.class),
-	EVENT_APPLIES(21, R.string.actionbar_title_event_applies, EventAppliesFragment.class);
+	EVENT_APPLIES(21, R.string.actionbar_title_event_applies, EventAppliesFragment.class),
+	SHAKE(22, R.string.actionbar_title_shake, ShakeFragment.class);
 
 	private int title;
 	private Class<?> clz;

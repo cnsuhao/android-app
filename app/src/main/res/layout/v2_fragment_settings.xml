@@ -119,7 +119,7 @@
                 android:id="@+id/tb_load_picture"
                 android:layout_width="65dp"
                 android:layout_height="30dp"
-                toggle:borderWidth="0.1dp"
+                toggle:borderWidth1="0.1dp"
                 toggle:onColor="@color/main_green" />
         </LinearLayout>
 

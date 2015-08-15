@@ -86,6 +86,15 @@ public class EmptyLayout extends LinearLayout implements
         mIvIcon = (ImageView)findViewById(R.id.iv_icon);
 
         mRlStateContainer = findViewById(R.id.rl_state_container);
+        mRlStateContainer.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (clickEnable) {
+                    if (listener != null)
+                        listener.onClick(v);
+                }
+            }
+        });
         mRlIcon = findViewById(R.id.rl_icon);
         mTvEmptyTitle = (TextView) findViewById(R.id.tv_empty_title);
         mTvEmptyMessage = (TextView) findViewById(R.id.tv_empty_message);

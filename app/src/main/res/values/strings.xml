@@ -184,6 +184,8 @@
     <string name="actionbar_title_event">开源活动</string>
     <string name="actionbar_title_event_applies">活动出席人员</string>
 
+    <string name="actionbar_title_shake">摇一摇</string>
+
     <string name="actionbar_title_comment">评论</string>
     <string name="actionbar_title_question_tag">%s相关</string>
     <string name="comment_count">%s评论</string>

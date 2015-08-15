@@ -224,7 +224,8 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 
     public void loadMore() {
         if (mState == STATE_NONE) {
-            if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+            if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE
+                    || mAdapter.getState()== ListBaseAdapter.STATE_NETWORK_ERROR) {
                 TLog.log(TAG, "begin to load more data.");
                 mCurrentPage++;
                 mState = STATE_LOADMORE;
@@ -450,7 +451,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             }
         } else {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            mAdapter.setState(RecycleBaseAdapter.STATE_NETWORK_ERROR);
+            mAdapter.setState(ListBaseAdapter.STATE_NETWORK_ERROR);
         }
         mAdapter.notifyDataSetChanged();
     }
