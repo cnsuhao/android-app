@@ -106,7 +106,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:visibility="invisible">
-            <include layout="@layout/list_cell_shake_result"/>
+            <include layout="@layout/v2_list_cell_shake_result"/>
         </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

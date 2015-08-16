@@ -49,4 +49,5 @@ dependencies {
     //compile 'com.afollestad:material-dialogs:0.6.3.5'
     compile 'com.android.support:design:22.2.1'
     compile 'com.squareup:seismic:1.0.2'
+    compile 'com.google.zxing:core:3.2.0'
 }

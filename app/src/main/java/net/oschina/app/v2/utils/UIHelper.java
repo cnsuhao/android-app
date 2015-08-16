@@ -10,6 +10,7 @@ import net.oschina.app.v2.activity.message.fragment.MessageDetailFragment;
 import net.oschina.app.v2.activity.message.fragment.MessageForwardFragment;
 import net.oschina.app.v2.activity.message.fragment.MessagePublicFragment;
 import net.oschina.app.v2.activity.news.DetailActivity;
+import net.oschina.app.v2.activity.qrcode.CaptureActivity;
 import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
 import net.oschina.app.v2.activity.search.SearchActivity;
 import net.oschina.app.v2.activity.user.LoginActivity;
@@ -1133,5 +1134,11 @@ public class UIHelper {
 
     public static void showShake(Context context) {
         showSimpleBack(context, SimpleBackPage.SHAKE);
+    }
+
+    public static void showQRCode(Context context) {
+        //showSimpleBack(context, SimpleBackPage.QRCODE_SCAN);
+        Intent intent = new Intent(context, CaptureActivity.class);
+        context.startActivity(intent);
     }
 }

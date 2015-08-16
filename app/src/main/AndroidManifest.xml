@@ -15,6 +15,18 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RESTART_PACKAGES" />
 
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.front" android:required="false"/>
+    <!-- TODO replace above two with next line after Android 4.2 -->
+    <!-- <uses-feature android:name="android.hardware.camera.any"/> -->
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
+    <uses-feature android:name="android.hardware.screen.landscape"/>
+    <uses-feature android:name="android.hardware.wifi" android:required="false"/>
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -78,6 +90,10 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="net.oschina.app.v2.activity.common.SimpleBackActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="net.oschina.app.v2.activity.qrcode.CaptureActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <activity

@@ -10,6 +10,7 @@ import net.oschina.app.v2.activity.friend.fragment.FriendViewPagerFragment;
 import net.oschina.app.v2.activity.message.fragment.MessageDetailFragment;
 import net.oschina.app.v2.activity.message.fragment.MessageForwardFragment;
 import net.oschina.app.v2.activity.message.fragment.MessagePublicFragment;
+//import net.oschina.app.v2.activity.qrcode.fragment.QrCodeScanFragment;
 import net.oschina.app.v2.activity.question.fragment.QuestionPublicFragment;
 import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
 import net.oschina.app.v2.activity.search.fragment.SearchViewPagerFragment;
@@ -48,7 +49,8 @@ public enum SimpleBackPage {
 	DAILY_ENGLISH(19, R.string.actionbar_title_daily_english, DailyEnglishFragment.class),
 	EVENTS(20, R.string.actionbar_title_event, EventViewPagerFragment.class),
 	EVENT_APPLIES(21, R.string.actionbar_title_event_applies, EventAppliesFragment.class),
-	SHAKE(22, R.string.actionbar_title_shake, ShakeFragment.class);
+	SHAKE(22, R.string.actionbar_title_shake, ShakeFragment.class);//,
+//	QRCODE_SCAN(23, R.string.actionbar_title_qrcode_scan, QrCodeScanFragment.class);
 
 	private int title;
 	private Class<?> clz;

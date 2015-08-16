@@ -322,7 +322,7 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if(mDrawerLayout.isDrawerOpen(Gravity.LEFT)){
+                if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                 } else {
                     mDrawerLayout.openDrawer(Gravity.LEFT);
@@ -372,6 +372,10 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
 
     @Override
     public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+            return;
+        }
         if (System.currentTimeMillis() - mLastExitTime < 2000) {
             super.onBackPressed();
         } else {

@@ -84,6 +84,7 @@ public class NavigationDrawerFragment extends BaseFragment {
                 UIHelper.showShake(getActivity());
                 break;
             case R.id.tv_scan:
+                UIHelper.showQRCode(getActivity());
                 break;
         }
     }
