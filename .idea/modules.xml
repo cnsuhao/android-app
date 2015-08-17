@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/libraries/library-sticky-listheaders/library-sticky-listheaders.iml" filepath="$PROJECT_DIR$/libraries/library-sticky-listheaders/library-sticky-listheaders.iml" />
       <module fileurl="file://$PROJECT_DIR$/libraries/library-umengshare/library-umengshare.iml" filepath="$PROJECT_DIR$/libraries/library-umengshare/library-umengshare.iml" />
       <module fileurl="file://$PROJECT_DIR$/libraries/library-viewpager-indicator/library-viewpager-indicator.iml" filepath="$PROJECT_DIR$/libraries/library-viewpager-indicator/library-viewpager-indicator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libraries/library-zxing-core/library-zxing-core.iml" filepath="$PROJECT_DIR$/libraries/library-zxing-core/library-zxing-core.iml" />
     </modules>
   </component>
 </project>

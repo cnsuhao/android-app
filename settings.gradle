@@ -1,6 +1,7 @@
-include ':app', ':library-photoview', ':library-pulltorefresh', ':library-viewpager-indicator', ':library-sticky-listheaders', ':library-umengshare'
+include ':app', ':library-photoview', ':library-pulltorefresh', ':library-viewpager-indicator', ':library-sticky-listheaders', ':library-umengshare',":library-zxing-core"
 project(':library-photoview').projectDir = new File('libraries/library-photoview')
 project(':library-pulltorefresh').projectDir = new File('libraries/library-pulltorefresh')
 project(':library-viewpager-indicator').projectDir = new File('libraries/library-viewpager-indicator')
 project(':library-sticky-listheaders').projectDir = new File('libraries/library-sticky-listheaders')
 project(':library-umengshare').projectDir = new File('libraries/library-umengshare')
+project(':library-zxing-core').projectDir = new File('libraries/library-zxing-core')
