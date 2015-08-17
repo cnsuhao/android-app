@@ -33,8 +33,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -55,7 +53,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.AppException;
 import net.oschina.app.v2.activity.zxing.camera.CameraManager;
 import net.oschina.app.v2.activity.zxing.clipboard.ClipboardInterface;
 import net.oschina.app.v2.activity.zxing.result.ResultButtonListener;
@@ -63,7 +60,7 @@ import net.oschina.app.v2.activity.zxing.result.ResultHandler;
 import net.oschina.app.v2.activity.zxing.result.ResultHandlerFactory;
 import net.oschina.app.v2.api.remote.UserApi;
 import net.oschina.app.v2.base.BaseActivity;
-import net.oschina.app.v2.model.BarCode;
+import net.oschina.app.v2.model.BarCode2;
 import net.oschina.app.v2.model.ResultBean;
 import net.oschina.app.v2.model.SingInResult;
 import net.oschina.app.v2.utils.StringUtils;
@@ -539,10 +536,10 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
             }
         }
         try {
-            BarCode bc = BarCode.parse(text);
+            BarCode2 bc = BarCode2.parse(text);
             int type = bc.getType();
             switch (type) {
-                case BarCode.SIGN_IN:// 签到
+                case BarCode2.SIGN_IN:// 签到
                     handleSignIn(bc);
                     return;
                 default:
@@ -873,7 +870,7 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
                 }).show();
     }
 
-    private void handleSignIn(BarCode barCode) {
+    private void handleSignIn(BarCode2 barCode) {
         if (barCode.isRequireLogin() && !AppContext.instance().isLogin()) {
             showLogin();
             return;
