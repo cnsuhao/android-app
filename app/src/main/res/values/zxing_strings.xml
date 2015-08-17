@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="msg_camera_framework_bug">抱歉，Android相机出现问题。您可能需要重启设备。</string>
+    <string name="scan_text">将二维码放入框内, 即可自动扫描</string>
+    <string name="msg_bulk_mode_scanned">批量扫描：找到条码，已保存</string>
+
+    <string name="contents_contact">联系人信息</string>
+    <string name="contents_email">Email地址</string>
+    <string name="contents_location">地理坐标</string>
+    <string name="contents_phone">电话号码</string>
+    <string name="contents_sms">短信地址</string>
+    <string name="contents_text">纯文本</string>
+
+    <string name="button_ok">确定</string>
+    <string name="button_cancel">取消</string>
+
+    <string name="button_mms">发送彩信</string>
+    <string name="button_sms">发送短信</string>
+
+    <string name="button_get_directions">获取地址</string>
+    <string name="button_product_search">打开产品搜索</string>
+    <string name="button_book_search">打开图书搜索</string>
+    <string name="button_search_book_contents">搜索图书内容</string>
+    <string name="button_custom_product_search">自定义搜索</string>
+    <string name="button_web_search">网页搜索</string>
+
+    <string name="button_add_calendar">添加事件至日历</string>
+
+    <string name="button_add_contact">添加联系人</string>
+    <string name="button_show_map">显示地图</string>
+    <string name="button_dial">拨号</string>
+    <string name="button_email">发送email</string>
+
+    <string name="button_wifi">连接到网络</string>
+
+    <string name="button_share_by_email">通过email分享</string>
+    <string name="button_share_by_sms">通过短信分享</string>
+
+    <string name="button_open_browser">打开浏览器</string>
+
+    <string name="msg_default_format">格式</string>
+    <string name="msg_default_meta">元数据</string>
+    <string name="msg_default_mms_subject">Hi</string>
+    <string name="msg_default_status">请将条码置于取景框内扫描。  </string>
+    <string name="msg_default_time">时间</string>
+    <string name="msg_default_type">类型</string>
+
+    <string name="msg_intent_failed">抱歉，无法打开所需软件。 条码内容可能无效。</string>
+    <string name="wifi_changing_network">请求连接到网络\u2026</string>
+
+    <string name="result_address_book">找到联系人信息</string>
+    <string name="result_calendar">找到日历事件</string>
+    <string name="result_email_address">找到email地址</string>
+    <string name="result_geo">找到地理坐标</string>
+    <string name="result_isbn">找到图书</string>
+    <string name="result_product">找到产品</string>
+    <string name="result_sms">找到短信地址</string>
+    <string name="result_tel">找到电话号码</string>
+    <string name="result_text">找到纯文本</string>
+    <string name="result_uri">找到URL</string>
+    <string name="result_wifi">发现网络配置</string>
+</resources>

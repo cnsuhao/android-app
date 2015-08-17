@@ -10,6 +10,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.http.client.params.ClientPNames;
+
 public class ApiHttpClient {
 	// http://www.oschina.net/action/oauth2/authorize?response_type=code&client_id=F6QtiYRetdUEwsYKYvNR&state=xyz&redirect_uri=http://my.oschina.net/u/142883
 	public final static String HOST = "www.oschina.net";
@@ -86,7 +88,7 @@ public class ApiHttpClient {
 	}
 
 	public static void getDirect(String url, AsyncHttpResponseHandler handler) {
-		new AsyncHttpClient().get(url, handler);
+		client.get(url, handler);
 		log(new StringBuilder("GET ").append(url).toString());
 	}
 
@@ -131,6 +133,8 @@ public class ApiHttpClient {
 		client.addHeader("Accept-Language", Locale.getDefault().toString());
 		client.addHeader("Host", HOST);
 		client.addHeader("Connection", "Keep-Alive");
+		client.getHttpClient().getParams()
+				.setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
 		setUserAgent(ApiClientHelper.getUserAgent(AppContext.instance()));
 		//setUserAgent("OSChina.NET/1.0.0.4_29/Android/4.4.4/Nexus 4/1cd6bd26-fe78-4fbd-8bcf-1dd4d121ef1d");
 	}

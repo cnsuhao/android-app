@@ -27,6 +27,8 @@
     <uses-feature android:name="android.hardware.screen.landscape"/>
     <uses-feature android:name="android.hardware.wifi" android:required="false"/>
 
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -93,7 +95,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name="net.oschina.app.v2.activity.qrcode.CaptureActivity"
+            android:name="net.oschina.app.v2.activity.zxing.CaptureActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <activity

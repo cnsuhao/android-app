@@ -25,6 +25,8 @@ public class StringUtils {
 	// SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	// private final static SimpleDateFormat dateFormater2 = new
 	// SimpleDateFormat("yyyy-MM-dd");
+	private final static Pattern URL = Pattern
+			.compile("^(https|http)://.*?$(net|com|.com.cn|org|me|)");
 
 	private final static ThreadLocal<SimpleDateFormat> dateFormater = new ThreadLocal<SimpleDateFormat>() {
 		@Override
@@ -266,5 +268,11 @@ public class StringUtils {
 			}
 		}
 		return res.toString();
+	}
+
+	public static boolean isUrl(String str) {
+		if (str == null || str.trim().length() == 0)
+			return false;
+		return URL.matcher(str).matches();
 	}
 }

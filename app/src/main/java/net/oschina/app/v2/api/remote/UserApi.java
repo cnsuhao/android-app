@@ -17,5 +17,25 @@ public class UserApi extends BaseApi {
 		String loginurl = "action/api/login_validate";
 		ApiHttpClient.get(loginurl, params, handler);
 	}
-	
+
+	/***
+	 * 客户端扫描二维码登陆
+	 *
+	 * @author 火蚁 2015-3-13 上午11:45:47
+	 *
+	 * @return void
+	 * @param url
+	 * @param handler
+	 */
+	public static void scanQrCodeLogin(String url,
+									   AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		String uuid = url.substring(url.lastIndexOf("=") + 1);
+		params.put("uuid", uuid);
+		ApiHttpClient.getDirect(url, handler);
+	}
+
+	public static void singnIn(String url, AsyncHttpResponseHandler handler) {
+		ApiHttpClient.getDirect(url, handler);
+	}
 }

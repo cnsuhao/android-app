@@ -332,7 +332,5 @@
     <string name="navigation_drawer_close">Close</string>
     <string name="version_format">Version : %s</string>
 
-    <string name="msg_camera_framework_bug">抱歉，Android相机出现问题。您可能需要重启设备。</string>
-    <string name="msg_default_status">请将条码置于取景框内扫描。  </string>
-    <string name="scan_text">将二维码放入框内, 即可自动扫描</string>
+    <string name="actionbar_title_zxing">扫一扫</string>
 </resources>

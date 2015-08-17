@@ -168,7 +168,6 @@ public class ShakeFragment extends BaseFragment implements ShakeDetector.Listene
         sp.play(sound, volumnRatio, volumnRatio, 1, 0, 1);
     }
 
-
     private void executeShakeSuccess(ShakeObject obj) {
         if (StringUtils.isEmpty(obj.getAuthor())
                 && StringUtils.isEmpty(obj
@@ -199,8 +198,13 @@ public class ShakeFragment extends BaseFragment implements ShakeDetector.Listene
     }
 
     private void executeShakeFailure() {
+        mLyLoadingTip.setVisibility(View.GONE);
         sp.play(soundFailure, volumnRatio, volumnRatio, 1, 0, 1);
-        AppContext.showToastShort("毛都没摇到一个！");
+        if(TDevice.hasInternet()) {
+            AppContext.showToastShort("毛都没摇到一个！");
+        } else {
+            AppContext.showToastShort("网络都没有，瞎摇什么劲~");
+        }
         mIsRequesting = false;
     }
 
