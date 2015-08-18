@@ -2,7 +2,6 @@ package net.oschina.app.v2.activity.news;
 
 import java.lang.ref.WeakReference;
 
-import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.blog.fragment.BlogDetailFragment;
 import net.oschina.app.v2.activity.event.fragment.EventDetailFragment;
 import net.oschina.app.v2.activity.news.fragment.EmojiFragmentControl;
@@ -11,14 +10,13 @@ import net.oschina.app.v2.activity.news.fragment.ToolbarFragment;
 import net.oschina.app.v2.activity.news.fragment.ToolbarFragmentControl;
 import net.oschina.app.v2.activity.question.fragment.QuestionDetailFragment;
 import net.oschina.app.v2.activity.software.fragment.SoftwareDetailFragment;
-import net.oschina.app.v2.activity.tweet.fragment.TweetDetailFragment;
+import net.oschina.app.v2.activity.tweet.fragment.TweetDetailFragmentNew;
 import net.oschina.app.v2.base.BaseActivity;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.emoji.EmojiFragment;
 import net.oschina.app.v2.utils.TDevice;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -93,7 +91,7 @@ public class DetailActivity extends BaseActivity implements
 			break;
 		case DISPLAY_TWEET:
 			actionBarTitle = R.string.actionbar_title_tweet;
-			fragment = new TweetDetailFragment();
+			fragment = new TweetDetailFragmentNew();
 			break;
 		case DISPLAY_EVENT:
 			actionBarTitle = R.string.actionbar_title_event_detail;

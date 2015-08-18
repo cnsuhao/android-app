@@ -1,16 +1,5 @@
 package net.oschina.app.v2.activity.tweet.adapter;
 
-import net.oschina.app.v2.base.ListBaseAdapter;
-import net.oschina.app.v2.base.RecycleBaseAdapter;
-import net.oschina.app.v2.model.Tweet;
-import net.oschina.app.v2.ui.AvatarView;
-import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
-import net.oschina.app.v2.ui.text.MyURLSpan;
-import net.oschina.app.v2.ui.text.TweetTextView;
-import net.oschina.app.v2.utils.DateUtil;
-import net.oschina.app.v2.utils.UIHelper;
-
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.Html;
@@ -24,14 +13,29 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.tonlin.osc.happy.R;
+
+import net.oschina.app.v2.base.RecycleBaseAdapter;
+import net.oschina.app.v2.model.Tweet;
+import net.oschina.app.v2.ui.AvatarView;
+import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
+import net.oschina.app.v2.ui.text.MyURLSpan;
+import net.oschina.app.v2.ui.text.TweetTextView;
+import net.oschina.app.v2.utils.DateUtil;
+import net.oschina.app.v2.utils.UIHelper;
 
 public class TweetAdapter extends RecycleBaseAdapter {
 
+    private final TweetOperationListener mDelegate;
+
+    public interface TweetOperationListener {
+        void onTweetLikeToggle(Tweet tweet);
+    }
+
     private DisplayImageOptions options;
 
-    public TweetAdapter() {
+    public TweetAdapter(TweetOperationListener lis) {
+        this.mDelegate = lis;
         options = new DisplayImageOptions.Builder().cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565).build();
     }
@@ -88,7 +92,15 @@ public class TweetAdapter extends RecycleBaseAdapter {
 
         vh.commentCount.setText(item.getCommentCount() > 999 ? "999+" : String.valueOf(item.getCommentCount()));
         vh.likeCount.setText(item.getLikeCount() > 999 ? "999+" : String.valueOf(item.getLikeCount()));
-        vh.likeCount.setCompoundDrawablesWithIntrinsicBounds(item.getIsLike()==1 ? R.drawable.ic_like_selected : R.drawable.ic_like_normal, 0, 0, 0);
+        vh.likeCount.setCompoundDrawablesWithIntrinsicBounds(item.getIsLike() == 1 ? R.drawable.ic_like_selected : R.drawable.ic_like_normal, 0, 0, 0);
+        vh.likeCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mDelegate != null) {
+                    mDelegate.onTweetLikeToggle(item);
+                }
+            }
+        });
 
         vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
         vh.avatar.setAvatarUrl(item.getFace());

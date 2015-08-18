@@ -19,6 +19,7 @@ import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.tweet.adapter.TweetAdapter;
 import net.oschina.app.v2.api.OperationResponseHandler;
 import net.oschina.app.v2.api.remote.NewsApi;
+import net.oschina.app.v2.api.remote.UserApi;
 import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.base.RecycleBaseAdapter;
@@ -26,6 +27,7 @@ import net.oschina.app.v2.model.ListEntity;
 import net.oschina.app.v2.model.Result;
 import net.oschina.app.v2.model.Tweet;
 import net.oschina.app.v2.model.TweetList;
+import net.oschina.app.v2.model.User;
 import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.HTMLSpirit;
 import net.oschina.app.v2.utils.TDevice;
@@ -43,10 +45,10 @@ import java.io.Serializable;
  *
  * @author william_sim
  */
-public class TweetFragment extends BaseRecycleViewFragment {
+public class TweetFragment extends BaseRecycleViewFragment implements TweetAdapter.TweetOperationListener {
     protected static final String TAG = TweetFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "tweet_list";
-    private boolean mIsWatingLogin;
+    private boolean mIsWaitingLogin;
 
     class DeleteTweetResponseHandler extends OperationResponseHandler {
 
@@ -80,12 +82,79 @@ public class TweetFragment extends BaseRecycleViewFragment {
         }
     }
 
+    class UnLikeTweetResponseHandler extends OperationResponseHandler {
+
+        UnLikeTweetResponseHandler(Object... args) {
+            super(args);
+        }
+
+        @Override
+        public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
+                throws Exception {
+            try {
+                Result res = Result.parse(is);
+                if (res != null && res.OK()) {
+                    AppContext.showToastShort("已取消赞");
+                    Tweet tweet = (Tweet) args[0];
+                    tweet.setIsLike(0);
+                    tweet.setLikeCount(tweet.getLikeCount() - 1);
+                    notifyDataSetChanged();
+                } else {
+                    onFailure(code, res.getErrorMessage(), args);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                onFailure(code, e.getMessage(), args);
+            }
+        }
+
+        @Override
+        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                              Throwable arg3) {
+            AppContext.showToastShort("取消赞失败了");
+        }
+    }
+
+    class LikeTweetResponseHandler extends OperationResponseHandler {
+
+        LikeTweetResponseHandler(Object... args) {
+            super(args);
+        }
+
+        @Override
+        public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
+                throws Exception {
+            try {
+                Result res = Result.parse(is);
+                if (res != null && res.OK()) {
+                    AppContext.showToastShort("赞成功了");
+                    Tweet tweet = (Tweet) args[0];
+                    tweet.setIsLike(1);
+                    tweet.setLikeCount(tweet.getLikeCount() + 1);
+                    notifyDataSetChanged();
+                } else {
+                    onFailure(code, res.getErrorMessage(), args);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                onFailure(code, e.getMessage(), args);
+            }
+        }
+
+        @Override
+        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                              Throwable arg3) {
+            AppContext.showToastShort("赞失败了");
+        }
+    }
+
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mErrorLayout != null) {
-                mIsWatingLogin = true;
+                mIsWaitingLogin = true;
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                 mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
             }
@@ -107,7 +176,7 @@ public class TweetFragment extends BaseRecycleViewFragment {
 
     @Override
     public void onResume() {
-        if (mIsWatingLogin) {
+        if (mIsWaitingLogin) {
             mCurrentPage = 0;
             mState = STATE_REFRESH;
             requestData(false);
@@ -144,7 +213,7 @@ public class TweetFragment extends BaseRecycleViewFragment {
 
     @Override
     protected RecycleBaseAdapter getListAdapter() {
-        RecycleBaseAdapter adapter = new TweetAdapter();
+        RecycleBaseAdapter adapter = new TweetAdapter(this);
         adapter.setOnItemLongClickListener(this);
         return adapter;
     }
@@ -162,7 +231,7 @@ public class TweetFragment extends BaseRecycleViewFragment {
     @Override
     protected ListEntity parseList(InputStream is) throws Exception {
         //TweetList list = TweetList.parse(is);
-        return XmlUtils.toBean(TweetList.class,is);
+        return XmlUtils.toBean(TweetList.class, is);
     }
 
     @Override
@@ -176,15 +245,15 @@ public class TweetFragment extends BaseRecycleViewFragment {
         if (mCatalog > 0) {
             if (AppContext.instance().isLogin()) {
                 mCatalog = AppContext.instance().getLoginUid();
-                mIsWatingLogin = false;
+                mIsWaitingLogin = false;
                 super.requestData(refresh);
             } else {
-                mIsWatingLogin = true;
+                mIsWaitingLogin = true;
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                 mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
             }
         } else {
-            mIsWatingLogin = false;
+            mIsWaitingLogin = false;
             super.requestData(refresh);
         }
     }
@@ -221,53 +290,11 @@ public class TweetFragment extends BaseRecycleViewFragment {
             items = new String[]{getResources().getString(R.string.view),
                     getResources().getString(R.string.copy)};
         }
-//        final CommonDialog dialog = DialogHelper
-//                .getPinterestDialogCancelable(getActivity());
-//        dialog.setTitle(R.string.operation);
-//        dialog.setNegativeButton(R.string.cancel, null);
-//        dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view,
-//                                    int position, long id) {
-//                dialog.dismiss();
-//                if (position == 0) {
-//                    UIHelper.showTweetDetail(view.getContext(), tweet.getId());
-//                } else if (position == 1) {
-//                    TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(tweet
-//                            .getBody()));
-//                } else if (position == 2) {
-//                    handleDeleteTweet(tweet);
-//                }
-//            }
-//        });
-//        dialog.show();
-
-//        new MaterialDialog.Builder(getActivity())
-//                .title(R.string.operation)
-//                .items(items)
-//                .contentColor(R.color.main_gray)
-//                .itemsCallback(new MaterialDialog.ListCallback() {
-//                    @Override
-//                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-//                        dialog.dismiss();
-//                        if (which == 0) {
-//                            UIHelper.showTweetDetail(view.getContext(), tweet.getId(), tweet.getBody());
-//                        } else if (which == 1) {
-//                            TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(tweet
-//                                    .getBody()));
-//                        } else if (which == 2) {
-//                            handleDeleteTweet(tweet);
-//                        }
-//                    }
-//                })
-//                .show();
-
         AlertDialog dialog = new AlertDialog.Builder(getActivity(),
                 R.style.Theme_AppCompat_Light_Dialog_Alert)
                 .setTitle(R.string.operation)
                 .setCancelable(true)
-                .setItems(items,new DialogInterface.OnClickListener() {
+                .setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == 0) {
@@ -285,37 +312,6 @@ public class TweetFragment extends BaseRecycleViewFragment {
     }
 
     private void handleDeleteTweet(final Tweet tweet) {
-//        CommonDialog dialog = DialogHelper
-//                .getPinterestDialogCancelable(getActivity());
-//        dialog.setMessage(R.string.message_delete_tweet);
-//        dialog.setPositiveButton(R.string.ok,
-//                new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                        NewsApi.deleteTweet(tweet.getAuthorId(), tweet.getId(),
-//                                new DeleteTweetResponseHandler(tweet));
-//                    }
-//                });
-//        dialog.setNegativeButton(R.string.cancel, null);
-//        dialog.show();
-
-//        new MaterialDialog.Builder(getActivity())
-//                .content(R.string.message_delete_tweet)
-//                .positiveText(R.string.ok)
-//                .negativeText(R.string.cancel)
-//                .callback(new MaterialDialog.ButtonCallback() {
-//                    @Override
-//                    public void onPositive(MaterialDialog dialog) {
-//                        super.onPositive(dialog);
-//                        dialog.dismiss();
-//                        NewsApi.deleteTweet(tweet.getAuthorId(), tweet.getId(),
-//                                new DeleteTweetResponseHandler(tweet));
-//                    }
-//                })
-//                .show();
-
         AlertDialog dialog = new AlertDialog.Builder(getActivity(),
                 R.style.Theme_AppCompat_Light_Dialog_Alert)
                 .setTitle(R.string.operation)
@@ -325,12 +321,29 @@ public class TweetFragment extends BaseRecycleViewFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                          dialog.dismiss();
-                          NewsApi.deleteTweet(tweet.getAuthorId(), tweet.getId(),
+                        dialog.dismiss();
+                        NewsApi.deleteTweet(tweet.getAuthorId(), tweet.getId(),
                                 new DeleteTweetResponseHandler(tweet));
                     }
                 }).create();
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    @Override
+    public void onTweetLikeToggle(Tweet tweet) {
+        //showWaitDialog(R.string.progress_submit);
+        if (!AppContext.instance().isLogin()) {
+            UIHelper.showLogin(getActivity());
+            return;
+        }
+        User user = AppContext.getLoginInfo();
+        if (tweet.getIsLike() == 1) {
+            NewsApi.pubUnLikeTweet(user.getUid(), tweet.getId(), tweet.getAuthorId(),
+                    new UnLikeTweetResponseHandler(tweet));
+        } else {
+            NewsApi.pubLikeTweet(user.getUid(), tweet.getId(), tweet.getAuthorId(),
+                    new LikeTweetResponseHandler(tweet));
+        }
     }
 }

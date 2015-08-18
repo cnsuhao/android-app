@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_item_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/tab_bar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_comment_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/tweet_tab_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:singleLine="true"
+            android:text="评论(0)"
+            android:textColor="@color/color_black_gray"
+            android:textSize="@dimen/text_size_14" />
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="6dp"
+            android:background="@color/list_divider_color"/>
+
+        <TextView
+            android:id="@+id/tv_like_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/tweet_tab_selector"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:singleLine="true"
+            android:text="点赞(0)"
+            android:textColor="@color/color_black_gray"
+            android:textSize="@dimen/text_size_14" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/tweet_tab_normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_16">
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="@dimen/list_item_avatar_size"
+            android:layout_height="@dimen/list_item_avatar_size"
+            android:layout_marginRight="@dimen/space_16"
+            android:background="@drawable/ic_default_avatar"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textColor="@color/main_black"
+            android:textSize="@dimen/text_size_16" />
+    </LinearLayout>
+
+</LinearLayout>
+

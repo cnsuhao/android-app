@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
-    <net.oschina.app.v2.ui.widget.FixedRecyclerView
+    <!--<net.oschina.app.v2.ui.widget.FixedRecyclerView
         android:id="@+id/recycleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,7 +13,69 @@
         android:dividerHeight="0dp"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
+        android:listSelector="@android:color/transparent" />-->
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="#ffffffff"
+        android:descendantFocusability="blocksDescendants"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
         android:listSelector="@android:color/transparent" />
+
+    <RadioGroup
+        android:id="@+id/sticky_tab_bar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <RadioButton
+            android:id="@+id/rb_comment_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/tweet_tab_selector"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:singleLine="true"
+            android:text="评论 (0)"
+            android:textColor="@color/color_black_gray"
+            android:textSize="@dimen/text_size_14" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/list_divider_color" />
+
+        <RadioButton
+            android:id="@+id/rb_like_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/tweet_tab_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:singleLine="true"
+            android:text="点赞 (0)"
+            android:textColor="@color/color_black_gray"
+            android:textSize="@dimen/text_size_14" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/tweet_tab_normal" />
+    </RadioGroup>
 
     <net.oschina.app.v2.ui.empty.EmptyLayout
         android:id="@+id/error_layout"

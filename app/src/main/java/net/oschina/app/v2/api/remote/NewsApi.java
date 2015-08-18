@@ -10,6 +10,8 @@ import net.oschina.app.v2.api.ApiHttpClient;
 import net.oschina.app.v2.model.Post;
 import net.oschina.app.v2.model.Report;
 import net.oschina.app.v2.model.Tweet;
+import net.oschina.app.v2.utils.TDevice;
+
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -75,6 +77,35 @@ public class NewsApi extends BaseApi {
 		params.put("pageSize", DEF_PAGE_SIZE);
 		// params.put("dataType", "json");
 		ApiHttpClient.get("action/api/tweet_list", params, handler);
+	}
+
+	public static void pubLikeTweet(int uid,int tweetId, int authorId,
+									AsyncHttpResponseHandler handler) {
+
+		RequestParams params = new RequestParams();
+		params.put("tweetid", tweetId);
+		params.put("uid", uid);
+		params.put("ownerOfTweet", authorId);
+		ApiHttpClient.post("action/api/tweet_like", params, handler);
+	}
+
+	public static void pubUnLikeTweet(int uid,int tweetId, int authorId,
+									  AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("tweetid", tweetId);
+		params.put("uid", uid);
+		params.put("ownerOfTweet", authorId);
+		ApiHttpClient.post("action/api/tweet_unlike", params, handler);
+	}
+
+	public static void getTweetLikeList(int tweetId, int page,
+										AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("tweetid", tweetId);
+		params.put("pageIndex", page);
+		params.put("pageSize", DEF_PAGE_SIZE);
+		ApiHttpClient.get("action/api/tweet_like_list", params, handler);
+
 	}
 
 	public static void getActiveList(int uid, int catalog, int page,

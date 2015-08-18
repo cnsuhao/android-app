@@ -319,4 +319,8 @@ public class Tweet extends Entity implements Parcelable {
     public void setIsLike(int isLike) {
         this.isLike = isLike;
     }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
 }

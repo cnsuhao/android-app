@@ -167,9 +167,9 @@ public class ListBaseAdapter extends BaseAdapter {
 	@SuppressLint("InflateParams")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if (position == getCount() - 1) {// 最后一条
+		if (position == getCount() - getLastPos(position)) {// 最后一条
 			if (getState() == STATE_LOAD_MORE || getState() == STATE_NO_MORE
-					|| state == STATE_EMPTY_ITEM
+					|| getState() == STATE_EMPTY_ITEM
 					|| getState() == STATE_NETWORK_ERROR) {
 				View loadmore =  LayoutInflater.from(
 						parent.getContext()).inflate(
@@ -218,6 +218,10 @@ public class ListBaseAdapter extends BaseAdapter {
 			}
 		}
 		return getRealView(position, convertView, parent);
+	}
+
+	protected int getLastPos(int pos) {
+		return 1;
 	}
 
 	protected View getRealView(int position, View convertView, ViewGroup parent) {
