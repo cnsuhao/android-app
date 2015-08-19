@@ -75,6 +75,27 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/tweet_tab_normal" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/list_divider_color" />
+        <TextView
+            android:id="@+id/tv_like"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@drawable/ic_like_normal"
+            android:drawablePadding="6dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="赞一个"
+            android:clickable="true"
+            android:background="@drawable/tweet_tab_like_selector"
+            android:textColor="@color/main_gray"
+            android:textSize="14sp" />
     </RadioGroup>
 
     <net.oschina.app.v2.ui.empty.EmptyLayout

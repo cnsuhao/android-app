@@ -5,4 +5,7 @@ package net.oschina.app.v2.activity.tweet;
  */
 public interface TweetTabClickListener {
     void onTabChanged(int idx);
+    void onCommentClick();
+    void onLikeClick();
+    void onRefreshData(int idx);
 }

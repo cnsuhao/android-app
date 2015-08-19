@@ -11,7 +11,7 @@
         android:layout_height="40dp"
         android:orientation="horizontal"
         android:background="@color/white"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_comment_count"
@@ -51,6 +51,26 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:background="@drawable/tweet_tab_normal"/>
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/list_divider_color" />
+        <TextView
+            android:id="@+id/tv_like_opt"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@drawable/ic_like_normal"
+            android:drawablePadding="6dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="赞一个"
+            android:clickable="true"
+            android:background="@drawable/tweet_tab_like_selector"
+            android:textColor="@color/main_gray"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <RelativeLayout
@@ -74,8 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/iv_avatar"
-            android:textColor="@color/main_gray"
-            android:text="name"
+            android:textColor="@color/main_purple"
             android:textSize="@dimen/text_size_14" />
 
         <TextView
@@ -83,17 +102,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="sdfd"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
-
-
 
         <net.oschina.app.v2.ui.text.TweetTextView
             android:id="@+id/tv_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="asdfasd"
             android:layout_below="@id/tv_name"
             android:layout_marginTop="@dimen/space_4"
             android:layout_toRightOf="@id/iv_avatar"
@@ -105,7 +120,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_content"
-            android:text="android"
             android:layout_marginTop="@dimen/space_4"
             android:layout_toRightOf="@id/iv_avatar"
             android:textColor="@color/main_gray"

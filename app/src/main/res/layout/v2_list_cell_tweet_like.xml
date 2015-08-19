@@ -26,12 +26,13 @@
             android:text="评论(0)"
             android:textColor="@color/color_black_gray"
             android:textSize="@dimen/text_size_14" />
+
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="6dp"
-            android:background="@color/list_divider_color"/>
+            android:layout_marginTop="8dp"
+            android:background="@color/list_divider_color" />
 
         <TextView
             android:id="@+id/tv_like_count"
@@ -53,6 +54,28 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/tweet_tab_normal" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/list_divider_color" />
+
+        <TextView
+            android:id="@+id/tv_like_opt"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@drawable/ic_like_normal"
+            android:drawablePadding="6dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="赞一个"
+            android:clickable="true"
+            android:background="@drawable/tweet_tab_like_selector"
+            android:textColor="@color/main_gray"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -74,10 +97,14 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
             android:textColor="@color/main_black"
             android:textSize="@dimen/text_size_16" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="72dp"
+        android:background="@color/list_divider_color" />
 </LinearLayout>
 

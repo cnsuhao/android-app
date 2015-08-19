@@ -70,6 +70,7 @@ import net.oschina.app.v2.ui.text.TweetTextView;
 import net.oschina.app.v2.utils.HTMLSpirit;
 import net.oschina.app.v2.utils.StringUtils;
 import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.TLog;
 import net.oschina.app.v2.utils.UIHelper;
 import net.oschina.app.v2.utils.XmlUtils;
 
@@ -108,39 +109,9 @@ public class TweetDetailFragmentNew extends BaseFragment implements
     private RadioGroup mStickyTabBar;
     private int mCurrentList = 0;
     private RadioButton mRbCommentCount, mRbLikeCount;
-    protected int mStateLike = STATE_NONE;
+    private int mStateComment = STATE_NONE;
+    private int mStateLike = STATE_NONE;
 
-    @Override
-    public void onTabChanged(int idx) {
-        switch (idx) {
-            case 0:
-                if (mCurrentList != 0) {
-                    mCurrentList = 0;
-                    mStickyTabBar.check(R.id.rb_comment_count);
-                    boolean needStick = false;
-                    if (mStickyTabBar.getVisibility() == View.VISIBLE)
-                        needStick = true;
-                    mListView.setAdapter(mCommentAdapter);
-                    mCommentAdapter.notifyDataSetChanged();
-                    if (needStick)
-                        mListView.setSelection(1);
-                }
-                break;
-            case 1:
-                if (mCurrentList != 1) {
-                    mCurrentList = 1;
-                    mStickyTabBar.check(R.id.rb_like_count);
-                    boolean needStick = false;
-                    if (mStickyTabBar.getVisibility() == View.VISIBLE)
-                        needStick = true;
-                    mListView.setAdapter(mLikeAdapter);
-                    mCommentAdapter.notifyDataSetChanged();
-                    if (needStick)
-                        mListView.setSelection(1);
-                }
-                break;
-        }
-    }
 
     class CommentChangeReceiver extends BroadcastReceiver {
 
@@ -176,7 +147,7 @@ public class TweetDetailFragmentNew extends BaseFragment implements
                     View v = mListView.getChildAt(mListView.getLastVisiblePosition() - 1);
                     v.getGlobalVisibleRect(r);
                     int height = r.bottom - r.top;
-                    Log.e(TAG, "Comment Empty height:" + height +" top:"+r.top+" bottom:"+r.bottom +"　view:"+v.getTag());
+                    Log.e(TAG, "Comment Empty height:" + height + " top:" + r.top + " bottom:" + r.bottom + "　view:" + v.getTag());
                     mCommentAdapter.setEmptyHeight(height);
                 } else {
                     mCommentAdapter.setEmptyHeight(0);
@@ -199,11 +170,11 @@ public class TweetDetailFragmentNew extends BaseFragment implements
             }
 
             if (mListView.getLastVisiblePosition() == (mListView.getCount() - 1)) {
-                if (mCurrentList == 0 && mState == STATE_NONE && mCommentAdapter != null
+                if (mCurrentList == 0 && mStateComment == STATE_NONE && mCommentAdapter != null
                         && (mCommentAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE
                         || mCommentAdapter.getState() == ListBaseAdapter.STATE_NETWORK_ERROR)
                         && mCommentAdapter.getDataSize() > 0) {
-                    mState = STATE_LOADMORE;
+                    mStateComment = STATE_LOADMORE;
                     mCurrentPage++;
                     requestTweetCommentData(true);
                 } else if (mCurrentList == 1 && mStateLike == STATE_NONE && mLikeAdapter != null
@@ -240,13 +211,17 @@ public class TweetDetailFragmentNew extends BaseFragment implements
     private void onCommentChanged(int opt, int id, int catalog, boolean isBlog,
                                   Comment comment) {
         if (Comment.OPT_ADD == opt && catalog == CommentList.CATALOG_TWEET
-                && id == mTweetId) {
+                && id == mTweetId
+                && (mCommentAdapter.getState() != TweetCommentAdapter.STATE_TWEET_LOADING &&
+                mCommentAdapter.getState() != TweetCommentAdapter.STATE_TWEET_ERROR)) {
             if (mTweet != null && mTvCommentCount != null) {
                 mTweet.setCommentCount(mTweet.getCommentCount() + 1);
+                fillUI();
 
+                if (mCommentAdapter.getState() == TweetCommentAdapter.STATE_TWEET_EMPTY) {
+                    mCommentAdapter.setState(TweetCommentAdapter.STATE_LESS_ONE_PAGE);
+                }
                 mCommentAdapter.addItem(0, comment);
-                mTvCommentCount.setText(getString(R.string.comment_count,
-                        mTweet.getCommentCount()));
             }
         }
     }
@@ -454,6 +429,7 @@ public class TweetDetailFragmentNew extends BaseFragment implements
     }
 
     private void sendRequestLikeData() {
+        TLog.log(TAG, "sendRequestLikeData");
         NewsApi.getTweetLikeList(mTweetId, mCurrentLikePage, mLikeHandler);
     }
 
@@ -516,7 +492,6 @@ public class TweetDetailFragmentNew extends BaseFragment implements
             UIHelper.showUserCenter(getActivity(), user.getUid(), user.getName());
         }
     }
-
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -598,11 +573,15 @@ public class TweetDetailFragmentNew extends BaseFragment implements
                 if (res.OK()) {
                     AppContext.showToastShort(R.string.delete_success);
                     UIHelper.sendNoticeBroadcast(getActivity(), res);
-                    mCommentAdapter.removeItem(args[0]);
 
                     mTweet.setCommentCount(mTweet.getCommentCount() - 1);
-                    mTvCommentCount.setText(getString(R.string.comment_count,
-                            mTweet.getCommentCount()));
+
+                    fillUI();
+
+                    if (mCommentAdapter.getDataSize() == 1) {
+                        mCommentAdapter.setState(TweetCommentAdapter.STATE_TWEET_EMPTY);
+                    }
+                    mCommentAdapter.removeItem(args[0]);
                 } else {
                     AppContext.showToastShort(res.getErrorMessage());
                 }
@@ -662,10 +641,11 @@ public class TweetDetailFragmentNew extends BaseFragment implements
             super.onPostExecute(tweet);
             if (tweet != null) {
                 executeOnLoadDataSuccess(tweet);
+                mState = STATE_NONE;
             } else {
                 executeOnLoadDataError(null);
+                mState = STATE_NONE;
             }
-            executeOnLoadFinish();
         }
     }
 
@@ -697,6 +677,8 @@ public class TweetDetailFragmentNew extends BaseFragment implements
                 if (mTweet != null && mTweet.getId() > 0) {
                     UIHelper.sendNoticeBroadcast(getActivity(), mTweet);
                     executeOnLoadDataSuccess(mTweet);
+                    mState = STATE_NONE;
+                    mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
                     new SaveCacheTask(getActivity(), mTweet, getCacheKey())
                             .execute();
                 } else {
@@ -719,27 +701,37 @@ public class TweetDetailFragmentNew extends BaseFragment implements
         mTweet = tweet;
         if (mTweet != null && mTweet.getId() > 0) {
             fillUI();
-            mCurrentPage = 0;
-
-            mState = STATE_REFRESH;
-            mCurrentPage = 0;
-            mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
-            requestTweetCommentData(true);
-
-            mStateLike = STATE_REFRESH;
-            mCurrentLikePage = 0;
-            requestTweetLikeData(true);
+            refreshCommentList();
+            refreshLikeList();
         } else {
             throw new RuntimeException("load detail error");
         }
     }
 
-    private void executeOnLoadFinish() {
-        mState = STATE_NONE;
-    }
-
     private void executeOnLoadDataError(Object object) {
         mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
+    }
+
+    private void refreshCommentList() {
+        if (mStateComment == STATE_NONE) {
+            mStateComment = STATE_REFRESH;
+            mCurrentPage = 0;
+
+            mCommentAdapter.setState(TweetCommentAdapter.STATE_TWEET_LOADING);
+            mCommentAdapter.notifyDataSetChanged();
+            requestTweetCommentData(true);
+        }
+    }
+
+    private void refreshLikeList() {
+        if (mStateLike == STATE_NONE) {
+            mStateLike = STATE_REFRESH;
+            mCurrentLikePage = 0;
+
+            mLikeAdapter.setState(TweetLikeAdapter.STATE_TWEET_LOADING);
+            mLikeAdapter.notifyDataSetChanged();
+            requestTweetLikeData(true);
+        }
     }
 
     protected void requestTweetCommentData(boolean refresh) {
@@ -771,6 +763,7 @@ public class TweetDetailFragmentNew extends BaseFragment implements
     }
 
     private void readCacheCommentData(String cacheKey) {
+        TLog.log(TAG, "readCacheCommentData :" + cacheKey);
         new CacheCommentTask(getActivity()).execute(cacheKey);
     }
 
@@ -782,7 +775,7 @@ public class TweetDetailFragmentNew extends BaseFragment implements
         private WeakReference<Context> mContext;
 
         private CacheCommentTask(Context context) {
-            mContext = new WeakReference<Context>(context);
+            mContext = new WeakReference<>(context);
         }
 
         @Override
@@ -820,8 +813,8 @@ public class TweetDetailFragmentNew extends BaseFragment implements
                         arg2));
                 UIHelper.sendNoticeBroadcast(getActivity(), list);
                 executeOnLoadCommentDataSuccess(list);
-                new SaveCacheTask(getActivity(), list, getCacheCommentKey())
-                        .execute();
+                executeOnLoadCommentFinish();
+                new SaveCacheTask(getActivity(), list, getCacheCommentKey()).execute();
             } catch (Exception e) {
                 e.printStackTrace();
                 onFailure(arg0, arg1, arg2, e);
@@ -831,43 +824,45 @@ public class TweetDetailFragmentNew extends BaseFragment implements
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                               Throwable arg3) {
-            mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        }
-
-        public void onFinish() {
-            mState = STATE_NONE;
+            executeOnLoadCommentDataError(arg3.getMessage());
+            executeOnLoadCommentFinish();
         }
     };
 
     private void executeOnLoadCommentDataSuccess(CommentList list) {
-        if (mState == STATE_REFRESH)
+        TLog.log(TAG, "executeOnLoadCommentDataSuccess state :" + mStateComment);
+        if (mStateComment == STATE_REFRESH)
             mCommentAdapter.clear();
         List<Comment> data = list.getCommentlist();
         mCommentAdapter.addData(data);
-        mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        if (data.size() == 0 && mState == STATE_REFRESH) {
-            mCommentAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+        if (data.size() == 0 && (mStateComment == STATE_REFRESH || mCurrentPage == 0)) {
+            TLog.log(TAG, "empty comment");
+            mCommentAdapter.setState(TweetCommentAdapter.STATE_TWEET_EMPTY);
         } else if (data.size() < TDevice.getPageSize()) {
-            if (mState == STATE_REFRESH)
+            if (mStateComment == STATE_REFRESH || mCurrentPage == 0) {
+                TLog.log(TAG, "comment less one page");
+                mCommentAdapter.setState(ListBaseAdapter.STATE_LESS_ONE_PAGE);
+            } else {
+                TLog.log(TAG, "comment no more");
                 mCommentAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-            else
-                mCommentAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+            }
         } else {
             mCommentAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
         }
     }
 
     private void executeOnLoadCommentFinish() {
-        mState = STATE_NONE;
+        mStateComment = STATE_NONE;
+        mCommentAdapter.notifyDataSetChanged();
     }
 
     private void executeOnLoadCommentDataError(Object object) {
         if (mCurrentPage == 0) {
-            mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
+            TLog.log(TAG, "comment error page 1");
+            mCommentAdapter.setState(TweetCommentAdapter.STATE_TWEET_ERROR);
         } else {
-            mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            TLog.log(TAG, "comment error page !=1");
             mCommentAdapter.setState(ListBaseAdapter.STATE_NETWORK_ERROR);
-            mCommentAdapter.notifyDataSetChanged();
         }
     }
 
@@ -912,6 +907,7 @@ public class TweetDetailFragmentNew extends BaseFragment implements
                 TweetLikeUserList list = XmlUtils.toBean(TweetLikeUserList.class, arg2);
                 UIHelper.sendNoticeBroadcast(getActivity(), list);
                 executeOnLoadLikeDataSuccess(list);
+                executeOnLoadLikeFinish();
                 new SaveCacheTask(getActivity(), list, getCacheLikeKey()).execute();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -922,11 +918,8 @@ public class TweetDetailFragmentNew extends BaseFragment implements
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                               Throwable arg3) {
-            //mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        }
-
-        public void onFinish() {
-            mStateLike = STATE_NONE;
+            executeOnLoadLikeDataError(arg3.getMessage());
+            executeOnLoadLikeFinish();
         }
     };
 
@@ -935,12 +928,11 @@ public class TweetDetailFragmentNew extends BaseFragment implements
             mLikeAdapter.clear();
         List<User> data = list.getList();
         mLikeAdapter.addData(data);
-        //mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        if (data.size() == 0 && mState == STATE_REFRESH) {
-            mLikeAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+        if (data.size() == 0 && (mStateLike == STATE_REFRESH || mCurrentLikePage == 0)) {
+            mLikeAdapter.setState(TweetLikeAdapter.STATE_TWEET_EMPTY);
         } else if (data.size() < TDevice.getPageSize()) {
-            if (mStateLike == STATE_REFRESH)
-                mLikeAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+            if (mStateLike == STATE_REFRESH || mCurrentLikePage == 0)
+                mLikeAdapter.setState(ListBaseAdapter.STATE_LESS_ONE_PAGE);
             else
                 mLikeAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
         } else {
@@ -948,17 +940,172 @@ public class TweetDetailFragmentNew extends BaseFragment implements
         }
     }
 
-    private void executeOnLoadLikeFinish() {
-        mStateLike = STATE_NONE;
-    }
-
     private void executeOnLoadLikeDataError(Object object) {
         if (mCurrentLikePage == 0) {
-            //mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
+            mLikeAdapter.setState(TweetLikeAdapter.STATE_TWEET_ERROR);
         } else {
-            //mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mLikeAdapter.setState(ListBaseAdapter.STATE_NETWORK_ERROR);
-            mLikeAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void executeOnLoadLikeFinish() {
+        mStateLike = STATE_NONE;
+        mLikeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onTabChanged(int idx) {
+        switch (idx) {
+            case 0:
+                if (mCurrentList != 0) {
+                    mCurrentList = 0;
+                    mStickyTabBar.check(R.id.rb_comment_count);
+                    boolean needStick = false;
+                    if (mStickyTabBar.getVisibility() == View.VISIBLE)
+                        needStick = true;
+                    mListView.setAdapter(mCommentAdapter);
+                    mCommentAdapter.notifyDataSetChanged();
+                    if (needStick)
+                        mListView.setSelection(1);
+                }
+                break;
+            case 1:
+                if (mCurrentList != 1) {
+                    mCurrentList = 1;
+                    mStickyTabBar.check(R.id.rb_like_count);
+                    boolean needStick = false;
+                    if (mStickyTabBar.getVisibility() == View.VISIBLE)
+                        needStick = true;
+                    mListView.setAdapter(mLikeAdapter);
+                    mCommentAdapter.notifyDataSetChanged();
+                    if (needStick)
+                        mListView.setSelection(1);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onCommentClick() {
+        mEmojiFragment.requestFocusInput();
+    }
+
+    @Override
+    public void onLikeClick() {
+        if (!AppContext.instance().isLogin()) {
+            UIHelper.showLogin(getActivity());
+            return;
+        }
+        if (mTweet != null) {
+            int uid = AppContext.getLoginUid();
+            if (mTweet.getIsLike() == 1) {
+                NewsApi.pubUnLikeTweet(uid, mTweet.getId(), mTweet.getAuthorId(), new UnLikeTweetResponseHandler(mTweet));
+            } else {
+                NewsApi.pubLikeTweet(uid, mTweet.getId(), mTweet.getAuthorId(), new LikeTweetResponseHandler(mTweet));
+            }
+        }
+    }
+
+    @Override
+    public void onRefreshData(int idx) {
+        switch (idx) {
+            case 0:
+                refreshCommentList();
+                break;
+            case 1:
+                refreshLikeList();
+                break;
+        }
+    }
+
+    class UnLikeTweetResponseHandler extends OperationResponseHandler {
+
+        UnLikeTweetResponseHandler(Object... args) {
+            super(args);
+        }
+
+        @Override
+        public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
+                throws Exception {
+            try {
+                Result res = Result.parse(is);
+                if (res != null && res.OK()) {
+                    AppContext.showToastShort("已取消赞");
+                    Tweet tweet = (Tweet) args[0];
+                    tweet.setIsLike(0);
+                    tweet.setLikeCount(tweet.getLikeCount() - 1);
+
+                    fillUI();
+
+                    if (mLikeAdapter != null
+                            && mLikeAdapter.getState() != TweetLikeAdapter.STATE_TWEET_ERROR &&
+                            mLikeAdapter.getState() != TweetLikeAdapter.STATE_TWEET_LOADING) {
+                        if (mLikeAdapter.getDataSize() == 1) {
+                            User user = (User) mLikeAdapter.getItem(0);
+                            User cu = AppContext.getLoginInfo();
+                            if (user.getUid() == cu.getUid()) {
+                                mLikeAdapter.setState(TweetLikeAdapter.STATE_TWEET_EMPTY);
+                            }
+                        }
+                        mLikeAdapter.removeItem(0);
+                    }
+                } else {
+                    onFailure(code, res.getErrorMessage(), args);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                onFailure(code, e.getMessage(), args);
+            }
+        }
+
+        @Override
+        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                              Throwable arg3) {
+            AppContext.showToastShort("取消赞失败了");
+        }
+    }
+
+    class LikeTweetResponseHandler extends OperationResponseHandler {
+
+        LikeTweetResponseHandler(Object... args) {
+            super(args);
+        }
+
+        @Override
+        public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
+                throws Exception {
+            try {
+                Result res = Result.parse(is);
+                if (res != null && res.OK()) {
+                    AppContext.showToastShort("赞成功了");
+                    Tweet tweet = (Tweet) args[0];
+                    tweet.setIsLike(1);
+                    tweet.setLikeCount(tweet.getLikeCount() + 1);
+
+                    fillUI();
+
+                    if (mLikeAdapter != null
+                            && mLikeAdapter.getState() != TweetLikeAdapter.STATE_TWEET_ERROR &&
+                            mLikeAdapter.getState() != TweetLikeAdapter.STATE_TWEET_LOADING) {
+                        if (mLikeAdapter.getState() == TweetLikeAdapter.STATE_TWEET_EMPTY) {
+                            mLikeAdapter.setState(TweetLikeAdapter.STATE_LESS_ONE_PAGE);
+                        }
+                        User cu = AppContext.getLoginInfo();
+                        mLikeAdapter.addItem(0, cu);
+                    }
+                } else {
+                    onFailure(code, res.getErrorMessage(), args);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                onFailure(code, e.getMessage(), args);
+            }
+        }
+
+        @Override
+        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                              Throwable arg3) {
+            AppContext.showToastShort("赞失败了");
         }
     }
 }

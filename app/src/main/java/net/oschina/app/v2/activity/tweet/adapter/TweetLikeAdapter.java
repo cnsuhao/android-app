@@ -2,6 +2,7 @@ package net.oschina.app.v2.activity.tweet.adapter;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +19,10 @@ import net.oschina.app.v2.utils.TDevice;
  * Created by Tonlin on 2015/8/18.
  */
 public class TweetLikeAdapter extends ListBaseAdapter {
+
+    public static final int STATE_TWEET_LOADING = 6;
+    public static final int STATE_TWEET_ERROR = 7;
+    public static final int STATE_TWEET_EMPTY = 8;
 
     private static final java.lang.String TAG = "TweetLike";
     private final TweetTabClickListener mDelegate;
@@ -55,14 +60,97 @@ public class TweetLikeAdapter extends ListBaseAdapter {
         return 1;
     }
 
+
     @Override
     public int getCount() {
+        switch (getState()) {
+            case STATE_TWEET_LOADING:
+            case STATE_TWEET_ERROR:
+            case STATE_TWEET_EMPTY:
+                return getDataSize() + 2;
+        }
         return super.getCount() + 1;
     }
 
     @Override
     protected View getRealView(int position, View convertView, ViewGroup parent) {
-        if (getCount() - 1 == position) {
+        if (getCount() - 2 == position &&
+                (getState() == STATE_TWEET_LOADING || getState() == STATE_TWEET_ERROR || getState() == STATE_TWEET_EMPTY)) {
+            convertView = getLayoutInflater(parent.getContext()).inflate(R.layout.v2_list_cell_tweet_loading, null);
+
+            View loading = convertView.findViewById(R.id.ly_loading);
+            View error = convertView.findViewById(R.id.ly_error);
+            Button btn = (Button) convertView.findViewById(R.id.btn_refresh);
+            TextView text = (TextView)convertView.findViewById(R.id.tv_text);
+            switch (getState()){
+                case STATE_TWEET_LOADING:
+                    loading.setVisibility(View.VISIBLE);
+                    error.setVisibility(View.GONE);
+                    break;
+                case STATE_TWEET_EMPTY:
+                    loading.setVisibility(View.GONE);
+                    error.setVisibility(View.VISIBLE);
+                    text.setText("还没有小伙伴来点赞\n赶紧来抢个沙发吧");
+                    btn.setText("点赞");
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mDelegate != null) {
+                                mDelegate.onLikeClick();
+                            }
+                        }
+                    });
+                    break;
+                case STATE_TWEET_ERROR:
+                    loading.setVisibility(View.GONE);
+                    error.setVisibility(View.VISIBLE);
+                    if(TDevice.hasInternet()){
+                        text.setText("Oops加载出错啦\n");
+                        btn.setText("刷新");
+                    } else {
+                        text.setText("什么年代啦,还没有网络哦");
+                        btn.setText("刷新");
+                    }
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(mDelegate != null){
+                                mDelegate.onRefreshData(1);
+                            }
+                        }
+                    });
+                    break;
+            }
+            View bar = convertView.findViewById(R.id.tab_bar);
+            final TextView commentCount = (TextView) convertView.findViewById(R.id.tv_comment_count);
+            final TextView likeCount = (TextView) convertView.findViewById(R.id.tv_like_count);
+            //bar.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
+            if (position == 0) {
+                likeCount.setSelected(true);
+                commentCount.setText("评论 (" + mCommentCount + ")");
+                likeCount.setText("点赞 (" + mLikeCount + ")");
+                commentCount.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mDelegate != null) {
+                            mDelegate.onTabChanged(0);
+                        }
+                        commentCount.setSelected(true);
+                        likeCount.setSelected(false);
+                    }
+                });
+                likeCount.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mDelegate != null) {
+                            mDelegate.onTabChanged(1);
+                        }
+                        commentCount.setSelected(false);
+                        likeCount.setSelected(true);
+                    }
+                });
+            }
+        } else if (getCount() - 1 == position) {
             convertView = getLayoutInflater(parent.getContext()).inflate(R.layout.v2_list_cell_tweet_empty, null);
             View item = convertView.findViewById(R.id.empty);
             if (mEmptyHeight != -1) {
