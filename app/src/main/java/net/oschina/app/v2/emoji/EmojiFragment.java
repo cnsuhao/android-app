@@ -96,7 +96,7 @@ public class EmojiFragment extends BaseFragment implements
 		Map<String, Emoji> emojis = EmojiHelper.qq_emojis_nos;
 		// int pagerSize = emojis.size() / 20;
 
-		List<Emoji> allEmojis = new ArrayList<Emoji>();
+		List<Emoji> allEmojis = new ArrayList<>();
 		Iterator<String> itr1 = emojis.keySet().iterator();
 		while (itr1.hasNext()) {
 			Emoji ej = emojis.get(itr1.next());
@@ -111,11 +111,11 @@ public class EmojiFragment extends BaseFragment implements
 		boolean justAdd = false;
 		for (Emoji ej : allEmojis) {
 			if (size == 0) {
-				es = new ArrayList<Emoji>();
+				es = new ArrayList<>();
 			}
 			es.add(new Emoji(ej.getResId(), ej.getValue(), ej.getValueNo()));
 			size++;
-			if (size == 20) {
+			if (size == 27) {
 				pagers.add(es);
 				size = 0;
 				justAdd = true;
@@ -142,7 +142,7 @@ public class EmojiFragment extends BaseFragment implements
 		}
 		int emojiPanelHeight = (int) (mCurrentKeyboardHeigh - TDevice
 				.dpToPixel(20));
-		int emojiHeight = (int) (emojiPanelHeight / 3);
+		int emojiHeight = (int) (emojiPanelHeight / 4);
 
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT, emojiPanelHeight);
