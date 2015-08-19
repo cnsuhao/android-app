@@ -3,14 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/list_item_background"
-    android:padding="@dimen/space_8" >
+    android:padding="@dimen/space_12" >
 
-    <ImageView
+    <net.oschina.app.v2.ui.AvatarView
+        style="@style/avatar"
         android:id="@+id/iv_avatar"
-        android:layout_width="@dimen/list_item_avatar_size"
-        android:layout_height="@dimen/list_item_avatar_size"
         android:layout_marginRight="@dimen/space_8"
-        android:background="@drawable/ic_default_avatar"
         android:contentDescription="@null" />
 
     <LinearLayout

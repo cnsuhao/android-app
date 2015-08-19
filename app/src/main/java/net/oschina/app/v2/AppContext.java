@@ -48,6 +48,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;
@@ -122,6 +123,8 @@ public class AppContext extends BaseApplication {
         UpdateConfig.setDebug(false);
 
         requestDailyEnglish();
+
+        Fresco.initialize(getApplicationContext());
     }
 
     public static void requestDailyEnglish() {

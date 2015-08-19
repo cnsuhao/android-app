@@ -55,6 +55,7 @@ public class SearchViewPagerFragment extends BaseFragment implements
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setCustomTabView(R.layout.v2_tab_indicator2, R.id.tv_name);
 		mViewPager = (ViewPager) view.findViewById(R.id.main_tab_pager);
+		mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
 
 		if (mTabAdapter == null) {
 			mTabAdapter = new SearchTabPagerAdapter(getChildFragmentManager(),

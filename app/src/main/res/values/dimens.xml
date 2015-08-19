@@ -89,4 +89,6 @@
     <dimen name="menu_padding_left">34dp</dimen>
 
     <dimen name="error_icon_size">59dp</dimen>
+
+    <dimen name="view_pager_margin">6dp</dimen>
 </resources>

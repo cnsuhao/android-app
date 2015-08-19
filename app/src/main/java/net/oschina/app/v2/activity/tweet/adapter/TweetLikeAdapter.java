@@ -14,6 +14,7 @@ import net.oschina.app.v2.activity.tweet.TweetTabClickListener;
 import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.model.Tweet;
 import net.oschina.app.v2.model.User;
+import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.utils.TDevice;
 
 /**
@@ -223,7 +224,9 @@ public class TweetLikeAdapter extends ListBaseAdapter {
             User item = (User) _data.get(position);
 
             vh.name.setText(item.getName());
-            ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
+//            ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
+            vh.avatar.setUserInfo(item.getUid(),item.getName());
+            vh.avatar.setAvatarUrl(item.getFace());
         }
         return convertView;
     }
@@ -231,7 +234,7 @@ public class TweetLikeAdapter extends ListBaseAdapter {
     static class ViewHolder {
         LinearLayout bar;
         TextView commentCount, likeCount,like;
-        ImageView avatar;
+        AvatarView avatar;
         TextView name;
 
         ViewHolder(View view) {
@@ -239,7 +242,7 @@ public class TweetLikeAdapter extends ListBaseAdapter {
             commentCount = (TextView) view.findViewById(R.id.tv_comment_count);
             likeCount = (TextView) view.findViewById(R.id.tv_like_count);
             bar = (LinearLayout) view.findViewById(R.id.tab_bar);
-            avatar = (ImageView) view.findViewById(R.id.iv_avatar);
+            avatar = (AvatarView) view.findViewById(R.id.iv_avatar);
             name = (TextView) view.findViewById(R.id.tv_name);
         }
     }

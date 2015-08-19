@@ -2,6 +2,7 @@ package net.oschina.app.v2.activity.user.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 //import com.afollestad.materialdialogs.MaterialDialog;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
@@ -39,7 +41,8 @@ import java.lang.ref.WeakReference;
 
 public class UserProfileFragment extends BaseFragment {
 	private static final String USER_PROFILE_SCREEN = "user_profile_screen";
-	private ImageView mIvAvatar, mIvGender;
+	private ImageView mIvGender;
+	private SimpleDraweeView mIvAvatar;
 	private TextView mTvName;
 	private TextView mTvFavorite,mTvScore, mTvFollowing, mTvFollower;
 	private TextView mTvJoinTime, mTvLocation, mTvDevelopmentPlatform,
@@ -96,7 +99,7 @@ public class UserProfileFragment extends BaseFragment {
 				requestData(true);
 			}
 		});
-		mIvAvatar = (ImageView) view.findViewById(R.id.iv_avatar);
+		mIvAvatar = (SimpleDraweeView) view.findViewById(R.id.iv_avatar);
 		mTvName = (TextView) view.findViewById(R.id.tv_name);
 		mIvGender = (ImageView) view.findViewById(R.id.iv_gender);
 
@@ -119,8 +122,10 @@ public class UserProfileFragment extends BaseFragment {
 	}
 
 	private void fillUI() {
-		ImageLoader.getInstance().displayImage(
-				AvatarUtils.getLargeAvatar(mUser.getFace()), mIvAvatar);
+		//ImageLoader.getInstance().displayImage(
+		//		AvatarUtils.getLargeAvatar(mUser.getFace()), mIvAvatar);
+		mIvAvatar.setImageURI(Uri.parse(mUser.getFace()));
+
 		mTvName.setText(mUser.getName());
 		mIvGender
 				.setImageResource(mUser.getGender().equals("1") ? R.drawable.userinfo_icon_male
@@ -151,36 +156,6 @@ public class UserProfileFragment extends BaseFragment {
 	}
 
 	private void handleLogout() {
-//		CommonDialog dialog = DialogHelper
-//				.getPinterestDialogCancelable(getActivity());
-//		dialog.setMessage(R.string.message_logout);
-//		dialog.setPositiveButton(R.string.ok,
-//				new DialogInterface.OnClickListener() {
-//
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						AppContext.instance().Logout();
-//						AppContext.showToastShort(R.string.tip_logout_success);
-//						getActivity().finish();
-//					}
-//				});
-//		dialog.setNegativeButton(R.string.cancel, null);
-//		dialog.show();
-
-//        new MaterialDialog.Builder(getActivity())
-//                .content(R.string.message_logout)
-//                .positiveText(R.string.ok)
-//                .negativeText(R.string.cancel)
-//                .callback(new MaterialDialog.ButtonCallback() {
-//                    @Override
-//                    public void onPositive(MaterialDialog dialog) {
-//                        super.onPositive(dialog);
-//						AppContext.instance().Logout();
-//						AppContext.showToastShort(R.string.tip_logout_success);
-//						getActivity().finish();
-//                    }
-//                })
-//                .show();
         AlertDialog dialog = new AlertDialog.Builder(getActivity(),
                 R.style.Theme_AppCompat_Light_Dialog_Alert)
                 .setMessage(R.string.message_logout)

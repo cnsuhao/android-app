@@ -17,9 +17,8 @@
             android:paddingRight="@dimen/space_16">
 
             <net.oschina.app.v2.ui.AvatarView
+                style="@style/avatar"
                 android:id="@+id/iv_avatar"
-                android:layout_width="@dimen/list_item_avatar_size"
-                android:layout_height="@dimen/list_item_avatar_size"
                 android:layout_marginRight="@dimen/space_16"
                 android:contentDescription="@null" />
 

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,15 +13,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.user.view.QrCodeDialog;
 import net.oschina.app.v2.base.BaseFragment;
 import net.oschina.app.v2.base.Constants;
+import net.oschina.app.v2.model.URLs;
 import net.oschina.app.v2.model.User;
-import net.oschina.app.v2.utils.AvatarUtils;
+import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.utils.TDevice;
 import net.oschina.app.v2.utils.UIHelper;
 
@@ -29,7 +31,7 @@ import net.oschina.app.v2.utils.UIHelper;
  */
 public class NavigationDrawerFragment extends BaseFragment {
 
-    private ImageView mIvAvatar;
+    private SimpleDraweeView mIvAvatar;
     private TextView mTvName;
     private ImageView mIvQrCode;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -60,7 +62,7 @@ public class NavigationDrawerFragment extends BaseFragment {
     }
 
     private void initViews(View view) {
-        mIvAvatar = (ImageView) view.findViewById(R.id.iv_avatar);
+        mIvAvatar = (SimpleDraweeView) view.findViewById(R.id.iv_avatar);
         mTvName = (TextView) view.findViewById(R.id.tv_name);
 
         mIvQrCode = (ImageView)view.findViewById(R.id.iv_qr_code);
@@ -83,11 +85,13 @@ public class NavigationDrawerFragment extends BaseFragment {
         if (AppContext.instance().isLogin()) {
             User user = AppContext.getLoginInfo();
 
-            ImageLoader.getInstance().displayImage(AvatarUtils.getLargeAvatar(user.getFace()), mIvAvatar);
+            mIvAvatar.setImageURI(Uri.parse(user.getFace()));
+            //ImageLoader.getInstance().displayImage(AvatarUtils
+            // .getLargeAvatar(user.getFace()), mIvAvatar);
             mTvName.setText(user.getName());
             mIvQrCode.setVisibility(View.VISIBLE);
         } else {
-            mIvAvatar.setImageResource(R.drawable.ic_default_avatar);
+            mIvAvatar.setImageURI(Uri.parse(""));
             mTvName.setText(R.string.unlogin);
             mIvQrCode.setVisibility(View.GONE);
         }

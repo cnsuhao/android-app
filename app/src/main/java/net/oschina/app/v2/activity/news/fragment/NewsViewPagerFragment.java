@@ -17,6 +17,7 @@ import net.oschina.app.v2.activity.IPagerFragment;
 import net.oschina.app.v2.activity.news.adapter.NewsTabPagerAdapter;
 import net.oschina.app.v2.base.BaseViewPagerAdapter;
 import net.oschina.app.v2.ui.tab.SlidingTabLayout;
+import net.oschina.app.v2.utils.TDevice;
 
 public class NewsViewPagerFragment extends Fragment implements
          IPagerFragment {
@@ -42,6 +43,7 @@ public class NewsViewPagerFragment extends Fragment implements
         mSlidingTabLayout.setCustomTabView(R.layout.v2_tab_indicator2, R.id.tv_name);
 
         mViewPager = (ViewPager) view.findViewById(R.id.main_tab_pager);
+        mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
 
         if (mViewPager.getAdapter() == null &&
                 mTabAdapter == null) {

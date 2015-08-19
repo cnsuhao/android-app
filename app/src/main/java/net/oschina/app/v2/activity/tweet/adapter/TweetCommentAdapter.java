@@ -17,6 +17,7 @@ import net.oschina.app.v2.activity.tweet.TweetTabClickListener;
 import net.oschina.app.v2.base.ListBaseAdapter;
 import net.oschina.app.v2.model.Comment;
 import net.oschina.app.v2.model.Tweet;
+import net.oschina.app.v2.ui.AvatarView;
 import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
 import net.oschina.app.v2.ui.text.MyURLSpan;
 import net.oschina.app.v2.ui.text.TweetTextView;
@@ -265,17 +266,18 @@ public class TweetCommentAdapter extends ListBaseAdapter {
                     break;
             }
 
-            final Context context = vh.avatar.getContext();
-            ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
-
-            vh.avatar.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    UIHelper.showUserCenter(context,
-                            item.getAuthorId(), item.getAuthor());
-                }
-            });
+            vh.avatar.setUserInfo(item.getAuthorId(),item.getAuthor());
+            vh.avatar.setAvatarUrl(item.getFace());
+//            final Context context = vh.avatar.getContext();
+//            ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
+//            vh.avatar.setOnClickListener(new View.OnClickListener() {
+//
+//                @Override
+//                public void onClick(View v) {
+//                    UIHelper.showUserCenter(context,
+//                            item.getAuthorId(), item.getAuthor());
+//                }
+//            });
 
             vh.split.setVisibility(View.VISIBLE);
         }
@@ -286,7 +288,7 @@ public class TweetCommentAdapter extends ListBaseAdapter {
         TextView name, time, from,like;
         TweetTextView content;
         View split;
-        ImageView avatar;
+        AvatarView avatar;
         LinearLayout bar;
         TextView commentCount, likeCount;
 
@@ -295,7 +297,7 @@ public class TweetCommentAdapter extends ListBaseAdapter {
             commentCount = (TextView) view.findViewById(R.id.tv_comment_count);
             likeCount = (TextView) view.findViewById(R.id.tv_like_count);
             bar = (LinearLayout) view.findViewById(R.id.tab_bar);
-            avatar = (ImageView) view.findViewById(R.id.iv_avatar);
+            avatar = (AvatarView) view.findViewById(R.id.iv_avatar);
             name = (TextView) view.findViewById(R.id.tv_name);
             content = (TweetTextView) view.findViewById(R.id.tv_content);
             time = (TextView) view.findViewById(R.id.tv_time);

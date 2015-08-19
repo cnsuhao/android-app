@@ -1,21 +1,20 @@
 package net.oschina.app.v2.activity.message.adapter;
 
-import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.base.ListBaseAdapter;
-import net.oschina.app.v2.model.Comment;
-import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
-import net.oschina.app.v2.ui.text.MyURLSpan;
-import net.oschina.app.v2.ui.text.TweetTextView;
-import net.oschina.app.v2.utils.UIHelper;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
+
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.base.ListBaseAdapter;
+import net.oschina.app.v2.model.Comment;
+import net.oschina.app.v2.ui.AvatarView;
+import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
+import net.oschina.app.v2.ui.text.MyURLSpan;
+import net.oschina.app.v2.ui.text.TweetTextView;
 
 public class MessageDetailAdapter extends ListBaseAdapter {
 
@@ -67,27 +66,29 @@ public class MessageDetailAdapter extends ListBaseAdapter {
 		vh.content.setText(span);
 		MyURLSpan.parseLinkText(vh.content, span);
 
-		ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
-		vh.avatar.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				UIHelper.showUserCenter(parent.getContext(),
-						item.getAuthorId(), item.getAuthor());
-			}
-		});
+//		ImageLoader.getInstance().displayImage(item.getFace(), vh.avatar);
+		vh.avatar.setUserInfo(item.getAuthorId(),item.getAuthor());
+		vh.avatar.setAvatarUrl(item.getFace());
+//		vh.avatar.setOnClickListener(new View.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				UIHelper.showUserCenter(parent.getContext(),
+//						item.getAuthorId(), item.getAuthor());
+//			}
+//		});
 
 		return convertView;
 	}
 
 	static class ViewHolder {
 		int type;
-		ImageView avatar;
+		AvatarView avatar;
 		TextView name, time;
 		TweetTextView content;
 
 		ViewHolder(View view) {
-			avatar = (ImageView) view.findViewById(R.id.iv_avatar);
+			avatar = (AvatarView) view.findViewById(R.id.iv_avatar);
 			name = (TextView) view.findViewById(R.id.tv_name);
 			time = (TextView) view.findViewById(R.id.tv_time);
 			content = (TweetTextView) view.findViewById(R.id.tv_content);

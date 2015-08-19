@@ -394,4 +394,9 @@
         <item name="android:textSize">@dimen/text_size_12</item>
         <item name="android:layout_marginTop">@dimen/space_10</item>
     </style>
+
+    <style name="avatar">
+        <item name="android:layout_width">@dimen/list_item_avatar_size</item>
+        <item name="android:layout_height">@dimen/list_item_avatar_size</item>
+    </style>
 </resources>

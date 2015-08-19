@@ -27,7 +27,10 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/menu_header_bg" />
 
-                <ImageView
+                <com.facebook.drawee.view.SimpleDraweeView
+                    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    fresco:placeholderImage="@drawable/ic_default_avatar"
+                    fresco:roundAsCircle="true"
                     android:id="@+id/iv_avatar"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
@@ -37,8 +40,7 @@
                     android:paddingRight="6dp"
                     android:paddingTop="7dp"
                     android:paddingBottom="6dp"
-                    android:background="@drawable/menu_avatar_bg"
-                    android:src="@drawable/ic_default_avatar" />
+                    android:background="@drawable/menu_avatar_bg" />
 
 
                 <ImageView

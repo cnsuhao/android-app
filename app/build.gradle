@@ -51,4 +51,5 @@ dependencies {
     compile 'com.android.support:design:22.2.1'
     compile 'com.squareup:seismic:1.0.2'
     compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.facebook.fresco:fresco:0.6.1+'
 }
