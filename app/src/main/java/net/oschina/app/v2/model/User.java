@@ -1,16 +1,5 @@
 package net.oschina.app.v2.model;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import net.oschina.app.v2.AppException;
-import net.oschina.app.v2.utils.StringUtils;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import android.util.Xml;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
@@ -41,7 +30,7 @@ public class User extends Base {
     private static final String NODE_SOCRE = "score";
     private static final String NODE_PORTRAIT = "portrait";
 
-//    private int uid;
+    //    private int uid;
 //    private String location;
 //    private String name;
 //    private int followers;
@@ -234,7 +223,22 @@ public class User extends Base {
         return from;
     }
 
-//    public static User parse(InputStream stream) throws IOException, AppException {
+    @Override
+    public int hashCode() {
+        return uid;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof User))
+            return false;
+        if (o == null)
+            return false;
+        User user = (User) o;
+        return user.getUid() == uid;
+    }
+
+    //    public static User parse(InputStream stream) throws IOException, AppException {
 //        User user = new User();
 //        Result res = null;
 //        // 获得XmlPullParser解析器

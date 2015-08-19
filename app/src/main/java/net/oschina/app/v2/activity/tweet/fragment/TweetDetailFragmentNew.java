@@ -109,6 +109,7 @@ public class TweetDetailFragmentNew extends BaseFragment implements
     private RadioGroup mStickyTabBar;
     private int mCurrentList = 0;
     private RadioButton mRbCommentCount, mRbLikeCount;
+    private TextView mTvLikeOpt;
     private int mStateComment = STATE_NONE;
     private int mStateLike = STATE_NONE;
 
@@ -281,6 +282,13 @@ public class TweetDetailFragmentNew extends BaseFragment implements
         mRbCommentCount.setOnClickListener(this);
         mRbLikeCount = (RadioButton) view.findViewById(R.id.rb_like_count);
         mRbLikeCount.setOnClickListener(this);
+        mTvLikeOpt = (TextView)view.findViewById(R.id.tv_like_opt);
+        mTvLikeOpt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onLikeClick();
+            }
+        });
 
         View header = LayoutInflater.from(getActivity()).inflate(
                 R.layout.v2_list_header_tweet_detail, null);
@@ -373,13 +381,14 @@ public class TweetDetailFragmentNew extends BaseFragment implements
 
         mRbCommentCount.setText("评论 (" + mTweet.getCommentCount() + ")");
         mRbLikeCount.setText("点赞 (" + mTweet.getLikeCount() + ")");
+        mTvLikeOpt.setText(mTweet.getIsLike() == 1 ? "已赞" : "赞一下");
+        mTvLikeOpt.setCompoundDrawablesWithIntrinsicBounds(mTweet.getIsLike() == 1 ?
+                R.drawable.ic_like_selected : R.drawable.ic_like_normal, 0, 0, 0);
 
-        mCommentAdapter.setCommentCount(mTweet.getCommentCount());
-        mCommentAdapter.setLikeCount(mTweet.getLikeCount());
+        mCommentAdapter.setTweet(mTweet);
         mCommentAdapter.notifyDataSetChanged();
 
-        mLikeAdapter.setCommentCount(mTweet.getCommentCount());
-        mLikeAdapter.setLikeCount(mTweet.getLikeCount());
+        mLikeAdapter.setTweet(mTweet);
         mLikeAdapter.notifyDataSetChanged();
         // mTvCommentCount.setText(mTweet.getBody());
 
@@ -1040,14 +1049,14 @@ public class TweetDetailFragmentNew extends BaseFragment implements
                     if (mLikeAdapter != null
                             && mLikeAdapter.getState() != TweetLikeAdapter.STATE_TWEET_ERROR &&
                             mLikeAdapter.getState() != TweetLikeAdapter.STATE_TWEET_LOADING) {
+                        User cu = AppContext.getLoginInfo();
                         if (mLikeAdapter.getDataSize() == 1) {
                             User user = (User) mLikeAdapter.getItem(0);
-                            User cu = AppContext.getLoginInfo();
                             if (user.getUid() == cu.getUid()) {
                                 mLikeAdapter.setState(TweetLikeAdapter.STATE_TWEET_EMPTY);
                             }
                         }
-                        mLikeAdapter.removeItem(0);
+                        mLikeAdapter.removeItem(cu);
                     }
                 } else {
                     onFailure(code, res.getErrorMessage(), args);

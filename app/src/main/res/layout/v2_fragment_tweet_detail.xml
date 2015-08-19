@@ -83,7 +83,7 @@
             android:layout_marginTop="8dp"
             android:background="@color/list_divider_color" />
         <TextView
-            android:id="@+id/tv_like"
+            android:id="@+id/tv_like_opt"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:drawableLeft="@drawable/ic_like_normal"

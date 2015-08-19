@@ -36,8 +36,7 @@ public class TweetCommentAdapter extends ListBaseAdapter {
     private final TweetTabClickListener mDelegate;
     private View mTabBar, mEmptyView;
     private int mEmptyHeight = -1;
-    private int mLikeCount;
-    private int mCommentCount;
+    private Tweet mTweet;
 
     public TweetCommentAdapter(TweetTabClickListener delegate) {
         mDelegate = delegate;
@@ -55,12 +54,8 @@ public class TweetCommentAdapter extends ListBaseAdapter {
         mEmptyHeight = height;
     }
 
-    public void setLikeCount(int count) {
-        mLikeCount = count;
-    }
-
-    public void setCommentCount(int count) {
-        mCommentCount = count;
+    public void setTweet(Tweet tweet) {
+        mTweet = tweet;
     }
 
     @Override
@@ -133,9 +128,21 @@ public class TweetCommentAdapter extends ListBaseAdapter {
             final TextView likeCount = (TextView) convertView.findViewById(R.id.tv_like_count);
             bar.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
             if (position == 0) {
+                TextView like = (TextView) convertView.findViewById(R.id.tv_like_opt);
+                like.setText(mTweet.getIsLike()==1?"已赞":"赞一下");
+                like.setCompoundDrawablesWithIntrinsicBounds(mTweet.getIsLike() == 1 ?
+                        R.drawable.ic_like_selected : R.drawable.ic_like_normal, 0, 0, 0);
+                like.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mDelegate != null){
+                            mDelegate.onLikeClick();
+                        }
+                    }
+                });
                 commentCount.setSelected(true);
-                commentCount.setText("评论 (" + mCommentCount + ")");
-                likeCount.setText("点赞 (" + mLikeCount + ")");
+                commentCount.setText("评论 (" + mTweet.getCommentCount() + ")");
+                likeCount.setText("点赞 (" + mTweet.getLikeCount() + ")");
                 commentCount.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -184,9 +191,20 @@ public class TweetCommentAdapter extends ListBaseAdapter {
             vh.bar.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
             if (position == 0) {
                 mTabBar = vh.bar;
+                vh.like.setText(mTweet.getIsLike()==1?"已赞":"赞一下");
+                vh.like.setCompoundDrawablesWithIntrinsicBounds(mTweet.getIsLike() == 1
+                        ? R.drawable.ic_like_selected : R.drawable.ic_like_normal, 0, 0, 0);
+                vh.like.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mDelegate != null) {
+                            mDelegate.onLikeClick();
+                        }
+                    }
+                });
                 vh.commentCount.setSelected(true);
-                vh.commentCount.setText("评论 (" + mCommentCount + ")");
-                vh.likeCount.setText("点赞 (" + mLikeCount + ")");
+                vh.commentCount.setText("评论 (" + mTweet.getCommentCount() + ")");
+                vh.likeCount.setText("点赞 (" + mTweet.getLikeCount() + ")");
                 final TextView cc = vh.commentCount;
                 final TextView lc = vh.likeCount;
                 vh.commentCount.setOnClickListener(new View.OnClickListener() {
@@ -265,7 +283,7 @@ public class TweetCommentAdapter extends ListBaseAdapter {
     }
 
     static class ViewHolder {
-        TextView name, time, from;
+        TextView name, time, from,like;
         TweetTextView content;
         View split;
         ImageView avatar;
@@ -273,6 +291,7 @@ public class TweetCommentAdapter extends ListBaseAdapter {
         TextView commentCount, likeCount;
 
         ViewHolder(View view) {
+            like = (TextView) view.findViewById(R.id.tv_like_opt);
             commentCount = (TextView) view.findViewById(R.id.tv_comment_count);
             likeCount = (TextView) view.findViewById(R.id.tv_like_count);
             bar = (LinearLayout) view.findViewById(R.id.tab_bar);

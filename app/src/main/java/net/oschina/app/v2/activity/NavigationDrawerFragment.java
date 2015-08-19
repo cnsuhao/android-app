@@ -1,5 +1,9 @@
 package net.oschina.app.v2.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,7 +16,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.activity.user.view.QrCodeDialog;
 import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.model.User;
 import net.oschina.app.v2.utils.AvatarUtils;
 import net.oschina.app.v2.utils.TDevice;
@@ -25,6 +31,25 @@ public class NavigationDrawerFragment extends BaseFragment {
 
     private ImageView mIvAvatar;
     private TextView mTvName;
+    private ImageView mIvQrCode;
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onResume();
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(mReceiver);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivity().registerReceiver(mReceiver,new IntentFilter(Constants.INTENT_ACTION_LOGOUT));
+    }
 
     @Nullable
     @Override
@@ -37,6 +62,9 @@ public class NavigationDrawerFragment extends BaseFragment {
     private void initViews(View view) {
         mIvAvatar = (ImageView) view.findViewById(R.id.iv_avatar);
         mTvName = (TextView) view.findViewById(R.id.tv_name);
+
+        mIvQrCode = (ImageView)view.findViewById(R.id.iv_qr_code);
+        mIvQrCode.setOnClickListener(this);
 
         TextView tvVersionName = (TextView) view
                 .findViewById(R.id.tv_version_name);
@@ -57,9 +85,11 @@ public class NavigationDrawerFragment extends BaseFragment {
 
             ImageLoader.getInstance().displayImage(AvatarUtils.getLargeAvatar(user.getFace()), mIvAvatar);
             mTvName.setText(user.getName());
+            mIvQrCode.setVisibility(View.VISIBLE);
         } else {
             mIvAvatar.setImageResource(R.drawable.ic_default_avatar);
             mTvName.setText(R.string.unlogin);
+            mIvQrCode.setVisibility(View.GONE);
         }
     }
 
@@ -85,6 +115,11 @@ public class NavigationDrawerFragment extends BaseFragment {
                 break;
             case R.id.tv_scan:
                 UIHelper.showQRCode(getActivity());
+                break;
+            case R.id.iv_qr_code:
+                QrCodeDialog dialog = new QrCodeDialog(getActivity());
+                dialog.setNegativeButton(R.string.cancel,null);
+                dialog.show();
                 break;
         }
     }
