@@ -117,7 +117,7 @@
 
         <item name="android:windowAnimationStyle">@style/ActivityTransitions</item>
 
-        <item name="actionBarSize">48dp</item>
+        <item name="actionBarSize">@dimen/actionbar_size</item>
     </style>
 
     <style name="Theme.IMA" parent="Theme.IMA.Base" />

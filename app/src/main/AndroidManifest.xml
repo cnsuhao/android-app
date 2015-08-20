@@ -82,6 +82,21 @@
             android:theme="@style/Theme.IMA"
             android:screenOrientation="portrait" />
         <activity
+            android:name="net.oschina.app.v2.activity.user.UserCenterActivityDesign"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/Theme.IMA"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="net.oschina.app.v2.activity.user.UserCenterActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/Theme.IMA"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="net.oschina.app.v2.activity.user.UserCenterActivity2"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/Theme.IMA"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="net.oschina.app.v2.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"/>

@@ -84,6 +84,7 @@
     <dimen name="timeline_small_card_min_width">66.0dip</dimen>
     <dimen name="timeline_small_card_padding_right">5.0dip</dimen>
 
+    <dimen name="actionbar_size">48dp</dimen>
     <dimen name="tab_height">38dp</dimen>
 
     <dimen name="menu_padding_left">34dp</dimen>
@@ -91,4 +92,16 @@
     <dimen name="error_icon_size">59dp</dimen>
 
     <dimen name="view_pager_margin">6dp</dimen>
+
+    <dimen name="toolbar_margin_start">72dp</dimen>
+    <dimen name="flexible_space_height">72dp</dimen>
+    <dimen name="flexible_space_image_height">320dp</dimen>
+    <dimen name="flexible_space_show_fab_offset">120dp</dimen>
+    <dimen name="title_margin_left">62dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
+
+
+    <dimen name="header_height">298dp</dimen>
+    <dimen name="min_header_height">260dp</dimen>
+    <dimen name="header_logo_size">100dp</dimen>
 </resources>

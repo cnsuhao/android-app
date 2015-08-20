@@ -13,6 +13,9 @@ import net.oschina.app.v2.activity.news.DetailActivity;
 import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
 import net.oschina.app.v2.activity.search.SearchActivity;
 import net.oschina.app.v2.activity.user.LoginActivity;
+import net.oschina.app.v2.activity.user.UserCenterActivity;
+import net.oschina.app.v2.activity.user.UserCenterActivity2;
+import net.oschina.app.v2.activity.user.UserCenterActivityDesign;
 import net.oschina.app.v2.activity.zxing.CaptureActivity;
 import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.Constants;
@@ -517,14 +520,15 @@ public class UIHelper {
      */
     public static void showUserCenter(Context context, int hisuid,
                                       String hisname) {
-        // Intent intent = new Intent(context, UserCenter.class);
-        // intent.putExtra("his_id", hisuid);
-        // intent.putExtra("his_name", hisname);
-        // context.startActivity(intent);
-        Bundle args = new Bundle();
-        args.putInt("his_id", hisuid);
-        args.putString("his_name", hisname);
-        showSimpleBack(context, SimpleBackPage.USER_CENTER, args);
+//        Bundle args = new Bundle();
+//        args.putInt("his_id", hisuid);
+//        args.putString("his_name", hisname);
+        //showSimpleBack(context, SimpleBackPage.USER_CENTER, args);
+
+         Intent intent = new Intent(context, UserCenterActivity.class);
+         intent.putExtra("his_id", hisuid);
+         intent.putExtra("his_name", hisname);
+         context.startActivity(intent);
     }
 
     /**

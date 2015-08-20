@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="2"
+        android:text="哈哈哈"
         android:paddingBottom="@dimen/space_16"
         android:paddingLeft="@dimen/space_8"
         android:paddingRight="@dimen/space_8"

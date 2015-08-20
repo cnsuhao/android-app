@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:osc="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/main_menu_profile"
+        android:title="它的关注"
+        android:visible="true"
+        osc:showAsAction="never"/>
+
+    <item
+        android:id="@+id/main_menu_open_software"
+        android:title="它的粉丝"
+        android:visible="true"
+        osc:showAsAction="never"/>
+    <item
+        android:id="@+id/main_menu_event"
+        android:title="给它留言"
+        android:visible="true"
+        osc:showAsAction="never"/>
+</menu>
