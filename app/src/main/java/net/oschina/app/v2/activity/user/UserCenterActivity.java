@@ -1,58 +1,66 @@
 package net.oschina.app.v2.activity.user;
 
-import android.annotation.TargetApi;
-import android.content.res.Configuration;
-import android.os.Build;
+import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.v4.widget.MySwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MotionEvent;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewConfiguration;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
-import com.github.ksoichiro.android.observablescrollview.Scrollable;
-import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.github.ksoichiro.android.observablescrollview.CacheFragmentStatePagerAdapter;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nineoldandroids.view.ViewHelper;
 import com.tonlin.osc.happy.R;
 
-import net.oschina.app.v2.activity.user.adapter.NavigationAdapter;
-import net.oschina.app.v2.activity.user.view.SlidingTabLayout;
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.activity.user.fragment.UserActiveRecyclerListFragment;
+import net.oschina.app.v2.activity.user.fragment.UserBaseInformationRecyclerFragment;
+import net.oschina.app.v2.activity.user.fragment.UserBlogRecyclerListFragment;
+import net.oschina.app.v2.api.remote.NewsApi;
 import net.oschina.app.v2.base.BaseActivity;
+import net.oschina.app.v2.model.Result;
+import net.oschina.app.v2.model.User;
+import net.oschina.app.v2.utils.AvatarUtils;
+import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
+
+import org.apache.http.Header;
+
+import java.io.ByteArrayInputStream;
 
 /**
  * Created by Tonlin on 2015/8/20.
  */
-public class UserCenterActivity extends BaseActivity implements ObservableScrollViewCallbacks {
+public class UserCenterActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener, UserDataControl {
+    private static final String TAG = "UserCenter";
+    private static final Object FEMALE = "女";
+    private AppBarLayout mAppBar;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
+    private MyPagerAdapter mPagerAdapter;
+    private TextView mTvActionBarTitle, mTvName;
+    private SimpleDraweeView mIvAvatar;
+    private User mUser;
+    private ImageView mIvGender;
 
-    private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
-    private static final String TAG = "UCenter";
-
-    private View mRlInfo;
-    private View mImageView;
-    private View mOverlayView;
-    private ImageView mIvAvatar;
-    private TextView mTitleView;
-    private TouchInterceptionFrameLayout mInterceptionLayout;
-    private ViewPager mPager;
-    private NavigationAdapter mPagerAdapter;
-    private int mSlop;
-    private int mFlexibleSpaceHeight;
-    private int mTabHeight;
-    private boolean mScrolled;
+    private int mUid, mHisUid;
+    private String mHisName;
+    private String mHisAvatarUrl;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.v2_activity_user_center_3;
+        return R.layout.v2_activity_user_center;
     }
 
     @Override
@@ -61,194 +69,236 @@ public class UserCenterActivity extends BaseActivity implements ObservableScroll
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.user_center_menu, menu);
-        return true;
+    protected void onDestroy() {
+        super.onDestroy();
+        mAppBar.removeOnOffsetChangedListener(this);
+    }
+
+    @Override
+    protected int getActionBarCustomView() {
+        return R.layout.v2_actionbar_custom_user_center;
+    }
+
+    @Override
+    protected void initActionBar(Toolbar actionBar) {
+        super.initActionBar(actionBar);
+        mTvActionBarTitle = (TextView) actionBar.findViewById(R.id.tv_actionbar_title);
     }
 
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        ViewCompat.setElevation(findViewById(R.id.header), getResources().getDimension(R.dimen.toolbar_elevation));
-        mPagerAdapter = new NavigationAdapter(getSupportFragmentManager());
-        mPager = (ViewPager) findViewById(R.id.view_pager);
-        mPager.setAdapter(mPagerAdapter);
-        mImageView = findViewById(R.id.image);
-        mOverlayView = findViewById(R.id.overlay);
-        // Padding for ViewPager must be set outside the ViewPager itself
-        // because with padding, EdgeEffect of ViewPager become strange.
-        mFlexibleSpaceHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height)
-                - getResources().getDimensionPixelSize(R.dimen.actionbar_size);
-        mTabHeight = getResources().getDimensionPixelSize(R.dimen.tab_height);
-        findViewById(R.id.pager_wrapper).setPadding(0, mFlexibleSpaceHeight
-                + getResources().getDimensionPixelSize(R.dimen.actionbar_size), 0, 0);
-        mTitleView = (TextView) findViewById(R.id.title);
-        mTitleView.setText(getTitle());
+        mUid = AppContext.instance().getLoginUid();
+        mHisUid = getIntent().getIntExtra("his_id", 0);
+        mHisName = getIntent().getStringExtra("his_name");
+        mHisAvatarUrl = getIntent().getStringExtra("his_avatar");
 
-        mRlInfo = findViewById(R.id.rl_info);
-        mIvAvatar = (ImageView) findViewById(R.id.iv_avatar);
-        setTitle(null);
+        mAppBar = (AppBarLayout) findViewById(R.id.appbar);
+        mAppBar.addOnOffsetChangedListener(this);
 
-        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
-        slidingTabLayout.setCustomTabView(R.layout.v2_tab_indicator_uc, android.R.id.text1);
-        slidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.white));
-        slidingTabLayout.setDistributeEvenly(true);
-        slidingTabLayout.setViewPager(mPager);
-        ((FrameLayout.LayoutParams) slidingTabLayout.getLayoutParams()).topMargin = mFlexibleSpaceHeight - mTabHeight
-                + getResources().getDimensionPixelSize(R.dimen.actionbar_size);
+        mIvAvatar = (SimpleDraweeView) findViewById(R.id.iv_avatar);
+        mTvName = (TextView) findViewById(R.id.tv_name);
+        mIvGender = (ImageView) findViewById(R.id.iv_gender);
 
-        ViewConfiguration vc = ViewConfiguration.get(this);
-        mSlop = vc.getScaledTouchSlop() * 2;
-        mInterceptionLayout = (TouchInterceptionFrameLayout) findViewById(R.id.container);
-        mInterceptionLayout.setScrollInterceptionListener(mInterceptionListener);
-        ScrollUtils.addOnGlobalLayoutListener(mInterceptionLayout, new Runnable() {
-            @Override
-            public void run() {
-                updateFlexibleSpace();
-            }
-        });
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
+        mViewPager.setOffscreenPageLimit(3);
+        mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+
+        mTvActionBarTitle.setText(mHisName);
+        mTvName.setText(mHisName);
+        mIvAvatar.setImageURI(Uri.parse(AvatarUtils.getLargeAvatar(mHisAvatarUrl)));
     }
 
     @Override
-    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.user_center_menu, menu);
+        if (mUser != null) {
+            if (mUser.getRelation() == User.RELATION_TYPE_FANS_ME || mUser.getRelation() == User.RELATION_TYPE_NULL) {
+                menu.findItem(R.id.menu_follow).setVisible(true);
+                menu.findItem(R.id.menu_unfollow).setVisible(false);
+            } else {
+                menu.findItem(R.id.menu_follow).setVisible(false);
+                menu.findItem(R.id.menu_unfollow).setVisible(true);
+            }
+        }
+        return true;
     }
 
     @Override
-    public void onDownMotionEvent() {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_his_follow:
+                UIHelper.showFriends(this, mHisUid, 0);
+                break;
+            case R.id.menu_his_fans:
+                UIHelper.showFriends(this, mHisUid, 1);
+                break;
+            case R.id.menu_message:
+                UIHelper.showMessagePub(this, mHisUid, mHisName);
+                break;
+            case R.id.menu_follow:
+                handleUserRelation();
+                break;
+            case R.id.menu_unfollow:
+                handleUserRelation();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-    }
-
-    private TouchInterceptionFrameLayout.TouchInterceptionListener mInterceptionListener = new TouchInterceptionFrameLayout.TouchInterceptionListener() {
-        @Override
-        public boolean shouldInterceptTouchEvent(MotionEvent ev, boolean moving, float diffX, float diffY) {
-            if (!mScrolled && mSlop < Math.abs(diffX) && Math.abs(diffY) < Math.abs(diffX)) {
-                // Horizontal scroll is maybe handled by ViewPager
-                return false;
-            }
-
-            Scrollable scrollable = getCurrentScrollable();
-            if (scrollable == null) {
-                mScrolled = false;
-                return false;
-            }
-
-
-            // If interceptionLayout can move, it should intercept.
-            // And once it begins to move, horizontal scroll shouldn't work any longer.
-            int flexibleSpace = mFlexibleSpaceHeight - mTabHeight;
-            int translationY = (int) ViewHelper.getTranslationY(mInterceptionLayout);
-            boolean scrollingUp = 0 < diffY;
-            boolean scrollingDown = diffY < 0;
-            if (scrollingUp) {
-                // Log.e(TAG,"up y:"+((ListView)scrollable).getScrollY());
-                if (translationY < 0 && getScrollY(scrollable) == 0) {
-                    Log.e(TAG, "scrollingUp translationY < 0 return true:" + translationY);
-                    mScrolled = true;
-                    return true;
+    public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+        ViewHelper.setAlpha(mTvActionBarTitle, (-i * 1f) / appBarLayout.getTotalScrollRange());
+        for (int k = 0; k < mPagerAdapter.getCount(); k++) {
+            Fragment fragment = mPagerAdapter.getItemAt(k);
+            if (fragment instanceof SwipeRefreshViewControl) {
+                MySwipeRefreshLayout view = ((SwipeRefreshViewControl) fragment).getSwipeRefreshView();
+                if (view != null) {
+                    view.setEnabled(i == 0);
                 }
-                Log.e(TAG, "scrollingUp translationY >= 0 return false:" + translationY);
-            } else if (scrollingDown) {
-                if (-flexibleSpace < translationY) {
-                    Log.e(TAG, "scrollingDown -flexibleSpace < translationY return true:" + scrollable.getCurrentScrollY());
-                    mScrolled = true;
-                    return true;
-                }
-                Log.e(TAG, "scrollingDown translationY >= 0 return false:" + scrollable.getCurrentScrollY());
             }
-            mScrolled = false;
-            return false;
+        }
+    }
+
+    @Override
+    public void setUserInfo(User user) {
+        if (user == null) return;
+        mUser = user;
+        mTvActionBarTitle.setText(user.getName());
+        mTvName.setText(user.getName());
+        mIvAvatar.setImageURI(Uri.parse(AvatarUtils.getLargeAvatar(user.getFace())));
+        mIvGender.setImageResource(FEMALE.equals(user.getGender()) ? R.drawable.userinfo_icon_female :
+                R.drawable.userinfo_icon_male);
+        mIvGender.setVisibility(View.VISIBLE);
+
+        supportInvalidateOptionsMenu();
+    }
+
+    private void handleUserRelation() {
+        if (mUser == null)
+            return;
+        // 判断登录
+        final AppContext ac = AppContext.instance();
+        if (!ac.isLogin()) {
+            UIHelper.showLogin(this);
+            return;
+        }
+        String dialogTitle = "";
+        int relationAction = 0;
+        switch (mUser.getRelation()) {
+            case User.RELATION_TYPE_BOTH:
+                dialogTitle = "确定取消互粉吗？";
+                relationAction = User.RELATION_ACTION_DELETE;
+                break;
+            case User.RELATION_TYPE_FANS_HIM:
+                dialogTitle = "确定取消关注吗？";
+                relationAction = User.RELATION_ACTION_DELETE;
+                break;
+            case User.RELATION_TYPE_FANS_ME:
+                dialogTitle = "确定关注他吗？";
+                relationAction = User.RELATION_ACTION_ADD;
+                break;
+            case User.RELATION_TYPE_NULL:
+                dialogTitle = "确定关注他吗？";
+                relationAction = User.RELATION_ACTION_ADD;
+                break;
+        }
+        final int ra = relationAction;
+        AlertDialog dialog = new AlertDialog.Builder(this,
+                R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle(dialogTitle)
+                .setCancelable(true)
+                .setNegativeButton(R.string.cancel,null)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        sendUpdateRelcationRequest(ra);
+                    }
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    private void sendUpdateRelcationRequest(int ra) {
+        NewsApi.updateRelation(mUid, mHisUid, ra,
+                new AsyncHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                        try {
+                            Result result = Result.parse(new ByteArrayInputStream(arg2));
+                            if (result.OK()) {
+                                UIHelper.sendNoticeBroadcast(UserCenterActivity.this, result);
+                                switch (mUser.getRelation()) {
+                                    case User.RELATION_TYPE_BOTH:
+                                        mUser.setRelation(User.RELATION_TYPE_FANS_ME);
+                                        break;
+                                    case User.RELATION_TYPE_FANS_HIM:
+                                        mUser.setRelation(User.RELATION_TYPE_NULL);
+                                        break;
+                                    case User.RELATION_TYPE_FANS_ME:
+                                        mUser.setRelation(User.RELATION_TYPE_BOTH);
+                                        break;
+                                    case User.RELATION_TYPE_NULL:
+                                        mUser.setRelation(User.RELATION_TYPE_FANS_HIM);
+                                        break;
+                                }
+                                supportInvalidateOptionsMenu();
+                            }
+                            AppContext.showToastShort(result.getErrorMessage());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            onFailure(arg0, arg1, arg2, e);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                                          Throwable arg3) {
+                    }
+                });
+    }
+
+    static class MyPagerAdapter extends CacheFragmentStatePagerAdapter {
+
+        @Override
+        protected Fragment createItem(int i) {
+            switch (i) {
+                case 0:
+                    return new UserActiveRecyclerListFragment();
+                case 1:
+                    return new UserBlogRecyclerListFragment();
+                case 2:
+                    return new UserBaseInformationRecyclerFragment();
+            }
+            return new Fragment();
         }
 
-        public int getScrollY(Scrollable scrollable) {
-            View c = ((ListView) scrollable).getChildAt(0);
-            if (c == null) {
-                return 0;
-            }
-            int firstVisiblePosition = ((ListView) scrollable).getFirstVisiblePosition();
-            int top = c.getTop();
-            return -top + firstVisiblePosition * c.getHeight();
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm);
         }
 
         @Override
-        public void onDownMotionEvent(MotionEvent ev) {
+        public int getCount() {
+            return 3;
         }
 
         @Override
-        public void onMoveMotionEvent(MotionEvent ev, float diffX, float diffY) {
-            int flexibleSpace = mFlexibleSpaceHeight - mTabHeight;
-            float translationY = ScrollUtils.getFloat(ViewHelper.getTranslationY(mInterceptionLayout) + diffY, -flexibleSpace, 0);
-            updateFlexibleSpace(translationY);
-            if (translationY < 0) {
-                FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInterceptionLayout.getLayoutParams();
-                lp.height = (int) (-translationY + getScreenHeight());
-                mInterceptionLayout.requestLayout();
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "分类";
+                case 1:
+                    return "博客";
+                case 2:
+                    return "资料";
             }
-        }
-
-        @Override
-        public void onUpOrCancelMotionEvent(MotionEvent ev) {
-            mScrolled = false;
-        }
-    };
-
-    private Scrollable getCurrentScrollable() {
-        Fragment fragment = getCurrentFragment();
-        if (fragment == null) {
-            return null;
-        }
-        View view = fragment.getView();
-        if (view == null) {
-            return null;
-        }
-        return (Scrollable) view.findViewById(R.id.scroll);
-    }
-
-    private void updateFlexibleSpace() {
-        updateFlexibleSpace(ViewHelper.getTranslationY(mInterceptionLayout));
-    }
-
-    private void updateFlexibleSpace(float translationY) {
-        ViewHelper.setTranslationY(mInterceptionLayout, translationY);
-        int minOverlayTransitionY = getActionBarSize() - mOverlayView.getHeight();
-        ViewHelper.setTranslationY(mImageView, ScrollUtils.getFloat(-translationY / 2, minOverlayTransitionY, 0));
-
-        // Change alpha of overlay
-        float flexibleRange = mFlexibleSpaceHeight - getActionBarSize();
-        ViewHelper.setAlpha(mOverlayView, ScrollUtils.getFloat(-translationY / flexibleRange, 0, 1));
-
-        // Scale title text
-        float scale = 1 + ScrollUtils.getFloat((flexibleRange + translationY - mTabHeight) / flexibleRange, 0, MAX_TEXT_SCALE_DELTA);
-        setPivotXToTitle();
-        //ViewHelper.setPivotY(mTitleView, 0);
-        //ViewHelper.setScaleX(mTitleView, scale);
-        //ViewHelper.setScaleY(mTitleView, scale);
-        int totalX = ((findViewById(android.R.id.content).getWidth() / 2) - mTitleView.getWidth() / 2);
-        int moveX = (int) (totalX - totalX * ((-translationY) / mFlexibleSpaceHeight));
-        int minMoveX = getResources().getDimensionPixelSize(R.dimen.title_margin_left);
-        moveX = moveX < minMoveX ? minMoveX : moveX;
-        ViewHelper.setTranslationX(mTitleView, moveX);
-        //Log.e(TAG, "flexibleRange:" + flexibleRange + " transY:" + translationY + " tabHeight:" + mTabHeight + " scale :" + scale);
-
-        // change avatar
-        ViewHelper.setAlpha(mIvAvatar, 1 - ScrollUtils.getFloat(-translationY / flexibleRange, 0, 1));
-        ViewHelper.setAlpha(mRlInfo, 1 - ScrollUtils.getFloat(-translationY / flexibleRange, 0, 1));
-    }
-
-    private Fragment getCurrentFragment() {
-        return mPagerAdapter.getItemAt(mPager.getCurrentItem());
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private void setPivotXToTitle() {
-        Configuration config = getResources().getConfiguration();
-        if (Build.VERSION_CODES.JELLY_BEAN_MR1 <= Build.VERSION.SDK_INT
-                && config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-            ViewHelper.setPivotX(mTitleView, findViewById(android.R.id.content).getWidth());
-        } else {
-            ViewHelper.setPivotX(mTitleView, 0);
+            return "";
         }
     }
 }

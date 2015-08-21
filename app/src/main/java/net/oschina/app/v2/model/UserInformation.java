@@ -21,7 +21,7 @@ import android.util.Xml;
  * @version 1.0
  * @created 2012-3-21
  */
-public class UserInformation extends Entity {
+public class UserInformation extends Entity implements ListEntity{
 
     private static final String NODE_USER = "user";
     private static final String NODE_ACTIVE = "active";
@@ -190,5 +190,10 @@ public class UserInformation extends Entity {
             inputStream.close();
         }
         return uinfo;
+    }
+
+    @Override
+    public List<?> getList() {
+        return activelist;
     }
 }

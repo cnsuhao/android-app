@@ -14,9 +14,8 @@ import net.oschina.app.v2.activity.question.fragment.QuestionTagFragment;
 import net.oschina.app.v2.activity.search.SearchActivity;
 import net.oschina.app.v2.activity.user.LoginActivity;
 import net.oschina.app.v2.activity.user.UserCenterActivity;
-import net.oschina.app.v2.activity.user.UserCenterActivity2;
-import net.oschina.app.v2.activity.user.UserCenterActivityDesign;
 import net.oschina.app.v2.activity.zxing.CaptureActivity;
+import net.oschina.app.v2.base.BaseActivity;
 import net.oschina.app.v2.base.BaseRecycleViewFragment;
 import net.oschina.app.v2.base.Constants;
 import net.oschina.app.v2.model.Active;
@@ -511,6 +510,12 @@ public class UIHelper {
         showSimpleBack(context, SimpleBackPage.PROFILE);
     }
 
+
+    public static void showUserCenter(Context context, int hisuid,
+                                      String hisname) {
+        showUserCenter(context,hisuid,hisname,null);
+    }
+
     /**
      * 显示用户动态
      *
@@ -519,16 +524,17 @@ public class UIHelper {
      * @param hisname
      */
     public static void showUserCenter(Context context, int hisuid,
-                                      String hisname) {
+                                      String hisname,String hisavatar) {
 //        Bundle args = new Bundle();
 //        args.putInt("his_id", hisuid);
 //        args.putString("his_name", hisname);
         //showSimpleBack(context, SimpleBackPage.USER_CENTER, args);
 
-         Intent intent = new Intent(context, UserCenterActivity.class);
-         intent.putExtra("his_id", hisuid);
-         intent.putExtra("his_name", hisname);
-         context.startActivity(intent);
+        Intent intent = new Intent(context, UserCenterActivity.class);
+        intent.putExtra("his_id", hisuid);
+        intent.putExtra("his_name", hisname);
+        intent.putExtra("his_avatar",hisavatar);
+        context.startActivity(intent);
     }
 
     /**
@@ -1043,14 +1049,18 @@ public class UIHelper {
     }
 
     public static void exitApp(Context context) {
-        Intent intent = new Intent(
-                net.oschina.app.v2.base.BaseActivity.INTENT_ACTION_EXIT_APP);
+        Intent intent = new Intent(BaseActivity.INTENT_ACTION_EXIT_APP);
         context.sendBroadcast(intent);
     }
 
     public static void showFriends(Context context, int tabIdx) {
+        showFriends(context, AppContext.getLoginUid());
+    }
+
+    public static void showFriends(Context context, int uid, int tabIdx) {
         Bundle args = new Bundle();
         args.putInt(FriendViewPagerFragment.BUNDLE_KEY_TABIDX, tabIdx);
+        args.putInt(FriendViewPagerFragment.BUNDLE_KEY_UID, uid);
         showSimpleBack(context, SimpleBackPage.FRIENDS, args);
     }
 

@@ -35,7 +35,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
-        RecycleBaseAdapter.OnItemClickListener, RecycleBaseAdapter.OnItemLongClickListener {
+        RecycleBaseAdapter.OnItemClickListener, RecycleBaseAdapter.OnItemLongClickListener, RecycleBaseAdapter.OnSingleViewClickListener {
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
     private static final String TAG = "BaseRecycleViewFragment";
@@ -132,12 +132,17 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             mAdapter = getListAdapter();
             mAdapter.setOnItemClickListener(this);
             mAdapter.setOnItemLongClickListener(this);
+            mAdapter.setOnSingleViewClickListener(this);
             mRecycleView.setAdapter(mAdapter);
 
             if (requestDataIfViewCreated()) {
                 mCurrentPage = 0;
                 mState = STATE_REFRESH;
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                if(useSingleState()){
+                    mAdapter.setState(RecycleBaseAdapter.STATE_SINGLE_LOADING);
+                } else {
+                    mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                }
                 //requestData(requestDataFromNetWork());
                 new ReadCacheTask(this).execute();
             } else {
@@ -145,11 +150,13 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
             }
         }
 
-        if (mStoreEmptyState != -1) {
-            mErrorLayout.setErrorType(mStoreEmptyState);
-        }
-        if (!TextUtils.isEmpty(mStoreEmptyMessage)) {
-            mErrorLayout.setErrorMessage(mStoreEmptyMessage);
+        if(!useSingleState()) {
+            if (mStoreEmptyState != -1) {
+                mErrorLayout.setErrorType(mStoreEmptyState);
+            }
+            if (!TextUtils.isEmpty(mStoreEmptyMessage)) {
+                mErrorLayout.setErrorMessage(mStoreEmptyMessage);
+            }
         }
     }
 
@@ -182,6 +189,16 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
 
     protected boolean onItemLongClick(View view, int position) {
         return false;
+    }
+
+    @Override
+    public void onSingleViewClick(View view) {
+        mCurrentPage = 0;
+        mState = STATE_REFRESH;
+        mAdapter.setState(RecycleBaseAdapter.STATE_SINGLE_LOADING);
+        mAdapter.notifyDataSetChanged();
+        //mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+        requestData(true);
     }
 
     protected abstract RecycleBaseAdapter getListAdapter();
@@ -225,7 +242,7 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
     public void loadMore() {
         if (mState == STATE_NONE) {
             if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE
-                    || mAdapter.getState()== ListBaseAdapter.STATE_NETWORK_ERROR) {
+                    || mAdapter.getState() == ListBaseAdapter.STATE_NETWORK_ERROR) {
                 TLog.log(TAG, "begin to load more data.");
                 mCurrentPage++;
                 mState = STATE_LOADMORE;
@@ -245,7 +262,10 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
     }
 
     protected void sendRequestData() {
+    }
 
+    protected boolean useSingleState() {
+        return false;
     }
 
     public long getCacheExpire() {
@@ -411,10 +431,14 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         mAdapter.addData(data);
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         if (data.size() == 0 && mState == STATE_REFRESH) {
-            mErrorLayout.setErrorType(EmptyLayout.NODATA);
-            String emptyTip = getEmptyTip();
-            if(!TextUtils.isEmpty(emptyTip))
-                mErrorLayout.setErrorMessage(emptyTip);
+            if(useSingleState()){
+                mAdapter.setState(RecycleBaseAdapter.STATE_SINGLE_EMPTY);
+            } else {
+                mErrorLayout.setErrorType(EmptyLayout.NODATA);
+                String emptyTip = getEmptyTip();
+                if (!TextUtils.isEmpty(emptyTip))
+                    mErrorLayout.setErrorMessage(emptyTip);
+            }
         } else if (data.size() < TDevice.getPageSize()) {
             if (mState == STATE_REFRESH)
                 mAdapter.setState(ListBaseAdapter.STATE_LESS_ONE_PAGE);
@@ -436,7 +460,11 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
     protected void executeOnLoadDataError(String error) {
         if (mCurrentPage == 0) {
             if (mAdapter.getDataSize() == 0) {
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+                if(useSingleState()){
+                    mAdapter.setState(RecycleBaseAdapter.STATE_SINGLE_ERROR);
+                } else {
+                    mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+                }
             } else {
                 mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
                 String message = error;

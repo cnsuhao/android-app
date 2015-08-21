@@ -1,11 +1,5 @@
 package net.oschina.app.v2.activity.friend.fragment;
 
-import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.activity.common.SimpleBackActivity;
-import net.oschina.app.v2.activity.friend.adapter.FriendTabPagerAdapter;
-import net.oschina.app.v2.base.Constants;
-import net.oschina.app.v2.ui.tab.SlidingTabLayout;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,10 +16,17 @@ import android.view.ViewGroup;
 
 import com.tonlin.osc.happy.R;
 
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.activity.common.SimpleBackActivity;
+import net.oschina.app.v2.activity.friend.adapter.FriendTabPagerAdapter;
+import net.oschina.app.v2.base.Constants;
+import net.oschina.app.v2.ui.tab.SlidingTabLayout;
+
 public class FriendViewPagerFragment extends Fragment implements
 		OnPageChangeListener {
 
 	public static final String BUNDLE_KEY_TABIDX = "BUNDLE_KEY_TABIDX";
+	public static final String BUNDLE_KEY_UID = "BUNDLE_KEY_UID";
 
 	//private PagerSlidingTabStrip mTabStrip;
     private SlidingTabLayout mSlidingTabLayout;
@@ -33,6 +34,7 @@ public class FriendViewPagerFragment extends Fragment implements
 	private FriendTabPagerAdapter mTabAdapter;
 
 	private int mInitTabIdx;
+	private int mUid;
 	//private BadgeView mBvNewFans;
 
 	private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
@@ -40,22 +42,24 @@ public class FriendViewPagerFragment extends Fragment implements
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			int newFansCount = intent.getIntExtra("newFansCount", 0);// 新粉丝
-            mSlidingTabLayout.setMessageCount(1, newFansCount);
-			if (newFansCount > 0) {
-				//mBvNewFans.setText(newFansCount + "");
-				//mBvNewFans.show();
-			} else {
-				//mBvNewFans.hide();
+			if(mUid == AppContext.getLoginUid()) {
+				mSlidingTabLayout.setMessageCount(1, newFansCount);
+				if (newFansCount > 0) {
+					//mBvNewFans.setText(newFansCount + "");
+					//mBvNewFans.show();
+				} else {
+					//mBvNewFans.hide();
+				}
 			}
 		}
 	};
 
-
-    @Override
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle args = getArguments();
 		mInitTabIdx = args.getInt(BUNDLE_KEY_TABIDX, 0);
+		mUid = args.getInt(BUNDLE_KEY_UID, 0);
 
 		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_NOTICE);
 		getActivity().registerReceiver(mNoticeReceiver, filter);
@@ -65,6 +69,7 @@ public class FriendViewPagerFragment extends Fragment implements
 	public void onDestroy() {
 		super.onDestroy();
 		getActivity().unregisterReceiver(mNoticeReceiver);
+		mViewPager.removeOnPageChangeListener(this);
 	}
 
 	@Override
@@ -80,11 +85,11 @@ public class FriendViewPagerFragment extends Fragment implements
 
 		if (mTabAdapter == null) {
 			mTabAdapter = new FriendTabPagerAdapter(getChildFragmentManager(),
-					getActivity(), mViewPager);
+					getActivity(), mViewPager,mUid);
 		}
 		mViewPager.setOffscreenPageLimit(mTabAdapter.getCacheCount());
 		mViewPager.setAdapter(mTabAdapter);
-		mViewPager.setOnPageChangeListener(this);
+		mViewPager.addOnPageChangeListener(this);
 		//mTabStrip.setViewPager(mViewPager);
 
 		mViewPager.setCurrentItem(mInitTabIdx);

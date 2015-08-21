@@ -22,6 +22,7 @@ public class AvatarView extends SimpleDraweeView {
 	private static final String PGIF = "portrait.gif";
 	private int id;
 	private String name;
+	private String url;
 
 	public AvatarView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -57,7 +58,7 @@ public class AvatarView extends SimpleDraweeView {
 			@Override
 			public void onClick(View v) {
 				if (!TextUtils.isEmpty(name)) {
-					UIHelper.showUserCenter(getContext(), id, name);
+					UIHelper.showUserCenter(getContext(), id, name ,url);
 				}
 			}
 		});
@@ -69,12 +70,14 @@ public class AvatarView extends SimpleDraweeView {
 	}
 
 	public void setAvatarUrl(String url) {
+		this.url = url;
 		//if (url.endsWith(PGIF) || StringUtils.isEmpty(url))
 		//	setImageBitmap(null);
 		//else {
 			//ImageLoader.getInstance().displayImage(
 			//		AvatarUtils.getMiddleAvatar(url), this);
 		//}
-		setImageURI(Uri.parse(AvatarUtils.getMiddleAvatar(url)));
+		//setImageURI(Uri.parse(AvatarUtils.getMiddleAvatar(url)));
+		setImageURI(Uri.parse(AvatarUtils.getLargeAvatar(url)));
 	}
 }

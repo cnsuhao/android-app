@@ -169,6 +169,7 @@
     <string name="unfollow_user">取消关注</string>
     <string name="follow_each_other">取消互粉</string>
     <string name="latest_login_time">最近登录:%s</string>
+    <string name="latest_login_time_lb">最近登录:</string>
     <string name="category">分类</string>
     <string name="blog">博客</string>
     <string name="blog_count">博客(%s)</string>
@@ -177,7 +178,7 @@
     <string name="logout">退出当前帐号</string>
     <string name="message_logout">退出后将无法看到个人动态,确定退出吗?</string>
     
-    <string name="actionbar_title_friends">我的好友</string>
+    <string name="actionbar_title_friends">好友</string>
     <string name="actionbar_title_favorites">我的收藏</string>
     <string name="actionbar_title_ossoftware">开源软件</string>
 

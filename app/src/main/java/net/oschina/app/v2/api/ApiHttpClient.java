@@ -3,6 +3,8 @@ package net.oschina.app.v2.api;
 import java.util.Locale;
 
 import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.utils.TLog;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -93,7 +95,7 @@ public class ApiHttpClient {
 	}
 
 	public static void log(String log) {
-		Log.d("BaseApi", log);
+		TLog.log("BaseApi", log);
 	}
 
 	public static void post(String partUrl, AsyncHttpResponseHandler handler) {

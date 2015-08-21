@@ -16,7 +16,7 @@ import android.support.v4.view.ViewPager;
 public final class FriendTabPagerAdapter extends SlidingTabPagerAdapter {
 
 	public FriendTabPagerAdapter(FragmentManager mgr, Context context,
-			ViewPager viewpager) {
+			ViewPager viewpager,int uid) {
 		super(mgr, FriendTab.values().length, context.getApplicationContext(),
 				viewpager);
 		FriendTab[] values = FriendTab.values();
@@ -47,6 +47,7 @@ public final class FriendTabPagerAdapter extends SlidingTabPagerAdapter {
 			Bundle args = new Bundle();
 			args.putInt(FriendFragment.BUNDLE_KEY_CATALOG,
 					values[i].getCatalog());
+			args.putInt(FriendFragment.BUNDLE_KEY_UID,uid);
 			tabFragment.setArguments(args);
 
 			fragments[values[i].getIdx()] = tabFragment;

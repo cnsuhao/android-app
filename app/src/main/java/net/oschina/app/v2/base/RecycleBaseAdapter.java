@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.ui.empty.EmptyLayout;
 import net.oschina.app.v2.utils.TDevice;
-import net.oschina.app.v2.utils.TLog;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -27,8 +27,13 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
     public static final int STATE_LESS_ONE_PAGE = 4;
     public static final int STATE_NETWORK_ERROR = 5;
 
+    public static final int STATE_SINGLE_EMPTY = 6;
+    public static final int STATE_SINGLE_LOADING = 7;
+    public static final int STATE_SINGLE_ERROR = 8;
+
     public static final int TYPE_FOOTER = 0x101;
     public static final int TYPE_HEADER = 0x102;
+    public static final int TYPE_SINGLE = 0x103;
 
     protected int state = STATE_LESS_ONE_PAGE;
 
@@ -44,15 +49,20 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
 
     private WeakReference<OnItemClickListener> mListener;
     private WeakReference<OnItemLongClickListener> mLongListener;
+    private WeakReference<OnSingleViewClickListener> mSingleViewListener;
     protected View mHeaderView;
 
 
     public interface OnItemClickListener {
-        public void onItemClick(View view);
+        void onItemClick(View view);
     }
 
     public interface OnItemLongClickListener {
-        public boolean onItemLongClick(View view);
+        boolean onItemLongClick(View view);
+    }
+
+    public interface OnSingleViewClickListener {
+        void onSingleViewClick(View view);
     }
 
     protected LayoutInflater getLayoutInflater(Context context) {
@@ -82,6 +92,8 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
 
     @Override
     public int getItemCount() {
+        if (getState() == STATE_SINGLE_EMPTY || getState() == STATE_SINGLE_LOADING || getState() == STATE_SINGLE_ERROR)
+            return 1;
         int size = getDataSize();
         if (hasFooter()) {
             size += 1;
@@ -172,11 +184,15 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
-        this.mListener = new WeakReference<OnItemClickListener>(listener);
+        this.mListener = new WeakReference<>(listener);
     }
 
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
-        this.mLongListener = new WeakReference<OnItemLongClickListener>(listener);
+        this.mLongListener = new WeakReference<>(listener);
+    }
+
+    public void setOnSingleViewClickListener(OnSingleViewClickListener listener) {
+        this.mSingleViewListener = new WeakReference<>(listener);
     }
 
     public boolean hasHeader() {
@@ -202,9 +218,11 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0 && hasHeader()) {
-            // TLog.log("getItemViewType: hasHeader");
-            return TYPE_HEADER;
+        if (position == 0) {
+            if (hasHeader())
+                return TYPE_HEADER;
+            else if (state == STATE_SINGLE_EMPTY || state == STATE_SINGLE_ERROR || state == STATE_SINGLE_LOADING)
+                return TYPE_SINGLE;
         } else if (position == getItemCount() - 1 && hasFooter()) {
             return TYPE_FOOTER;
         }
@@ -225,6 +243,10 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
                 throw new RuntimeException("Header view is null");
             }
             vh = new HeaderViewHolder(viewType, mHeaderView);
+        } else if (viewType == TYPE_SINGLE) {
+            View v = getLayoutInflater(parent.getContext())
+                    .inflate(R.layout.v2_list_cell_loading, null);
+            vh = new SingleViewHolder(viewType, v);
         } else {
             final View itemView = onCreateItemView(parent, viewType);
             if (itemView != null) {
@@ -263,13 +285,43 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
                 || holder instanceof HeaderViewHolder) {
             //TLog.log("bind Header view:" + position + " " + holder.viewType);
             onBindHeaderViewHolder(holder, position);
+        } else if ((getItemViewType(position) == TYPE_SINGLE) || holder instanceof SingleViewHolder) {
+            //TLog.log("bind single view:" + position + " " + holder.viewType);
+            onBindSingleViewHolder(holder, position);
         } else if ((getItemViewType(position) == TYPE_FOOTER
                 && position == getItemCount() - 1) || holder instanceof FooterViewHolder) {
             //TLog.log("bind Footer view:" + position + " " + holder.viewType);
             onBindFooterViewHolder(holder, position);
         } else {
             //TLog.log("bind item view:" + position + " " + holder.viewType);
-            onBindItemViewHolder(holder, hasHeader() ? position -1:position);
+            onBindItemViewHolder(holder, hasHeader() ? position - 1 : position);
+        }
+    }
+
+    protected void onBindSingleViewHolder(ViewHolder holder, int position) {
+        SingleViewHolder vh = (SingleViewHolder) holder;
+        switch (getState()) {
+            case STATE_SINGLE_EMPTY:
+                vh.mEmptyLayout.setErrorType(EmptyLayout.NODATA);
+                break;
+            case STATE_SINGLE_ERROR:
+                vh.mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+                break;
+            case STATE_SINGLE_LOADING:
+                vh.mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                break;
+        }
+
+        if (mSingleViewListener != null) {
+            final OnSingleViewClickListener lis = mSingleViewListener.get();
+            if (lis != null) {
+                vh.mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        lis.onSingleViewClick(v);
+                    }
+                });
+            }
         }
     }
 
@@ -360,6 +412,15 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
             loadmore = v;
             progress = (ProgressBar) v.findViewById(R.id.progressbar);
             text = (TextView) v.findViewById(R.id.text);
+        }
+    }
+
+    public static class SingleViewHolder extends ViewHolder {
+        public EmptyLayout mEmptyLayout;
+
+        public SingleViewHolder(int viewType, View v) {
+            super(viewType, v);
+            mEmptyLayout = (EmptyLayout) v.findViewById(R.id.error_layout);
         }
     }
 }

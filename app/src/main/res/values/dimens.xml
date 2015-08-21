@@ -86,6 +86,7 @@
 
     <dimen name="actionbar_size">48dp</dimen>
     <dimen name="tab_height">38dp</dimen>
+    <dimen name="actionbar_size_with_tab_size">86dp</dimen>
 
     <dimen name="menu_padding_left">34dp</dimen>
 
