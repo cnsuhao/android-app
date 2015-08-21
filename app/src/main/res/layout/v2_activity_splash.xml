@@ -55,7 +55,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_10"
             android:layout_marginBottom="4dp"
-            android:src="@drawable/ic_born_open_source" />
+            android:src="@drawable/ic_born_open_source"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_marginTop="6dp"
+            android:text="生于开源~只为你更爽的阅读！"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/main_gray"/>
     </LinearLayout>
 
 </RelativeLayout>
