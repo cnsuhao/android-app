@@ -513,7 +513,7 @@ public class UIHelper {
 
     public static void showUserCenter(Context context, int hisuid,
                                       String hisname) {
-        showUserCenter(context,hisuid,hisname,null);
+        showUserCenter(context, hisuid, hisname, null);
     }
 
     /**
@@ -524,7 +524,7 @@ public class UIHelper {
      * @param hisname
      */
     public static void showUserCenter(Context context, int hisuid,
-                                      String hisname,String hisavatar) {
+                                      String hisname, String hisavatar) {
 //        Bundle args = new Bundle();
 //        args.putInt("his_id", hisuid);
 //        args.putString("his_name", hisname);
@@ -533,7 +533,7 @@ public class UIHelper {
         Intent intent = new Intent(context, UserCenterActivity.class);
         intent.putExtra("his_id", hisuid);
         intent.putExtra("his_name", hisname);
-        intent.putExtra("his_avatar",hisavatar);
+        intent.putExtra("his_avatar", hisavatar);
         context.startActivity(intent);
     }
 
@@ -1054,7 +1054,7 @@ public class UIHelper {
     }
 
     public static void showFriends(Context context, int tabIdx) {
-        showFriends(context, AppContext.getLoginUid());
+        showFriends(context, AppContext.getLoginUid(), tabIdx);
     }
 
     public static void showFriends(Context context, int uid, int tabIdx) {

@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.MySwipeRefreshLayout;
 import android.view.View;
 
+import com.tonlin.osc.happy.R;
+
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.user.SwipeRefreshViewControl;
 import net.oschina.app.v2.activity.user.UserDataControl;
@@ -91,6 +93,11 @@ public class UserActiveRecyclerListFragment extends BaseRecycleViewFragment impl
     @Override
     public MySwipeRefreshLayout getSwipeRefreshView() {
         return mSwipeRefresh;
+    }
+
+    @Override
+    protected String getEmptyTip() {
+        return getString(R.string.empty_tip_user_center_active);
     }
 
     @Override

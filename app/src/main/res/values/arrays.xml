@@ -77,4 +77,11 @@
         <item>男</item>
         <item>女</item>
     </string-array>
+
+    <string-array name="user_center_bgs">
+        <item>@drawable/profile_header_bg_1</item>
+        <item>@drawable/profile_header_bg_2</item>
+        <item>@drawable/profile_header_bg_3</item>
+        <item>@drawable/profile_header_bg_4</item>
+    </string-array>
 </resources>

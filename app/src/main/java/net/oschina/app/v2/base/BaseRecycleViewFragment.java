@@ -433,6 +433,9 @@ public abstract class BaseRecycleViewFragment extends BaseTabFragment implements
         if (data.size() == 0 && mState == STATE_REFRESH) {
             if(useSingleState()){
                 mAdapter.setState(RecycleBaseAdapter.STATE_SINGLE_EMPTY);
+                String emptyTip = getEmptyTip();
+                if (!TextUtils.isEmpty(emptyTip))
+                    mAdapter.setEmptyText(emptyTip);
             } else {
                 mErrorLayout.setErrorType(EmptyLayout.NODATA);
                 String emptyTip = getEmptyTip();

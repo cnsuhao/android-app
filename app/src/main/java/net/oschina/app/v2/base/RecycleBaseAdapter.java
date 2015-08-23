@@ -2,6 +2,7 @@ package net.oschina.app.v2.base;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,8 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
     protected int _loadmoreText;
     protected int _loadFinishText;
     protected int mScreenWidth;
+
+    protected String mEmptyText;
 
     private LayoutInflater mInflater;
 
@@ -179,6 +182,10 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
         _loadFinishText = loadFinishText;
     }
 
+    public void setEmptyText(String text) {
+        mEmptyText = text;
+    }
+
     protected boolean loadMoreHasBg() {
         return true;
     }
@@ -303,6 +310,9 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
         switch (getState()) {
             case STATE_SINGLE_EMPTY:
                 vh.mEmptyLayout.setErrorType(EmptyLayout.NODATA);
+                if (!TextUtils.isEmpty(mEmptyText)) {
+                    vh.mEmptyLayout.setErrorMessage(mEmptyText);
+                }
                 break;
             case STATE_SINGLE_ERROR:
                 vh.mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
@@ -369,14 +379,6 @@ public abstract class RecycleBaseAdapter extends RecyclerView.Adapter<RecycleBas
     protected abstract View onCreateItemView(ViewGroup parent, int viewType);
 
     protected abstract ViewHolder onCreateItemViewHolder(View view, int viewType);
-
-//    private ViewHolder onCreateHeaderViewHolder(View headerView, int viewType) {
-//        if (hasHeader()) {
-//            throw new RuntimeException("hasHeader return true, you must implement onCreateHeaderViewHolder");
-//        }
-//        //TODO do nothing...
-//        return null;
-//    }
 
     protected void onBindHeaderViewHolder(ViewHolder holder, int position) {
         //TODO do nothing...

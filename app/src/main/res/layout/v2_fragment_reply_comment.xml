@@ -9,14 +9,12 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal"
-        android:padding="@dimen/space_8" >
+        android:padding="@dimen/space_16" >
 
-        <ImageView
+        <net.oschina.app.v2.ui.AvatarView
             android:id="@+id/iv_avatar"
-            android:layout_width="@dimen/list_item_avatar_size"
-            android:layout_height="@dimen/list_item_avatar_size"
-            android:layout_marginRight="@dimen/space_4"
-            android:background="@drawable/ic_default_avatar" />
+            style="@style/avatar"
+            android:layout_marginRight="@dimen/space_4" />
 
         <ScrollView
             android:layout_width="0dp"

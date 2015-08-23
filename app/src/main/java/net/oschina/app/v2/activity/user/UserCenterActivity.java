@@ -1,9 +1,11 @@
 package net.oschina.app.v2.activity.user;
 
 import android.content.DialogInterface;
+import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,9 +13,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.MySwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.TextureView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +43,7 @@ import net.oschina.app.v2.utils.UIHelper;
 import org.apache.http.Header;
 
 import java.io.ByteArrayInputStream;
+import java.util.Random;
 
 /**
  * Created by Tonlin on 2015/8/20.
@@ -96,6 +102,17 @@ public class UserCenterActivity extends BaseActivity implements AppBarLayout.OnO
         mAppBar = (AppBarLayout) findViewById(R.id.appbar);
         mAppBar.addOnOffsetChangedListener(this);
 
+        int height = (int) (TDevice.getScreenWidth() * 3 / 4);
+        CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+        mAppBar.setLayoutParams(lp);
+
+        ImageView bg = (ImageView) findViewById(R.id.iv_bg);
+        TypedArray ar = getResources().obtainTypedArray(R.array.user_center_bgs);
+        int len = ar.length();
+        int resId = ar.getResourceId(new Random().nextInt(len), 0);
+        bg.setImageResource(resId);
+        ar.recycle();
+
         mIvAvatar = (SimpleDraweeView) findViewById(R.id.iv_avatar);
         mTvName = (TextView) findViewById(R.id.tv_name);
         mIvGender = (ImageView) findViewById(R.id.iv_gender);
@@ -110,7 +127,8 @@ public class UserCenterActivity extends BaseActivity implements AppBarLayout.OnO
 
         mTvActionBarTitle.setText(mHisName);
         mTvName.setText(mHisName);
-        mIvAvatar.setImageURI(Uri.parse(AvatarUtils.getLargeAvatar(mHisAvatarUrl)));
+        if (!TextUtils.isEmpty(mHisAvatarUrl))
+            mIvAvatar.setImageURI(Uri.parse(AvatarUtils.getLargeAvatar(mHisAvatarUrl)));
     }
 
     @Override
@@ -170,7 +188,8 @@ public class UserCenterActivity extends BaseActivity implements AppBarLayout.OnO
         mUser = user;
         mTvActionBarTitle.setText(user.getName());
         mTvName.setText(user.getName());
-        mIvAvatar.setImageURI(Uri.parse(AvatarUtils.getLargeAvatar(user.getFace())));
+        if (!TextUtils.isEmpty(user.getFace()))
+            mIvAvatar.setImageURI(Uri.parse(AvatarUtils.getLargeAvatar(user.getFace())));
         mIvGender.setImageResource(FEMALE.equals(user.getGender()) ? R.drawable.userinfo_icon_female :
                 R.drawable.userinfo_icon_male);
         mIvGender.setVisibility(View.VISIBLE);
@@ -212,7 +231,7 @@ public class UserCenterActivity extends BaseActivity implements AppBarLayout.OnO
                 R.style.Theme_AppCompat_Light_Dialog_Alert)
                 .setTitle(dialogTitle)
                 .setCancelable(true)
-                .setNegativeButton(R.string.cancel,null)
+                .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

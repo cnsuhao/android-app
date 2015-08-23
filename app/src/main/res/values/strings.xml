@@ -324,6 +324,10 @@
     <string name="empty_tip_my_event_list">惭愧！\n您至今未参加任何活动哟</string>
     <string name="empty_tip_my_event_apply_list">目前还没有人出席哟</string>
 
+    <string name="empty_tip_user_center_blog">这个家伙很懒\n一篇博客都没有写~</string>
+    <string name="empty_tip_user_center_active">这个家伙很懒\n啥都没有留下~</string>
+    <string name="empty_tip_comment_list">还没有人评论哟\n赶紧来评论下吧~</string>
+
     <string name="event_start_time">开始时间: %s</string>
     <string name="event_end_time">结束时间: %s</string>
     <string name="present_members">出席人员</string>

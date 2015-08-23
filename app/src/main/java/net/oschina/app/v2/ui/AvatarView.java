@@ -57,7 +57,7 @@ public class AvatarView extends SimpleDraweeView {
 
 			@Override
 			public void onClick(View v) {
-				if (!TextUtils.isEmpty(name)) {
+				if (!TextUtils.isEmpty(name) && id !=0) {
 					UIHelper.showUserCenter(getContext(), id, name ,url);
 				}
 			}
@@ -78,6 +78,6 @@ public class AvatarView extends SimpleDraweeView {
 			//		AvatarUtils.getMiddleAvatar(url), this);
 		//}
 		//setImageURI(Uri.parse(AvatarUtils.getMiddleAvatar(url)));
-		setImageURI(Uri.parse(AvatarUtils.getLargeAvatar(url)));
+		setImageURI(Uri.parse(AvatarUtils.getMiddleAvatar(url)));
 	}
 }

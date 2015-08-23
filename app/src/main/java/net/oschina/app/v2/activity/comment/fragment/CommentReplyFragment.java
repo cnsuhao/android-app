@@ -1,23 +1,5 @@
 package net.oschina.app.v2.activity.comment.fragment;
 
-import java.io.ByteArrayInputStream;
-
-import net.oschina.app.v2.AppContext;
-import net.oschina.app.v2.api.remote.NewsApi;
-import net.oschina.app.v2.base.BaseActivity;
-import net.oschina.app.v2.base.BaseFragment;
-import net.oschina.app.v2.emoji.EmojiFragment;
-import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
-import net.oschina.app.v2.model.Comment;
-import net.oschina.app.v2.model.Result;
-import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
-import net.oschina.app.v2.ui.text.MyURLSpan;
-import net.oschina.app.v2.ui.text.TweetTextView;
-import net.oschina.app.v2.utils.TDevice;
-import net.oschina.app.v2.utils.UIHelper;
-
-import org.apache.http.Header;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,12 +12,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonlin.osc.happy.R;
 import com.umeng.analytics.MobclickAgent;
+
+import net.oschina.app.v2.AppContext;
+import net.oschina.app.v2.api.remote.NewsApi;
+import net.oschina.app.v2.base.BaseActivity;
+import net.oschina.app.v2.base.BaseFragment;
+import net.oschina.app.v2.emoji.EmojiFragment;
+import net.oschina.app.v2.emoji.EmojiFragment.EmojiTextListener;
+import net.oschina.app.v2.model.Comment;
+import net.oschina.app.v2.model.Result;
+import net.oschina.app.v2.ui.AvatarView;
+import net.oschina.app.v2.ui.text.MyLinkMovementMethod;
+import net.oschina.app.v2.ui.text.MyURLSpan;
+import net.oschina.app.v2.ui.text.TweetTextView;
+import net.oschina.app.v2.utils.TDevice;
+import net.oschina.app.v2.utils.UIHelper;
+
+import org.apache.http.Header;
+
+import java.io.ByteArrayInputStream;
 
 public class CommentReplyFragment extends BaseFragment implements
 		EmojiTextListener {
@@ -48,7 +47,7 @@ public class CommentReplyFragment extends BaseFragment implements
 
 	private EmojiFragment mEmojiFragment;
 	private TweetTextView mTvContent;
-	private ImageView mIvAvatar;
+	private AvatarView mIvAvatar;
 
 	private int mId, mCatalog;
 	private Comment mComment;
@@ -137,7 +136,7 @@ public class CommentReplyFragment extends BaseFragment implements
 	}
 
 	private void initViews(View view) {
-		mIvAvatar = (ImageView) view.findViewById(R.id.iv_avatar);
+		mIvAvatar = (AvatarView) view.findViewById(R.id.iv_avatar);
 		mTvContent = (TweetTextView) view.findViewById(R.id.tv_content);
 	}
 
@@ -148,7 +147,8 @@ public class CommentReplyFragment extends BaseFragment implements
 		mCatalog = args.getInt(BUNDLE_KEY_CATALOG);
 		mComment = args.getParcelable(BUNDLE_KEY_COMMENT);
 
-		ImageLoader.getInstance().displayImage(mComment.getFace(), mIvAvatar);
+		mIvAvatar.setAvatarUrl(mComment.getFace());
+		//ImageLoader.getInstance().displayImage(mComment.getFace(), mIvAvatar);
 
 		mTvContent.setMovementMethod(MyLinkMovementMethod.a());
 		mTvContent.setFocusable(false);

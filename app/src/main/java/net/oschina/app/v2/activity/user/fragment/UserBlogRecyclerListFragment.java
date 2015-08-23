@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.widget.MySwipeRefreshLayout;
 import android.view.View;
 
+import com.tonlin.osc.happy.R;
+
 import net.oschina.app.v2.AppContext;
 import net.oschina.app.v2.activity.user.SwipeRefreshViewControl;
 import net.oschina.app.v2.activity.user.adapter.UserBlogAdapter;
@@ -58,6 +60,11 @@ public class UserBlogRecyclerListFragment extends BaseRecycleViewFragment implem
     protected void sendRequestData() {
         NewsApi.getUserBlogList(mHisUid, mHisName, mUid, mCurrentPage,
                 getResponseHandler());
+    }
+
+    @Override
+    protected String getEmptyTip() {
+        return getString(R.string.empty_tip_user_center_blog);
     }
 
     @Override

@@ -21,9 +21,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.MySwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -77,7 +79,6 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
     private ScrollState mLastScrollState;
     private TouchInterceptionFrameLayout mInterceptionLayout;
 
-    private NavigationDrawerFragment mNavigationDrawerFragment;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
 
@@ -143,8 +144,6 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.navigation_drawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.root);
         // Set up the drawer.
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -195,7 +194,7 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
         UIHelper.sendBroadcastForNotice(this);
 
         ViewConfiguration vc = ViewConfiguration.get(this);
-        mSlop = vc.getScaledTouchSlop();
+        mSlop = vc.getScaledTouchSlop() / 2;
         mInterceptionLayout = (TouchInterceptionFrameLayout) findViewById(R.id.container);
         mInterceptionLayout.setScrollInterceptionListener(mInterceptionListener);
     }
@@ -307,6 +306,18 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
     }
 
     @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         boolean visible = false;
@@ -404,6 +415,7 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+        Log.e(TAG,"Main onUpOrCancelMotionEvent");
         if (!mScrolled) {
             // This event can be used only when TouchInterceptionFrameLayout
             // doesn't handle the consecutive events.
@@ -423,6 +435,18 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
         return (Scrollable) view.findViewById(R.id.recycleView);
     }
 
+    private MySwipeRefreshLayout getCurrentRefreshLayout() {
+        Fragment fragment = getCurrentFragment();
+        if (fragment == null) {
+            return null;
+        }
+        View view = fragment.getView();
+        if (view == null) {
+            return null;
+        }
+        return (MySwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
+    }
+
     private void adjustToolbar(ScrollState scrollState) {
         int toolbarHeight = mToolbarView.getHeight();
         final Scrollable scrollable = getCurrentScrollable();
@@ -431,16 +455,20 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
         }
         int scrollY = scrollable.getCurrentScrollY();
         if (scrollState == ScrollState.DOWN) {
+            Log.e(TAG,"adjustToolbar scrollState down showToolbar");
             showToolbar();
         } else if (scrollState == ScrollState.UP) {
             if (toolbarHeight <= scrollY) {
+                Log.e(TAG,"adjustToolbar scrollState up toolbarHeight <= scrollY hideToolbar");
                 hideToolbar();
             } else {
+                Log.e(TAG,"adjustToolbar scrollState up toolbarHeight > scrollY showToolbar");
                 showToolbar();
             }
         } else if (!toolbarIsShown() && !toolbarIsHidden()) {
             // Toolbar is moving but doesn't know which to move:
             // you can change this to hideToolbar()
+            Log.e(TAG,"adjustToolbar !toolbarIsShown() && !toolbarIsHidden() showToolbar");
             showToolbar();
         }
     }
@@ -457,10 +485,6 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
     }
 
     private Fragment getPagerFragment() {
-        //MainTab[] tabs = MainTab.values();
-
-        //MainTab tab = tabs[mTabHost.getCurrentTab()];
-        //getString(tab.getResName())
         return getSupportFragmentManager().findFragmentByTag(mTabHost.getCurrentTabTag());
     }
 
@@ -472,11 +496,14 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
         return ViewHelper.getTranslationY(mInterceptionLayout) == -mToolbarView.getHeight();
     }
 
+    private boolean  mToolbarShow = true;
     private void showToolbar() {
+        mToolbarShow = true;
         animateToolbar(0);
     }
 
     private void hideToolbar() {
+        mToolbarShow = false;
         animateToolbar(-mToolbarView.getHeight());
     }
 
@@ -504,24 +531,27 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
     private TouchInterceptionFrameLayout.TouchInterceptionListener mInterceptionListener = new TouchInterceptionFrameLayout.TouchInterceptionListener() {
         @Override
         public boolean shouldInterceptTouchEvent(MotionEvent ev, boolean moving, float diffX, float diffY) {
-            return false;
-//            if (!mScrolled && mSlop < Math.abs(diffX) && Math.abs(diffY) < Math.abs(diffX)) {
-//                // Horizontal scroll is maybe handled by ViewPager
-//                return false;
-//            }
-//
-//            Scrollable scrollable = getCurrentScrollable();
-//            if (scrollable == null) {
-//                mScrolled = false;
-//                return false;
-//            }
-//
-//            // If interceptionLayout can move, it should intercept.
-//            // And once it begins to move, horizontal scroll shouldn't work any longer.
-//            int toolbarHeight = mToolbarView.getHeight();
-//            int translationY = (int) ViewHelper.getTranslationY(mInterceptionLayout);
-//            boolean scrollingUp = 0 < diffY;
-//            boolean scrollingDown = diffY < 0;
+
+
+
+            if (!mScrolled && mSlop < Math.abs(diffX) && Math.abs(diffY) < Math.abs(diffX)) {
+                // Horizontal scroll is maybe handled by ViewPager
+                Log.e(TAG,"Horizontal scroll is maybe handled by ViewPager");
+                return false;
+            }
+
+            Scrollable scrollable = getCurrentScrollable();
+            if (scrollable == null) {
+                mScrolled = false;
+                return false;
+            }
+
+            // If interceptionLayout can move, it should intercept.
+            // And once it begins to move, horizontal scroll shouldn't work any longer.
+            int toolbarHeight = mToolbarView.getHeight();
+            int translationY = (int) ViewHelper.getTranslationY(mInterceptionLayout);
+            boolean scrollingUp = 0 < diffY;
+            boolean scrollingDown = diffY < 0;
 //            if (scrollingUp) {
 //                if (translationY < 0) {
 //                    mScrolled = true;
@@ -537,6 +567,18 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
 //            }
 //            mScrolled = false;
 //            return false;
+
+            Log.e(TAG,"shouldInterceptTouchEvent "+translationY + ": scrollY:" + getCurrentScrollable().getCurrentScrollY() + " up:"+scrollingUp+" down:"+scrollingDown);
+            if(getCurrentScrollable().getCurrentScrollY()==0 && !mToolbarShow) {
+                mScrolled = true;
+                mLastScrollState = ScrollState.DOWN;
+                Log.e(TAG,"shouldInterceptTouchEvent return true");
+                return true;
+            } else {
+                Log.e(TAG,"shouldInterceptTouchEvent return false");
+                mScrolled = false;
+                return false;
+            }
         }
 
         @Override
@@ -556,23 +598,10 @@ public class MainActivity extends BaseActivity implements OnTabChangeListener, I
 
         @Override
         public void onUpOrCancelMotionEvent(MotionEvent ev) {
+            Log.e(TAG,"shouldInterceptTouchEvent onUpOrCancelMotionEvent");
             mScrolled = false;
             adjustToolbar(mLastScrollState);
         }
     };
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
-    }
 }

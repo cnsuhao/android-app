@@ -208,6 +208,11 @@ public class CommentFragment extends BaseRecycleViewFragment implements
 	}
 
 	@Override
+	protected String getEmptyTip() {
+		return getString(R.string.empty_tip_comment_list);
+	}
+
+	@Override
 	public boolean onItemLongClick(View view,int position) {
 		final Comment item = (Comment) mAdapter.getItem(position);
 		if (item == null)
@@ -224,47 +229,6 @@ public class CommentFragment extends BaseRecycleViewFragment implements
 					getResources().getString(R.string.reply),
 					getResources().getString(R.string.copy) };
 		}
-		
-		//final CommonDialog dialog = DialogHelper
-		//		.getPinterestDialogCancelable(getActivity());
-		//dialog.setTitle(R.string.operation);
-		//dialog.setNegativeButton(R.string.cancle, null);
-		//dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-        //
-		//	@Override
-		//	public void onItemClick(AdapterView<?> parent, View view,
-		//			int position, long id) {
-		//		dialog.dismiss();
-		//		if (position == 0) {
-		//			handleReplyComment(item);
-		//		} else if (position == 1) {
-		//			TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
-		//					.getContent()));
-		//		} else if(position==2){
-		//			handleDeleteComment(item);
-		//		}
-		//	}
-		//});
-		//dialog.show();
-
-//        new MaterialDialog.Builder(getActivity())
-//                .title(R.string.operation)
-//                .items(items)
-//                .itemsCallback(new MaterialDialog.ListCallback() {
-//                    @Override
-//                    public void onSelection(MaterialDialog dialog, View view, int position, CharSequence text) {
-//                        dialog.dismiss();
-//                        if (position == 0) {
-//                            handleReplyComment(item);
-//                        } else if (position == 1) {
-//                            TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
-//                                    .getContent()));
-//                        } else if (position == 2) {
-//                            handleDeleteComment(item);
-//                        }
-//                    }
-//                })
-//                .show();
 
         AlertDialog dialog = new AlertDialog.Builder(getActivity(),
                 R.style.Theme_AppCompat_Light_Dialog_Alert)

@@ -122,7 +122,7 @@ public class NavigationDrawerFragment extends BaseFragment {
                 break;
             case R.id.iv_qr_code:
                 QrCodeDialog dialog = new QrCodeDialog(getActivity());
-                dialog.setNegativeButton(R.string.cancel,null);
+                dialog.setPositiveButton(R.string.ok,null);
                 dialog.show();
                 break;
         }
