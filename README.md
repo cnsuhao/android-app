@@ -1,7 +1,7 @@
 #哎嘛-OSCHINA第三方客户端
 ===========
 ## APP下载
-[![qrcode](http://git.oschina.net/tonlin/android-app/raw/master/screenshots/qrcode.png)](http://android.myapp.com/myapp/detail.htm?apkName=com.tonlin.osc.happy)
+[![qrcode](http://www.wwei.cn/Uploads/qrcode/2015/08/24/a04a2cf3164cd9a2f7d9b6a08f3746e0.png)](http://android.myapp.com/myapp/detail.htm?apkName=com.tonlin.osc.happy)
 [![屏幕截图](http://git.oschina.net/tonlin/android-app/raw/master/screenshots/screen_shots.jpg)](http://android.myapp.com/myapp/detail.htm?apkName=com.tonlin.osc.happy)
 
 
