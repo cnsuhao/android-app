@@ -94,6 +94,11 @@ public class ApiHttpClient {
 		log(new StringBuilder("GET ").append(url).toString());
 	}
 
+	public static void getDirect2(String url, AsyncHttpResponseHandler handler) {
+		new AsyncHttpClient().get(url, handler);
+		log(new StringBuilder("GET ").append(url).toString());
+	}
+
 	public static void log(String log) {
 		TLog.log("BaseApi", log);
 	}

@@ -8,6 +8,6 @@ public class OtherApi {
 	private static final String ENG_API = "http://open.iciba.com/dsapi";
 
 	public static void getDailyEnglish(AsyncHttpResponseHandler handler) {
-		ApiHttpClient.getDirect(ENG_API, handler);
+		ApiHttpClient.getDirect2(ENG_API, handler);
 	}
 }

@@ -46,6 +46,8 @@ import android.graphics.RectF;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
+import android.support.v4.app.ActivityManagerCompat;
 import android.text.TextUtils;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -97,7 +99,6 @@ public class AppContext extends BaseApplication {
     private static Set<String> mReadedNewsIds, mReadedQuestionIds, mReadedBlogIds; //已读IDS
 
     private static AppContext instance;
-
 
     @Override
     public void onCreate() {
