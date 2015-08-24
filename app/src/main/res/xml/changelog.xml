@@ -1,6 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <changelog>
     <release
+        version="1.3.0.0-2015.08.24"
+        versioncode="60">
+        <change>新增：可以查看参与开源活动啦</change>
+        <change>新增：也可以摇一摇、扫一扫功能</change>
+        <change>新增：还有个人二维码</change>
+        <change>新增：详情特大号字体设置</change>
+        <change>新增：动弹也可以赞啦</change>
+        <change>修改：全新的个人中心界面</change>
+        <change>修改：全新的动弹详情界面</change>
+        <change>修改：全新的Loading交互</change>
+        <change>优化：UI细节和部分界面交互调整</change>
+        <change>修复：部分情况下恢复网络无法加载更多BUG</change>
+        <change>修复：部分情况下加载数据闪退BUG</change>
+        <change>修复：在输入表情过多时出现卡顿BUG</change>
+        <change>修复：部分情况下无法注销BUG</change>
+    </release>
+    <release
         version="1.2.1.1-2015.05.26"
         versioncode="40">
         <change>修复：输入框光标不可见BUG</change>

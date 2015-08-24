@@ -57,15 +57,13 @@ public class SplashActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		if(TDevice.isServiceRunning(this, "net.oschina.app.v2.service.NoticeService")){
 			redirectTo();
 			return;
 		}
-
+		super.onCreate(savedInstanceState);
 		//checkUpdate();
-		final View view = View.inflate(this, R.layout.v2_activity_splash, null);
-		setContentView(view);
+		setContentView(R.layout.v2_activity_splash);
 
 		// 渐变展示启动屏
 //		AlphaAnimation aa = new AlphaAnimation(1f, 1.0f);

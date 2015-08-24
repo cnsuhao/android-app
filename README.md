@@ -1,6 +1,8 @@
 #哎嘛-OSCHINA第三方客户端
 ===========
-[![屏幕截图](http://git.oschina.net/tonlin/android-app/raw/master/screenshots/screen_shots.jpg)](http://zhushou.360.cn/detail/index/soft_id/1987733)
+## APP下载
+[![qrcode](http://git.oschina.net/tonlin/android-app/raw/master/screenshots/qrcode.png)](http://android.myapp.com/myapp/detail.htm?apkName=com.tonlin.osc.happy)
+[![屏幕截图](http://git.oschina.net/tonlin/android-app/raw/master/screenshots/screen_shots.jpg)](http://android.myapp.com/myapp/detail.htm?apkName=com.tonlin.osc.happy)
 
 
 ## 开源协议

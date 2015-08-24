@@ -84,7 +84,7 @@ public class NavigationDrawerFragment extends BaseFragment {
         super.onResume();
         if (AppContext.instance().isLogin()) {
             User user = AppContext.getLoginInfo();
-
+            //AppContext.showToastShort(""+user.getFace());
             mIvAvatar.setImageURI(Uri.parse(user.getFace()));
             //ImageLoader.getInstance().displayImage(AvatarUtils
             // .getLargeAvatar(user.getFace()), mIvAvatar);

@@ -8,8 +8,25 @@ android {
         applicationId "com.tonlin.osc.happy"
         minSdkVersion 9
         targetSdkVersion 21
-        versionCode 50
-        versionName "1.3.0.0beta"
+        versionCode 60
+        versionName "1.3.0.0"
+        manifestPlaceholders = [CHANNEL_NAME: "channle_beta"]//默认渠道
+    }
+
+    // 友盟渠道配置
+    productFlavors {
+        channle_xiaomi {
+            manifestPlaceholders = [CHANNEL_NAME: "channel_xiaomi"]
+        }
+        channle_360 {
+            manifestPlaceholders = [CHANNEL_NAME: "channel_360"]
+        }
+        channel_yingyongbao {
+            manifestPlaceholders = [CHANNEL_NAME: "channel_yingyongbao"]
+        }
+        channel_baidu {
+            manifestPlaceholders = [CHANNEL_NAME: "channel_baidu"]
+        }
     }
 
     buildTypes {

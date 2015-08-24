@@ -94,7 +94,7 @@ public class TweetFragment extends BaseRecycleViewFragment implements TweetAdapt
             try {
                 Result res = Result.parse(is);
                 if (res != null && res.OK()) {
-                    AppContext.showToastShort("已取消赞");
+                    //AppContext.showToastShort("已取消赞");
                     Tweet tweet = (Tweet) args[0];
                     tweet.setIsLike(0);
                     tweet.setLikeCount(tweet.getLikeCount() - 1);
@@ -127,7 +127,7 @@ public class TweetFragment extends BaseRecycleViewFragment implements TweetAdapt
             try {
                 Result res = Result.parse(is);
                 if (res != null && res.OK()) {
-                    AppContext.showToastShort("赞成功了");
+                    //AppContext.showToastShort("赞成功了");
                     Tweet tweet = (Tweet) args[0];
                     tweet.setIsLike(1);
                     tweet.setLikeCount(tweet.getLikeCount() + 1);

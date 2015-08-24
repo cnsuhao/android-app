@@ -89,7 +89,7 @@ public class AppContext extends BaseApplication {
     private static final String KEY_NOTICE_MESSAGE_COUNT = "key_notice_message_count";
     private static final String KEY_NOTICE_REVIEW_COUNT = "key_notice_review_count";
     private static final String KEY_NOTICE_NEWFANS_COUNT = "key_notice_newfans_count";
-    private static final String KEY_LOGIN_ID = "key_login_id";
+    private static final String KEY_LOGIN_ID = "key_login_id_2";
     private static final String KEY_COOKIE = "key_cookie";
     private static final String KEY_APP_ID = "key_app_id";
     private static final String KEY_DETAIL_FONT_SIZE = "key_font_size";
