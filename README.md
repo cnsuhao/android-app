@@ -2,7 +2,7 @@
 ===========
 ## APP下载
 [![qrcode](http://www.wwei.cn/Uploads/qrcode/2015/08/24/a04a2cf3164cd9a2f7d9b6a08f3746e0.png)](http://android.myapp.com/myapp/detail.htm?apkName=com.tonlin.osc.happy)
-[![屏幕截图](http://git.oschina.net/tonlin/android-app/raw/master/screenshots/screen_shots.jpg)](http://android.myapp.com/myapp/detail.htm?apkName=com.tonlin.osc.happy)
+[![屏幕截图](http://git.oschina.net/tonlin/android-app/raw/normal/screenshots/screen_shots2.jpg)](http://android.myapp.com/myapp/detail.htm?apkName=com.tonlin.osc.happy)
 
 
 ## 开源协议
