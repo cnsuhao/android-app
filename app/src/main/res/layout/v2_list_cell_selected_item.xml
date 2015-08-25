@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <net.oschina.app.v2.ui.AvatarView
+        android:id="@+id/iv_avatar"
+        style="@style/avatar"
+        android:background="@drawable/ic_default_avatar" />
+
+    <ImageView
+        android:id="@+id/iv_overlay"
+        android:layout_width="@dimen/list_item_avatar_size"
+        android:layout_height="@dimen/list_item_avatar_size"
+        android:background="@drawable/ic_avatar_overlay"
+        android:visibility="gone" />
+</RelativeLayout>

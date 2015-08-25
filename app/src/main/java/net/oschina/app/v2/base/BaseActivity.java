@@ -53,6 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
         }
     };
 
+
     protected int getActionBarSize() {
         TypedValue typedValue = new TypedValue();
         int[] textSizeAttr = new int[]{R.attr.actionBarSize};
@@ -166,34 +167,14 @@ public abstract class BaseActivity extends AppCompatActivity implements
                 Toolbar.LayoutParams params = new Toolbar.LayoutParams(LayoutParams.MATCH_PARENT,
                         LayoutParams.MATCH_PARENT);
                 actionBar.addView(view, params);
+                mTvActionTitle = (TextView) view.findViewById(R.id.tv_actionbar_title);
+                int titleRes = getActionBarTitle();
+                if (titleRes != 0 && mTvActionTitle != null) {
+                    mTvActionTitle.setText(titleRes);
+                }
             }
-            // This is Test
-            //View view = inflateView(layoutRes == 0 ? R.layout.v2_actionbar_custom_backtitle
-            //		: layoutRes);
-            //View back = view.findViewById(R.id.btn_back);
-            //if (back == null) {
-            //	throw new IllegalArgumentException(
-            //			"can not find R.id.btn_back in customView");
-            //}
-            //back.setOnClickListener(new OnClickListener() {
 
-            //	@Override
-            //	public void onClick(View v) {
-            //		onBackPressed();
-            //	}
-            //});
-            //mTvActionTitle = (TextView) view
-            //		.findViewById(R.id.tv_actionbar_title);
-            //if (mTvActionTitle == null) {
-            //	throw new IllegalArgumentException(
-            //			"can not find R.id.tv_actionbar_title in customView");
-            //}
             int titleRes = getActionBarTitle();
-            //if (titleRes != 0) {
-            //	mTvActionTitle.setText(titleRes);
-            //}
-
-            //actionBar.setCustomView(view, params);
 
 
             if (titleRes != 0) {
@@ -208,16 +189,9 @@ public abstract class BaseActivity extends AppCompatActivity implements
                 }
             });
 
-            //actionBar.setHomeAsUpIndicator(0);
-            //actionBar.setDisplayShowTitleEnabled(false);
-            //actionBar.setDisplayShowCustomEnabled(true);
-            //actionBar.setDisplayUseLogoEnabled(false);
-            //actionBar.setDisplayShowHomeEnabled(false);
 
             actionBar.setPadding(0, 0, 0, 0);
         } else {
-            //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
-            //actionBar.setDisplayUseLogoEnabled(false);
             int titleRes = getActionBarTitle();
             if (titleRes != 0) {
                 actionBar.setTitle(titleRes);

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/window_background"
+    android:orientation="vertical">
+
+    <include layout="@layout/v2_view_actionbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/actionBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/v2_list_header_friends" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <android.support.v4.widget.MySwipeRefreshLayout
+                    android:id="@+id/srl_refresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <net.oschina.app.v2.ui.pinned.PinnedHeaderListView
+                        android:id="@+id/listView"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:cacheColorHint="@android:color/transparent"
+                        android:divider="@color/list_divider_color"
+                        android:dividerHeight="1.0px"
+                        android:footerDividersEnabled="false"
+                        android:headerDividersEnabled="false" />
+
+                </android.support.v4.widget.MySwipeRefreshLayout>
+
+                <net.oschina.app.v2.ui.pinned.BladeView
+                    android:id="@+id/bv"
+                    android:layout_width="20dp"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true"
+                    android:background="#00000000" />
+
+                <RelativeLayout
+                    android:id="@+id/rl_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <ListView
+                        android:id="@+id/lv_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tv_empty_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:padding="32dp"
+                        android:gravity="center_horizontal|top"
+                        android:textSize="12sp"
+                        android:text="无结果"
+                        android:textColor="@color/main_black"
+                        android:visibility="gone"/>
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <net.oschina.app.v2.ui.empty.EmptyLayout
+            android:id="@+id/error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_actionbar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/actionBar"
+        android:background="@drawable/header_shadow" />
+</RelativeLayout>

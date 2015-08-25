@@ -1,6 +1,15 @@
 package net.oschina.app.v2.model;
 
+import android.text.TextUtils;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 /**
  * 登录用户实体类
@@ -241,79 +250,5 @@ public class User extends Base {
         return user.getUid() == uid;
     }
 
-    //    public static User parse(InputStream stream) throws IOException, AppException {
-//        User user = new User();
-//        Result res = null;
-//        // 获得XmlPullParser解析器
-//        XmlPullParser xmlParser = Xml.newPullParser();
-//        try {
-//            xmlParser.setInput(stream, Base.UTF8);
-//            // 获得解析到的事件类别，这里有开始文档，结束文档，开始标签，结束标签，文本等等事件。
-//            int evtType = xmlParser.getEventType();
-//            // 一直循环，直到文档结束
-//            while (evtType != XmlPullParser.END_DOCUMENT) {
-//                String tag = xmlParser.getName();
-//                switch (evtType) {
-//
-//                    case XmlPullParser.START_TAG:
-//                        // 如果是标签开始，则说明需要实例化对象了
-//                        if (tag.equalsIgnoreCase(NODE_RESULT)) {
-//                            res = new Result();
-//                        } else if (tag.equalsIgnoreCase(NODE_ERROR_CODE)) {
-//                            res.setErrorCode(StringUtils.toInt(xmlParser.nextText(), -1));
-//                        } else if (tag.equalsIgnoreCase(NODE_ERROR_MESSAGE)) {
-//                            res.setErrorMessage(xmlParser.nextText().trim());
-//                        } else if (res != null && res.OK()) {
-//                            if (tag.equalsIgnoreCase(NODE_UID)) {
-//                                user.uid = StringUtils.toInt(xmlParser.nextText(), 0);
-//                            } else if (tag.equalsIgnoreCase(NODE_LOCATION)) {
-//                                user.setLocation(xmlParser.nextText());
-//                            } else if (tag.equalsIgnoreCase(NODE_NAME)) {
-//                                user.setName(xmlParser.nextText());
-//                            } else if (tag.equalsIgnoreCase(NODE_FOLLOWERS)) {
-//                                user.setFollowers(StringUtils.toInt(xmlParser.nextText(), 0));
-//                            } else if (tag.equalsIgnoreCase(NODE_FANS)) {
-//                                user.setFans(StringUtils.toInt(xmlParser.nextText(), 0));
-//                            } else if (tag.equalsIgnoreCase(NODE_SOCRE)) {
-//                                user.setScore(StringUtils.toInt(xmlParser.nextText(), 0));
-//                            } else if (tag.equalsIgnoreCase(NODE_PORTRAIT)) {
-//                                user.setFace(xmlParser.nextText());
-//                            } else if (tag.equalsIgnoreCase(Notice.NODE_NOTICE)) {
-//                                user.setNotice(new Notice());
-//                            }  else if (user.getNotice() != null) {
-//                                if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {
-//                                    user.getNotice().setAtmeCount(
-//                                            StringUtils.toInt(xmlParser.nextText(), 0));
-//                                } else if (tag.equalsIgnoreCase(Notice.NODE_MESSAGE_COUNT)) {
-//                                    user.getNotice().setMsgCount(
-//                                            StringUtils.toInt(xmlParser.nextText(), 0));
-//                                } else if (tag.equalsIgnoreCase(Notice.NODE_REVIEW_COUNT)) {
-//                                    user.getNotice().setReviewCount(
-//                                            StringUtils.toInt(xmlParser.nextText(), 0));
-//                                } else if (tag.equalsIgnoreCase(Notice.NODE_NEWFANS_COUNT)) {
-//                                    user.getNotice().setNewFansCount(
-//                                            StringUtils.toInt(xmlParser.nextText(), 0));
-//                                }
-//                            }
-//                        }
-//                        break;
-//                    case XmlPullParser.END_TAG:
-//                        //如果遇到标签结束，则把对象添加进集合中
-//                        if (tag.equalsIgnoreCase(NODE_RESULT) && res != null) {
-//                            user.setValidate(res);
-//                        }
-//                        break;
-//                }
-//                // 如果xml没有结束，则导航到下一个节点
-//                evtType = xmlParser.next();
-//            }
-//
-//        } catch (XmlPullParserException e) {
-//            throw AppException.xml(e);
-//        } finally {
-//            stream.close();
-//        }
-//        return user;
-//    }
 
 }

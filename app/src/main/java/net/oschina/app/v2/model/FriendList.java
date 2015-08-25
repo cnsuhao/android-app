@@ -14,6 +14,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
  * 好友列表实体类
  *
@@ -21,6 +23,7 @@ import android.util.Xml;
  * @version 1.0
  * @created 2012-3-21
  */
+@XStreamAlias("oschina")
 public class FriendList extends Entity implements ListEntity {
 
     public final static int TYPE_FANS = 0x00;
@@ -32,58 +35,59 @@ public class FriendList extends Entity implements ListEntity {
     private static final String NODE_EXPERTISE = "expertise";
     private static final String NODE_GENDER = "gender";
 
+    @XStreamAlias("friends")
     private List<Friend> friendlist = new ArrayList<Friend>();
 
-    /**
-     * 好友实体类
-     */
-    public static class Friend implements Serializable {
-        private int userid;
-        private String name;
-        private String face;
-        private String expertise;
-        private int gender;
-
-        public int getUserid() {
-            return userid;
-        }
-
-        public void setUserid(int userid) {
-            this.userid = userid;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getFace() {
-            return face;
-        }
-
-        public void setFace(String face) {
-            this.face = face;
-        }
-
-        public String getExpertise() {
-            return expertise;
-        }
-
-        public void setExpertise(String expertise) {
-            this.expertise = expertise;
-        }
-
-        public int getGender() {
-            return gender;
-        }
-
-        public void setGender(int gender) {
-            this.gender = gender;
-        }
-    }
+//    /**
+//     * 好友实体类
+//     */
+//    public static class Friend implements Serializable {
+//        private int userid;
+//        private String name;
+//        private String face;
+//        private String expertise;
+//        private int gender;
+//
+//        public int getUserid() {
+//            return userid;
+//        }
+//
+//        public void setUserid(int userid) {
+//            this.userid = userid;
+//        }
+//
+//        public String getName() {
+//            return name;
+//        }
+//
+//        public void setName(String name) {
+//            this.name = name;
+//        }
+//
+//        public String getFace() {
+//            return face;
+//        }
+//
+//        public void setFace(String face) {
+//            this.face = face;
+//        }
+//
+//        public String getExpertise() {
+//            return expertise;
+//        }
+//
+//        public void setExpertise(String expertise) {
+//            this.expertise = expertise;
+//        }
+//
+//        public int getGender() {
+//            return gender;
+//        }
+//
+//        public void setGender(int gender) {
+//            this.gender = gender;
+//        }
+//    }
 
     public List<Friend> getFriendlist() {
         return friendlist;
@@ -112,17 +116,17 @@ public class FriendList extends Entity implements ListEntity {
                             friend = new Friend();
                         } else if (friend != null) {
                             if (tag.equalsIgnoreCase(NODE_USER_ID)) {
-                                friend.userid = StringUtils.toInt(
-                                        xmlParser.nextText(), 0);
+                                friend.setUserid(StringUtils.toInt(
+                                        xmlParser.nextText(), 0));
                             } else if (tag.equalsIgnoreCase(NODE_NAME)) {
-                                friend.name = xmlParser.nextText();
+                                friend.setName(xmlParser.nextText());
                             } else if (tag.equalsIgnoreCase(NODE_PORTRAIT)) {
-                                friend.face = xmlParser.nextText();
+                                friend.setPortrait(xmlParser.nextText());
                             } else if (tag.equalsIgnoreCase(NODE_EXPERTISE)) {
-                                friend.expertise = xmlParser.nextText();
+                                friend.setExpertise(xmlParser.nextText());
                             } else if (tag.equalsIgnoreCase(NODE_GENDER)) {
-                                friend.gender = StringUtils.toInt(
-                                        xmlParser.nextText(), 0);
+                                friend.setGender(StringUtils.toInt(
+                                        xmlParser.nextText(), 0));
                             }
                         } else if (friendlist.getNotice() != null) {
                             if (tag.equalsIgnoreCase(Notice.NODE_ATME_COUNT)) {

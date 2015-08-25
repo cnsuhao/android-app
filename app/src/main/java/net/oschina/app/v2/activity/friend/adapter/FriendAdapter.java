@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.tonlin.osc.happy.R;
 
 import net.oschina.app.v2.base.RecycleBaseAdapter;
-import net.oschina.app.v2.model.FriendList.Friend;
+import net.oschina.app.v2.model.Friend;
 import net.oschina.app.v2.ui.AvatarView;
 
 public class FriendAdapter extends RecycleBaseAdapter {
@@ -46,7 +46,7 @@ public class FriendAdapter extends RecycleBaseAdapter {
 //            }
 //        });
         vh.avatar.setUserInfo(item.getUserid(),item.getName());
-        vh.avatar.setAvatarUrl(item.getFace());
+        vh.avatar.setAvatarUrl(item.getPortrait());
     }
 
 	static class ViewHolder extends RecycleBaseAdapter.ViewHolder {
