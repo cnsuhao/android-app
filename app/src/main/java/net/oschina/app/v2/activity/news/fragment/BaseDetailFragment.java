@@ -413,7 +413,6 @@ public class BaseDetailFragment extends BaseFragment implements
     }
 
     protected void executeOnLoadDataSuccess(Entity entity) {
-
     }
 
     protected boolean hasReportMenu() {

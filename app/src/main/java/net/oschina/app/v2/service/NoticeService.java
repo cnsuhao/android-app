@@ -182,6 +182,7 @@ public class NoticeService extends Service {
 			// only fans
 			Bundle args = new Bundle();
 			args.putInt(FriendViewPagerFragment.BUNDLE_KEY_TABIDX, 1);
+			args.putInt(FriendViewPagerFragment.BUNDLE_KEY_UID, AppContext.getLoginUid());
 			intent = new Intent(this, SimpleBackActivity.class);
 			intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
 			intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE,
